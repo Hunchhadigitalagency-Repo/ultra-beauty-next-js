@@ -17,8 +17,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Basera E-commerce",
-  description: "Baserai hunechha samasya ko samadhan",
+  title: "Ultra Beauty & Brand",
+  description: "Ultra Beauty & Brand is your one-stop destination for all beauty and personal care products.",
 };
 
 export default function RootLayout({
