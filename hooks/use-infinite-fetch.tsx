@@ -1,0 +1,99 @@
+"use client";
+
+import { useState, useEffect, useCallback, useRef } from "react";
+
+import { useAppSelector } from "@/redux/hooks";
+import api from "@/services/api-instance";
+import { ETypes } from "@/types/table";
+
+export interface InfiniteFetchResult<T> {
+  data: T[];
+  count: number;
+  loading: boolean;
+  hasMore: boolean;
+  fetchNext: () => void;
+}
+
+export function useInfiniteFetch<T>(
+  path: string,
+  queryParam?: string,
+  queryValue?: string,
+  type?: string
+): InfiniteFetchResult<T> {
+  const { criteria } = useAppSelector((state) => state.filter);
+
+  const buildUrl = useCallback(
+    (url: string | null) => {
+      if (!url) return null;
+
+      const fullUrl = url.startsWith("http")
+        ? url
+        : `${process.env.NEXT_PUBLIC_API_URL}${url.replace(/^\/+/, "")}`;
+
+      const u = new URL(fullUrl);
+
+      if (queryParam) {
+        u.searchParams.set(queryParam, queryValue || "");
+      }
+
+      switch (type) {
+        case ETypes.ORDERS:
+          u.searchParams.set("status", criteria?.status || "");
+          break;
+
+        default:
+      }
+
+      return u.toString();
+    },
+    [queryParam, queryValue, criteria, type]
+  );
+
+  const { refetch } = useAppSelector((state) => state.table);
+
+  const [data, setData] = useState<T[]>([]);
+  const [nextUrl, setNextUrl] = useState<string | null>(buildUrl(path));
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState<number>(0);
+  const initialLoadRef = useRef(true);
+
+  const fetchNext = useCallback(async () => {
+    if (!nextUrl || loading) return;
+    setLoading(true);
+    try {
+      const response = await api.get(nextUrl);
+      const payload = response.data;
+      if (Array.isArray(payload.results)) {
+        setData((prev) => [...prev, ...payload.results]);
+      }
+      setNextUrl(payload.links?.next ?? null);
+      setCount(payload?.count ?? 0);
+    } catch (err) {
+      console.error("useInfiniteFetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [nextUrl, loading]);
+
+  useEffect(() => {
+    if (initialLoadRef.current) {
+      initialLoadRef.current = false;
+      fetchNext();
+    }
+  }, [fetchNext]);
+
+  useEffect(() => {
+    setData([]);
+    setCount(0);
+    initialLoadRef.current = true;
+    setNextUrl(buildUrl(path));
+  }, [path, buildUrl, refetch]);
+
+  return {
+    data,
+    count,
+    loading,
+    hasMore: Boolean(nextUrl),
+    fetchNext,
+  };
+}

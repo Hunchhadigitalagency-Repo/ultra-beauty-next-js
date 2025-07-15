@@ -1,0 +1,93 @@
+export interface IFeature {
+  label: string;
+  position: string;
+}
+
+export interface ProductVariant {
+  id: number;
+  item_name: string;
+  item_price: string;
+  item_quantity: string;
+  item_image: string;
+  sku: string;
+  product_variants: any[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+}
+
+export interface Inventory {
+  id: number;
+  name: string;
+}
+
+export interface IProductImage{
+  id: number;
+  file: string;
+  file_type: string;
+  is_primary: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IProduct {
+  id: number;
+  variants: ProductVariant[];
+  images: IProductImage[]; 
+  category: Category;
+  subcategory: Category | null; 
+  inventory: Inventory;
+  name: string;
+  sku: string;
+  quantity: string | null;
+  general_description: string;
+  detail_description: string;
+  brand: string;
+  price: string;
+  discount_percentage: string;
+  flash_end_date: string | null;
+  flash_sale_discount: string | null;
+  is_flash_sale: boolean;
+  slug_name: string;
+  is_published: boolean;
+  is_Featured: boolean;
+  is_new: boolean;
+  is_must_sold: boolean;
+  is_tax_applicable: boolean;
+  tutorial: string | null;
+  youtube_link: string;
+  created_at: string;
+  updated_at: string;
+  package: any | null;
+  my_wishlist: boolean;
+}
+
+export interface CategoryFilter {
+  id: number;
+  name: string;
+  product_count: number;
+}
+
+export interface SubcategoryFilter {
+  id: number;
+  name: string;
+  category_id: number;
+  product_count: number;
+}
+
+export interface PriceRangeFilter {
+  min_price: number;
+  max_price: number;
+}
+
+export interface IProductFilter {
+  categories: CategoryFilter[];
+  subcategories: SubcategoryFilter[];
+  inventories: any[]; // Replace `any` with actual inventory type if known
+  price_range: PriceRangeFilter;
+  attributes: any[]; // Replace `any` with actual attribute type if known
+}
