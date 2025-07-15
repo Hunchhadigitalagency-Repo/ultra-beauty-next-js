@@ -1,11 +1,6 @@
 import apiBase from "@/services/api-base-instance";
+import { NavigationItem } from "@/types/website";
 
-export interface NavigationItem {
-    name: string;
-    href: string;
-    hasDropdown?: boolean;
-    children?: { name: string; href: string }[];
-}
 
 export const getNavigationItems = async (): Promise<NavigationItem[]> => {
     try {

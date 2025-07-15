@@ -1,5 +1,12 @@
 import { IFeature } from "./product";
 
+
+export interface NavigationItem {
+  name: string;
+  href: string;
+  hasDropdown?: boolean;
+  children?: { name: string; href: string }[];
+}
 export interface IRecommendation {
   id: number;
   name: string;
@@ -73,13 +80,13 @@ export interface Product {
     id: number;
     name: string;
   };
-  subcategory: any; 
+  subcategory: any;
   tutorial: any;
   quantity: number | null;
   package: any;
   youtube_link: string;
   created_at: string;
   updated_at: string;
-  variants: any[]; 
+  variants: any[];
 }
 
