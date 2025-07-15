@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import image1 from "@/assets/Rectangle 11.png"
 import Image from "next/image";
 import {
@@ -18,7 +16,7 @@ const slides = [
   {
     id: 1,
     title: "",
-    description:"",
+    description: "",
     image: image1,
     buttonText: "",
   },
@@ -105,23 +103,23 @@ export default function HeroSection() {
           ))}
         </CarouselContent>
         <div className=" absolute -bottom-5  flex flex-row justify-center items-center">
-        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
-        <CarouselNext className="absolute left-16 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover: text-white border-white/20 rounded-full" />
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
+          <CarouselNext className="absolute left-16 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover: text-white border-white/20 rounded-full" />
         </div>
 
         <div className="absolute -bottom-5 right-3 -translate-x-1/2 z-20 flex space-x-2">
-                  {slides.map((_, i) => (
-                    <button
-                      key={i}
-                      className={`w-3 h-3  rounded-full transition-all duration-300 ${i === current
-                        ? "bg-red-500 scale-110 h-[10px] w-[15px]"
-                        : "bg-[#7A7A7A] hover:bg-white/70"
-                        }`}
-                      onClick={() => api?.scrollTo(i)}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
-                </div>
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              className={`w-3 h-3  rounded-full transition-all duration-300 ${i === current
+                ? "bg-red-500 scale-110 h-[10px] w-[15px]"
+                : "bg-[#7A7A7A] hover:bg-white/70"
+                }`}
+              onClick={() => api?.scrollTo(i)}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </Carousel>
     </section>
   );
