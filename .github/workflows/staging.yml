@@ -1,150 +1,149 @@
-name: Deploy to Droplet
+# name: Deploy to Droplet
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: npm ci
+#     - name: Setup Node.js
+#       uses: actions/setup-node@v4
+#       with:
+#         node-version: '18'
+#         cache: 'npm'
 
-    - name: Build application
-      env:
-        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
-      run: npm run build
+#     - name: Install dependencies
+#       run: npm ci
 
-    - name: Create deployment package
-      run: |
-        # Create a deployment directory
-        mkdir deployment-package
-        
-        # Copy build output and essential files
-        cp -r .next deployment-package/
-        cp package.json deployment-package/
-        cp package-lock.json deployment-package/
-        cp next.config.ts deployment-package/
-        cp ecosystem.config.js deployment-package/
-        
-        # Copy all source code directories needed at runtime
-        cp -r app deployment-package/
-        cp -r lib deployment-package/
-        cp -r components deployment-package/
-        cp -r services deployment-package/
-        cp -r types deployment-package/
-        cp -r constants deployment-package/
-        cp -r hooks deployment-package/
-        cp -r schemas deployment-package/
-        cp -r redux deployment-package/
-        cp -r hoc deployment-package/
-        
-        # Copy public folder if it exists
-        if [ -d "public" ]; then
-          cp -r public deployment-package/
-        fi
-        
-        # Copy assets folder if it exists
-        if [ -d "assets" ]; then
-          cp -r assets deployment-package/
-        fi
-        
-        # Copy configuration files
-        if [ -f "tsconfig.json" ]; then
-          cp tsconfig.json deployment-package/
-        fi
-        if [ -f "next-env.d.ts" ]; then
-          cp next-env.d.ts deployment-package/
-        fi
-        if [ -f "tailwind.config.js" ]; then
-          cp tailwind.config.js deployment-package/
-        fi
-        if [ -f "postcss.config.mjs" ]; then
-          cp postcss.config.mjs deployment-package/
-        fi
-        if [ -f "components.json" ]; then
-          cp components.json deployment-package/
-        fi
-        
-        # Create a compressed archive
-        tar -czf deployment.tar.gz -C deployment-package .
+#     - name: Build application
+#       env:
+#         NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+#         NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+#       run: npm run build
 
-    - name: Upload deployment package
-      uses: appleboy/scp-action@v0.1.3
-      with:
-        host: ${{ secrets.DROPLET_IP }}
-        username: ${{ secrets.DROPLET_USER }}
-        password: ${{ secrets.DROPLET_PASSWORD }}
-        source: "deployment.tar.gz"
-        target: "/tmp/"
+#     - name: Create deployment package
+#       run: |
+#         # Create a deployment directory
+#         mkdir deployment-package
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+#         # Copy build output and essential files
+#         cp -r .next deployment-package/
+#         cp package.json deployment-package/
+#         cp package-lock.json deployment-package/
+#         cp next.config.ts deployment-package/
+#         cp ecosystem.config.js deployment-package/
 
-    steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.DROPLET_IP }}
-        username: ${{ secrets.DROPLET_USER }}
-        password: ${{ secrets.DROPLET_PASSWORD }}
-        script: |
-          set -e
-          
-          # Navigate to project directory
-          cd /mnt/volume_blr1_02/projects/basera-next-js-staging
-          
-          # Stop PM2 process if running
-          pm2 stop basera-frontend-staging 2>/dev/null || echo "Process not running"
-          
-          # Backup current deployment (optional)
-          if [ -d ".next" ]; then
-            rm -rf .next.backup 2>/dev/null || true
-            mv .next .next.backup 2>/dev/null || true
-          fi
-          
-          # Extract new deployment
-          tar -xzf /tmp/deployment.tar.gz -C .
-          
-          # Create logs directory if it doesn't exist
-          mkdir -p logs
-          
-          # Install only production dependencies
-          npm ci --only=production
-          
-          # Verify environment file exists
-          if [ ! -f ".env" ]; then
-            echo "⚠️  Warning: .env file not found. Please ensure environment variables are set."
-          else
-            echo "✅ Environment file found"
-          fi
-          
-          # Start/restart PM2 process using ecosystem file
-          if pm2 describe basera-frontend-staging > /dev/null 2>&1; then
-            echo "Restarting existing PM2 process..."
-            pm2 restart ecosystem.config.js
-          else
-            echo "Starting new PM2 process..."
-            pm2 start ecosystem.config.js
-          fi
-          
-          # Clean up
-          rm -f /tmp/deployment.tar.gz
-          rm -rf .next.backup 2>/dev/null || true
-          
-          echo "🚀 Deployment completed successfully!"
-          
+#         # Copy all source code directories needed at runtime
+#         cp -r app deployment-package/
+#         cp -r lib deployment-package/
+#         cp -r components deployment-package/
+#         cp -r services deployment-package/
+#         cp -r types deployment-package/
+#         cp -r constants deployment-package/
+#         cp -r hooks deployment-package/
+#         cp -r schemas deployment-package/
+#         cp -r redux deployment-package/
+#         cp -r hoc deployment-package/
+
+#         # Copy public folder if it exists
+#         if [ -d "public" ]; then
+#           cp -r public deployment-package/
+#         fi
+
+#         # Copy assets folder if it exists
+#         if [ -d "assets" ]; then
+#           cp -r assets deployment-package/
+#         fi
+
+#         # Copy configuration files
+#         if [ -f "tsconfig.json" ]; then
+#           cp tsconfig.json deployment-package/
+#         fi
+#         if [ -f "next-env.d.ts" ]; then
+#           cp next-env.d.ts deployment-package/
+#         fi
+#         if [ -f "tailwind.config.js" ]; then
+#           cp tailwind.config.js deployment-package/
+#         fi
+#         if [ -f "postcss.config.mjs" ]; then
+#           cp postcss.config.mjs deployment-package/
+#         fi
+#         if [ -f "components.json" ]; then
+#           cp components.json deployment-package/
+#         fi
+
+#         # Create a compressed archive
+#         tar -czf deployment.tar.gz -C deployment-package .
+
+#     - name: Upload deployment package
+#       uses: appleboy/scp-action@v0.1.3
+#       with:
+#         host: ${{ secrets.DROPLET_IP }}
+#         username: ${{ secrets.DROPLET_USER }}
+#         password: ${{ secrets.DROPLET_PASSWORD }}
+#         source: "deployment.tar.gz"
+#         target: "/tmp/"
+
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Deploy to server
+#       uses: appleboy/ssh-action@v0.1.5
+#       with:
+#         host: ${{ secrets.DROPLET_IP }}
+#         username: ${{ secrets.DROPLET_USER }}
+#         password: ${{ secrets.DROPLET_PASSWORD }}
+#         script: |
+#           set -e
+
+#           # Navigate to project directory
+#           cd /mnt/volume_blr1_02/projects/basera-next-js-staging
+
+#           # Stop PM2 process if running
+#           pm2 stop basera-frontend-staging 2>/dev/null || echo "Process not running"
+
+#           # Backup current deployment (optional)
+#           if [ -d ".next" ]; then
+#             rm -rf .next.backup 2>/dev/null || true
+#             mv .next .next.backup 2>/dev/null || true
+#           fi
+
+#           # Extract new deployment
+#           tar -xzf /tmp/deployment.tar.gz -C .
+
+#           # Create logs directory if it doesn't exist
+#           mkdir -p logs
+
+#           # Install only production dependencies
+#           npm ci --only=production
+
+#           # Verify environment file exists
+#           if [ ! -f ".env" ]; then
+#             echo "⚠️  Warning: .env file not found. Please ensure environment variables are set."
+#           else
+#             echo "✅ Environment file found"
+#           fi
+
+#           # Start/restart PM2 process using ecosystem file
+#           if pm2 describe basera-frontend-staging > /dev/null 2>&1; then
+#             echo "Restarting existing PM2 process..."
+#             pm2 restart ecosystem.config.js
+#           else
+#             echo "Starting new PM2 process..."
+#             pm2 start ecosystem.config.js
+#           fi
+
+#           # Clean up
+#           rm -f /tmp/deployment.tar.gz
+#           rm -rf .next.backup 2>/dev/null || true
+
+#           echo "🚀 Deployment completed successfully!"
