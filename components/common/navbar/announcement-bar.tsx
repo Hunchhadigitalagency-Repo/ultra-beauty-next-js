@@ -8,12 +8,11 @@ export default function AnnouncementBar() {
   );
 
   return (
-    <div className="bg-blue-500 text-white py-2 px-4">
-      <div className="container mx-auto flex items-center justify-between text-sm">
-        <div className="flex-1 text-center lg:text-left text-sm">
+    <div className="bg-white text-black w-full px-8 sm:px-12 lg:px-16 py-4 flex items-center justify-between">
+      <div className="flex-1 flex items-center justify-between text-sm">
+        <div className="flex-1 text-center text-foreground lg:text-left text-sm">
           <span>
-            Select Seller! Sales On Some Item or any moving text message will be
-            here!
+            20% Off on New Brand Earth Mama! Shop Now
           </span>
         </div>
         {isLoggedIn ? (

@@ -48,12 +48,17 @@ export default function Navbar() {
   const isActiveHeader = (pathname: string) => path.startsWith(pathname);
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-secondary border-b border-gray-200 sticky top-0 z-50">
       <div className="padding-x py-2">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-playfair font-bold text-green">बSERA</span>
+            <span className="text-xl text-center font-playfair font-medium text-primary leading-none">
+              Ultra Beauty<br />
+              <span className="font-poppins text-base">&</span><br />
+              Brand
+            </span>
+
           </Link>
 
           {/* Desktop Navigation */}
@@ -65,9 +70,9 @@ export default function Navbar() {
                     <NavigationMenuList>
                       <NavigationMenuItem>
                         <NavigationMenuTrigger
-                          className={`text-foreground hover:text-primary bg-transparent font-medium  ${isActiveHeader(item.href)
-                            ? "text-primary font-semibold"
-                            : "text-foreground"
+                          className={`text-foreground hover:text-primary bg-transparent  ${isActiveHeader(item.href)
+                            ? "text-primary font-medium"
+                            : "text-foreground font-normal"
                             }`}
                         >
                           {item.name}
@@ -90,9 +95,9 @@ export default function Navbar() {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`text-foreground hover:text-primary font-medium transition-colors text-sm  ${isActive(item.href)
-                      ? "text-primary font-semibold"
-                      : "text-foreground"
+                    className={`text-foreground hover:text-primary transition-colors text-sm  ${isActive(item.href)
+                      ? "text-primary font-medium"
+                      : "text-foreground font-normal"
                       }`}
                   >
                     {item.name}
