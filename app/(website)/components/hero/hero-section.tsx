@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import image1 from "@/assets/Rectangle 11.png"
 import Image from "next/image";
 import {
   Carousel,
@@ -16,20 +17,17 @@ import {
 const slides = [
   {
     id: 1,
-    title: "Redefining Comfort at Work",
-    description:
-      "Say goodbye to back pain and discomfort. Discover ergonomic cushions, supports, and wellness tools crafted for the Nepali workplace—where tradition meets modern design.",
-    image:
-      "https://img.freepik.com/free-photo/green-sofa-white-living-room-with-free-space_43614-834.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
-    buttonText: "SHOP NOW",
+    title: "",
+    description:"",
+    image: image1,
+    buttonText: "",
   },
   {
     id: 2,
     title: "Transform Your Workspace",
     description:
       "Experience the perfect blend of style and functionality. Our premium collection brings comfort and elegance to every corner of your office space.",
-    image:
-      "https://img.freepik.com/premium-photo/clean-coworking-office-interior-with-concrete-wall-wooden-flooring-windows-with-city-view-sunlight-shadows-furniture-3d-rendering_670147-71922.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+    image: image1,
     buttonText: "EXPLORE COLLECTION",
   },
   {
@@ -37,8 +35,7 @@ const slides = [
     title: "Wellness Meets Design",
     description:
       "Prioritize health without compromising aesthetics. Our wellness-focused furniture elevates your productivity with mindful comfort and modern design.",
-    image:
-      "https://img.freepik.com/premium-photo/modern-openplan-office-interior-with-sleek-furniture-large-glass-windows-showcasing-urban-city-view-3d-rendering_670147-118930.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+    image: image1,
     buttonText: "DISCOVER MORE",
   },
 ];
@@ -63,7 +60,7 @@ export default function HeroSection() {
   }, [api, isHovered]);
 
   return (
-    <section className="relative h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)] overflow-hidden">
+    <section className="relative h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
       <Carousel
         setApi={setApi}
         className="w-full h-full"
@@ -71,7 +68,7 @@ export default function HeroSection() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <CarouselContent className="h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
+        <CarouselContent className="h-[400px] mx-auto sm:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
             <CarouselItem key={slide.id} className="h-full">
               <div className="relative w-full h-full">
@@ -80,13 +77,13 @@ export default function HeroSection() {
                     src={slide.image || "/placeholder.svg"}
                     alt={slide.title}
                     fill
-                    className="object-cover"
+                    className=" w-[1403px] h-[519px]"
                     priority={index === 0}
                   />
                   <div className="absolute inset-0 bg-black/40" />
                 </div>
 
-                <div className="relative z-10 container mx-auto h-full flex items-center justify-center px-4 sm:px-6 md:px-10">
+                {/* <div className="relative z-10 container mx-auto h-full flex items-center justify-center px-4 sm:px-6 md:px-10">
                   <div className="text-white text-center max-w-lg sm:max-w-xl lg:max-w-4xl space-y-4">
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
                       {slide.title}
@@ -102,28 +99,29 @@ export default function HeroSection() {
                       <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                     </Button>
                   </div>
-                </div>
+                </div> */}
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <div className=" absolute -bottom-5  flex flex-row justify-center items-center">
+        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
+        <CarouselNext className="absolute left-16 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover: text-white border-white/20 rounded-full" />
+        </div>
 
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+        <div className="absolute -bottom-5 right-3 -translate-x-1/2 z-20 flex space-x-2">
                   {slides.map((_, i) => (
                     <button
                       key={i}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${i === current
-                        ? "bg-orange-500 scale-110"
-                        : "bg-white/50 hover:bg-white/70"
+                      className={`w-3 h-3  rounded-full transition-all duration-300 ${i === current
+                        ? "bg-red-500 scale-110 h-[10px] w-[15px]"
+                        : "bg-[#7A7A7A] hover:bg-white/70"
                         }`}
                       onClick={() => api?.scrollTo(i)}
                       aria-label={`Go to slide ${i + 1}`}
                     />
                   ))}
                 </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-
-        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
-        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
       </Carousel>
     </section>
   );
