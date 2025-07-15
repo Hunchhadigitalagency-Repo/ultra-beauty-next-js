@@ -10,7 +10,7 @@ const LinkText = ({ title, href }: ILinkText) => {
   return (
     <Link
       href={href}
-      className="text-foreground hover:text-primary transition-all duration-300 ease-in-out flex items-center gap-2 uppercase"
+      className="text-foreground hover:text-primary text-sm sm:text-base transition-all duration-300 ease-in-out flex items-center gap-2 uppercase"
     >
       {title} <ArrowRight />
     </Link>

@@ -8,7 +8,7 @@ export default function AnnouncementBar() {
   );
 
   return (
-    <div className="bg-white text-black w-full px-8 sm:px-12 lg:px-16 py-4 flex items-center justify-between">
+    <div className="bg-white text-black w-full px-8 padding-x py-4 flex items-center justify-between">
       <div className="flex-1 flex items-center justify-between text-sm">
         <div className="flex-1 text-center text-foreground lg:text-left text-sm">
           <span>

@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import MobileMenu from "./mobile-menu";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { Search, ShoppingCart, Bell, Heart, CircleUser } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,22 +11,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import MobileMenu from "./mobile-menu";
-// import { getNavigationItems } from "./constants/navbar-data";
+import { Button } from "@/components/ui/button";
+import { NavigationItem } from "@/types/website";
+import { usePathname, useRouter } from "next/navigation";
 import { getNavigationItems } from "../../../constants/navbar-data";
+import { Search, ShoppingCart, Bell, Heart, CircleUser } from "lucide-react";
 
-// ✅ Define the type
-interface NavigationItem {
-  name: string;
-  href: string;
-  hasDropdown?: boolean;
-  children?: {
-    name: string;
-    href: string;
-  }[];
-}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +43,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-xl text-center font-playfair font-medium text-primary leading-none">
+            <span className="text-base md:text-xl text-center font-playfair font-medium text-primary leading-none">
               Ultra Beauty<br />
-              <span className="font-poppins text-base">&</span><br />
+              <span className="font-poppins text-sm md:text-base">&</span><br />
               Brand
             </span>
 
@@ -108,7 +98,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right side icons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" className="hidden md:flex">
               <Search className="size-5" />
             </Button>
@@ -116,11 +106,11 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="relative hover:text-yellow"
+              className="relative hover:text-primary"
               onClick={() => router.push("/wishlist")}
             >
               <Heart
-                className={`size-5 ${isActive("/wishlist") && "text-yellow"}`}
+                className={`size-5 ${isActive("/wishlist") && "text-primary"}`}
               />
               <Badge
                 variant="destructive"
@@ -133,11 +123,11 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="relative"
+              className="relative hover:text-primary"
               onClick={() => router.push("/cart")}
             >
               <ShoppingCart
-                className={`size-5 ${isActive("/cart") && "text-yellow"} `}
+                className={`size-5 ${isActive("/cart") && "text-primary"} `}
               />
               <Badge
                 variant="destructive"
@@ -149,15 +139,15 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="relative"
+              className="relative hover:text-primary"
               onClick={() => router.push("/profile")}
             >
               <CircleUser
-                className={`size-5 ${isActive("/profile") && "text-yellow"} `}
+                className={`size-5 ${isActive("/profile") && "text-primary"} `}
               />
             </Button>
 
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Button variant="ghost" size="icon" className="hidden md:flex hover:text-primary">
               <Bell className={`size-5`} />
             </Button>
 
