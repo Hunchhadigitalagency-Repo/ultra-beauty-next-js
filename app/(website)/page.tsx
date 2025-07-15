@@ -11,6 +11,7 @@ import Blogs from "./components/blogs/blogs";
 import DifferentiatorSection from "../../components/common/differentiator/differentiator-section";
 import Companies from "./components/companies/Companies";
 import Testimonials from "@/components/common/testimonials/testimonials";
+import Beauty_Banner from "./beauty_Banner/page";
 import CategorySection from "./components/category/category-section";
 
 export default function HomePage() {
@@ -19,6 +20,7 @@ export default function HomePage() {
       <HeroSection />
       <CategorySection />
       <FeaturedProducts />
+      <Beauty_Banner />
       <RecommendationCarousel />
       <PromotionalCarousel className="padding" />
       <Testimonials />
