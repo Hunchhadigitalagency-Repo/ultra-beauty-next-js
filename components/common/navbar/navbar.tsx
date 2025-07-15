@@ -53,7 +53,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-green">बSERA</span>
+            <span className="text-2xl font-playfair font-bold text-green">बSERA</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -66,8 +66,8 @@ export default function Navbar() {
                       <NavigationMenuItem>
                         <NavigationMenuTrigger
                           className={`text-foreground hover:text-primary bg-transparent font-medium  ${isActiveHeader(item.href)
-                              ? "text-primary font-semibold"
-                              : "text-foreground"
+                            ? "text-primary font-semibold"
+                            : "text-foreground"
                             }`}
                         >
                           {item.name}
@@ -91,8 +91,8 @@ export default function Navbar() {
                   <Link
                     href={item.href}
                     className={`text-foreground hover:text-primary font-medium transition-colors text-sm  ${isActive(item.href)
-                        ? "text-primary font-semibold"
-                        : "text-foreground"
+                      ? "text-primary font-semibold"
+                      : "text-foreground"
                       }`}
                   >
                     {item.name}
