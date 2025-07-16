@@ -84,8 +84,8 @@ export default function HeroSection() {
           ))}
         </CarouselContent>
         <div className=" absolute bottom-2  flex flex-row ">
-          <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] left-4 border-none shadow-none bg-transparent"/>
-          <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] left-16 border-none shadow-none bg-transparent"/>
+          <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] left-4 border-none shadow-none bg-transparent" />
+          <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] left-16 border-none shadow-none bg-transparent" />
         </div>
 
         <div className="absolute bottom-2 right-3 -translate-x-1/2 z-20 flex space-x-2">
