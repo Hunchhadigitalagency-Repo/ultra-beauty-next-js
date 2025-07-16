@@ -46,7 +46,7 @@ const CategorySection: React.FunctionComponent = () => {
             {CATEGORY_LIST.map((category, index) => (
               <CarouselItem
                 key={index}
-                className="pl-0 basis-[45%] sm:basis-1/2 lg:basis-1/5"
+                className="pl-2 basis-[45%] sm:basis-1/2 lg:basis-1/5"
               >
                 <CategoryCard title={category.title} image={category.image} />
               </CarouselItem>
