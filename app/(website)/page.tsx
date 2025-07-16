@@ -13,6 +13,8 @@ import Companies from "./components/companies/Companies";
 import Testimonials from "@/components/common/testimonials/testimonials";
 import Beauty_Banner from "./beauty_Banner/page";
 import CategorySection from "./components/category/category-section";
+import BrandsCard from "./components/brands-that-you-love/brands-section";
+
 
 export default function HomePage() {
   return (
@@ -26,6 +28,7 @@ export default function HomePage() {
       <Testimonials />
       <DifferentiatorSection />
       <KnowYourProductSection />
+      <BrandsCard/>
       <FAQSection />
       <Companies />
       <Blogs />
