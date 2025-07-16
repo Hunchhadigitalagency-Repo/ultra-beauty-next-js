@@ -25,7 +25,7 @@ const slides = [
     title: "Transform Your Workspace",
     description:
       "Experience the perfect blend of style and functionality. Our premium collection brings comfort and elegance to every corner of your office space.",
-    image: image1,
+    image: "https://img.freepik.com/premium-photo/clean-coworking-office-interior-with-concrete-wall-wooden-flooring-windows-with-city-view-sunlight-shadows-furniture-3d-rendering_670147-71922.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
     buttonText: "EXPLORE COLLECTION",
   },
   {
@@ -33,7 +33,7 @@ const slides = [
     title: "Wellness Meets Design",
     description:
       "Prioritize health without compromising aesthetics. Our wellness-focused furniture elevates your productivity with mindful comfort and modern design.",
-    image: image1,
+    image: "https://img.freepik.com/free-photo/green-sofa-white-living-room-with-free-space_43614-834.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
     buttonText: "DISCOVER MORE",
   },
 ];
@@ -58,7 +58,7 @@ export default function HeroSection() {
   }, [api, isHovered]);
 
   return (
-    <section className="relative h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
+    <section className="relative h-[400px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
       <Carousel
         setApi={setApi}
         className="w-full h-full"
@@ -66,52 +66,33 @@ export default function HeroSection() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <CarouselContent className="h-[400px] mx-auto sm:h-[500px] lg:h-[calc(100vh-130px)]">
+        <CarouselContent className="h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
             <CarouselItem key={slide.id} className="h-full">
-              <div className="relative w-full h-full">
+              <div className="relative  w-[1403px] h-[519px]">
                 <div className="absolute inset-0">
                   <Image
                     src={slide.image || "/placeholder.svg"}
-                    alt={slide.title}
+                    alt=""
                     fill
-                    className=" w-[1403px] h-[519px]"
+                    className=" object-cover "
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-black/40" />
                 </div>
-
-                {/* <div className="relative z-10 container mx-auto h-full flex items-center justify-center px-4 sm:px-6 md:px-10">
-                  <div className="text-white text-center max-w-lg sm:max-w-xl lg:max-w-4xl space-y-4">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                      {slide.title}
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg font-medium opacity-90">
-                      {slide.description}
-                    </p>
-                    <Button
-                      size="sm"
-                      className="text-sm font-semibold rounded-full w-[200] md:w-[300] h-8 md:h-10 px-6 sm:px-8 py-2 sm:py-3 bg-[#FF9900] text-black hover:bg-[#e3a900]"
-                    >
-                      {slide.buttonText}
-                      <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-                    </Button>
-                  </div>
-                </div> */}
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className=" absolute -bottom-5  flex flex-row justify-center items-center">
-          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover:bg-white/30 text-white border-white/20 rounded-full" />
-          <CarouselNext className="absolute left-16 top-1/2 -translate-y-1/2 z-20 bg-black/20 hover: text-white border-white/20 rounded-full" />
+        <div className=" absolute bottom-2  flex flex-row ">
+          <CarouselPrevious className="absolute w-[17px] text-[#333333] left-4 border-none shadow-none bg-transparent"/>
+          <CarouselNext className="absolute w-[17px] text-[#333333] left-16 border-none shadow-none bg-transparent"/>
         </div>
 
-        <div className="absolute -bottom-5 right-3 -translate-x-1/2 z-20 flex space-x-2">
+        <div className="absolute bottom-2 right-3 -translate-x-1/2 z-20 flex space-x-2">
           {slides.map((_, i) => (
             <button
               key={i}
-              className={`w-3 h-3  rounded-full transition-all duration-300 ${i === current
+              className={`w-[10px] h-[10px]  rounded-full transition-all duration-300 ${i === current
                 ? "bg-red-500 scale-110 h-[10px] w-[15px]"
                 : "bg-[#7A7A7A] hover:bg-white/70"
                 }`}
