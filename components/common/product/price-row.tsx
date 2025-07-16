@@ -20,11 +20,13 @@ const PriceRow = ({
   console.log("this are the items", previousPrice, price, discountTag)
   return (
     <div className={`md:items-center  gap-3 md:gap-5  ${className}`}>
-      <span className={`flex gap-3 justify-between ${priceClassname}`}>
-        <span className="text-red text-[15px] md:text-lg font-bold line-through">
+      <span className={`flex w-full justify-between ${priceClassname}`}>
+        <span className="text-foreground text-sm md:text-xl font-medium ">
+          Nrs. {price}
+        </span>
+        <span className="text-sm md:text-base font-normal text-[#7A7A7A] line-through">
           Nrs. {previousPrice}
         </span>
-        <span className="text-[15px] md:text-lg font-bold text-green">Nrs. {price}</span>
       </span>
       {
         discountTag && (
