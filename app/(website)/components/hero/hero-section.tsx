@@ -69,7 +69,7 @@ export default function HeroSection() {
         <CarouselContent className="h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
             <CarouselItem key={slide.id} className="h-full">
-              <div className="relative  w-[1403px] h-[519px]">
+              <div className="relative  w-[1403px] h-[80%]">
                 <div className="absolute inset-0">
                   <Image
                     src={slide.image || "/placeholder.svg"}
@@ -84,8 +84,8 @@ export default function HeroSection() {
           ))}
         </CarouselContent>
         <div className=" absolute bottom-2  flex flex-row ">
-          <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] left-4 border-none shadow-none bg-transparent"/>
-          <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] left-16 border-none shadow-none bg-transparent"/>
+          <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] left-4 border-none shadow-none bg-transparent" />
+          <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] left-16 border-none shadow-none bg-transparent" />
         </div>
 
         <div className="absolute bottom-2 right-3 -translate-x-1/2 z-20 flex space-x-2">
