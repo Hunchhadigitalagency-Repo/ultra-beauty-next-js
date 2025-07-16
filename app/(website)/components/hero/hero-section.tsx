@@ -68,14 +68,14 @@ export default function HeroSection() {
       >
         <CarouselContent className="h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
-            <CarouselItem key={slide.id} className="h-full">
-              <div className="relative  w-[1403px] h-[80%]">
-                <div className="absolute inset-0">
+            <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
+              <div className="relative  w-[1403px] h-[80%] overflow-hidden rounded-md ">
+                <div className="absolute inset-0 ">
                   <Image
                     src={slide.image || "/placeholder.svg"}
                     alt=""
                     fill
-                    className=" object-cover "
+                    className=" object-cover rounded-md "
                     priority={index === 0}
                   />
                 </div>

@@ -9,6 +9,8 @@ import Testimonials from "@/components/common/testimonials/testimonials";
 import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
 import KnowYourProductSection from "./components/know-your-product/know-your-product-section";
 import DifferentiatorSection from "../../components/common/differentiator/differentiator-section";
+import BrandsCard from "./components/brands-that-you-love/brands-section";
+
 
 export default function HomePage() {
   return (
@@ -22,6 +24,7 @@ export default function HomePage() {
       <Testimonials />
       <DifferentiatorSection />
       <KnowYourProductSection />
+      <BrandsCard />
       <FAQSection />
       <Companies />
     </main>
