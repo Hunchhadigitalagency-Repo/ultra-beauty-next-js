@@ -58,7 +58,7 @@ export default function HeroSection() {
   }, [api, isHovered]);
 
   return (
-    <section className="relative h-[35vh] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
+    <section className="relative h-[400px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
       <Carousel
         setApi={setApi}
         className="w-full h-full"
@@ -68,8 +68,8 @@ export default function HeroSection() {
       >
         <CarouselContent className="h-[400px] sm:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
-            <CarouselItem key={slide.id} className="h-full lg:h-full overflow-hidden rounded-md ">
-              <div className="relative w-full h-[50%] md:w-[1403px] lg:h-[80%] overflow-hidden rounded-md ">
+            <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
+              <div className="relative  w-[1403px] h-[80%] overflow-hidden rounded-md ">
                 <div className="absolute inset-0 ">
                   <Image
                     src={slide.image || "/placeholder.svg"}
@@ -88,7 +88,7 @@ export default function HeroSection() {
           <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] left-16 border-none shadow-none bg-transparent" />
         </div>
 
-        <div className="absolute  bottom-2 right-3 -translate-x-1/2 z-20 flex space-x-2">
+        <div className="absolute bottom-2 right-3 -translate-x-1/2 z-20 flex space-x-2">
           {slides.map((_, i) => (
             <button
               key={i}
