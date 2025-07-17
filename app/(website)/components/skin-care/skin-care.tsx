@@ -1,6 +1,6 @@
-"use client"
-import React from 'react'
+import React from 'react';
 import ProductSection from '../product/product-section';
+
 
 const PRODUCTS = [
     { id: 1, imageSrc: 'https://images.unsplash.com/photo-1619352520578-8fefbfa2f904?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Red Lipstick', title: 'Red Lipstick', description: 'A beautiful red lipstick for all occasions', brand: 'Pastel Cosmetics', rating: 4.5, price: '$19.99' },
@@ -9,15 +9,15 @@ const PRODUCTS = [
     { id: 4, imageSrc: 'https://images.unsplash.com/photo-1512351660358-6bed42b7b842?q=80&w=927&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Lip Glow Color Reviver Balm', title: 'Lip Balm', description: 'A color reviver balm for your lips', brand: 'Channel', rating: 4.2, price: '$22.99' }
 ]
 
-const TrendingSection: React.FunctionComponent = () => {
+const SkinCare = () => {
     return (
         <ProductSection
             products={PRODUCTS}
-            headerTitle='Loved By EveryOne'
-            headerDescription='Find the trending Products'
+            headerTitle='Skin Care'
+            headerDescription='Care your skin like never before'
             headerLink='/shop'
         />
     )
 }
 
-export default TrendingSection
+export default SkinCare

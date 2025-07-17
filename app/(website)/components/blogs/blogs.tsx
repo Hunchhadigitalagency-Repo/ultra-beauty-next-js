@@ -19,13 +19,14 @@ const Blogs = () => {
       <div className="flex items-center justify-between gap-4">
         <SectionHeader
           title="Hear More from Us"
-          description="Read the Blog that we post"
+          description="See the Inside story and Useful content from our side"
+          titleClassName="font-playfair"
         />
         <LinkText title="See All" href="/blogs" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog) => (
+        {blogs.slice(0, 3).map((blog) => (
           <BlogCard key={blog.id} {...blog} />
         ))}
       </div>

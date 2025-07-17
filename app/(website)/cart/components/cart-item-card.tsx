@@ -56,6 +56,8 @@ export default function CartItemCard({
             <PriceRow
               previousPrice={`${item.originalPrice.toLocaleString()}`}
               price={`${item.currentPrice.toLocaleString()}`}
+              className="flex flex-col md:flex-row "
+              discountClassName="w-[74px] md:w-[80px]  text-[12px]  md:text-sm"
               priceClassname="w-[200px] md:w-[250px]"
             />
             <QuantityRow

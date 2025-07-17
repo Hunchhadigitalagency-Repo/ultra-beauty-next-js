@@ -1,15 +1,15 @@
 import Beauty_Banner from "./beauty_Banner/page";
 import HeroSection from "./components/hero/hero-section";
-import Companies from "./components/companies/Companies";
 import OffersSection from "./components/offers/offers-section";
-import FAQSection from "../../components/common/faq/faq-section";
 import CategorySection from "./components/category/category-section";
 import TrendingSection from "./components/trending/trending-section";
-import Testimonials from "@/components/common/testimonials/testimonials";
-import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
-import KnowYourProductSection from "./components/know-your-product/know-your-product-section";
-import DifferentiatorSection from "../../components/common/differentiator/differentiator-section";
 import BrandsCard from "./components/brands-that-you-love/brands-section";
+import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
+import BrandAdsBanner from "./components/brand-ads-banner/brand-ads-banner";
+import SkinCare from "./components/skin-care/skin-care";
+import MakeUp from "./components/make-up/make-up";
+import Featured from "./components/fetured/featured";
+import Blogs from "./components/blogs/blogs";
 
 
 export default function HomePage() {
@@ -20,13 +20,13 @@ export default function HomePage() {
       <OffersSection />
       <Beauty_Banner />
       <TrendingSection />
+      <BrandAdsBanner />
+      <SkinCare />
+      <MakeUp />
       <PromotionalCarousel className="padding" />
-      <Testimonials />
-      <DifferentiatorSection />
-      <KnowYourProductSection />
+      <Featured />
       <BrandsCard />
-      <FAQSection />
-      <Companies />
+      <Blogs />
     </main>
   );
 }

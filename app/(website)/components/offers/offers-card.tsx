@@ -8,12 +8,14 @@ interface OffersCardProps {
 
 const OffersCard: React.FunctionComponent<OffersCardProps> = ({ product }) => {
     return (
-        <div className=' w-36 h-36 md:w-64 md:h-64 lg:h-80 lg:w-80 relative overflow-hidden rounded-sm group cursor-pointer'>
-            <Image
-                src={product}
-                alt={'Offer Image'}
-                layout='fill'
-            />
+        <div className='w-[90%]'>
+            <div className=' w-full h-36 md:h-52 lg:h-80 relative overflow-hidden rounded-sm group cursor-pointer'>
+                <Image
+                    src={product}
+                    alt={'Offer Image'}
+                    layout='fill'
+                />
+            </div>
         </div>
     )
 }
