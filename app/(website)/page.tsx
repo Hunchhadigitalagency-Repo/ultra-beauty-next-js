@@ -7,9 +7,11 @@ import CategorySection from "./components/category/category-section";
 import TrendingSection from "./components/trending/trending-section";
 import Testimonials from "@/components/common/testimonials/testimonials";
 import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
-import KnowYourProductSection from "./components/know-your-product/know-your-product-section";
+// import KnowYourProductSection from "./components/know-your-product/know-your-product-section";
 import DifferentiatorSection from "../../components/common/differentiator/differentiator-section";
 import BrandsCard from "./components/brands-that-you-love/brands-section";
+import GlowKitSection from "./components/featured-glow-kit/glow-kit-section";
+import BeautyVideoSection from "./components/beauty-video/beauty-video-section";
 
 
 export default function HomePage() {
@@ -20,10 +22,12 @@ export default function HomePage() {
       <OffersSection />
       <Beauty_Banner />
       <TrendingSection />
+      <BeautyVideoSection/>
       <PromotionalCarousel className="padding" />
       <Testimonials />
+      <GlowKitSection/>
       <DifferentiatorSection />
-      <KnowYourProductSection />
+      {/* <KnowYourProductSection /> */}
       <BrandsCard />
       <FAQSection />
       <Companies />
