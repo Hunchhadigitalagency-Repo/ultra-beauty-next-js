@@ -59,7 +59,7 @@ const BrandsSection = () => {
         <SectionHeader
           title="Brands That You Love"
           titleClassName="font-playfair text-[#333333] "
-          description="Find the list of category that you must have to glow"
+          description="Find the brand from teh market that are loved by most women"
         />
         <LinkText title="ALL BRANDS" href="/shop" />
       </div>
