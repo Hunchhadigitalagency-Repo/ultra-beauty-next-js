@@ -10,7 +10,7 @@ const SignatureImage = () => {
      <div className="w-full md:w-1/3 mt-10 md:mt-0 flex justify-center  z-10 ">
      
         <div className="relative ">
-          <Image src={womanImage} alt="woman image" className="relative z-10 hidden lg:block top-[-80px]"></Image>
+          <Image src={womanImage} alt="woman image" className="relative z-10 hidden lg:block top-[-60px]"></Image>
           <Image
             src={flowerImage}
             alt="flower image"

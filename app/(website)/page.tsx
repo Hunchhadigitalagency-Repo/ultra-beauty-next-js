@@ -10,7 +10,9 @@ import PromotionalCarousel from "@/components/common/carousel/promotional-carous
 import KnowYourProductSection from "./components/know-your-product/know-your-product-section";
 import DifferentiatorSection from "../../components/common/differentiator/differentiator-section";
 import BrandsCard from "./components/brands-that-you-love/brands-section";
-import BeautyBanner from "./beauty-banner/page";
+
+import MermaidBanner from "./components/mermaid-banner/mermaid-banner";
+import BeautyBanner from "./components/beauty-banner/page";
 
 
 export default function HomePage() {
@@ -23,7 +25,9 @@ export default function HomePage() {
       <TrendingSection />
       <PromotionalCarousel className="padding" />
       <Testimonials />
+   <MermaidBanner/>
       <DifferentiatorSection />
+  
       <KnowYourProductSection />
       <BrandsCard />
       <FAQSection />
