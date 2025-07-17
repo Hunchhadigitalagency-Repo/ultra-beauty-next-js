@@ -47,10 +47,10 @@ const Footer: React.FC = () => {
   // );
 
   return (
-    <footer className="relative bg-[#161616] text-white py-12 sm:py-16 lg:py-20 mt-16">
+    <footer className="relative bg-[#161616] text-white padding">
 
       {/* Footer Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-6 pt-10">
         {/* News Letter */}
         <div className=' bg-inherit mb-10 gap-4 lg:gap-0 flex flex-col lg:flex-row lg:justify-between'>
           <div>
@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
             <div className="space-y-6">
               {/* More Links */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">More links</h3>
+                <h3 className="text-lg font-semibold text-white">About</h3>
                 <ul className="space-y-3">
                   {ABOUT_LINKS.map((link) => (
                     <li key={link.name} className="flex items-center space-x-2">
@@ -105,23 +105,38 @@ const Footer: React.FC = () => {
                   ))}
                 </ul>
               </div>
-
-              {/* Contact Us */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Contact Us</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">Kathmandu, Nepal</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">555555555</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">bsera@links.com</span>
-                  </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">HELP</h3>
+              <ul className="space-y-3">
+                {HELP_LINKS.map((link) => (
+                  <li key={link.name} className="flex items-center space-x-2">
+                    {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                    <a
+                      href={link.href}
+                      className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Contact Us */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm">Kathmandu, Nepal</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm">555555555</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                  <span className="text-gray-300 text-sm">bsera@links.com</span>
                 </div>
               </div>
             </div>
@@ -129,7 +144,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-4 gap-12">
+        <div className="hidden lg:grid lg:grid-cols-4">
           {/* SHOP Links - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-normal text-gray">SHOP</h3>
