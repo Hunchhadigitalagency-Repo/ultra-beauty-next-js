@@ -1,4 +1,4 @@
-import Beauty_Banner from "./beauty_Banner/page";
+
 import HeroSection from "./components/hero/hero-section";
 import OffersSection from "./components/offers/offers-section";
 import CategorySection from "./components/category/category-section";
@@ -11,6 +11,9 @@ import MakeUp from "./components/make-up/make-up";
 import Featured from "./components/fetured/featured";
 import Blogs from "./components/blogs/blogs";
 
+import MermaidBanner from "./components/mermaid-banner/mermaid-banner";
+import BeautyBanner from "./components/beauty-banner/page";
+
 
 export default function HomePage() {
   return (
@@ -18,11 +21,12 @@ export default function HomePage() {
       <HeroSection />
       <CategorySection />
       <OffersSection />
-      <Beauty_Banner />
+      <BeautyBanner />
       <TrendingSection />
       <BrandAdsBanner />
       <SkinCare />
       <MakeUp />
+      <MermaidBanner />
       <PromotionalCarousel className="padding" />
       <Featured />
       <BrandsCard />
