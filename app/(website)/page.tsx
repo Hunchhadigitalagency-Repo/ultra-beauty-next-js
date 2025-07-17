@@ -26,8 +26,8 @@ export default function HomePage() {
       <BrandAdsBanner />
       <SkinCare />
       <MakeUp />
-      <MermaidBanner />
       <PromotionalCarousel className="padding" />
+      <MermaidBanner />
       <Featured />
       <BrandsCard />
       <Blogs />
