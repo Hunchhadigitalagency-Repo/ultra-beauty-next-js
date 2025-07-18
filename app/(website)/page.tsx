@@ -22,6 +22,7 @@ export default function HomePage() {
       <CategorySection />
       <OffersSection />
       <BeautyBanner/>
+      
       <TrendingSection />
       <PromotionalCarousel className="padding" />
       <Testimonials />
