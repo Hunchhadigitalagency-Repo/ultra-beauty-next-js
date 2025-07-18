@@ -44,7 +44,7 @@ const ProductCard = ({
   // const router = useRouter();
   return (
 
-    <section className="w-[90%] bg-white flex flex-col gap-2 md:gap-3 lg:gap-4 rounded-lg overflow-hidden">
+    <section className="w-full bg-white flex flex-col gap-2 md:gap-3 lg:gap-4 rounded-lg overflow-hidden">
 
       {/* Image Section */}
       <div className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
@@ -103,7 +103,7 @@ const ProductCard = ({
         price={"3000"}
       />
       {/* Add To Bag Button */}
-      <button className="bg-pink w-full flex font-medium text-xs sm:text-sm md:text-base uppercase flex-row gap-2 justify-center items-center py-2">
+      <button className="bg-secondary w-full flex font-medium text-xs sm:text-sm md:text-base uppercase flex-row gap-2 justify-center items-center py-2">
         <ShoppingBag className="w-4 h-4" />
         Add To Bag
       </button>

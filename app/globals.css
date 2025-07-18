@@ -98,12 +98,12 @@
   --red: oklch(62.8% 0.258 29.23);
   --orange: oklch(77.2% 0.174 64.55);
   --yellow: oklch(83.04% 0.170 83.99);
-  --gray: oklch(95.97% 0.002 17.2);
-  /* Ultra Beauty Styles */
+  /* --gray: oklch(95.97% 0.002 17.2); */
   --blue: oklch(0.7047 0.1922 259.28);
-  --custom-black: oklch(23.50% 0.000 0);
-  --pink: oklch(0.8912 0.0776 19.14);
+  --pink: oklch(0.9422 0.0426 19.31);
   --gray: oklch(0.5281 0.0001 278.52);
+  /* Ultra Beauty Styles */
+  --custom-black: oklch(23.50% 0.000 0);
   --button: oklch(0.7752 0.2038 19.82);
   --sky-blue: oklch(0.7795 0.1731 241.82);
 }

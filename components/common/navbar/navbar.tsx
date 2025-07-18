@@ -11,6 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import SearchModal from "./search-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NavigationItem } from "@/types/website";
@@ -20,7 +21,9 @@ import { Search, ShoppingCart, Bell, Heart, CircleUser } from "lucide-react";
 
 
 export default function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false)
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
   const router = useRouter();
   const path = usePathname();
@@ -39,7 +42,11 @@ export default function Navbar() {
 
   return (
     <header className="bg-secondary border-b border-gray-200 sticky top-0 z-50">
-      <div className="padding-x py-2">
+      <div className="padding-x py-2 relative">
+        {/* Search Popup  */}
+        {searchOpen && (
+          <SearchModal />
+        )}
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
@@ -99,8 +106,8 @@ export default function Navbar() {
 
           {/* Right side icons */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <Search className="size-5" />
+            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(!searchOpen)} className="hidden md:flex hover:text-primary">
+              <Search className={`size-5  ${searchOpen && "text-primary"}`} />
             </Button>
 
             <Button

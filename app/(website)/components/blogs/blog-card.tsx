@@ -1,43 +1,33 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { IBlog } from "@/types/cms";
-import { Calendar, Eye, UserCircle2Icon } from "lucide-react";
+import DOMPurify from "dompurify";
+import { Calendar, UserCircle2Icon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-// export interface BlogCardProps {
-//   id: number;
-//   title: string;
-//   sub_title?: string;
-//   author: { id: number; name: string; is_active: boolean };
-//   category?: { id: number; name: string; is_active: boolean };
-//   cover_image?: string;
-//   created_at: string;
-//   description: string;
-//   features?: IFeature[];
-// }
 
 const BlogCard = ({
   title,
-  sub_title,
+  // sub_title,
   author,
-  category,
+  // category,
   cover_image,
   created_at,
   description,
 }: // features,
-IBlog) => {
+  IBlog) => {
   const formattedDate = created_at
     ? new Date(created_at).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
     : "";
 
   return (
-    <section className="w-full rounded-lg overflow-hidden space-y-2">
+    <section className="w-full rounded-lg overflow-hidden space-y-2 border-[1px] border-[#D7D7D7] p-3">
       <div className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group cursor-pointer">
         {cover_image ? (
           <Image
@@ -57,16 +47,16 @@ IBlog) => {
         )}
 
         {/* VIEW BLOG overlay */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Button
             size="sm"
             className="bg-primary hover:bg-sky-500 text-white w-48 h-11 rounded-full flex items-center justify-center gap-2"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             VIEW BLOG
             <Eye className="w-4 h-4" />
           </Button>
-        </div>
+        </div> */}
 
         {/* Feature badges */}
         {/* {features?.map((feat, i) => (
@@ -79,10 +69,10 @@ IBlog) => {
         ))} */}
       </div>
 
-      <h3 className="text-xl font-semibold text-foreground">{title}</h3>
-      {sub_title && (
+      <h3 className="text-xl font-playfair font-semibold text-foreground">{title}</h3>
+      {/* {sub_title && (
         <p className="text-sm text-muted-foreground">{sub_title}</p>
-      )}
+      )} */}
 
       <div className="flex items-center gap-4 justify-between">
         <div className="text-accent-foreground flex items-center gap-2">
@@ -92,11 +82,11 @@ IBlog) => {
           </span>
         </div>
 
-        {category?.name && (
+        {/* {category?.name && (
           <div className="text-accent-foreground flex items-center gap-2">
             <span className="font-medium text-sm">{category.name}</span>
           </div>
-        )}
+        )} */}
 
         <div className="text-accent-foreground flex items-center gap-2">
           <Calendar className="w-4 h-4" />
@@ -105,8 +95,8 @@ IBlog) => {
       </div>
 
       <p
-        className="text-foreground text-sm text-ellipsis overflow-hidden line-clamp-2"
-        dangerouslySetInnerHTML={{ __html: description || "" }}
+        className="text-foreground font-normal text-sm text-ellipsis overflow-hidden line-clamp-2"
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description || "") }}
       />
     </section>
   );

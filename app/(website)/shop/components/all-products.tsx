@@ -1,26 +1,31 @@
 "use client";
 
-import ProductCard from "@/components/common/cards/product-card";
-import SectionHeader from "@/components/common/header/section-header";
-import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-import InfiniteScroll from "react-infinite-scroll-component";
 import React from "react";
-import { ScribbleProductCard } from "@/components/ui/product-scribble";
+import FilterSection from "./filter";
 import { useParams } from "next/navigation";
-import { createWishList } from "@/lib/api/wishlist/wishlist-apis";
 import useCheckToken from "@/hooks/use-check-token";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ProductCard from "@/components/common/cards/product-card";
+import { createWishList } from "@/lib/api/wishlist/wishlist-apis";
+import SectionHeader from "@/components/common/header/section-header";
+import { ScribbleProductCard } from "@/components/ui/product-scribble";
+import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
+import SearchBox from "@/components/common/filter/search-box";
+
 
 const AllProducts = () => {
+
   const id = useParams().id as string;
   const path = id ? `products/?category=${id}` : "products";
 
   const { isAuthenticated } = useCheckToken()
   const { data: products, loading, hasMore, fetchNext } = useInfiniteFetchNoToken(path, 6);
 
-  console.log("this is the product details ", products)
+  console.log("this is the product details ", products);
+
   const toggleWishList = (id: number) => {
-    if(!isAuthenticated) {
-      return; 
+    if (!isAuthenticated) {
+      return;
     }
     const response = createWishList(id);
     console.log('this is the whish list updated', response)
@@ -40,49 +45,55 @@ const AllProducts = () => {
         </div>
       </section>
     );
-  }
+  };
+
 
   return (
-    <section className="space-y-8 padding">
-      <SectionHeader
-        title="All Products"
-        description="Get list of the items here so you can buy"
-      />
 
-      <InfiniteScroll
-        dataLength={products.length}
-        next={fetchNext}
-        hasMore={hasMore}
-        loader={
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-            {[...Array(3)].map((_, index) => (
-              <ScribbleProductCard key={index} />
-            ))}
-          </div>
-        }
-        endMessage={
-          <p className="text-center text-sm text-muted-foreground mt-4">
-            You’ve reached the end!
-          </p>
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product: any) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              title={product.name}
-              price={`Nrs. ${product.price}`}
-              imageSrc={product.images?.[0]?.file || "/fallback-image.jpg"}
-              alt={product.name}
-              description={product.description}
-              rating={product.rating || 5}
-              isWishlisted={product.my_wishlist}
-              onToggleWishlist={toggleWishList}
-            />
-          ))}
+    <section className="padding flex flex-col gap-8">
+      <div className="flex items-center flex-col md:flex-row justify-between gap-4">
+        <SectionHeader title={`All Products (${210})`} description="" />
+        <SearchBox placeholder="Search Products" />
+      </div>
+      <div className="flex flex-row gap-16">
+        <FilterSection />
+        <div className="flex-1">
+          <InfiniteScroll
+            dataLength={products.length}
+            next={fetchNext}
+            hasMore={hasMore}
+            loader={
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                {[...Array(3)].map((_, index) => (
+                  <ScribbleProductCard key={index} />
+                ))}
+              </div>
+            }
+            endMessage={
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                You’ve reached the end!
+              </p>
+            }
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product: any) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  title={product.name}
+                  price={`Nrs. ${product.price}`}
+                  imageSrc={product.images?.[0]?.file || "/fallback-image.jpg"}
+                  alt={product.name}
+                  description={product.description}
+                  rating={product.rating || 5}
+                  isWishlisted={product.my_wishlist}
+                  onToggleWishlist={toggleWishList}
+                />
+              ))}
+            </div>
+          </InfiniteScroll>
         </div>
-      </InfiniteScroll>
+      </div>
     </section>
   );
 };
