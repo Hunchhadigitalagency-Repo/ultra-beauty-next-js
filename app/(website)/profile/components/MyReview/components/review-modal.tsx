@@ -69,7 +69,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 </div>
 
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <p className="font-medium break-words text-sm md:text-base">
+                                    <p className="font-medium break-words text-sm md:text-base font-playfair">
                                         {title}
                                     </p>
                                     <FormField
