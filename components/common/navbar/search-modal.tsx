@@ -50,11 +50,11 @@ const SearchModal = () => {
                             <CarouselNext className="hidden lg:flex bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
                         </div>
 
-                        <CarouselContent className="-ml-1 lg:-ml-2">
+                        <CarouselContent className="-ml-1 lg:-ml-4">
                             {CATEGORY_LIST.map((category, index) => (
                                 <CarouselItem
                                     key={index}
-                                    className="basis-[40%] pl-2  sm:basis-1/3 lg:basis-1/4"
+                                    className="basis-[40%] pl-4  sm:basis-1/3 lg:basis-1/4"
                                 >
                                     <PopularCard image={category.image} />
                                 </CarouselItem>
