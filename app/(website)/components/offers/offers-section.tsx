@@ -29,11 +29,11 @@ const OffersSection = () => {
                 <Carousel
                     className="w-full"
                 >
-                    <CarouselContent className="-ml-0">
+                    <CarouselContent className="-ml-4">
                         {OFFERS_LIST.map((offer) => (
                             <CarouselItem
                                 key={offer.title}
-                                className="pl-0 basis-[45%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                                className="pl-4 basis-[45%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                             >
                                 <OffersCard product={offer.image} />
                             </CarouselItem>
