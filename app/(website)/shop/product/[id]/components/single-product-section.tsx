@@ -1,15 +1,16 @@
 "use client";
-
-import SectionHeader from "@/components/common/header/section-header";
+// import SectionHeader from "@/components/common/header/section-header";
 import ProductImagesSection from "./product-images-section";
 import ProductDescriptionSection from "./product-description-section";
 import { useParams } from "next/navigation";
 import { useFetchProduct } from "@/hooks/use-fetch-product";
 import { Product } from "@/types/website";
+import RatingStars from "@/components/common/product/rating-stars";
 
 const SingleProductSection = () => {
   const params = useParams();
   const id = params?.id as string;
+  const rating = 4.5;
 
   const { data: product, loading } = useFetchProduct<Product>(`products/${id}`);
   console.log(product)
@@ -19,12 +20,17 @@ const SingleProductSection = () => {
 
   return (
     <section className="padding space-y-6">
-      <SectionHeader
-        title={product.name}
-        description="Get list of the items here so you can buy"
-        titleClassName="line-clamp-1 text-ellipsis"
-      />
-
+      <div>
+      <div className="flex justify-end pl-8 w-full  mb-4">
+          <div className="flex justify-between w-1/2">
+          <span className="font-poppins font-medium text-sm text-[#7A7A7A]">Ubiya Derma</span>
+          <div className="flex ">
+              <RatingStars rating={rating} />
+              <span className="text-sm text-[#333333]">{rating}/5 Star Rating by 349 people</span>
+          </div>
+          </div>
+          
+        </div>
       <div className="grid lg:grid-cols-2 gap-8">
         <ProductImagesSection
           images={product.images}
@@ -32,6 +38,9 @@ const SingleProductSection = () => {
         />
         <ProductDescriptionSection product={product} />
       </div>
+
+      </div>
+  
     </section>
   );
 };

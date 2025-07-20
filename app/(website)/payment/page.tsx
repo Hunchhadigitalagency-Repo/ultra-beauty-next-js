@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Esewa from '@/assets/esewa.png';
 import Khalti from '@/assets/khalti.png';
 import SectionHeader from '@/components/common/header/section-header';
-import CashOnDelivery from '@/assets/cashondelivery.svg'
+import CashOnDelivery from '@/assets/cash-on-delivery.png'
 import GlobalIme from '@/assets/global-bank.png'
 import MasterCard from '@/assets/master-card.png'
 
