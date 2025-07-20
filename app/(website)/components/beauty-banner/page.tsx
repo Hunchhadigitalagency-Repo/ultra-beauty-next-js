@@ -1,6 +1,6 @@
 import React from "react";
-import lineImge from "@/assets/Line.png";
 import Image from "next/image";
+import lineImge from "@/assets/Line.png";
 import SignatureSection from "./components/signature"
 import SignatureImage from "./components/signature-image";
 

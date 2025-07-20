@@ -27,10 +27,14 @@ const PriceRow = ({
         <span className="text-sm md:text-base font-normal text-[#7A7A7A] line-through">
           Nrs. {previousPrice}
         </span>
+        <span className=" text-sm md:text-xl  text-[#FF2B5F] font-bold">
+          Nrs. {price}
+        </span>
+
       </span>
       {
         discountTag && (
-          <span className={`bg-green text-white px-3 py-0.5 rounded-full ${discountClassName}`}>
+          <span className={`bg-[#FF2B5F] text-white px-3 py-0.5 rounded-full ${discountClassName}`}>
             {discountTag}% Off
           </span>
         )
