@@ -60,13 +60,6 @@ export default function VerifyOtpForm() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 sm:pb-4 md:pb-8 lg:pb-10">
-        <h1 className="text-5xl text-primary font-semibold">बSERA</h1>
-        <p className="text-accent-foreground text-sm pr-6">
-          The Perfect Balance of Comfort and Style, where tradition meets modern
-          design.
-        </p>
-      </div>
 
       <div className="flex flex-col space-y-2">
         <h1 className="text-2xl font-semibold text-primary tracking-tight">
@@ -134,7 +127,7 @@ export default function VerifyOtpForm() {
           />
           <Button
             disabled={loading}
-            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
+            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-full p-5"
             type="submit"
           >
             Verify OTP

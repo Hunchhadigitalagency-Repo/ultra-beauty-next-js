@@ -1,19 +1,19 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import DOMPurify from "dompurify";
-import SectionHeader from "@/components/common/header/section-header";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, UserCircle2Icon } from "lucide-react";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import DOMPurify from "dompurify";
+import { IBlog } from "@/types/cms";
+import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { useFetchProduct } from "@/hooks/use-fetch-product";
-import { IBlog } from "@/types/cms"; // import your IBlog interface
+import SectionHeader from "@/components/common/header/section-header";
+import { ArrowRight, Calendar, UserCircle2Icon } from "lucide-react";
 
 const SingleBlogSection = () => {
   const id = useParams().id;
 
-const path = id ? `cms/blogs/${id}` : "";
+  const path = id ? `cms/blogs/${id}` : "";
 
   const { data: blog, loading, error } = useFetchProduct<IBlog>(path);
 
@@ -46,9 +46,8 @@ const path = id ? `cms/blogs/${id}` : "";
   });
 
   return (
-    <section className="space-y-8 padding max-w-5xl mx-auto">
-      <SectionHeader title={blog.title} description={blog.sub_title || "Watch inside story"} />
-
+    <section className="space-y-8 padding w-full mx-auto">
+      <SectionHeader title="Blog" description="Watch inside stories" />
       <div className="relative w-full h-[442px] rounded-lg overflow-hidden group shadow-lg">
         {blog.cover_image ? (
           <Image
@@ -65,10 +64,10 @@ const path = id ? `cms/blogs/${id}` : "";
           </div>
         )}
 
-        <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute bottom-6 right-6 ">
           <Button
             variant="default"
-            className="text-black rounded-full w-[250px] h-11 uppercase font-semibold tracking-wide shadow-md hover:bg-gray-100"
+            className="text-white rounded-full w-[250px] h-11 uppercase font-semibold tracking-wide shadow-md bg-[#FF2B5F] "
             onClick={() => {
               window.location.href = "/shop";
             }}
@@ -77,47 +76,38 @@ const path = id ? `cms/blogs/${id}` : "";
           </Button>
         </div>
       </div>
+      <div className="flex flex-col md:flex-col  gap-4">
+        <h2 className="text-3xl font-semibold text-custom-black max-w-4xl font-playfair">
+          {blog.title}
+        </h2>
 
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-        <h2 className="text-3xl font-semibold text-custom-black max-w-4xl">{blog.title}</h2>
-
-        <div className="flex flex-wrap gap-6 text-accent-foreground text-sm font-medium">
+        <div className="flex flex-wrap gap-6 text-accent-foreground text-sm font-medium ">
           <div className="flex items-center gap-2">
             <UserCircle2Icon className="w-5 h-5" />
             <span>{blog.author?.username || "Unknown Author"}</span>
           </div>
+          {blog.category?.name && (
+            <div className="flex items-center gap-2">
+              <span className="uppercase tracking-wide bg-[#40C040] text-white px-3 rounded-full">
+                {blog.category.name}
+              </span>
+            </div>
+          )}
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5" />
             <span>{new Date(blog.created_at).toLocaleDateString()}</span>
           </div>
-          {blog.category?.name && (
-            <div className="flex items-center gap-2">
-              <span className="uppercase tracking-wide">{blog.category.name}</span>
-            </div>
-          )}
         </div>
       </div>
-
+      <p className="text-justify tracking-tight">
+        {blog.description.length > 1
+          ? blog.description
+          : "No Description Available"}
+      </p>
       <article
         className="prose max-w-none prose-indigo text-gray-800"
         dangerouslySetInnerHTML={{ __html: cleanHtml }}
       />
-
-      {blog.tags && (
-        <div>
-          <h4 className="text-xl font-semibold mb-2 text-custom-black">Tags</h4>
-          <div className="flex flex-wrap gap-2">
-            {blog.tags.split(",").map((tag: string) => (
-              <span
-                key={tag.trim()}
-                className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm font-medium"
-              >
-                {tag.trim()}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </section>
   );
 };

@@ -1,17 +1,18 @@
 "use client";
-import SectionHeader from "@/components/common/header/section-header";
-import React, { useEffect, useState } from "react";
 import WishlistCard from "./wishlist-card";
+import React, { useEffect, useState } from "react";
 import useCheckToken from "@/hooks/use-check-token";
 import useFetchDataToken from "@/hooks/use-fetch-data-token";
-import WishlistCardSkeleton from "@/components/ui/wishlist-scribble-loader";
 import { deleteWishlist } from "@/lib/api/wishlist/wishlist-apis";
+import SectionHeader from "@/components/common/header/section-header";
+import WishlistCardSkeleton from "@/components/ui/wishlist-scribble-loader";
 
 interface Product {
   id: number;
   image: string;
   name: string;
   detail_description?: string;
+  general_description?: string;
   rating?: number;
   price?: string;
   discount_percentage?: string;
@@ -32,10 +33,13 @@ const WishlistedProducts = () => {
 
   const wishlistItems: Product[] = React.useMemo(() => {
     const isWishlistEntryArray = (data: any): data is WishlistEntry[] => {
-      return Array.isArray(data) && data.length > 0 && 
-             typeof data[0] === 'object' && 
-             'products' in data[0] && 
-             Array.isArray(data[0].products);
+      return (
+        Array.isArray(data) &&
+        data.length > 0 &&
+        typeof data[0] === "object" &&
+        "products" in data[0] &&
+        Array.isArray(data[0].products)
+      );
     };
 
     if (!isWishlistEntryArray(data)) {
@@ -62,7 +66,11 @@ const WishlistedProducts = () => {
   };
 
   if (authLoading) {
-    return <p className="padding text-sm text-gray-500">Checking authentication...</p>;
+    return (
+      <p className="padding text-sm text-gray-500">
+        Checking authentication...
+      </p>
+    );
   }
 
   if (!isAuthenticated) {
@@ -77,10 +85,16 @@ const WishlistedProducts = () => {
 
   return (
     <section className="space-y-6 padding">
-      <SectionHeader
-        title="Wishlist"
-        description="Find all the products you liked"
-      />
+      <div className="flex justify-between w-full">
+        <SectionHeader
+          title="Wishlist"
+          description="Find all the products you liked"
+        />
+        <button className="bg-[#EFEFEF] h-10 px-7 rounded-full">
+          clear All Wishlist
+        </button>
+      </div>
+
       <div className="flex flex-col gap-8">
         {loading ? (
           <>
@@ -94,7 +108,7 @@ const WishlistedProducts = () => {
               id={product.id}
               image={product.image}
               name={product.name}
-              description={product.detail_description || ""}
+              description={product.general_description || ""}
               rating={product.rating ?? 4.5}
               previousPrice={product.price || "0"}
               price={product.price || "0"}
@@ -103,7 +117,9 @@ const WishlistedProducts = () => {
             />
           ))
         ) : (
-          <p className="text-sm text-gray-500 text-center">No wishlist items found.</p>
+          <p className="text-sm text-gray-500 text-center">
+            No wishlist items found.
+          </p>
         )}
       </div>
     </section>
