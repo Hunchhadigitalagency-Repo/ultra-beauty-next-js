@@ -6,7 +6,7 @@ import vectorIcon from "@/assets/Vector.png"
 
 const SignatureSection = () => {
   return (
-    <div className="w-full md:w-full z-10 px-4 md:px-8 lg:w-1/2 ">
+    <div className="w-full md:w-full z-10 lg:w-1/2 ">
       <p className="text-sm md:text-base font-playfair mb-2">
         Ultra Beauty & Brand
       </p>
