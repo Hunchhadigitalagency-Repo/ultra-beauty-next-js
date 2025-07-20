@@ -14,6 +14,7 @@ import BrandsCard from "./components/brands-that-you-love/brands-section";
 import BrandAdsBanner from "./components/brand-ads-banner/brand-ads-banner";
 import GlowKitSection from "./components/featured-glow-kit/glow-kit-section";
 import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
+import BeautyVideoSection from "./components/beauty-video/beauty-video-section";
 
 
 export default function HomePage() {
@@ -26,6 +27,7 @@ export default function HomePage() {
       <TrendingSection />
       <BrandAdsBanner />
       <SkinCare />
+      <BeautyVideoSection />
       <MakeUp />
       <PromotionalCarousel className="padding" />
       <GlowKitSection />
