@@ -1,8 +1,8 @@
-import Image from 'next/image'
-import React from 'react'
-import frameIcon from "@/assets/Frame.png"
-import groupIcon from "@/assets/Group.png"
-import vectorIcon from "@/assets/Vector.png"
+import Image from "next/image";
+import React from "react";
+import frameIcon from "@/assets/Frame.png";
+import groupIcon from "@/assets/Group.png";
+import vectorIcon from "@/assets/Vector.png";
 
 const SignatureSection = () => {
   return (
@@ -16,8 +16,9 @@ const SignatureSection = () => {
       </h1>
 
       <p className="font-poppins text-sm sm:text-base md:text-lg text-foreground mb-6">
-        Elevate your everyday routine with handpicked collections crafted for timeless elegance.
-        From skin-perfecting essentials to bold statement shades—indulge in beauty that defines you.
+        Elevate your everyday routine with handpicked collections crafted for
+        timeless elegance. From skin-perfecting essentials to bold statement
+        shades—indulge in beauty that defines you.
       </p>
 
       <ul className="space-y-6">
@@ -68,7 +69,7 @@ const SignatureSection = () => {
         SHOP NOW →
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default SignatureSection
+export default SignatureSection;

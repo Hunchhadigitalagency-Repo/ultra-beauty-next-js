@@ -1,12 +1,10 @@
 import React from "react";
-
 interface SectionHeaderProps {
   title: string;
   description: string;
   className?: string;
   titleClassName?: string;
 }
-
 const SectionHeader = ({
   title,
   description,
@@ -20,8 +18,6 @@ const SectionHeader = ({
       </h2>
       <p className="text-foreground font-normal text-xs sm:text-sm md:text-base">{description}</p>
     </div>
-
   );
 };
-
 export default SectionHeader;
