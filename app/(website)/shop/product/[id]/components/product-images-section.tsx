@@ -1,7 +1,9 @@
 "use client";
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import DOMPurify from "dompurify";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -20,10 +22,18 @@ interface ProductImagesSectionProps {
   is_flash_sale?: boolean;
 }
 
+const methods =[
+  {title: 'How To Use',
+   desc:"Apply a small amount to cleansed face and neck every morning and night. Gently massage in upward circular motions until fully absorbed. For best results, use consistently after toner and serum."},
+  {title: "Ingredients", 
+  desc: "Apply a small amount to cleansed face and neck every morning and night. Gently massage in upward circular motions until fully absorbed. For best results, use consistently after toner and serum. Apply a small amount to cleansed face and neck every morning and night. Gently massage in upward circular motions until fully absorbed. For best results, use consistently after toner and serum."
+  }
+]
+
+
 const ProductImagesSection: React.FC<ProductImagesSectionProps> = ({
   images,
-  description,
-  is_flash_sale,
+  // is_flash_sale,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string>(
     images?.[0]?.file || ""
@@ -41,7 +51,7 @@ const ProductImagesSection: React.FC<ProductImagesSectionProps> = ({
             className="object-center object-cover rounded-lg"
           />
         )}
-        <Badge className="absolute top-4 right-4 bg-gray-800 text-white">
+        <Badge className="absolute top-4 right-4 bg-[#4A90E2] text-white">
           New
         </Badge>
         <Button
@@ -73,20 +83,32 @@ const ProductImagesSection: React.FC<ProductImagesSectionProps> = ({
       )}
 
       {/* Flash Sale Badge */}
-      {is_flash_sale && (
-        <Badge className="bg-red-500 text-white w-fit">Flash Sales</Badge>
-      )}
-
+        <div className="flex justify-between text-white w-full bg-[#4A90E2] rounded-lg px-3 py-2 ">
+          <span className="font-bold font-poppins"> Flash Sales</span>
+          <span className="font-poppins">Ends in 48:00:00 Hrs</span>
+          </div>
+    
       {/* Detail Description */}
-      {description && (
-        <div className="space-y-2">
-          <h2 className="font-bold text-lg">More Description</h2>
-          <p
-            className="text-foreground text-sm leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: description }}
-          />
-        </div>
-      )}
+      <Accordion type="single" collapsible >
+          {methods?.map((method) => (
+            <AccordionItem
+              key={method.title}
+              value={`${method.title}`}
+              className="rounded-lg  py-2 bg-white border-none"
+            >
+              <AccordionTrigger className="text-left px-4 font-poppins cursor-pointer bg-secondary text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary text-lg">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(method.title),
+                  }}
+                />
+              </AccordionTrigger>
+              <AccordionContent className="text-foreground text-sm font-poppins leading-relaxed pt-2 pb-4">
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(method.desc) }} />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
     </div>
   );
 };
