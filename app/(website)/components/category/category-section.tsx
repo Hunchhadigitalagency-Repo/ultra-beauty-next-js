@@ -26,7 +26,6 @@ const CATEGORY_LIST = [
 
 const CategorySection: React.FunctionComponent = () => {
 
-
   return (
     <section className="padding space-y-4">
       <div className="flex justify-between items-center gap-4">
