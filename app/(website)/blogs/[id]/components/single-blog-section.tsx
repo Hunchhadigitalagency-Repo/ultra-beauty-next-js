@@ -104,7 +104,6 @@ const SingleBlogSection = () => {
           ? blog.description
           : "No Description Available"}
       </p>
-      =
       <article
         className="prose max-w-none prose-indigo text-gray-800"
         dangerouslySetInnerHTML={{ __html: cleanHtml }}
