@@ -43,7 +43,7 @@ const GlowKitSection = () => {
             {GlowKitList.map((kit, index) => (
               <CarouselItem
                 key={index}
-                className="pl-0 basis-[45%]   md:basis-[45%] lg:basis-[32%]" >
+                className="pl-0 basis-[45%]   md:basis-[45%] lg:basis-[32f%]" >
                 <GlowKitCard image={kit.image} title={kit.title} desc={kit.desc} />
               </CarouselItem>
             ))}
