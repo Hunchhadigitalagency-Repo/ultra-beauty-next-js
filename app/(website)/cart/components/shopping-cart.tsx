@@ -125,7 +125,7 @@ export default function ShoppingCart({
   return (
     <section className="padding space-y-4">
       <SectionHeader
-        title="Cart"
+        title="Bag"
         description="All the items are ready for checkout"
       />
 

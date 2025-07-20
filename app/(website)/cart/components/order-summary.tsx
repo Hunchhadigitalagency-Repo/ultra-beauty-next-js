@@ -1,10 +1,16 @@
 "use client";
 
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, Info, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "@/lib/cart-utils";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+// import { is } from "date-fns/locale";
+import GenericModal from "@/components/common/modals/generic-modal";
+// import { set } from "date-fns";
+import CircularProgressBar from "@/components/common/circular-progress-bar/circular-progress-bar";
+// import { Slider } from "@/components/ui/slider";
 
 interface OrderSummaryProps {
   totalItems: number;
@@ -29,15 +35,23 @@ export default function OrderSummary({
   onApplyVoucher,
   isCheckout = false,
 }: OrderSummaryProps) {
+
+
   const router = useRouter();
+  const progress = [50];
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
+  const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
 
   return (
-    <div className="bg-[#EFEFEF] rounded-lg p-4 space-y-4">
+    <div className="bg-secondary rounded-lg p-4 space-y-4">
       <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
-        <h3 className="font-medium text-base text-foreground">Location</h3>
+        <div className="w-full flex justify-between items-center">
+          <h3 className="font-medium text-base text-foreground">Location</h3>
+          <button onClick={() => setIsLocationModalOpen(!isLocationModalOpen)} className="text-sm cursor-pointer text-primary">Change Location</button>
+        </div>
         <div className="flex gap-2 items-start">
-          <div className="rounded-full size-8 p-2 flex items-center justify-center bg-[#D9D9D9]">
-            <MapPin className="w-6 h-6" />
+          <div className="rounded-full size-8 p-2 flex items-center justify-center bg-primary">
+            <MapPin className="w-6 h-6 text-white" />
           </div>
 
           <p className="text-sm font-medium text-custom-black">{location}</p>
@@ -72,7 +86,7 @@ export default function OrderSummary({
           className="text-sm rounded-none h-10 bg-white"
         />
         <Button
-          className="bg-green-600 hover:bg-green-700 rounded-none h-10"
+          className="bg-primary rounded-none h-10"
           onClick={onApplyVoucher}
         >
           Apply
@@ -91,9 +105,17 @@ export default function OrderSummary({
         )}
       </div>
 
+      <Button
+        className="w-full flex justify-between bg-blue text-white font-medium"
+        onClick={() => setisRewardsModalOpen(!isRewardsModalOpen)}
+      >
+        Apply For Rewards Points
+        <Info className="w-5 h-5" />
+      </Button>
+
       {!isCheckout && (
         <Button
-          className="w-full bg-yellow hover:bg-yellow-500 text-black font-medium"
+          className="w-full bg-primary text-white font-medium"
           onClick={() => router.push("/checkout")}
         >
           Proceed to Checkout
@@ -112,6 +134,45 @@ export default function OrderSummary({
           </Button>
         </div>
       )}
+      {
+        isLocationModalOpen && (
+          <GenericModal title="Change Delivery Location" setIsOptionClick={() => setIsLocationModalOpen(false)}>
+            <div className="flex flex-col gap-3">
+              <textarea rows={3} className="w-full p-3 border-[1px] outline-0 border-[#E3E3E3] text-gray" placeholder="Type your Location Here ....." />
+              <Button
+                className="w-full bg-primary text-white font-medium"
+                onClick={() => setIsLocationModalOpen(false)}
+              >
+                Change
+              </Button>
+            </div>
+          </GenericModal>
+        )
+      }
+
+      {
+        isRewardsModalOpen && (
+          <GenericModal title="Total Rewards Points" setIsOptionClick={() => setisRewardsModalOpen(false)}>
+            <div>
+              <div className="flex items-center gap-5 ">
+                <CircularProgressBar
+                  value={progress[0]}
+                  size={120}
+                  strokeWidth={10}
+                  showLabel
+                  labelClassName="text-xl font-bold"
+                  renderLabel={(progress) => `${progress}%`}
+                />
+                <div className="flex flex-col gap-2">
+                  <h1 className="font-semibold text-xl">350 Points</h1>
+                  <p className="font-medium text-base">Points till your next purchases</p>
+                </div>
+              </div>
+
+            </div>
+          </GenericModal>
+        )
+      }
     </div>
   );
 }

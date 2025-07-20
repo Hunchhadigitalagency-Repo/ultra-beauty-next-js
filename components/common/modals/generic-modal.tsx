@@ -21,7 +21,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
         <Dialog defaultOpen={true} onOpenChange={closeDialog}>
             <DialogContent className="sm:w-[484px] rounded-t-lg py-4 px-5 flex flex-col justify-between gap-3 bg-white">
                 <DialogTitle className="pt-1 pb-4">
-                    <p className="text-primary font-bold font-playfair text-xl">{title}</p>
+                    <p className="text-foreground font-medium text-xl">{title}</p>
                 </DialogTitle>
 
                 {children}

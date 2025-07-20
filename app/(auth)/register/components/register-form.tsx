@@ -54,6 +54,7 @@ export default function UserRegisterForm() {
       setLoading(true);
 
       const res = await register(data);
+      console.log(res)
       if (res.status === 201) {
         dispatch(setProfileDetails(res.data?.user));
         toast.success("Registration Successful", {
@@ -99,7 +100,7 @@ export default function UserRegisterForm() {
                       placeholder="Please Enter the email Address"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -108,7 +109,7 @@ export default function UserRegisterForm() {
                       className="absolute right-0 top-0 h-full px-2 py-1 hover:bg-transparent"
                     >
                       <IoIosMail
-                        className="h-10 w-10 cursor-pointer"
+                        className="h-10 w-10 text-[#C0C0C0] cursor-pointer"
                         aria-hidden="true"
                       />
                     </Button>
@@ -118,12 +119,12 @@ export default function UserRegisterForm() {
               </FormItem>
             )}
           />
-          <div className="flex gap-2">
+          <div className="flex w-full gap-2">
             <FormField
               control={form.control}
               name="first_name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
                     <div className="relative">
@@ -131,7 +132,7 @@ export default function UserRegisterForm() {
                         placeholder="Enter the First Name"
                         disabled={loading}
                         {...field}
-                        className="rounded-xs"
+                        className="rounded-full"
                       />
                     </div>
                   </FormControl>
@@ -143,7 +144,7 @@ export default function UserRegisterForm() {
               control={form.control}
               name="last_name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
                     <div className="relative">
@@ -151,7 +152,7 @@ export default function UserRegisterForm() {
                         placeholder="Enter the Last Name"
                         disabled={loading}
                         {...field}
-                        className="rounded-xs"
+                        className="rounded-full"
                       />
                     </div>
                   </FormControl>
@@ -174,7 +175,7 @@ export default function UserRegisterForm() {
                       placeholder="Please Enter the Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -184,10 +185,10 @@ export default function UserRegisterForm() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 cursor-pointer"
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -215,7 +216,7 @@ export default function UserRegisterForm() {
                       placeholder="Please Enter the Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -225,10 +226,10 @@ export default function UserRegisterForm() {
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
                     >
                       {showConfirmPassword ? (
-                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 cursor-pointer"
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -246,7 +247,7 @@ export default function UserRegisterForm() {
           />
           <Button
             disabled={loading}
-            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
+            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-full p-5"
             type="submit"
           >
             Register

@@ -15,7 +15,7 @@ const QuantityRow = ({ onDecrease, onIncrease, className }: QuantityRowProps) =>
       <Button
         variant="ghost"
         size="icon"
-        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-[#D9D9D9] hover:bg-[#D9D9D9]/80 "
+        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-transparent "
         onClick={onDecrease}
       >
         <Minus className="h-4 w-4" />
@@ -24,7 +24,7 @@ const QuantityRow = ({ onDecrease, onIncrease, className }: QuantityRowProps) =>
       <Button
         variant="ghost"
         size="icon"
-        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-[#D9D9D9] hover:bg-[#D9D9D9]/80"
+        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-transparent"
         onClick={onIncrease}
       >
         <Plus className="h-4 w-4" />

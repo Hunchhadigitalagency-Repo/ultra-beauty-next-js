@@ -21,7 +21,7 @@ const PriceRow = ({
   return (
     <div className={`md:items-center  gap-3 md:gap-5  ${className}`}>
       <span className={`flex w-full justify-between ${priceClassname}`}>
-        <span className="text-foreground text-sm md:text-xl font-medium ">
+        <span className="text-primary text-sm md:text-xl font-medium ">
           Nrs. {price}
         </span>
         <span className="text-sm md:text-base font-normal text-[#7A7A7A] line-through">
