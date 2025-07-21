@@ -29,7 +29,7 @@ const CheckoutDetails = () => {
                   description:
                     "Pregnancy Care / Pillow/ Name of the Project will go here and it can be long but with some long text",
                   image:
-                    "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+                    "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1038&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                   color: "Blue",
                   size: "XXL",
                   originalPrice: 45000,
@@ -41,12 +41,12 @@ const CheckoutDetails = () => {
               />
             </div>
           </section>
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-end">
             <Link
               href={"/shop"}
-              className="text-primary transition-all duration-300 ease-in-out flex items-center gap-2 uppercase text-xl hover:text-sky-500"
+              className="text-foreground transition-all duration-300 ease-in-out flex items-center gap-2 uppercase text-xl"
             >
-              <span className="font-bold">CONTINUE TO SHOP </span>
+              <span className="font-bold uppercase">Continue Shopping </span>
               <ArrowRight />
             </Link>
           </div>

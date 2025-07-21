@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
   const ABOUT_LINKS = [
     { name: "WHO WE ARE?", href: "/" },
     { name: "CUSTOMER REVIEW", href: "/" },
-    { name: "CAREER", href: "/" },
+    { name: "CAREER", href: "/career" },
     { name: "PR-PACKAGE", href: "/" },
     { name: "EVENTS", href: "/" },
     { name: "TERMS & CONDITION", href: "/" },

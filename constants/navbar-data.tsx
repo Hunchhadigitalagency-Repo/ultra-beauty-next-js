@@ -27,6 +27,7 @@ export const getNavigationItems = async (): Promise<NavigationItem[]> => {
             { name: "Blogs", href: "/blogs" },
             { name: "About Us", href: "/about" },
             { name: "Contact Us", href: "/contact" },
+            { name: "Brands", href: "/brands" },
         ];
 
         return navigationItems;

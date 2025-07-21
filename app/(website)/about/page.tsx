@@ -6,11 +6,14 @@ import OurVisions from "./components/our-visions";
 import OurTeam from "./components/our-team";
 import OurValues from "./components/our-values";
 import OurGoals from "./components/our-goals";
+import UltraBeauty from "./components/ultra-beauty";
+
 
 const AboutPage = () => {
   return (
     <main className="space-y-8">
       <AboutHeroSection />
+      <UltraBeauty/>
       <OurStory />
       <OurVisions />
       <OurTeam />
