@@ -51,7 +51,7 @@ export default function ShippingForm() {
 
   return (
     <div className="space-y-6 bg-white">
-      <div className="py-2 px-4 bg-[#EBEBEB] rounded-sm font-medium text-custom-black text-base">
+      <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base">
         <h2 className="">Shipping details</h2>
       </div>
 
@@ -344,7 +344,7 @@ export default function ShippingForm() {
           <div className="flex justify-end pt-4">
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-md"
+              className="bg-primary text-white px-8 py-2 rounded-md"
             >
               Continue and Pay
             </Button>

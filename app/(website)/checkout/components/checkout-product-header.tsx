@@ -12,7 +12,7 @@ const CheckoutProductHeader = ({
   totalQuantity,
 }: CheckoutProductHeaderProps) => {
   return (
-    <div className="py-2 px-4 bg-[#EBEBEB] rounded-sm font-medium text-custom-black text-base flex items-center justify-between gap-4">
+    <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base flex items-center justify-between gap-4">
       <h4>
         Package {selectedItem} of {totalItems}
       </h4>

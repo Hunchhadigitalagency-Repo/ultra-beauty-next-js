@@ -1,11 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 import {
   Form,
   FormControl,
@@ -15,15 +9,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import { toast } from "sonner";
+import { useState } from "react";
 import {
   ContactFormValues,
   contactSchema,
 } from "@/schemas/contact/contact-schema";
-
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import apiBase from "@/services/api-base-instance";
+import { zodResolver } from "@hookform/resolvers/zod";
+// import { Textarea } from "@/components/ui/textarea";
+
 
 export default function ContactForm() {
 
@@ -36,7 +34,7 @@ export default function ContactForm() {
       lastname: "",
       email: "",
       subject: "",
-      message: "",
+      // message: "",
     },
   });
 
@@ -57,9 +55,9 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="space-y-6 bg-white">
+    <div className="space-y-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
             name="firstname"
@@ -142,7 +140,7 @@ export default function ContactForm() {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="message"
             render={({ field }) => (
@@ -160,7 +158,7 @@ export default function ContactForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           {/* Submit Button */}
 
@@ -169,8 +167,8 @@ export default function ContactForm() {
             type="submit"
             className={
               `w-full  
-              ${isLoading ? 'bg-blue-400 hover:bg-blue-500' : 'bg-blue-600 hover:bg-blue-700'}
-               text-white px-8 py-2 rounded-md`
+              bg-primary
+               text-white px-8 py-5 rounded-md`
             }>
             {isLoading ? 'Submitting' : 'Submit Now'}
           </Button>

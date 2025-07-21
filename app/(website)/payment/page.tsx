@@ -13,8 +13,8 @@ const PAYMENT_GATEWAYS = [
     { name: 'Esewa', image: Esewa, value: 'esewa' },
     { name: 'Khalti', image: Khalti, value: 'khalti' },
     { name: 'CashOnDelivery', image: CashOnDelivery, value: 'cod' },
-    {name:"GlobalIme",image:GlobalIme,value:'GlobalIme'},
-    {name:"MasterCard",image:MasterCard,value:"MasterCard"}
+    { name: "GlobalIme", image: GlobalIme, value: 'GlobalIme' },
+    { name: "MasterCard", image: MasterCard, value: "MasterCard" }
 ];
 
 
@@ -31,7 +31,7 @@ const Payment = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_0.3fr] gap-10">
                 <div className="flex flex-col gap-3 md:gap-5">
-                    <div className="bg-[#EBEBEB] rounded-sm">
+                    <div className="bg-secondary rounded-sm">
                         <p className="px-5 py-3 font-medium text-sm md:text-base">
                             Select payment Methods
                         </p>
