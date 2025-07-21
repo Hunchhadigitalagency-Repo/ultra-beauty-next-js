@@ -5,7 +5,7 @@ import React from "react";
 import { Heart, ShoppingBag } from "lucide-react";
 import RatingStars from "../product/rating-stars";
 import PriceRow from "../product/price-row";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { IFeature } from "@/types/product";
 
 interface ProductCardProps {
@@ -41,13 +41,13 @@ const ProductCard = ({
 }: ProductCardProps) => {
 
 
-  // const router = useRouter();
+  const router = useRouter();
   return (
 
     <section className="w-full bg-white flex flex-col gap-2 md:gap-3 lg:gap-4 rounded-lg overflow-hidden">
 
       {/* Image Section */}
-      <div className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
+      <div onClick={() => router.push(`/shop/product/${id}`)} className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
         <Image
           src={imageSrc}
           alt={alt}

@@ -4,26 +4,33 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Info,
+  Minus,
   Plus,
   ShoppingCart,
+  SquareCheck,
+  Truck,
 } from "lucide-react";
 import Image from "next/image";
 import khalti from "@/assets/khalti.png";
 import esewa from "@/assets/esewa.png";
-import RatingStars from "@/components/common/product/rating-stars";
+import mastercard from "@/assets/mastercard.png";
+import coin from "@/assets/coin-dollar.png";
+import globalIime from "@/assets/globalIme.png"
 import QuantityRow from "@/components/common/product/quantity-row";
 import { FaInstagram, FaTiktok, FaXTwitter, FaFacebookMessenger } from "react-icons/fa6";
 import { Product } from "@/types/website";
 import React from "react";
-import PriceRow from "@/components/common/product/price-row";
+// import PriceRow from "@/components/common/product/price-row";
 import { addToCart } from "@/lib/api/cart/cart-apis";
+// import { sr } from "date-fns/locale";
 
 interface Props {
   product: Product;
+
 }
 
 const ProductDescriptionSection = ({ product }: Props) => {
-  const rating = 4.5;
+
 
   const discountedPrice = product.discount_percentage
     ? (
@@ -33,58 +40,53 @@ const ProductDescriptionSection = ({ product }: Props) => {
     : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 ">
       <div>
-        {product.is_must_sold && (
-          <Badge className="bg-green-500 text-white mb-2">Best Seller</Badge>
-        )}
-
-        <h1 className="text-2xl font-bold text-foreground mb-2">{product.name}</h1>
-
-        <div className="flex items-center gap-2 mb-4">
-          <RatingStars rating={rating} />
-          <span className="text-sm text-gray-600">{rating}/5 Star Rating</span>
-        </div>
-
+        <h1 className="text-2xl font-bold font-playfair text-foreground mb-2">{product.name}</h1>
+          <div className=" flex items-center justify-between " >
+          <Badge className="bg-[#FF2B5F] w-36 h-10 font-poppins font-light text-white text-[20px] mb-2">Best Seller</Badge>
+          <span className="text-sm text-[#333333] font-poppins font-medium pl-28">#15 SOLD</span>
+          <span className="text-sm text-[#333333] font-poppins font-medium inline-flex gap-2 items-center">
+          <Truck/> Fast Delivery <Info />
+        </span>
+          </div>
+        <div className="flex items-center gap-2 justify-between bg-secondary px-4 py-2 rounded-sm">
+        <span className="text-l font-medium">Details </span>
+        <Button variant="ghost" size="icon">
+            <Minus className="size-5" />
+        </Button>
+      
+      </div>
         {product.general_description && (
           <div
-            className="text-foreground text-sm mb-4 leading-relaxed"
+            className="text-foreground font-poppins text-sm mb-4 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: product.general_description }}
           />
         )}
       </div>
-
-      <div className="flex items-center gap-4">
-        {discountedPrice ? (
-          <PriceRow
-            previousPrice={product.price}
-            price={discountedPrice}
-            discountTag={product.discount_percentage}
-            className=""
-            discountClassName="text-[15px]"
-          />
-
-        ) : (
-          <h2 className="text-3xl font-bold text-foreground">NPR. {product.price}</h2>
-        )}
-      </div>
-
+{/* Variant Products section */}
       <div>
-        <h3 className="font-medium mb-2">Color</h3>
         <div className="flex gap-2">
-          {["bg-gray-800", "bg-red-500", "bg-blue-500", "bg-orange-500"].map((color, i) => (
-            <button
-              key={i}
-              className={`w-8 h-8 rounded-full ${color} `}
-            />
-          ))}
+        {product.variants.slice(0, 5).map((variant, i) => (
+          <div className="border border-[#D8D8D8] rounded-md" key={i}>
+                  <Image
+                    src={variant?.item_image
+                       || product.images?.[0]?.file || ""}
+                    alt={`Bundle item ${i}`}
+                    width={120}
+                    height={120}
+                    className="rounded-lg object-cover"
+                  />
+          </div>
+               
+              ))}
         </div>
       </div>
-
+{/* Products Size */}
       <div>
         <h3 className="font-medium mb-2">Size</h3>
-        <div className="flex gap-2">
-          {["XXL", "XL", "L", "M"].map((size, i) => (
+        <div className="flex gap-8">
+          {["150 Gram", "200 Gram", "450 Gram", "650 Gram"].map((size, i) => (
             <Button
               key={size}
               variant={i === 1 ? "default" : "outline"}
@@ -96,63 +98,71 @@ const ProductDescriptionSection = ({ product }: Props) => {
           ))}
         </div>
       </div>
-
-      <div className="flex items-center gap-4">
-        <QuantityRow
-          className=""
+{/* Product Price */}
+      <div className="flex items-center gap-9">
+        <div className="flex justify-between gap-20">
+          <div className="flex flex-col gap-3 ">
+            <h1 className="font-semibold text-xl"> NPR.{discountedPrice} </h1>
+          {discountedPrice && ( 
+            <div className="flex justify-between gap-5">
+                <>
+                <p className="line-through text-[#7A7A7A] font-medium" >NPR.{product.price} </p>
+                <p className="bg-[#FF2B5F] h-7 w-28 pl-5 py-1 font-medium text-sm  font-poppins text-white rounded-full"> {product.discount_percentage}%OFF </p>
+                </>
+            </div> 
+          )}
+          </div> 
+          <Badge className="bg-[#FF2B5F] text-sm font-poppins text-[#FFFFFF] w-32 h-10">Available</Badge>
+          <QuantityRow
+          className="w-42 h-10"
           onDecrease={() => console.log("Decrease")}
           onIncrease={() => console.log("Increase")}
         />
-        <div className="flex gap-2">
-          <Badge className="bg-green-100 text-green-800">Available</Badge>
-          <Badge className="bg-red-100 text-red-800">Low</Badge>
-          <Badge className="bg-blue-100 text-blue-800">Stocking Soon</Badge>
         </div>
+       
       </div>
-
+{/* ADD To Bag button */}
       <Button
-        className="w-full text-custom-black font-medium h-12 rounded-full bg-[#FBBC05]"
+        className="w-full text-[#FFFFFF] font-bold h-12 rounded-sm bg-[#FF2B5F]"
         onClick={()=> addToCart(product.id, 1)}
       >
-        ADD TO CART <ShoppingCart />
+        ADD TO BAG <ShoppingCart />
       </Button>
-
-      <div className="flex items-center justify-between">
+{/* Share Section */}
+      <div className="flex items-center justify-between  ">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium">SHARE:</span>
-          <div className="flex gap-2">
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <FaFacebookMessenger />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <FaInstagram />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <FaXTwitter />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <FaTiktok />
-            </Button>
+          <span className="text-sm font-poppins text-[#333333] font-medium">SHARE:</span>
+          <div className="flex gap-8 ">
+              <FaFacebookMessenger className="h-7 w-7 text-[#5D5D5D]" />
+              <FaInstagram className="h-7 w-7 text-[#5D5D5D]" />
+              <FaXTwitter className="h-7 w-7 text-[#5D5D5D]" />
+              <FaTiktok className="h-7 w-7 text-[#5D5D5D]"/>
           </div>
         </div>
-        <span className="text-sm text-gray-600 inline-flex gap-2 items-center">
+        <span className="text-sm text-[#333333] font-poppins font-medium inline-flex gap-2 items-center">
           Delivery Info <Info />
         </span>
       </div>
-
-      <div className="flex items-center gap-2 justify-between bg-[#FFF4DB] px-4 py-2 rounded-lg">
-        <span className="text-sm">We Accept</span>
-        <div className="flex gap-4 items-center">
+{/* Payment Section */}
+      <div className="flex items-center gap-2 justify-between bg-[#FFEBED] px-4 py-2 rounded-sm">
+        <span className="text-sm text-[#333333] font-poppins font-medium">We Accept</span>
+        <div className="flex gap-7 items-center">
+          <div className="flex justify-center items-center flex-col">
+          <Image src={coin.src} alt="COD" width={26} height={36} className="rounded-full " />
+          <span className="text-sm font-poppins font-bold">C.O.D</span>
+          </div>
+          <Image src={globalIime.src} alt="IME" width={60} height={46} className="rounded-full " />
+          <Image src={mastercard.src} alt="masterCard" width={60} height={36} className="rounded-full " />
           <Image src={esewa.src} alt="eSewa" width={36} height={36} className="rounded-full" />
           <Image src={khalti.src} alt="Khalti" width={36} height={36} className="rounded-full" />
         </div>
       </div>
-
+{/*Bundle Product Section */}
       {product.variants?.length > 0 && (
         <div className="space-y-4">
           <h2 className="font-bold text-lg">Bundle and Save</h2>
-          <div className="flex items-center justify-between gap-4">
-            <div className="">
+          <div className="flex items-center justify-between gap-20">
+            <div className="flex  items-center gap-3">
               {product.variants.slice(0, 2).map((variant, i) => (
                 <React.Fragment key={i}>
                   <Image
@@ -170,20 +180,24 @@ const ProductDescriptionSection = ({ product }: Props) => {
                 </React.Fragment>
               ))}
             </div>
-            <div className="flex flex-col items-start gap-2">
+            <div className="flex flex-col items-start gap-3">
               {product.variants.slice(0, 2).map((variant, i) => (
-                <h3 key={i} className="font-medium text-sm">
-                  {variant?.name || "Bundle product"}
-                </h3>
+                <div key={i} className="flex items-center gap-2">
+                  <SquareCheck/>
+                  <h3   className="font-medium text-sm">
+                  {variant?.name  || "Hair Cleaner for anti dandruf property and selsun property"}
+                  </h3>
+                </div>
+               
               ))}
             </div>
           </div>
-          <Button className="w-full text-custom-black font-medium rounded-full h-12 bg-[#FBBC05]">
-            CHOOSE YOUR BUNDLE <ShoppingCart />
+          <Button className="w-full text-[#FF2B5F] border border-[#FF2B5F] rounded-sm font-bold  h-12 bg-white">
+           Add Bundle To Bag <ShoppingCart/>
           </Button>
         </div>
       )}
-    </div>
+</div>
   );
 };
 

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { IoIosMail } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
+import { SiFacebook } from "react-icons/si";
 import Link from "next/link";
 import { useState } from "react";
 import { useAppDispatch } from "@/redux/hooks";
@@ -156,7 +157,7 @@ export default function UserLoginForm() {
                       placeholder="Please Enter the email Address"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -165,7 +166,7 @@ export default function UserLoginForm() {
                       className="absolute right-0 top-0 h-full px-2 py-1 hover:bg-transparent"
                     >
                       <IoIosMail
-                        className="h-10 w-10 cursor-pointer"
+                        className="h-10 w-10 text-[#C0C0C0] cursor-pointer"
                         aria-hidden="true"
                       />
                     </Button>
@@ -189,7 +190,7 @@ export default function UserLoginForm() {
                       placeholder="Please Enter the Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -199,10 +200,10 @@ export default function UserLoginForm() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 r text-[#C0C0C0]" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 cursor-pointer"
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -229,7 +230,7 @@ export default function UserLoginForm() {
           </div>
           <Button
             disabled={loading}
-            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
+            className="ml-auto w-full rounded-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer p-5"
             type="submit"
           >
             {loading ? <ButtonLoader /> : "Login"}
@@ -243,11 +244,18 @@ export default function UserLoginForm() {
           <hr className="flex-grow border-t border-accent-foreground" />
         </div>
         <div
-          className="flex border border-gray-300 rounded-xs items-center justify-center gap-4 font-medium py-1 cursor-pointer"
+          className="flex border border-gray-300 rounded-full items-center justify-center gap-4 font-medium py-1 cursor-pointer"
           onClick={() => handleGoogleLogin()}
         >
           <FcGoogle className="w-8 h-8" />
           Continue With Google
+        </div>
+        <div
+          className="flex mt-4 border border-gray-300 rounded-full items-center justify-center gap-4 font-medium py-1 cursor-pointer"
+          onClick={() => handleGoogleLogin()}
+        >
+          <SiFacebook className="w-7 h-7 text-[#1877F2]" />
+          Continue With Facebook
         </div>
         <div className="flex gap-2 text-accent-foreground text-sm my-4">
           Don&apos;t Have an Account?

@@ -64,13 +64,6 @@ export default function ResetPasswordForm() {
   };
   return (
     <>
-      <div className="flex flex-col gap-2 sm:pb-4 md:pb-8 lg:pb-10">
-        <h1 className=" text-5xl text-primary font-semibold">बSERA</h1>
-        <p className="text-accent-foreground text-sm pr-6">
-          The Perfect Balance of Comfort and Style, where tradition meets modern
-          design.
-        </p>
-      </div>
       <div className="flex flex-col space-y-2">
         <h1 className="text-2xl font-semibold text-primary tracking-tight">
           Reset Password
@@ -99,7 +92,7 @@ export default function ResetPasswordForm() {
                       placeholder="Please Enter your new Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -109,10 +102,10 @@ export default function ResetPasswordForm() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 cursor-pointer" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 cursor-pointer"
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -140,7 +133,7 @@ export default function ResetPasswordForm() {
                       placeholder="Please confirm your new Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-xs"
+                      className="rounded-full"
                     />
                     <Button
                       type="button"
@@ -150,10 +143,10 @@ export default function ResetPasswordForm() {
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
                     >
                       {showConfirmPassword ? (
-                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 cursor-pointer"
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -171,7 +164,7 @@ export default function ResetPasswordForm() {
           />
           <Button
             disabled={loading}
-            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
+            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-full p-5"
             type="submit"
           >
             Send

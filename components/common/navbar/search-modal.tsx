@@ -25,7 +25,7 @@ const SearchModal = () => {
                     <p className="text-base">Search</p>
                 </button>
             </div>
-            <div className="grid grid-cols-[20%_80%] gap-4 mt-4 padding-x">
+            <div className="grid grid-cols-2 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 mt-4 padding-x">
                 <section className="flex flex-col gap-5">
                     <h1 className="text-primary font-playfair font-bold text-3xl">Popular Search</h1>
                     <ul className="text-base font-normal text-foreground flex flex-col gap-2">
@@ -54,7 +54,7 @@ const SearchModal = () => {
                             {CATEGORY_LIST.map((category, index) => (
                                 <CarouselItem
                                     key={index}
-                                    className="basis-[40%] pl-4  sm:basis-1/3 lg:basis-1/4"
+                                    className="basis-[40%] pl-4  sm:basis-1/2 lg:basis-1/4"
                                 >
                                     <PopularCard image={category.image} />
                                 </CarouselItem>

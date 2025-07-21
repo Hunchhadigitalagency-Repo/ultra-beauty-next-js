@@ -30,6 +30,9 @@ export default function CartItemCard({
               fill
               className="object-cover"
             />
+            <div className="absolute bottom-1 right-1 bg-primary text-white text-xs px-2 py-1 rounded-full">
+              20% Off
+            </div>
           </div>
         </div>
 
@@ -44,7 +47,7 @@ export default function CartItemCard({
           </div>
 
           <div className="hidden md:block mb-3">
-            <h3 className="text-base font-semibold text-gray-900 mb-1">
+            <h3 className="text-base lg:text-2xl font-playfair font-semibold text-gray-900 mb-1">
               {item.name}
             </h3>
             <p className="text-sm text-gray-600 leading-snug line-clamp-2">

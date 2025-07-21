@@ -6,9 +6,11 @@ import DOMPurify from "dompurify";
 import { Calendar, UserCircle2Icon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 
 const BlogCard = ({
+  id,
   title,
   // sub_title,
   author,
@@ -26,9 +28,11 @@ const BlogCard = ({
     })
     : "";
 
+  const router = useRouter();
+
   return (
     <section className="w-full rounded-lg overflow-hidden space-y-2 border-[1px] border-[#D7D7D7] p-3">
-      <div className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group cursor-pointer">
+      <div onClick={() => { router.push(`/blogs/${id}`) }} className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group cursor-pointer">
         {cover_image ? (
           <Image
             src={cover_image}

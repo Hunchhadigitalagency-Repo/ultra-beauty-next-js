@@ -90,7 +90,7 @@ export default function ForgotPasswordForm() {
                         placeholder="Please Enter the email Address"
                         disabled={loading}
                         {...field}
-                        className="rounded-xs"
+                        className="rounded-full"
                       />
                       <Button
                         type="button"
@@ -99,7 +99,7 @@ export default function ForgotPasswordForm() {
                         className="absolute right-0 top-0 h-full px-2 py-1 hover:bg-transparent"
                       >
                         <IoIosMail
-                          className="h-10 w-10 cursor-pointer"
+                          className="h-10 w-10 text-[#C0C0C0] cursor-pointer"
                           aria-hidden="true"
                         />
                       </Button>
@@ -111,7 +111,7 @@ export default function ForgotPasswordForm() {
             />
             <Button
               disabled={loading}
-              className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
+              className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-full p-5"
               type="submit"
             >
               Send
@@ -119,7 +119,7 @@ export default function ForgotPasswordForm() {
           </form>
         </Form>
       ) : status === "success" ? (
-        <div className=" flex gap-6 items-center bg-[#D0E6FF] px-4 py-6 rounded-xs">
+        <div className=" flex gap-6 items-center bg-secondary px-4 py-6 rounded-full">
           <div className=" bg-primary rounded-full p-1">
             <Check className="h-9 w-9 text-white font-bold" />
           </div>
@@ -128,8 +128,8 @@ export default function ForgotPasswordForm() {
           </p>
         </div>
       ) : (
-        <div className=" flex gap-6 items-center bg-[#FFCDCF] px-4 py-6 rounded-xs">
-          <div className=" bg-[#D53C53] rounded-full p-1">
+        <div className=" flex gap-6 items-center bg-secondary px-4 py-6 rounded-full">
+          <div className=" bg-primary rounded-full p-1">
             <X className="h-9 w-9 text-white font-bold" />
           </div>
           <p className="text-sm">
