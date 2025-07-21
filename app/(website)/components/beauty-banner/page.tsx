@@ -15,7 +15,7 @@ const BeautyBanner: React.FC = () => {
       <Image
         src={lineImge}
         alt="Line Image "
-        className="absolute left-0 w-full bottom-[100px] z-0 overflow-hidden"
+        className="absolute left-0 w-full bottom-13 z-0 overflow-hidden"
       />
     </div>
   );

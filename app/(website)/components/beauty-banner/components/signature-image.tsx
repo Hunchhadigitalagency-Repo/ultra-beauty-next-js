@@ -6,28 +6,40 @@ import flowerImage from "@/assets/Flower.png";
 
 const SignatureImage = () => {
   return (
-    <div className="w-full md:w-1/3 mt-10 md:mt-0 flex justify-center  z-10 ">
+    <div className="w-full md:w-1/3 mt-10 md:mt-0  justify-center  z-10 hidden md:flex ">
       <div className="relative ">
-        <Image
+        <div>
+           <Image
           src={womanImage}
           alt="woman image"
-          className="relative z-10 hidden xl:block top-[-60px]"
+          className="relative z-10  top-[-60px]"
         />
-        <Image
+        </div>
+       
+        <div>
+           <Image
           src={flowerImage}
           alt="flower image"
-          className="absolute -bottom-20 left-[30px] z-20 hidden xl:block"
+          className="absolute -bottom-20 left-[30px] z-20 "
         />
-        <Image
+        </div>
+       
+        <div>
+           <Image
           src={Eclipse}
           alt="eclipse"
-          className="absolute z-0 bottom-[80px] w-[200px] h-[200px] left-[50px] hidden xl:block"
+          className="absolute z-0 bottom-[80px] w-[200px] h-[200px] left-[50px] "
         />
-        <Image
+        </div>
+       
+        <div>
+            <Image
           src={Eclipse}
           alt="eclipse"
-          className="absolute z-0 bottom-[150px] w-[300px] h-[300px] left-[200px] hidden xl:block"
+          className="absolute z-0 bottom-[150px] w-[300px] h-[300px] left-[200px] "
         />
+        </div>
+      
       </div>
     </div>
   );
