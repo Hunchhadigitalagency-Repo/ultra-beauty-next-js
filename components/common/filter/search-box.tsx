@@ -16,9 +16,11 @@ import {
 const SearchBox = ({
   className,
   placeholder = "Search",
+  iconClassName
 }: {
   className?: string;
   placeholder?: string;
+  iconClassName?:string;
 }) => {
   const dispatch = useAppDispatch();
   const { searchQuery } = useAppSelector((state) => state.filter);
@@ -68,10 +70,10 @@ const SearchBox = ({
             className="absolute inset-y-0 end-0 hover:bg-transparent hover:text-black pr-3"
             onClick={handleClear}
           >
-            <X className="h-4 w-4" />
+            <X className={` ${iconClassName} h-4 w-4`}/>
           </Button>
         ) : (
-          <div className="absolute inset-y-0 end-0 flex items-center pr-3 pointer-events-none">
+          <div className={`${iconClassName} absolute inset-y-0 end-0 flex items-center pr-3 pointer-events-none`}>
             <svg
               className="w-4 h-4 text-customBlack"
               aria-hidden="true"
