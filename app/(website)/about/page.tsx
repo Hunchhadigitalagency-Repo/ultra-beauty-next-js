@@ -7,14 +7,21 @@ import OurTeam from "./components/our-team";
 import OurValues from "./components/our-values";
 import OurGoals from "./components/our-goals";
 import UltraBeauty from "./components/ultra-beauty";
+import BusinessBenifits from "./components/business-benifits";
+import BrandsSection from "../components/brands-that-you-love/brands-section";
+import ClientTrust from "./components/client-trust";
 
 
 const AboutPage = () => {
   return (
     <main className="space-y-8">
       <AboutHeroSection />
+      <BrandsSection/>
       <UltraBeauty/>
+      <ClientTrust/>
+       <BusinessBenifits/>
       <OurStory />
+     
       <OurVisions />
       <OurTeam />
       <AboutStats />
