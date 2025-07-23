@@ -1,4 +1,7 @@
 "use client";
+import DOMPurify from "dompurify";
+import { FAQResponse } from "@/types/faq";
+import useFetchData from "@/hooks/use-fetch";
 import { Playfair_Display } from 'next/font/google';
 import SectionHeader from "@/components/common/header/section-header";
 import {
@@ -7,9 +10,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import useFetchData from "@/hooks/use-fetch";
-import { FAQResponse } from "@/types/faq";
-import DOMPurify from "dompurify";
 
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
@@ -46,7 +46,7 @@ export default function FAQSection() {
             <AccordionItem
               key={faq.id}
               value={`${faq.id}`}
-              className="rounded-none px-6 py-2 bg-white !border  border-[#FF2B5F]"
+              className="rounded-none px-6 py-2 bg-white"
             >
               <AccordionTrigger className={`text-left !font-playfair cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-medium text-xl ${playfair.className}`}>
               

@@ -1,5 +1,5 @@
-import SectionHeader from '@/components/common/header/section-header';
 import React from 'react'
+import SectionHeader from '@/components/common/header/section-header';
 
 interface HelperProps{
     headerTitle: string;

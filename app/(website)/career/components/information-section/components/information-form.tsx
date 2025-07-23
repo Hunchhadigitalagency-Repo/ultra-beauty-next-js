@@ -18,7 +18,7 @@ import apiBase from "@/services/api-base-instance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InformationFormValues, informationSchema } from "@/schemas/information/information-schema";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { IoMdQuote } from "react-icons/io";
+
 
 
 export default function InformationForm() {
@@ -30,7 +30,7 @@ export default function InformationForm() {
         defaultValues: {
             fullname: '',
             email: '',
-            phone: undefined,
+            phone: '',
             position: '',
             cv: '',
             resume: ''
@@ -128,13 +128,12 @@ export default function InformationForm() {
                                     Position
                                 </FormLabel>
                                 <FormControl>
-                                    <Select {...field}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className="text-xs">
-                                            <SelectValue placeholder="Please Enter the position that you apply for" />
+                                            <SelectValue placeholder="Please select the position you're applying for" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                {/* <SelectLabel>Positions</SelectLabel> */}
                                                 <SelectItem value="apple">Apple</SelectItem>
                                                 <SelectItem value="banana">Banana</SelectItem>
                                                 <SelectItem value="blueberry">Blueberry</SelectItem>
@@ -148,6 +147,7 @@ export default function InformationForm() {
                             </FormItem>
                         )}
                     />
+
 
                     <div className="flex flex-col xl:flex-row gap-0 xl:gap-6 space-y-6 xl:space-y-0">
                         {/* CV */}

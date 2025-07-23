@@ -1,34 +1,34 @@
 "use client";
 import React from "react";
+import aboutheroimage from "@/assets/bg-hero.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import SectionHeader from "@/components/common/header/section-header";
-import aboutheroimage from "@/assets/bg-hero.png";
 // import { Button } from "@/components/ui/button";
 
 const AboutHeroSection = () => {
   return (
-    <div
-      className="bg-cover bg-start text-white padding lg:min-h-96 flex justify-start items-center"
-      style={{ backgroundImage: `url(${aboutheroimage.src})` }}
-    >
-      <div className="w-full md:w-1/3 flex flex-col gap-10 h-full justify-center items-center md:items-start">
-      <div className="flex flex-col gap-0 items-center md:items-start">
-         <h3 className="text-base sm:text-lg md:text-lg font-semibold font-playfair md:leading-2 ">
-          About Us
-        </h3>
+    <div className="relative h-90 md:h-120 overflow-visible mt-15">
 
-        <SectionHeader
+    
+    <div
+      className="text-white padding   flex justify-start items-center absolute inset-0 z-0"
+      style={{ backgroundImage: `url(${aboutheroimage.src})` ,
+      backgroundSize:"cover",
+      backgroundPosition:"center"
+    }}
+      
+    >
+     <div className=" md:max-w-[30%] max-w-[50%] w-full  flex flex-col gap-5 items-start  my-8">
+      <h1 className="font-playfair text-xl md:text-3xl">About Us</h1>
+       <SectionHeader
           title="House Of Beauty Products"
           description="Treat yourself to luxury for less. Apply your promo code at checkout and enjoy exclusive discounts on our curated collections."
-          titleClassName="text-white font-playfair lg:text-4xl leading-snug text-center lg:text-left"
+          titleClassName="text-white md:text-2xl xl:text-5xl font-playfair md:leading-14 text-3xl font-bold text-xl"
+          descriptionClassName="text-white md:mt-5 mt-2 text-sm md:text-base"
         />
-      </div>
-       
-
-        <button className="bg-[#FF2B5F] rounded-full px-4 py-2 flex items-center gap-2 text-sm sm:text-base">
-          View New Collection <FaArrowRightLong />
-        </button>
-      </div>
+        <button className="bg-[#FF2B5F] lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 border-white-300 text-sm px-2 py-2">View New Collection <FaArrowRightLong /></button>
+     </div>
+    </div>
     </div>
   );
 };
