@@ -1,8 +1,7 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import image1 from "@/assets/Rectangle 11.png"
-import Image from "next/image";
 import {
   Carousel,
   CarouselContent,

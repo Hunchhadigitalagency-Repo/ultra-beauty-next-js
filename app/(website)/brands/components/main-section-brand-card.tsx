@@ -3,8 +3,6 @@ import Image, { StaticImageData } from 'next/image';
 
 interface BrandsCardProps {
   image: StaticImageData;
-
-
 }
 
 const MainBrandcard: React.FC<BrandsCardProps> = ({ image }) => {
