@@ -1,7 +1,13 @@
-import React from 'react'
-import SearchBox from '../filter/search-box'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
-import PopularCard from './popular-card'
+import React from 'react';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious
+} from '@/components/ui/carousel';
+import PopularCard from './popular-card';
+import SearchBox from '../filter/search-box';
 
 
 const CATEGORY_LIST = [
@@ -16,7 +22,7 @@ const CATEGORY_LIST = [
     { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
 ]
 
-const SearchModal = () => {
+const SearchModal: React.FunctionComponent = () => {
     return (
         <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-4">
             <div className="w-full flex justify-center items-center gap-5">
@@ -61,9 +67,6 @@ const SearchModal = () => {
                             ))}
                         </CarouselContent>
                     </Carousel>
-
-
-
                 </section>
             </div>
         </div>

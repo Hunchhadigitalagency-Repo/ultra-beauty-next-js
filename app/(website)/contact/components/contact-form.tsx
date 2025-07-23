@@ -69,7 +69,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Input
                     placeholder="Enter Your First Name"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500"
                     {...field}
                   />
                 </FormControl>

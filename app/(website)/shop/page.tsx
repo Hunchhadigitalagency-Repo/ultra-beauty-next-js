@@ -1,4 +1,4 @@
-import HeroCarousel from "@/components/common/carousel/hero-carousel";
+// import HeroCarousel from "@/components/common/carousel/hero-carousel";
 import React from "react";
 import AllProducts from "./components/all-products";
 // import DifferentiatorSection from "../../../components/common/differentiator/differentiator-section";
@@ -7,7 +7,7 @@ import AllProducts from "./components/all-products";
 const ShopPage = () => {
   return (
     <main className="">
-      <HeroCarousel />
+      {/* <HeroCarousel /> */}
       <AllProducts />
       {/* <DifferentiatorSection hasButton={false} /> */}
       {/* <Testimonials /> */}

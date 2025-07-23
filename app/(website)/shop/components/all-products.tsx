@@ -1,22 +1,27 @@
 "use client";
 
-import React from "react";
+import { Menu } from "lucide-react";
 import FilterSection from "./filter";
+import React, { useState } from "react";
+import ProductSort from "./product-sort";
+import MobileFilter from "./mobile-filter";
 import { useParams } from "next/navigation";
 import useCheckToken from "@/hooks/use-check-token";
 import InfiniteScroll from "react-infinite-scroll-component";
+import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
 import { createWishList } from "@/lib/api/wishlist/wishlist-apis";
 import SectionHeader from "@/components/common/header/section-header";
 import { ScribbleProductCard } from "@/components/ui/product-scribble";
 import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-import SearchBox from "@/components/common/filter/search-box";
 
 
 const AllProducts = () => {
 
   const id = useParams().id as string;
   const path = id ? `products/?category=${id}` : "products";
+
+  const [showFilter, setShowFilter] = useState(false);
 
   const { isAuthenticated } = useCheckToken()
   const { data: products, loading, hasMore, fetchNext } = useInfiniteFetchNoToken(path, 6);
@@ -47,13 +52,21 @@ const AllProducts = () => {
     );
   };
 
+  const toggleFilter = () => {
+    setShowFilter(!showFilter)
+  }
+
 
   return (
 
-    <section className="padding flex flex-col gap-8">
-      <div className="flex items-center flex-col md:flex-row justify-between gap-4">
+    <section className="padding relative flex flex-col gap-8">
+      <div className="flex items-center flex-row justify-between gap-4">
         <SectionHeader title={`All Products (${210})`} description="" />
-        <SearchBox placeholder="Search Products" />
+        <div className="hidden lg:flex lg:gap-5">
+          <SearchBox placeholder="Search Products" />
+          <ProductSort />
+        </div>
+        <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
       </div>
       <div className="flex flex-row gap-16">
         <FilterSection />
@@ -94,6 +107,12 @@ const AllProducts = () => {
           </InfiniteScroll>
         </div>
       </div>
+      {/* Mobile Filter */}
+      {showFilter && (
+        <MobileFilter
+          onclose={toggleFilter}
+        />
+      )}
     </section>
   );
 };

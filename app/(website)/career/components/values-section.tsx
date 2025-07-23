@@ -38,13 +38,13 @@ const ValuesSection = () => {
                 titleClassName="text-primary"
             />
 
-            <div className="w-full grid grid-cols-1 gap-5 md:gap-8 lg:gap-10 xl:gap-16 md:grid-cols-2 lg:grid-cols-4">
+            <div className="w-full grid grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-16 md:grid-cols-2 lg:grid-cols-4">
                 {VALUES.map(({ id, title, description, icon: Icon }) => (
                     <div
                         key={id}
-                        className="w-full bg-white rounded-sm p-5 xl:p-8 flex flex-row md:flex-col items-start gap-3"
+                        className="w-full bg-white rounded-sm p-5 xl:p-8 flex flex-col items-start gap-3"
                     >
-                        <div className="bg-secondary p-4 rounded-md self-center md:self-start">
+                        <div className="bg-secondary p-4 rounded-md self-start">
                             <Icon className="w-6 h-6 text-primary" />
                         </div>
                         <SectionHeader

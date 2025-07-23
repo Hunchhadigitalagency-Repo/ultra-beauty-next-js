@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
     { name: "PR-PACKAGE", href: "/" },
     { name: "EVENTS", href: "/" },
     { name: "TERMS & CONDITION", href: "/" },
-    { name: "PRIVACY & POLICY", href: "/" },
+    { name: "PRIVACY & POLICY", href: "/privacy-policy" },
   ];
 
   const HELP_LINKS = [

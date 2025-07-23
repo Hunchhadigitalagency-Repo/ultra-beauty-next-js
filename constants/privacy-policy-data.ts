@@ -1,0 +1,18 @@
+export const PRIVACY_POLICY_DATA = [
+    {
+        title: 'Information We Collect',
+        subtitle: 'Types and information we collect.',
+        additional_info: 'Effective since may 04 2024',
+        description: 'At [Your Website Name], accessible via [yourdomain.com], we are committed to protecting your personal information and your right to privacy. This Privacy Policy outlines how we collect, use, and safeguard the personal information you provide to us when you use our website or make a purchase. When you interact with our website, we may collect certain personal  data  such  as  your name, email address, phone number, billing and shipping addresses, payment details ( processed  securely through trusted third-party gateways), IP address, device type, and browser information. We also  gathe r details  about your orders and browsing behavior to improve your experience with us.We use this information primarily to  fulfill  and  deliver your orders, communicate with you  regarding  your  purchases,  provide  customer  service,  and  enhance  the functionality and  performance  of our website. With your permission, we may also use yo  ur email t  o send   promotional   offers,   updates, and newsletters. Additionally, your data may be used for fraud prevention,  internal  analytics,  and l egal  compliance.We d o not sell or rent your personal  information  to  third parties. However, w e  may  share  your  data  with  service  provider s such as payment processors, shipping companies, and marketing tools— strictly  for the purpose  of  fulfilling  your  requests or improving our  services.  In  certain cases,  we may also be  required  to  share  you r information  to  comply with legal obligations. When you interact with our website, we may collect certain personal  data  such  as  your name, email address, phone number, billing and shipping addresses, payment details ( processed  securely through trusted third-party gateways), IP address, device type, and browser information. We also  gathe r details  about your orders and browsing behavior to improve your experience with us.We use this information primarily to  fulfill  and  deliver your orders, communicate with you  regarding  your  purchases,  provide  customer  service,  and  enhance  the functionality and  performance  of our website. With your permission, we may also use yo  ur email t  o send   promotional   offers,   updates, and newsletters. Additionally, your data may be used for fraud prevention,  internal  analytics,  and l egal  compliance.We d o not sell or rent your personal  information  to  third parties. However, w e  may  share  your  data  with  service  provider s such as payment processors, shipping companies, and marketing tools— strictly  for the purpose  of  fulfilling  your  requests or improving our  services.  In  certain cases,  we may also be  required  to  share  you r information  to  comply with legal obligations.'
+    }, {
+        title: 'Introduction and Purpose',
+        subtitle: 'Introduction of the policies and their purpose',
+        additional_info: 'Effective since may 04 2024',
+        description: 'Introduction of the policies and their purpose'
+    }, {
+        title: 'How We Collect Information',
+        subtitle: 'How We Collect Information',
+        additional_info: 'Effective since may 04 2024',
+        description: 'How We Collect Information'
+    }
+]
