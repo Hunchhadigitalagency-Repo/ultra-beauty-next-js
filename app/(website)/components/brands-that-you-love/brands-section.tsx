@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import australis from "@/assets/australis.png";
 import moira from "@/assets/MORIA.png";
 import letan from "@/assets/LeTan.png";
 import urban from "@/assets/URBAN.png";
-
+import BrandsCard from "./brands-card";
+import australis from "@/assets/australis.png";
+import React, { useEffect, useState } from "react";
 import LinkText from "@/components/common/header/link-text";
 import SectionHeader from "@/components/common/header/section-header";
 import {
@@ -13,23 +13,22 @@ import {
   CarouselItem,
   CarouselApi
 } from "@/components/ui/carousel";
-import BrandsCard from "./brands-card";
 
 const BRANDS_LIST = [
   { image: australis },
   { image: moira },
   { image: letan },
-  { image: urban  },
+  { image: urban },
   { image: australis },
   { image: moira },
   { image: letan },
-  { image: urban  },
+  { image: urban },
 ];
 
 const BrandsSection = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [, setCurrent] = useState(0);
-  const [,setCount] = useState(0);
+  const [, setCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
@@ -66,9 +65,9 @@ const BrandsSection = () => {
 
       <div className="relative w-full">
         <Carousel setApi={setApi}
-         opts={{ align: "start", loop: true }}
-         onMouseEnter={() => setIsHovered(true)}
-         onMouseLeave={() => setIsHovered(false)}>
+          opts={{ align: "start", loop: true }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}>
           <CarouselContent className="flex gap-7">
             {BRANDS_LIST.map((brand, index) => (
               <CarouselItem
