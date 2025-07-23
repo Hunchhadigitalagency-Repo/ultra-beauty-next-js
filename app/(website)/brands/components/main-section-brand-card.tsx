@@ -3,12 +3,14 @@ import Image, { StaticImageData } from 'next/image';
 
 interface BrandsCardProps {
   image: StaticImageData;
+
+
 }
 
-const BrandsCard: React.FC<BrandsCardProps> = ({ image }) => {
+const MainBrandcard: React.FC<BrandsCardProps> = ({ image }) => {
   return (
-    <div className="flex justify-center items-center  border border-red-300 rounded-sm p-4">
-      <div className="relative  w-56 h-30 md:h-36 md:w-80 overflow-hidden rounded-lg">
+    <div className="flex justify-center items-center bg-white  border border-red-300 rounded-none ">
+      <div className="relative w-28 h-11 md:h-32 md:w-4xl overflow-hidden rounded-lg">
         <Image
           src={image}
           alt="brand logo"
@@ -20,4 +22,4 @@ const BrandsCard: React.FC<BrandsCardProps> = ({ image }) => {
   );
 };
 
-export default BrandsCard;
+export default MainBrandcard;
