@@ -33,6 +33,7 @@ const WishlistCard = ({
   return (
     <section className="relative flex flex-col md:flex-row gap-4">
       <div className="flex gap-4 md:gap-6 flex-row flex-1">
+        {/* Discount Tag */}
         <div className="relative">
           <Image
             src={image}
@@ -42,12 +43,12 @@ const WishlistCard = ({
             className="rounded-lg object-cover border w-full h-full"
           />
           {discountTag && (
-            <span className="absolute  bg-[#FF2B5F] text-white text-xs md:text-sm px-2 py-1 rounded-full right-2 bottom-2">
+            <span className="absolute  bg-primary text-white text-xs md:text-sm px-2 py-1 rounded-full right-2 bottom-2">
               {Math.floor(Number(discountTag))}% Off
             </span>
           )}
         </div>
-
+          {/* rating */}
         <div className="flex flex-col flex-1">
           <div className="flex justify-between gap-4">
             <div className="flex items-center gap-2 md:gap-4">
@@ -57,12 +58,13 @@ const WishlistCard = ({
               </span>
             </div>
           </div>
-
+          {/* Wishlist Card Name */}
           <div className="flex flex-col sm:flex-row justify-between gap-4 lg:gap-24 mt-3 md:w-4/5">
             <div className="flex flex-col gap-2 sm:gap-4 flex-1">
               <h3 className="text-base md:text-2xl text-foreground font-playfair font-bold">
                 {name}
               </h3>
+              {/* Dom Purify */}
               <p
                 className="text-sm md:text-base leading-relaxed line-clamp-2 text-ellipsis"
                 dangerouslySetInnerHTML={{
@@ -71,7 +73,7 @@ const WishlistCard = ({
                   ),
                 }}
               />
-
+              {/* Current Price and Previous Price */}
               <PriceRow
                 previousPrice={previousPrice}
                 price={price}
@@ -86,7 +88,7 @@ const WishlistCard = ({
 
       {/* Add to Cart Button */}
       <div className="flex items-center">
-        <Button className="flex w-full md:w-[250px]  font-medium h-12 rounded-full bg-[#FF2B5F] text-white justify-center">
+        <Button className="flex w-full md:w-[250px]  font-medium h-12 rounded-full bg-primary text-white justify-center">
           ADD TO CART <ShoppingCart className="ml-2" />
         </Button>
       </div>

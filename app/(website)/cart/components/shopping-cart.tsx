@@ -7,11 +7,11 @@ import {
 } from "@/lib/cart-utils";
 import { useState } from "react";
 import CartHeader from "./cart-header";
-import CartItemsList from "./cart-items-list";
-import OrderSummary from "./order-summary";
 import { CartItem, } from "@/types/cart";
-import SectionHeader from "@/components/common/header/section-header";
+import OrderSummary from "./order-summary";
+import CartItemsList from "./cart-items-list";
 import useFetchDataToken from "@/hooks/use-fetch-data-token";
+import SectionHeader from "@/components/common/header/section-header";
 
 export const defaultCartItems: CartItem[] = [
   {

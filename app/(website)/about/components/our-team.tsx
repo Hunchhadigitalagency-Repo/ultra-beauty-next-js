@@ -45,7 +45,7 @@ const OurTeam = () => {
       <SectionHeader
         title="Our Team"
         description="Hear our talented team"
-        className="items-center"
+        className="items-start"
       />
 
       <TeamCarousel />

@@ -1,8 +1,8 @@
-import LinkText from '@/components/common/header/link-text'
-import SectionHeader from '@/components/common/header/section-header'
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
-import React from 'react'
-import GlowKitCard from './glow-kit-card'
+import React from 'react';
+import GlowKitCard from './glow-kit-card';
+import LinkText from '@/components/common/header/link-text';
+import SectionHeader from '@/components/common/header/section-header';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
 const GlowKitList = [
   {
@@ -27,24 +27,24 @@ const GlowKitList = [
 
 const GlowKitSection = () => {
   return (
-    <section className="padding flex flex-col gap-2 md:gap-4 ">
+    <section className="padding flex flex-col gap-2 md:gap-4">
       <div className="flex justify-between gap-4 ">
         <SectionHeader
           title="Featured Glow Kit"
-          titleClassName="font-playfair text-[#333333] "
+          titleClassName="font-playfair text-[#333333]"
           description="Make yourself Up to fit the every Occassion"
         />
-        <LinkText title="ALL BRANDS" href="/shop" />
+        <LinkText title="ALL BRANDS" href="/shop"/>
       </div>
-
+{/* Image section */}
       <div className="relative w-full">
         <Carousel>
           <CarouselContent className='-ml-2 md:-ml-4 lg:-ml-8'>
             {GlowKitList.map((kit, index) => (
               <CarouselItem
                 key={index}
-                className="pl-2 md:pl-4 lg:pl-8 basis-1/3" >
-                <GlowKitCard image={kit.image} title={kit.title} desc={kit.desc} />
+                className="pl-2 md:pl-4 lg:pl-8 basis-1/3">
+                <GlowKitCard image={kit.image} title={kit.title} desc={kit.desc}/>
               </CarouselItem>
             ))}
           </CarouselContent>

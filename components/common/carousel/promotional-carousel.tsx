@@ -55,7 +55,7 @@ interface PromotionalCarouselProps {
   className?: string;
 }
 
-export default function PromotionalCarousel({className}: PromotionalCarouselProps) {
+export default function PromotionalCarousel({ className }: PromotionalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -100,7 +100,7 @@ export default function PromotionalCarousel({className}: PromotionalCarouselProp
         <CarouselContent>
           {slides.map((slide, index) => (
             <CarouselItem key={slide.id}>
-              <div className="relative w-full h-96 md:h-[500px] rounded-2xl overflow-hidden bg-gray-900">
+              <div className="relative w-full h-80 md:h-[500px] rounded-2xl overflow-hidden bg-gray-900">
                 {/* Background image with overlay */}
                 <div className="absolute inset-0">
                   <Image
@@ -114,34 +114,34 @@ export default function PromotionalCarousel({className}: PromotionalCarouselProp
                 </div>
 
                 {/* Content overlay */}
-                <div className="relative z-10 h-full flex items-center justify-between p-6 md:p-12">
+                <div className="relative flex flex-col lg:flex-row z-10 h-40 lg:h-full items-center gap-5 md:gap-9 justify-between p-3 md:p-12">
                   {/* Left side - Main title */}
-                  <div className="flex-1 max-w-md">
-                    <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                  <div className="flex-1 max-w-full">
+                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
                       {slide.title}
                     </h1>
                   </div>
 
                   {/* Right side - Promotional ticket */}
-                  <div className="relative ml-6">
+                  <div className="relative w-full flex justify-center items-center md:w-auto ml-0 md:ml-6">
                     {/* Ticket shape background */}
                     <div
-                      className="relative rounded-2xl px-24 py-12 shadow-2xl w-[596px] h-[234px]"
+                      className="relative rounded-2xl flex justify-start bg-center items-center px-24 py-12 shadow-2xl w-full h-[170px]  md:w-[596px] md:h-[234px]"
                       style={{ backgroundImage: `url(${subtractImage.src})` }}
                     >
                       {/* Ticket content */}
-                      <div className="flex items-start justify-between flex-col gap-8">
+                      <div className="flex justify-between items-center flex-col gap-2 md:gap-5 lg:gap-8">
                         <div className="text-left space-y-2 text-foreground">
                           <p className="text-sm  font-medium">
                             {slide.promotion.subtitle}
                           </p>
-                          <div className="text-3xl md:text-4xl font-bold text-foreground">
+                          <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
                             {slide.promotion.discount}
                           </div>
                         </div>
 
-                        <div>
-                          <div className=" px-3 py-1 rounded-md">
+                        <div className="text-left">
+                          <div className="py-1 rounded-md">
                             <code className="text-xl  font-semibold ">
                               {slide.promotion.code}
                             </code>
@@ -161,16 +161,15 @@ export default function PromotionalCarousel({className}: PromotionalCarouselProp
                 </div>
 
                 {/* Navigation dots - positioned inside the image at the bottom */}
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+                <div className="absolute bottom-6  left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
                   {slides.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => api?.scrollTo(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === current
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${index === current
                           ? "bg-orange-400 scale-110"
                           : "bg-white/50 hover:bg-white/70"
-                      }`}
+                        }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}

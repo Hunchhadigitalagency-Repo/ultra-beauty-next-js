@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import lineImge from "@/assets/Line.png";
-import SignatureSection from "./components/signature"
+import SignatureSection from "./components/signature";
 import SignatureImage from "./components/signature-image";
 
-const BeautyBanner: React.FC = () => {
+const BeautyBanner: React.FunctionComponent = () => {
 
   return (
     <div className="relative bg-[#FAFAFA] padding-x pt-4 sm:pt-6 lg:pt-8">

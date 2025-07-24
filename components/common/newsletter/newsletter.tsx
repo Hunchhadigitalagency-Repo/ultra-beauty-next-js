@@ -1,15 +1,20 @@
 "use client";
 import { useState } from "react";
+import { Megaphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Megaphone } from "lucide-react";
-
+import ConfirmationModal from "./components/confirmation-modal";
 
 
 export default function Newsletter() {
+
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [showNewsLetterModal, setShowNewsLetterModal] = useState<boolean>(false);
+
+  const isEmailValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  const isFormValid = isEmailValid && consent;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +26,10 @@ export default function Newsletter() {
       setStatus("error");
     }
   };
+
+  const toggleNewLetterModal = () => {
+    setShowNewsLetterModal(!showNewsLetterModal)
+  }
 
   return (
 
@@ -44,9 +53,10 @@ export default function Newsletter() {
             style={{ borderRadius: "4px" }}
           />
           <Button
+            onClick={toggleNewLetterModal}
+            disabled={!isFormValid || status === "loading"}
             type="submit"
-            disabled={status === "loading"}
-            className="bg-primary text-white hover:bg-orange-500 h-[35px] md:h-[45px] px-2 py-1 w-[100px] gap-0"
+            className="bg-primary text-white h-[35px] md:h-[45px] px-2 py-1 gap-0"
             style={{ borderRadius: "4px" }}
           >
             {status === "loading" ? (
@@ -92,16 +102,16 @@ export default function Newsletter() {
         </label>
       </form>
 
-      {status === "done" && (
-        <p className="text-sm font-medium text-emerald-600">
-          🎉 Subscribed! Check your inbox for a confirmation email.
-        </p>
-      )}
       {status === "error" && (
         <p className="text-sm font-medium text-red-600">
           Something went wrong — please try again.
         </p>
       )}
+      {
+        showNewsLetterModal && status === 'done' && (
+          <ConfirmationModal onClose={toggleNewLetterModal} />
+        )
+      }
     </div>
   );
 }

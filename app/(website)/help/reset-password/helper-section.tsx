@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import SectionHeader from '@/components/common/header/section-header';
 
 interface HelperProps{
@@ -29,11 +29,11 @@ const Helper = ({headerTitle, headerDesc, helperTitle}:HelperProps) => {
    <section className='padding space-y-6'>
     
 {/* Header */}
-    <SectionHeader title={headerTitle} description={headerDesc} titleClassName='text-primary' />
+    <SectionHeader title={headerTitle} description={headerDesc} titleClassName='text-primary'/>
 {/* Items */}
     <div className='border border-gray-300 rounded-md p-5 gap-2'>
       <p className="text-[#333333] text-xl  font-playfair font-semibold">{helperTitle}</p>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground py-5 ">
+            <ul className="list-disc pl-5 text-sm text-muted-foreground py-5">
             {items.map((item, index) => (
                 <li key={index}>{item}</li>
             ))}
