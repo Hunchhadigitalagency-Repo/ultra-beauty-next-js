@@ -1,13 +1,13 @@
 'use client'
-import React from 'react'
-import moira from "@/assets/MORIA.png"
-import letan from "@/assets/LeTan.png"
-import urban from "@/assets/URBAN.png"
-import australis from "@/assets/australis.png"
-import MainBrandcard from './main-section-brand-card'
-import LinkText from '@/components/common/header/link-text'
-import SectionHeader from '@/components/common/header/section-header'
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import React from 'react';
+import moira from "@/assets/MORIA.png";
+import letan from "@/assets/LeTan.png";
+import urban from "@/assets/URBAN.png";
+import australis from "@/assets/australis.png";
+import MainBrandcard from './main-section-brand-card';
+import LinkText from '@/components/common/header/link-text';
+import SectionHeader from '@/components/common/header/section-header';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
 const BRANDS_LIST = [
     { image: moira },

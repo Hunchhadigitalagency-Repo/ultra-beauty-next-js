@@ -53,11 +53,11 @@ const BrandsSection = () => {
   }, [api, isHovered]);
 
   return (
-    <section className="padding space-y-9 ">
-      <div className="flex justify-between gap-4 ">
+    <section className="padding space-y-9">
+      <div className="flex justify-between gap-4">
         <SectionHeader
           title="Brands That You Love"
-          titleClassName="font-playfair text-[#333333] "
+          titleClassName="font-playfair text-[#333333]"
           description="Find the list of category that you must have to glow"
         />
         <LinkText title="ALL BRANDS" href="/brands" />

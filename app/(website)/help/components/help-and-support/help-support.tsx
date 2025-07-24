@@ -1,7 +1,7 @@
 'use client'
-import Link from 'next/link'
-import { Laptop } from 'lucide-react'
-import SectionHeader from '@/components/common/header/section-header'
+import Link from 'next/link';
+import { Laptop } from 'lucide-react';
+import SectionHeader from '@/components/common/header/section-header';
 
 
 const items = [
