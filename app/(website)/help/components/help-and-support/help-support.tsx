@@ -1,7 +1,7 @@
 'use client'
-import Link from 'next/link'
-import { Laptop } from 'lucide-react'
-import SectionHeader from '@/components/common/header/section-header'
+import Link from 'next/link';
+import { Laptop } from 'lucide-react';
+import SectionHeader from '@/components/common/header/section-header';
 
 
 const items = [
@@ -42,6 +42,7 @@ const HelpSupportSection = () => {
         description="Explore the help and support"
         className=""
       />
+      {/* Items section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-36 gap-y-6 py-6">
         {items.map((item, index) => (
           <Link

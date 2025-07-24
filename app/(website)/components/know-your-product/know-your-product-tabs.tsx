@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import KnowYourProductTabContent from "./know-your-product-tab-content";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const settings = ["Baby Care", "Comfort", "Prega"];
 
