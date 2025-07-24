@@ -224,7 +224,8 @@ const Footer: React.FC = () => {
             EMBRACE THE BEAUTY WITHIN. CAREFULLY CHOSEN PIECES MADE TO ENHANCE YOUR NATURAL GRACE AND DAILY ROUTINE.
           </p>
           <p className="text-gray-400 text-xs">
-            Copyright Basera© 2025. Developed by Hunchha Digital Pvt. Ltd.
+            ALL RIGHT RESERVED ULTRA BEAUTY & CARE
+            DESIGNED AND DEVELOPED BY HUNCHHA DIGITAL
           </p>
         </div>
       </div>

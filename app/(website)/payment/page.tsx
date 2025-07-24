@@ -1,20 +1,20 @@
 "use client"
-import React, { useState } from 'react';
 import Image from 'next/image';
 import Esewa from '@/assets/esewa.png';
+import React, { useState } from 'react';
 import Khalti from '@/assets/khalti.png';
-import SectionHeader from '@/components/common/header/section-header';
-import CashOnDelivery from '@/assets/cash-on-delivery.png'
 import GlobalIme from '@/assets/global-bank.png'
 import MasterCard from '@/assets/master-card.png'
+import CashOnDelivery from '@/assets/cash-on-delivery.png'
+import SectionHeader from '@/components/common/header/section-header';
 
 
 const PAYMENT_GATEWAYS = [
     { name: 'Esewa', image: Esewa, value: 'esewa' },
     { name: 'Khalti', image: Khalti, value: 'khalti' },
-    { name: 'CashOnDelivery', image: CashOnDelivery, value: 'cod' },
-    { name: "GlobalIme", image: GlobalIme, value: 'GlobalIme' },
-    { name: "MasterCard", image: MasterCard, value: "MasterCard" }
+    { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
+    { name: "Global Bank", image: GlobalIme, value: 'GlobalIme' },
+    { name: "Master Card", image: MasterCard, value: "MasterCard" }
 ];
 
 
@@ -43,15 +43,15 @@ const Payment = () => {
                                 key={index}
                                 onClick={() => setActivePaymentMethod(item.value)}
                                 className={`
-                                    w-full cursor-pointer flex flex-col py-3 md:py-10 gap-2 md:gap-4
+                                    w-full aspect-square cursor-pointer flex flex-col gap-2 md:gap-4
                                     justify-center items-center border-[1px] rounded-sm 
                                     ${activePaymentMethod === item.value
-                                        ? "border-[#FF9900]"
+                                        ? "border-primary"
                                         : "border-[#7C7C7C]"
                                     }
                 `}
                             >
-                                <div className="w-10 h-10 md:w-20 md:h-20 relative">
+                                <div className="w-20 h-20 relative">
                                     <Image
                                         src={item.image}
                                         layout="fill"
@@ -62,7 +62,7 @@ const Payment = () => {
                                 <p
                                     className={`
                                         text-center text-xs sm:text-sm md:text-base font-medium
-                                        ${activePaymentMethod === item.value && "text-[#FF9900]"}
+                                        ${activePaymentMethod === item.value && "text-primary"}
                                         `}
                                 >
                                     {item.name}

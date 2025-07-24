@@ -55,7 +55,7 @@ interface PromotionalCarouselProps {
   className?: string;
 }
 
-export default function PromotionalCarousel({className}: PromotionalCarouselProps) {
+export default function PromotionalCarousel({ className }: PromotionalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -166,11 +166,10 @@ export default function PromotionalCarousel({className}: PromotionalCarouselProp
                     <button
                       key={index}
                       onClick={() => api?.scrollTo(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === current
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${index === current
                           ? "bg-orange-400 scale-110"
                           : "bg-white/50 hover:bg-white/70"
-                      }`}
+                        }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}

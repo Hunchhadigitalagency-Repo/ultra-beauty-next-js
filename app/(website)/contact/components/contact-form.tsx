@@ -88,7 +88,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Input
                     placeholder="Enter Your Last Name"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500"
                     {...field}
                   />
                 </FormControl>
@@ -110,7 +110,7 @@ export default function ContactForm() {
                   <Input
                     placeholder="Enter Your Email Address"
                     type="email"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500"
                     {...field}
                   />
                 </FormControl>
@@ -131,7 +131,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Input
                     placeholder="Enter The Subject"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-500"
                     {...field}
                   />
                 </FormControl>
