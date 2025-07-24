@@ -60,9 +60,9 @@ const BrandsSection = () => {
           titleClassName="font-playfair text-[#333333]"
           description="Find the list of category that you must have to glow"
         />
-        <LinkText title="ALL BRANDS" href="/brands" />
+        <LinkText title="ALL BRANDS" href="/brands"/>
       </div>
-
+{/* Brand Images section */}
       <div className="relative w-full">
         <Carousel setApi={setApi}
           opts={{ align: "start", loop: true }}
@@ -74,7 +74,7 @@ const BrandsSection = () => {
                 key={index}
                 className="basis-[45%]  sm:basis-1/2 md:basis-[32%] lg:basis-[23%]"
               >
-                <BrandsCard image={brand.image} />
+                <BrandsCard image={brand.image}/>
               </CarouselItem>
             ))}
           </CarouselContent>

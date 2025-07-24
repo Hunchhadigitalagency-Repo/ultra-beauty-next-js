@@ -64,14 +64,6 @@ const BrandsDescSection = () => {
                   objectFit="contain"
                 />
               </div>
-              {/* <div className='block sm:hidden flex-col pb-3'>
-              <div>
-                 <MdFormatQuote className="text-primary w-12 h-12 sm:w-10 sm:h-10 md:w-14 md:h-14" />
-              </div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-playfair text-primary">
-                  {brand.name}
-                </h3>
-            </div> */}
             </div>
 
             {/* Description Block */}

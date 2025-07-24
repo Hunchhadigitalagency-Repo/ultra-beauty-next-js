@@ -65,6 +65,7 @@ export default function HeroSection() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {/* Image Section */}
         <CarouselContent className="w-full md:h-[500px] lg:h-[calc(100vh-130px)]">
           {slides.map((slide, index) => (
             <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
@@ -82,11 +83,12 @@ export default function HeroSection() {
             </CarouselItem>
           ))}
         </CarouselContent>
+        {/* Slider arrow section*/}
         <div className="absolute bottom-2 flex flex-row">
           <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-4 border-none shadow-none bg-transparent" />
           <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-16 border-none shadow-none bg-transparent" />
         </div>
-
+      
         <div className="absolute -bottom-4 right-0  md:right-0 lg:bottom-2 lg:right-0 -translate-x-1/2 z-20 flex space-x-2">
           {slides.map((_, i) => (
             <button
