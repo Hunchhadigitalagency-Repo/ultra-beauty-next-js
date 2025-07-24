@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
     { name: "CAREER", href: "/career" },
     { name: "PR-PACKAGE", href: "/" },
     { name: "EVENTS", href: "/" },
-    { name: "TERMS & CONDITION", href: "/" },
+    { name: "TERMS & CONDITION", href: "/terms-and-condition" },
     { name: "PRIVACY & POLICY", href: "/privacy-policy" },
   ];
 

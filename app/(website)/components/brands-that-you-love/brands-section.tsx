@@ -60,7 +60,7 @@ const BrandsSection = () => {
           titleClassName="font-playfair text-[#333333] "
           description="Find the list of category that you must have to glow"
         />
-        <LinkText title="ALL BRANDS" href="/shop" />
+        <LinkText title="ALL BRANDS" href="/brands" />
       </div>
 
       <div className="relative w-full">

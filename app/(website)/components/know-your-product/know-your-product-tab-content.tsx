@@ -1,5 +1,5 @@
-import VideoPlayer from "@/components/common/video-player/video-player";
 import React from "react";
+import VideoPlayer from "@/components/common/video-player/video-player";
 
 const KnowYourProductTabContent = () => {
   return (
