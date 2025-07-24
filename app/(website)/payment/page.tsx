@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from 'react';
 import Image from 'next/image';
 import Esewa from '@/assets/esewa.png';
+import React, { useState } from 'react';
 import Khalti from '@/assets/khalti.png';
+import GlobalIme from '@/assets/global-bank.png';
+import MasterCard from '@/assets/master-card.png';
 import SectionHeader from '@/components/common/header/section-header';
-import CashOnDelivery from '@/assets/cash-on-delivery.png'
-import GlobalIme from '@/assets/global-bank.png'
-import MasterCard from '@/assets/master-card.png'
+import CashOnDelivery from '@/assets/cash-on-delivery.png';
 
 
 const PAYMENT_GATEWAYS = [
@@ -72,7 +72,7 @@ const Payment = () => {
                     </div>
                 </div>
                 <div className='flex flex-col gap-6 bg-[#EFEFEF] md:bg-inherit px-4 md:px-0 py-6 md:py-0 rounded-sm'>
-                    <h1 className=" text-sm md:text-base lg:text-xl font-medium text-[#FF2B5F]">
+                    <h1 className=" text-sm md:text-base lg:text-xl font-medium text-primary">
                         Order Summary
                     </h1>
                     <div className='flex flex-col gap-2 border-t'>
@@ -91,20 +91,20 @@ const Payment = () => {
                         <div className='flex justify-between items-center mt-2 font-semibold border-t'>
                             <p>Total</p>
                             <div className='flex flex-col items-end'>
-                                <p className='font-semibold text-[#FF2B5F] text-sm md:text-base'>Nrs. 5486459.25</p>
+                                <p className='font-semibold text-primary text-sm md:text-base'>Nrs. 5486459.25</p>
                                 <p className='text-xs sm:text-sm md:text-base font-normal text-[#6F6F6F]'>All Tax Undefined</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="border-[1px] border-[#7C7C7C] p-3 md:p-7 rounded-sm flex flex-col gap-2 md:gap-4">
-                    <h2 className='font-medium text-[#FF2B5F] text-base md:text-xl'>Confirm Order</h2>
+                    <h2 className='font-medium text-primary text-base md:text-xl'>Confirm Order</h2>
                     <ol className='list-decimal pl-3 text-sm sm:text-base font-medium'>
                         <li>Here will be some information regarding the payment </li>
                         <li>here wolll be another information regarding the payment</li>
                         <li>here will be other info</li>
                     </ol>
-                    <button className='bg-[#FF2B5F] text-white text-sm md:text-base lg:text-xl font-medium py-2 md:py-3 text-center'>
+                    <button className='bg-primary text-white text-sm md:text-base lg:text-xl font-medium py-2 md:py-3 text-center'>
                         Confirm Order
                     </button>
                 </div>
