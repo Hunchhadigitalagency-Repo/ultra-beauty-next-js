@@ -1,6 +1,5 @@
-import { CartItem } from "@/types/cart"
-import CartItemCard from "./cart-item-card"
-
+import { CartItem } from "@/types/cart";
+import CartItemCard from "./cart-item-card";
 
 interface CartItemsListProps {
   items: CartItem[]

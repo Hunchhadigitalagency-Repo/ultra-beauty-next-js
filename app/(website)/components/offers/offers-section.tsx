@@ -1,8 +1,14 @@
-import LinkText from '@/components/common/header/link-text'
-import SectionHeader from '@/components/common/header/section-header'
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import React from 'react';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious
+} from '@/components/ui/carousel';
 import OffersCard from './offers-card';
+import LinkText from '@/components/common/header/link-text';
+import SectionHeader from '@/components/common/header/section-header';
 
 
 const OFFERS_LIST = [

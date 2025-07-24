@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { CartItemCardProps } from "@/types/cart";
+import { Checkbox } from "@/components/ui/checkbox";
 import PriceRow from "@/components/common/product/price-row";
 import QuantityRow from "@/components/common/product/quantity-row";
 

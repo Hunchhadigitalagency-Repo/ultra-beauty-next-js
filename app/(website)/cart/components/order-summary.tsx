@@ -1,16 +1,16 @@
 "use client";
 
-import { ArrowRight, Info, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+// import { set } from "date-fns";
+// import { is } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { formatPrice } from "@/lib/cart-utils";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-// import { is } from "date-fns/locale";
-import GenericModal from "@/components/common/modals/generic-modal";
-// import { set } from "date-fns";
-import CircularProgressBar from "@/components/common/circular-progress-bar/circular-progress-bar";
+import { Button } from "@/components/ui/button";
 // import { Slider } from "@/components/ui/slider";
+import { ArrowRight, Info, MapPin } from "lucide-react";
+import GenericModal from "@/components/common/modals/generic-modal";
+import CircularProgressBar from "@/components/common/circular-progress-bar/circular-progress-bar";
 
 interface OrderSummaryProps {
   totalItems: number;
