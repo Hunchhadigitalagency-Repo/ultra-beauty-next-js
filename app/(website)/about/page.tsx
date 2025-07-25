@@ -12,20 +12,12 @@ const AboutPage = () => {
   return (
     <main className="space-y-8">
       <AboutHeroSection />
-      <BrandsSection/>
-      <UltraBeauty/>
-      <ClientTrust/>
-       <BusinessBenifits/>
-       <AboutStats/>
-       <OurTeam/>
-       
-      {/* <OurStory />
-     
-      <OurVisions />
-      <OurTeam />
+      <BrandsSection />
+      <UltraBeauty />
+      <ClientTrust />
+      <BusinessBenifits />
       <AboutStats />
-      <OurValues />
-      <OurGoals /> */}
+      <OurTeam />
     </main>
   );
 };

@@ -1,10 +1,10 @@
-import React from 'react'
-import Order from './components/Orders'
+import React from 'react';
+import Order from './components/Orders';
 
 const MyOrders = () => {
     return (
         <>
-        <Order />
+            <Order />
         </>
     )
 }

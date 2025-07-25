@@ -1,8 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { FaRegBell } from "react-icons/fa";
-import Rectangle1 from "@/assets/Rectangle227.png";
-import image1 from "@/assets/Luxury-Beauty.png";
 import {
   Carousel,
   CarouselContent,
@@ -10,21 +7,27 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-const UltraBeauty = () => {
-  const CATEGORY_LIST = [
-    {
-      title: "Something One",
-      description:
-        " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
+import { FaRegBell } from "react-icons/fa";
+import image1 from "@/assets/Luxury-Beauty.png";
+import Rectangle1 from "@/assets/Rectangle227.png";
 
-    },
-    {
-      title: "Something Two",
-      description:
-        " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
+const CATEGORY_LIST = [
+  {
+    title: "Something One",
+    description:
+      " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
 
-    },
-  ];
+  },
+  {
+    title: "Something Two",
+    description:
+      " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
+
+  },
+];
+
+const UltraBeauty: React.FunctionComponent = () => {
+
   return (
     <div
       className=" w-full padding text-white bg-contain my-25 relative"

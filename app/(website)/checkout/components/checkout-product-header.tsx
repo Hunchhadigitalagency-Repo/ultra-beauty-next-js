@@ -6,11 +6,7 @@ interface CheckoutProductHeaderProps {
   totalQuantity: number;
 }
 
-const CheckoutProductHeader = ({
-  selectedItem,
-  totalItems,
-  totalQuantity,
-}: CheckoutProductHeaderProps) => {
+const CheckoutProductHeader: React.FunctionComponent<CheckoutProductHeaderProps> = ({ selectedItem, totalItems, totalQuantity }) => {
   return (
     <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base flex items-center justify-between gap-4">
       <h4>

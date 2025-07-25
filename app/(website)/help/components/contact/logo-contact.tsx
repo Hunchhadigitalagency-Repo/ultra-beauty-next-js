@@ -1,7 +1,8 @@
 import React from 'react'
 import { Mail, Navigation, Phone } from 'lucide-react'
 
-const DirectContact = () => {
+const DirectContact: React.FunctionComponent = () => {
+
   return (
     <section className='padding space-y-5'>
       <div className='flex justify-between'>
@@ -20,8 +21,12 @@ const DirectContact = () => {
                 <Phone className="text-[#FF2B5F] w-5 h-5" />
               </div>
               <div>
-                <p className="font-semibold">Phone Number</p>
-                <p>9800000000</p>
+                <p className="font-semibold">
+                  Phone Number
+                </p>
+                <p>
+                  9800000000
+                </p>
               </div>
             </div>
 
@@ -31,8 +36,12 @@ const DirectContact = () => {
                 <Mail className="text-[#FF2B5F] w-5 h-5" />
               </div>
               <div>
-                <p className="font-semibold">Email Address</p>
-                <p>support@actuallysave.com</p>
+                <p className="font-semibold">
+                  Email Address
+                </p>
+                <p>
+                  support@actuallysave.com
+                </p>
               </div>
             </div>
 
@@ -42,8 +51,12 @@ const DirectContact = () => {
                 <Navigation className="text-[#FF2B5F] w-5 h-5" />
               </div>
               <div>
-                <p className="font-semibold">Our Location</p>
-                <p>Itahari, Sunsari,</p>
+                <p className="font-semibold">
+                  Our Location
+                </p>
+                <p>
+                  Itahari, Sunsari,
+                </p>
               </div>
             </div>
           </div>

@@ -1,10 +1,11 @@
-import SectionHeader from '@/components/common/header/section-header'
-import React from 'react'
-import OrderHeader from './Order-Header'
+import React from 'react';
+import OrderHeader from './Order-Header';
+import SectionHeader from '@/components/common/header/section-header';
 
-const Order = () => {
+const Order: React.FunctionComponent = () => {
 
-    const orderItems:any = [];
+    const orderItems: any = [];
+
     return (
         <section className="padding space-y-4">
             <SectionHeader

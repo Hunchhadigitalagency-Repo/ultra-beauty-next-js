@@ -11,15 +11,13 @@ interface OrderHearderDetails {
     itemId: string;
     totalItems: number;
     status: string;
-    orderItems:OrderProducts[];
+    orderItems: OrderProducts[];
 }
 
-const OrderHeader = ({
-    itemId,
-    totalItems,
-    status,
+const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, totalItems, status,
     // orderItems,
-}: OrderHearderDetails) => {
+}) => {
+
     return (
         <section>
             <div className="md:h-16 h-12 px-4 md:px-6 bg-gray-300 rounded-sm font-medium text-custom-black text-sm flex items-center justify-between">

@@ -20,7 +20,7 @@ export const aboutStatsData = [
 
 ];
 
-const AboutStats: React.FC = () => {
+const AboutStats: React.FunctionComponent = () => {
   return (
 
     <div className="relative  text-white "
@@ -30,7 +30,6 @@ const AboutStats: React.FC = () => {
         backgroundPosition: 'center',
       }}
     >
-
       <div className="border-red-600 padding-x py-5"
         style={{
           backgroundImage: `url(${blackrectangle.src})`,
@@ -38,12 +37,15 @@ const AboutStats: React.FC = () => {
           backgroundPosition: 'center',
         }}
       >
-
-
         <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold  max-w-4xl text-[#FF2B5F] font-playfair">
-          Explore the trusted products <span className="hidden md:inline">, categories....</span>
+          Explore the trusted products
+          <span className="hidden md:inline">
+            , categories....
+          </span>
         </h3>
-        <p className="text-xs md:text-sm py-3">Find the brand from the market that are loved by most women</p>
+        <p className="text-xs md:text-sm py-3">
+          Find the brand from the market that are loved by most women
+        </p>
 
         <div className="grid grid-cols-3  gap-6 py-6">
           {aboutStatsData.map((stat, index) => (
@@ -51,8 +53,12 @@ const AboutStats: React.FC = () => {
               key={index}
               className="flex flex-col items-center justify-center rounded-none last:border-0 border-r-2 border-white gap-4"
             >
-              <h4 className="text-xl md:text-3xl lg:text-4xl font-semibold text-primary ">{stat.title}</h4>
-              <p className="text-xl md:text-3xl lg:text-4xl font-playfair ">{stat.subtitle}</p>
+              <h4 className="text-xl md:text-3xl lg:text-4xl font-semibold text-primary ">
+                {stat.title}
+              </h4>
+              <p className="text-xl md:text-3xl lg:text-4xl font-playfair ">
+                {stat.subtitle}
+              </p>
             </div>
           ))}
         </div>

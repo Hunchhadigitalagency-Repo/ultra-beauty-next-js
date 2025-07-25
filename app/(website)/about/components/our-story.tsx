@@ -1,13 +1,17 @@
+import React from "react";
 import SectionHeader from "@/components/common/header/section-header";
 import VideoPlayer from "@/components/common/video-player/video-player";
-import React from "react";
 
-const OurStory = () => {
+const OurStory: React.FunctionComponent = () => {
   return (
     <section className="padding space-y-12">
       <div className="flex items-center justify-center flex-col gap-4 text-custom-black max-w-2xl mx-auto">
         <h4 className="text-2xl font-bold uppercase">
-          TRUSTED BY 2500<span className="text-green">+</span> CLIENTS FROM
+          TRUSTED BY 2500
+          <span className="text-green">
+            +
+          </span>
+          CLIENTS FROM
           AROUND THE WORLD
         </h4>
 
@@ -31,10 +35,7 @@ const OurStory = () => {
             suscipit magni ipsam esse ex impedit provident?
           </p>
         </div>
-
         <VideoPlayer src="https://img.freepik.com/free-photo/guy-shows-document-girl-group-young-freelancers-office-have-conversation-working_146671-13569.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740" poster="https://img.freepik.com/free-photo/guy-shows-document-girl-group-young-freelancers-office-have-conversation-working_146671-13569.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740" className="h-[400px] !rounded-none !rounded-tr-lg !rounded-br-lg" />
-
-        
       </div>
     </section>
   );

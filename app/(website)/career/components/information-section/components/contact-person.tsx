@@ -11,7 +11,7 @@ interface ContactItemProps {
     link?: string;
 }
 
-const ContactPerson = ({ name, position, image, link }: ContactItemProps) => {
+const ContactPerson: React.FunctionComponent<ContactItemProps> = ({ name, position, image, link }) => {
 
     return (
         <div className="flex items-center justify-start gap-5 text-center">
@@ -22,13 +22,17 @@ const ContactPerson = ({ name, position, image, link }: ContactItemProps) => {
                 <h4 className="text-lg font-playfair text-primary font-semibold">
                     {name}
                 </h4>
-                <p className="text-xs sm:text-sm text-custom-black">{position}</p>
+                <p className="text-xs sm:text-sm text-custom-black">
+                    {position}
+                </p>
                 <Link
                     href={`${link}`}
                     className="flex gap-2"
                 >
                     <IoLogoLinkedin className="w-5 h-5 text-primary" />
-                    <p className="text-sm hover:underline">Connect to Linkedln</p>
+                    <p className="text-sm hover:underline">
+                        Connect to Linkedln
+                    </p>
                 </Link>
             </div>
         </div>

@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import Khalti from '@/assets/khalti.png';
 import GlobalIme from '@/assets/global-bank.png';
 import MasterCard from '@/assets/master-card.png';
-import SectionHeader from '@/components/common/header/section-header';
 import CashOnDelivery from '@/assets/cash-on-delivery.png';
+import SectionHeader from '@/components/common/header/section-header';
 
 
 const PAYMENT_GATEWAYS = [
@@ -18,7 +18,7 @@ const PAYMENT_GATEWAYS = [
 ];
 
 
-const Payment = () => {
+const Payment: React.FunctionComponent = () => {
 
     const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null)
 

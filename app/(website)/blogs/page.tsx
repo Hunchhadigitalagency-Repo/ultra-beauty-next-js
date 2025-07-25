@@ -1,6 +1,6 @@
-import HeroCarousel from "@/components/common/carousel/hero-carousel";
 import React from "react";
 import BlogsList from "./components/blogs-list";
+import HeroCarousel from "@/components/common/carousel/hero-carousel";
 
 const BlogsPage = () => {
   return (

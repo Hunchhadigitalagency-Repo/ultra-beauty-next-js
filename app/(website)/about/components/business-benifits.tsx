@@ -31,7 +31,6 @@ const BusinessBenifits: React.FunctionComponent = () => {
             <div style={{ backgroundImage: `url(${benifitsrectangle.src})` }} className='bg-cover w-full h-full text-white padding  my-10 flex flex-col'>
                 <div className='lg:w-[65%] flex flex-col gap-6 my-8'>
                     {BUSINESS_BENIFITS_DATA.map((item) =>
-                    // Item ID
                         <div className='flex gap-3' key={item.id}>
                             <div className='bg-primary md:w-[78px] md:h-[73px] rounded-full lg:min-w-[78px] lg:min-h-[78px] flex justify-center items-center text-white font-bold md:text-3xl min-w-[60px] min-h-[60px] w-[60px] h-[60px]'>
                                 {item.id}

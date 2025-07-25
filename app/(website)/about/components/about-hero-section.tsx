@@ -5,7 +5,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import SectionHeader from "@/components/common/header/section-header";
 
 
-const AboutHeroSection = () => {
+const AboutHeroSection: React.FunctionComponent = () => {
   return (
     <section className="padding-y">
       <div className="relative h-90 md:h-120 overflow-visible ">
