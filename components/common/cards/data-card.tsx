@@ -21,9 +21,8 @@ const DataCard = ({
       className={cn("rounded-sm bg-card shadow-xs p-4 space-y-4", className)}
     >
       <div
-        className={`flex flex-col gap-2 md:flex-row items-center ${
-          title && "justify-between"
-        }`}
+        className={`flex flex-col gap-2 md:flex-row items-center ${title && "justify-between"
+          }`}
       >
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-semibold text-foreground">{title}</h3>
