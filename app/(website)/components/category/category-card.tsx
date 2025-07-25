@@ -16,7 +16,9 @@ const CategoryCard: React.FunctionComponent<CategoryCardProps> = ({ title, image
                     layout='fill'
                 />
             </div>
-            <p className='w-[]text-center text-sm sm:text-base uppercase font-medium'>{title}</p>
+            <p className='w-[]text-center text-sm sm:text-base uppercase font-medium'>
+                {title}
+            </p>
         </div>
     )
 }

@@ -1,14 +1,15 @@
 "use client";
 import React from "react";
-
 import BlogCard from "./blog-card";
+import { IBlog } from "@/types/cms";
 import LinkText from "@/components/common/header/link-text";
+import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
 import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-import BlogScrabbledLoader from "@/components/ui/blog-scribble";
-import { IBlog } from "@/types/cms";
 
-const Blogs = () => {
+
+const Blogs: React.FunctionComponent = () => {
+
   const { data: blogs, loading } = useInfiniteFetchNoToken<IBlog>(
     "/cms/blogs/?",
     3
@@ -22,7 +23,10 @@ const Blogs = () => {
           description="See the Inside story and Useful content from our side"
           titleClassName="font-playfair"
         />
-        <LinkText title="See All" href="/blogs" />
+        <LinkText
+          title="See All"
+          href="/blogs"
+        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

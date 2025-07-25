@@ -1,4 +1,4 @@
-// components/ProductFeatureCard.tsx
+
 import React, { FC } from "react";
 import Image from "next/image";
 import { ArrowRight, Star } from "lucide-react";
