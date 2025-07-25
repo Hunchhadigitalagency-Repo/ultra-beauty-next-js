@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
@@ -29,24 +30,26 @@ export function CheckboxFilter({
   onChange,
 }: CheckboxFilterProps) {
   return (
-    <AccordionItem value={id}>
-      <AccordionTrigger className="text-sm font-medium text-foreground py-3">
-        {title}
-      </AccordionTrigger>
-      <AccordionContent className="">
-        <div className="space-y-3 h-28 overflow-y-auto">
-          {options.map((option) => (
-            <CheckboxFilterItem
-              key={option.name}
-              id={`${id}-${option.name}`}
-              label={option.name}
-              count={option.product_count}
-              checked={selectedValues.includes(option.id)}
-              onChange={(checked) => onChange(option.id, checked)}
-            />
-          ))}
-        </div>
-      </AccordionContent>
-    </AccordionItem>
+    <Accordion defaultValue={[id]} type="multiple">
+      <AccordionItem value={id}>
+        <AccordionTrigger className="text-sm font-medium text-foreground py-3">
+          {title}
+        </AccordionTrigger>
+        <AccordionContent className="">
+          <div className="space-y-3 h-28 overflow-y-auto">
+            {options.map((option) => (
+              <CheckboxFilterItem
+                key={option.name}
+                id={`${id}-${option.name}`}
+                label={option.name}
+                count={option.product_count}
+                checked={selectedValues.includes(option.id)}
+                onChange={(checked) => onChange(option.id, checked)}
+              />
+            ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
