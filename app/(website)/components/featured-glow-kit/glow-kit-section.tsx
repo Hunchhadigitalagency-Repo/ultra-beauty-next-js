@@ -22,7 +22,6 @@ const GlowKitList = [
     desc: "Hemp Seed Aloe Vera Serum Mist"
   }
 
-
 ]
 
 const GlowKitSection: React.FunctionComponent = () => {

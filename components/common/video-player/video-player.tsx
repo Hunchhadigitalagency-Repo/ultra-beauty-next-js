@@ -1,11 +1,11 @@
-
 "use client"
-
+import { FaPlay } from "react-icons/fa";
 import { useRef, useState } from 'react';
+import { StaticImageData } from 'next/image';
 
 interface HeroVideoProps {
-  src:   string;   
-  poster: string;  
+  src: string | null;
+  poster: string | StaticImageData | undefined;
   className?: string;
 }
 
@@ -36,8 +36,8 @@ export default function VideoPlayer({
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
-        src={src}
-        poster={poster}
+        src={src === null ? undefined : src}
+        poster={typeof poster === 'string' ? poster : poster?.src}
         preload="metadata"
         playsInline
         controls={isPlaying}        /* reveal default controls after click */
@@ -56,14 +56,7 @@ export default function VideoPlayer({
         >
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 text-indigo-600 transition group-hover:scale-105 group-hover:bg-white">
             {/* play icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-10 w-10 translate-x-[2px]" /* nudge for optical centering */
-            >
-              <path d="M5 3.98v16.04c0 1.1 1.19 1.79 2.15 1.24l13.32-8.02a1.43 1.43 0 0 0 0-2.48L7.15 2.74A1.43 1.43 0 0 0 5 3.98Z" />
-            </svg>
+            <FaPlay className="text-primary w-6 h-6" />
           </div>
         </button>
       )}

@@ -27,10 +27,6 @@ const PriceRow = ({
         <span className="text-sm md:text-base font-normal text-[#7A7A7A] line-through">
           Nrs. {previousPrice}
         </span>
-        <span className=" text-sm md:text-xl  text-[#FF2B5F] font-bold">
-          Nrs. {price}
-        </span>
-
       </span>
       {
         discountTag && (

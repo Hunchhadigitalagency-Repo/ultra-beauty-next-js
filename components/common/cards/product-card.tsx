@@ -31,7 +31,7 @@ interface ProductCardProps {
 const ProductCard = ({
   id,
   imageSrc,
-  alt,
+  // alt,
   brandname,
   title,
   // price,
@@ -50,7 +50,7 @@ const ProductCard = ({
       <div onClick={() => router.push(`/shop/product/${id}`)} className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
         <Image
           src={imageSrc}
-          alt={alt}
+          alt={''}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />

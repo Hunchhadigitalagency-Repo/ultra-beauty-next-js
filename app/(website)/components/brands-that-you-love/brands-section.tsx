@@ -1,10 +1,4 @@
 "use client";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselApi
-} from "@/components/ui/carousel";
 import moira from "@/assets/MORIA.png";
 import letan from "@/assets/LeTan.png";
 import urban from "@/assets/URBAN.png";
@@ -13,6 +7,12 @@ import australis from "@/assets/australis.png";
 import React, { useEffect, useState } from "react";
 import LinkText from "@/components/common/header/link-text";
 import SectionHeader from "@/components/common/header/section-header";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselApi
+} from "@/components/ui/carousel";
 
 const BRANDS_LIST = [
   { image: australis },

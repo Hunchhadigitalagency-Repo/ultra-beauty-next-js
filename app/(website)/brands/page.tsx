@@ -3,6 +3,7 @@ import BrandsSection from './components/brand-main-section';
 import BrandsDescSection from './components/brands-that-you-love-desc';
 
 const Brands: React.FunctionComponent = () => {
+  
   return (
     <>
       <BrandsSection />

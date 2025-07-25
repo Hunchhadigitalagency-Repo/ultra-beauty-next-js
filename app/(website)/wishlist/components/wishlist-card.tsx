@@ -29,7 +29,6 @@ const WishlistCard = ({
   discountTag,
   deleteWishlist,
 }: WishlistCardProps) => {
-  console.log("this is the product id", id);
   return (
     <section className="relative flex flex-col md:flex-row gap-4">
       <div className="flex gap-4 md:gap-6 flex-row flex-1">
@@ -44,11 +43,12 @@ const WishlistCard = ({
           />
           {discountTag && (
             <span className="absolute  bg-primary text-white text-xs md:text-sm px-2 py-1 rounded-full right-2 bottom-2">
-              {Math.floor(Number(discountTag))}% Off
+              {/* {Math.floor(Number(discountTag))}% Off */}
+              {discountTag} Off
             </span>
           )}
         </div>
-          {/* rating */}
+        {/* rating */}
         <div className="flex flex-col flex-1">
           <div className="flex justify-between gap-4">
             <div className="flex items-center gap-2 md:gap-4">
