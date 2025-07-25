@@ -14,7 +14,7 @@ const BrandContent: React.FunctionComponent<BrandContentProps> = ({ brandName, b
             <h2 className=' font-normal uppercase text-sm ms:text-base lg:text-2xl'>
                 Brand Name
             </h2>
-            <h1 className='text-3xl md:text-5xl lg:text-7xl'>
+            <h1 className='text-3xl md:text-5xl lg:text-7xl font-playfair'>
                 {brandName}
             </h1>
             <p className='px-5 sm:px-0 text-xs sm:text-sm md:text-base lg:text-lg text-center'>
