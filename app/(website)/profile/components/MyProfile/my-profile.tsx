@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import OrderTable from '../Table/order-table';
 
-const data = [
+export const data = [
     {
         id: 1,
         orderNumber: 'ORD-001',
