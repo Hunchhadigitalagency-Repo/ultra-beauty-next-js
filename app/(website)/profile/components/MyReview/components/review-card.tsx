@@ -29,7 +29,7 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
             <button
                 onClick={() => setIsReviewModalOpen(!isReviewModalOpen)}
                 className='
-                bg-[#FF9900] px-2.5 py-1 sm:px-5 sm:py-2 md:px-8 md:py-2.5 rounded-sm
+                bg-primary text-white px-2.5 py-1 sm:px-5 sm:py-2 md:px-8 md:py-2.5 rounded-sm
                  cursor-pointer text-sm md:text-base font-medium
                  '>
                 Leave a review

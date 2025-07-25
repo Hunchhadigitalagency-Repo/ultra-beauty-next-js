@@ -1,49 +1,51 @@
 "use client";
 
-import { 
+import {
   ArrowRight,
   Calendar,
-  UserCircle2Icon 
+  UserCircle2Icon
 } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import DOMPurify from "dompurify";
-import { IBlog } from "@/types/cms";
-import { useParams } from "next/navigation";
+// import { IBlog } from "@/types/cms";
+// import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useFetchProduct } from "@/hooks/use-fetch-product";
+// import { useFetchProduct } from "@/hooks/use-fetch-product";
 import SectionHeader from "@/components/common/header/section-header";
+import { dummyBlogs } from "@/constants/blog-data";
 
 const SingleBlogSection = () => {
-  const id = useParams().id;
+  // const id = useParams().id;
 
-  const path = id ? `cms/blogs/${id}` : "";
+  // const path = id ? `cms/blogs/${id}` : "";
+  const blog = dummyBlogs[0];
 
-  const { data: blog, loading, error } = useFetchProduct<IBlog>(path);
+  // const { data: blog, loading, error } = useFetchProduct<IBlog>(path);
 
-  if (loading) {
-    return (
-      <section className="padding text-center py-20">
-        <p className="text-lg font-medium">Loading blog...</p>
-      </section>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <section className="padding text-center py-20">
+  //       <p className="text-lg font-medium">Loading blog...</p>
+  //     </section>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <section className="padding text-center py-20">
-        <p className="text-lg font-medium text-red-600">Failed to load blog.</p>
-      </section>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <section className="padding text-center py-20">
+  //       <p className="text-lg font-medium text-red-600">Failed to load blog.</p>
+  //     </section>
+  //   );
+  // }
 
-  if (!blog) {
-    return (
-      <section className="padding text-center py-20">
-        <p className="text-lg font-medium">Blog not found.</p>
-      </section>
-    );
-  }
+  // if (!blog) {
+  //   return (
+  //     <section className="padding text-center py-20">
+  //       <p className="text-lg font-medium">Blog not found.</p>
+  //     </section>
+  //   );
+  // }
 
   const cleanHtml = DOMPurify.sanitize(blog.description || "", {
     USE_PROFILES: { html: true },
@@ -85,7 +87,7 @@ const SingleBlogSection = () => {
         <h2 className="text-3xl font-semibold text-custom-black max-w-4xl font-playfair">
           {blog.title}
         </h2>
-          {/* Date & Author */}
+        {/* Date & Author */}
         <div className="flex flex-wrap gap-6 text-accent-foreground text-sm font-medium ">
           <div className="flex items-center gap-2">
             <UserCircle2Icon className="w-5 h-5" />

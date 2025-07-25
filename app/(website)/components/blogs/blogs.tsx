@@ -1,19 +1,22 @@
 "use client";
 import React from "react";
 import BlogCard from "./blog-card";
-import { IBlog } from "@/types/cms";
+// import { IBlog } from "@/types/cms";
+import { dummyBlogs } from "@/constants/blog-data";
 import LinkText from "@/components/common/header/link-text";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
+// import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
 
 
 const Blogs: React.FunctionComponent = () => {
 
-  const { data: blogs, loading } = useInfiniteFetchNoToken<IBlog>(
-    "/cms/blogs/?",
-    3
-  );
+  // const { data: blogs, loading } = useInfiniteFetchNoToken<IBlog>(
+  //   "/cms/blogs/?",
+  //   3
+  // );
+
+  const loading = false;
 
   return (
     <section className="padding space-y-8">
@@ -30,7 +33,7 @@ const Blogs: React.FunctionComponent = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.slice(0, 3).map((blog) => (
+        {dummyBlogs.slice(0, 3).map((blog) => (
           <BlogCard key={blog.id} {...blog} />
         ))}
       </div>

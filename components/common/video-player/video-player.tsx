@@ -4,8 +4,8 @@ import { useRef, useState } from 'react';
 import { StaticImageData } from 'next/image';
 
 interface HeroVideoProps {
-  src:   string;   
-  poster: string | StaticImageData |undefined;  
+  src: string | null;
+  poster: string | StaticImageData | undefined;
   className?: string;
 }
 
@@ -36,7 +36,7 @@ export default function VideoPlayer({
       <video
         ref={videoRef}
         className="w-full h-full object-cover"
-        src={src}
+        src={src === null ? undefined : src}
         poster={typeof poster === 'string' ? poster : poster?.src}
         preload="metadata"
         playsInline
@@ -56,7 +56,7 @@ export default function VideoPlayer({
         >
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 text-indigo-600 transition group-hover:scale-105 group-hover:bg-white">
             {/* play icon */}
-            <FaPlay  className="text-primary w-6 h-6"/>
+            <FaPlay className="text-primary w-6 h-6" />
           </div>
         </button>
       )}

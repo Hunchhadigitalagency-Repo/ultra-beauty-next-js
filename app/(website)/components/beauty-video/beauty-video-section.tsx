@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/carousel';
 
 const BeautyVideosList = [
-  { src: "", poster: VideoImage1 },
-  { src: "", poster: VideoImage2 },
-  { src: "", poster: VideoImage3 },
+  { src: null, poster: VideoImage1 },
+  { src: null, poster: VideoImage2 },
+  { src: null, poster: VideoImage3 },
 ];
 
 const BeautyVideoSection: React.FunctionComponent = () => {

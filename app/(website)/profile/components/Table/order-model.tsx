@@ -11,6 +11,7 @@ type Props = {
 };
 
 const OrderDetailsModal = ({ order, onClose }: Props) => {
+
   const getItemData = (item: IOrderDetail) => {
     console.log("this is the item iu am getting ", item)
     const source = item.product_variant ?? item.product;
@@ -46,7 +47,7 @@ const OrderDetailsModal = ({ order, onClose }: Props) => {
             return (
               <div
                 key={index}
-                className="relative flex flex-col p-4 rounded-lg bg-white border-b"
+                className="relative flex flex-col p-4 rounded-lg border-b"
               >
                 <div className="flex flex-row gap-4 items-start">
                   <div className="flex items-center gap-3 shrink-0">

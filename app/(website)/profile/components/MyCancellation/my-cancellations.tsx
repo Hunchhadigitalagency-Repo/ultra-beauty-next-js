@@ -31,7 +31,7 @@ const data = [
 const MyCancellations: React.FunctionComponent = () => {
     return (
         <div className='flex flex-col gap-5'>
-            <h1 className="text-[#1477B4] font-medium text-xl">Cancelled Orders</h1>
+            <h1 className="text-primary font-medium text-xl">Cancelled Orders</h1>
             <OrderTable data={data} />
         </div>
     )

@@ -33,13 +33,13 @@ const MyProfile: React.FunctionComponent = () => {
 
 
     return (
-        <section className="flex flex-col gap-8">
+        <section className="flex flex-col gap-8 bg-[#FAFAFA]">
             <div className="grid grid-cols-1 lg:grid-cols-[0.35fr_0.65fr] gap-10">
                 {/* Personal Information */}
                 <div className="border border-[#E2E2E2] rounded-sm">
                     <div className="flex justify-between items-center p-3">
                         <p className="font-medium text-sm md:text-base">Personal Information</p>
-                        <p className="text-[#1477B4] cursor-pointer text-sm md:text-base">Change</p>
+                        <p className="text-primary cursor-pointer text-sm md:text-base">Change</p>
                     </div>
                     <div className="border-t border-[#CFCECE] p-4 flex gap-4">
                         <div className="flex justify-center items-center">
@@ -53,7 +53,7 @@ const MyProfile: React.FunctionComponent = () => {
                             </div>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                            <p className="text-[#FF9900] font-semibold text-lg">Hemant Jung Karki</p>
+                            <p className="text-primary font-semibold text-lg">Hemant Jung Karki</p>
                             <p className="font-medium text-sm">hemantajungkarki@gmail.com</p>
                             <p className="font-medium text-sm">+977-9824386694</p>
                             <p className="font-medium text-sm text-[#5D5D5D]">DOB: 1997-01-19</p>
@@ -71,12 +71,12 @@ const MyProfile: React.FunctionComponent = () => {
                                 default address
                             </span>
                         </p>
-                        <p className="text-[#1477B4] cursor-pointer text-sm md:text-base">
+                        <p className="text-primary cursor-pointer text-sm md:text-base">
                             Change
                         </p>
                     </div>
                     <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
-                        <p className="text-[#FF9900] font-semibold text-lg">Hemant Jung Karki</p>
+                        <p className="text-primary font-semibold text-lg">Hemant Jung Karki</p>
                         <p className="font-medium text-sm">hemantajungkarki@gmail.com</p>
                         <p className="font-medium text-sm">+977-9824386694</p>
                         <p className="font-medium text-sm">
@@ -87,7 +87,7 @@ const MyProfile: React.FunctionComponent = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-                <h1 className="text-[#1477B4] font-medium text-xl">Recent Orders</h1>
+                <h1 className="text-primary font-medium text-xl">Recent Orders</h1>
                 <OrderTable data={data} />
             </div>
         </section>

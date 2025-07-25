@@ -35,8 +35,8 @@ const orderDetails: IOrderDetail[] = [
         total_price: 1000,
         status: "Shipped",
         product_variant: {
-            item_image: "/images/product1.jpg",
-            item_name: "Blue Hoodie",
+            item_image: "https://images.unsplash.com/photo-1725172045217-d1e1f2ecdf62?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            item_name: "Dermama",
         },
     },
     {
@@ -46,8 +46,8 @@ const orderDetails: IOrderDetail[] = [
         total_price: 1500,
         status: "Delivered",
         product: {
-            item_image: "/images/product2.jpg",
-            item_name: "Wireless Headphones",
+            item_image: "https://images.unsplash.com/photo-1648712789205-4a05ebb8d026?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            item_name: "Cosmozone",
         },
     },
 ];

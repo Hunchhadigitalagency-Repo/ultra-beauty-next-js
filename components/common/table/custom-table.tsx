@@ -42,6 +42,7 @@ const CustomTable = <T,>({
   getItemId = (item: any) => item.id,
   striped = true,
 }: TableProps<T>): JSX.Element => {
+
   const dispatch = useAppDispatch();
   const selectedIds = useAppSelector((state) => state.table.selectedIds);
 
@@ -77,11 +78,11 @@ const CustomTable = <T,>({
   return (
     <div className="space-y-4">
       <div
-        className={`relative overflow-x-auto ${height} border border-gray-200 rounded-md`}
+        className={`relative overflow-x-auto ${height} rounded-md`}
       >
         <table className="w-full border-collapse">
           <thead>
-            <tr className="sticky top-0 bg-gray-50 z-10 border-b border-gray-200">
+            <tr className="sticky top-0 bg-secondary z-10 border-b border-gray-200">
               {enableBulkSelect && (
                 <th className="px-4 py-3 font-medium text-sm text-left whitespace-nowrap w-12">
                   <Checkbox

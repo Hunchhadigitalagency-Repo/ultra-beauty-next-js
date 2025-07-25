@@ -4,7 +4,7 @@ import { StaticImageData } from 'next/image';
 import VideoPlayer from '@/components/common/video-player/video-player';
 
 interface BeautyVideoContentProps {
-  src: string;
+  src: string | null;
   poster?: string | StaticImageData | undefined;
 }
 
