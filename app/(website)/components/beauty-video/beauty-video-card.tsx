@@ -1,46 +1,18 @@
+'use client'
 import React from 'react';
+import { StaticImageData } from 'next/image';
+import VideoPlayer from '@/components/common/video-player/video-player';
 
 interface BeautyVideoContentProps {
   src: string;
-  poster?: string;
+  poster?: string | StaticImageData | undefined;
 }
 
 const BeautyVideoContent: React.FC<BeautyVideoContentProps> = ({ src, poster }) => {
-  const isYouTube = src.includes("youtube.com") || src.includes("youtu.be");
 
-  if (isYouTube) {
-    // Convert YouTube link to embed format
-    const videoId = src.includes("watch?v=")
-      ? src.split("watch?v=")[1]
-      : src.split("/").pop();
-
-    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-
-
-    return (
-      <div className="aspect-video w-full rounded-md overflow-hidden">
-        <iframe
-          className="w-full h-full"
-          src={embedUrl}
-          title="YouTube Video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
-    );
-  }
-
-  // Local or direct video file
   return (
     <div className="w-full rounded-md overflow-hidden">
-      <video
-        src={src}
-        poster={poster}
-        controls
-        className="w-full h-auto rounded"
-      >
-        Your browser does not support the video tag.
-      </video>
+      <VideoPlayer src={src} poster={typeof poster === 'string' ? poster : poster} />
     </div>
   );
 };

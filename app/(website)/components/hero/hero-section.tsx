@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import image1 from "@/assets/Rectangle 11.png"
+import heroImage2 from "@/assets/temp-images/heroImage2.png";
 import {
   Carousel,
   CarouselContent,
@@ -24,7 +25,7 @@ const slides = [
     title: "Transform Your Workspace",
     description:
       "Experience the perfect blend of style and functionality. Our premium collection brings comfort and elegance to every corner of your office space.",
-    image: "https://img.freepik.com/premium-photo/clean-coworking-office-interior-with-concrete-wall-wooden-flooring-windows-with-city-view-sunlight-shadows-furniture-3d-rendering_670147-71922.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+    image: heroImage2,
     buttonText: "EXPLORE COLLECTION",
   },
   {
@@ -32,7 +33,7 @@ const slides = [
     title: "Wellness Meets Design",
     description:
       "Prioritize health without compromising aesthetics. Our wellness-focused furniture elevates your productivity with mindful comfort and modern design.",
-    image: "https://img.freepik.com/free-photo/green-sofa-white-living-room-with-free-space_43614-834.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+    image: heroImage2,
     buttonText: "DISCOVER MORE",
   },
 ];
@@ -89,7 +90,7 @@ export default function HeroSection() {
           <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-4 border-none shadow-none bg-transparent" />
           <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-16 border-none shadow-none bg-transparent" />
         </div>
-
+        
         <div className="absolute -bottom-4 right-0  md:right-0 lg:bottom-2 lg:right-0 -translate-x-1/2 z-20 flex space-x-2">
           {slides.map((_, i) => (
             <button

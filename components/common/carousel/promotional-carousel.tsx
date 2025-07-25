@@ -1,14 +1,14 @@
 "use client";
-
 import Image from "next/image";
 import { Tag } from "lucide-react";
+import { useEffect, useState } from "react";
+import ticketImage from "@/assets/temp-images/ticketImage.png";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
 
 import subtractImage from "@/assets/Subtract.png";
 
@@ -17,7 +17,7 @@ const slides = [
     id: 1,
     title: "The Perfect Balance of Comfort and Style",
     image:
-      "https://img.freepik.com/free-photo/minimalist-desk-arrangement-with-laptop-top-view_23-2149073044.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+      ticketImage,
     promotion: {
       subtitle: "In your First Book",
       discount: "20% OFF",
@@ -29,7 +29,7 @@ const slides = [
     id: 2,
     title: "Discover Your Next Favorite Read",
     image:
-      "https://img.freepik.com/free-photo/minimalist-desk-arrangement-with-laptop-top-view_23-2149073044.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+     ticketImage,
     promotion: {
       subtitle: "Summer Reading Sale",
       discount: "30% OFF",
@@ -41,7 +41,7 @@ const slides = [
     id: 3,
     title: "Transform Your Reading Experience",
     image:
-      "https://img.freepik.com/free-photo/minimalist-desk-arrangement-with-laptop-top-view_23-2149073044.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
+     ticketImage,
     promotion: {
       subtitle: "Premium Collection",
       discount: "15% OFF",
@@ -110,7 +110,7 @@ export default function PromotionalCarousel({ className }: PromotionalCarouselPr
                     className="object-cover"
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-black/50" />
+                  <div className="absolute inset-0 bg-black/20" />
                 </div>
 
                 {/* Content overlay */}

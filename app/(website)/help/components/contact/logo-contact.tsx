@@ -8,17 +8,20 @@ const DirectContact: React.FunctionComponent = () => {
       <div className='flex justify-between'>
         <span className="text-base md:text-4xl text-center font-playfair font-medium text-primary leading-none">
           Ultra Beauty<br />
-          <span className="font-poppins text-xl md:text-base">&</span><br />
+          <span className="font-poppins text-xl md:text-base">
+            &
+          </span>
+          <br />
           Brand
         </span>
 
-        <div className="w-4xl p-8 bg-white rounded-sm border border-gray-200 ">
+        <div className="w-4xl p-8 bg-white rounded-sm border border-[#E1E1E1] ">
           <h2 className="text-2xl font-bold font-playfair text-primary mb-6">Contact us Directly</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 font-poppins gap-6 text-sm">
             {/* Phone */}
             <div className="flex items-start gap-3">
-              <div className="bg-[#FFEBED] p-2 rounded-md">
-                <Phone className="text-[#FF2B5F] w-5 h-5" />
+              <div className="bg-secondary p-2 rounded-md">
+                <Phone className="text-primary w-5 h-5" />
               </div>
               <div>
                 <p className="font-semibold">
@@ -32,8 +35,8 @@ const DirectContact: React.FunctionComponent = () => {
 
             {/* Email */}
             <div className="flex items-start gap-3">
-              <div className="bg-[#FFEBED] p-2 rounded-md">
-                <Mail className="text-[#FF2B5F] w-5 h-5" />
+              <div className="bg-secondary p-2 rounded-md">
+                <Mail className="text-primary w-5 h-5" />
               </div>
               <div>
                 <p className="font-semibold">
@@ -48,7 +51,7 @@ const DirectContact: React.FunctionComponent = () => {
             {/* Location */}
             <div className="flex items-start gap-3">
               <div className="bg-[#FFEBED] p-2 rounded-md">
-                <Navigation className="text-[#FF2B5F] w-5 h-5" />
+                <Navigation className="text-primary w-5 h-5" />
               </div>
               <div>
                 <p className="font-semibold">

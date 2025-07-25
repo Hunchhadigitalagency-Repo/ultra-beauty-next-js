@@ -39,8 +39,7 @@ const TermsAndConditions: React.FunctionComponent = () => {
                         PRIVACY_POLICY_DATA.map((item, index) => (
                             <p key={index} className="pb-2" onClick={() => setActiveTitleIndex(index)}>
                                 <span
-                                    className={`inline-block cursor-pointer ${activeTitleIndex === index ? 'text-primary border-b border-primary pb-1 px-2' : 'px-2'}`}
-                                >
+                                    className={`inline-block cursor-pointer ${activeTitleIndex === index ? 'text-primary border-b border-primary pb-1 px-2' : 'px-2'}`}>
                                     {item.title}
                                 </span>
                             </p>

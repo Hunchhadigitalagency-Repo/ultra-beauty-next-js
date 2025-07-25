@@ -39,7 +39,7 @@ const BrandsSection: React.FunctionComponent = () => {
                             <p className="hidden md:block text-white text-sm md:text-sm lg:text-base max-w-[500px] font-poppins">
                                 The major cosmetic product brands and what makes them stand out. These brands operate in various segments of the beauty industry—skincare, makeup, haircare and fragrance—and cater to different customers’ needs, price ranges, and global markets.
                             </p>
-                            <button className="hidden md:block bg-[#FF2B5F] px-5 py-1 md:px-10 md:py-2.5 lg:px-14 lg:py-3 text-xs sm:text-sm md:text-sm lg:text-base  rounded-full text-white font-poppins border border-white shadow-white">
+                            <button className="hidden md:block bg-primary px-5 py-1 md:px-10 md:py-2.5 lg:px-14 lg:py-3 text-xs sm:text-sm md:text-sm lg:text-base  rounded-full text-white font-poppins border border-white shadow-white">
                                 Shop now
                             </button>
                         </div>

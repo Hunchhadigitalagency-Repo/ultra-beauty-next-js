@@ -35,6 +35,7 @@ const items = [
 
 
 const HelpSupportSection: React.FunctionComponent = () => {
+  
   return (
     <section className='padding space-y-2'>
       <SectionHeader
@@ -51,10 +52,10 @@ const HelpSupportSection: React.FunctionComponent = () => {
             className={"border rounded-md p-4 cursor-pointer border-[#E1E1E1] hover:shadow-md transition"}
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="bg-pink-100 p-2 rounded">
-                <Laptop className="text-[#FF2B5F] w-5 h-5" />
+              <div className="bg-secondary p-2 rounded">
+                <Laptop className="text-primary w-5 h-5" />
               </div>
-              <h2 className="text-lg font-playfair font-bold text-[#FF2B5F]">
+              <h2 className="text-lg font-playfair font-bold text-primary">
                 {item.title}
               </h2>
             </div>
