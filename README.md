@@ -1,4 +1,4 @@
-# Basera E-commerce 🛒
+# Ultra Beauty & Care
 
 A modern, full-stack e-commerce application built with Next.js 15, React, and Redux. Basera E-commerce offers a scalable, performant platform for selling products online, complete with user authentication, product catalog, shopping cart, and order management.
 

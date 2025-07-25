@@ -24,24 +24,25 @@ const CATEGORY_LIST = [
 
 const SearchModal: React.FunctionComponent = () => {
     return (
-        <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-4">
+        <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4">
             <div className="w-full flex justify-center items-center gap-5">
                 <SearchBox placeholder="Find the Product of Your Choice" />
-                <button className="bg-primary text-white px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors cursor-pointer">
+                <button className="hidden lg:flex bg-primary text-white px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors cursor-pointer">
                     <p className="text-base">Search</p>
                 </button>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 mt-4 padding-x">
+            {/* Suggestions Section */}
+            <div className="hidden lg:grid grid-cols-2 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 mt-4 padding-x">
                 <section className="flex flex-col gap-5">
                     <h1 className="text-primary font-playfair font-bold text-3xl">Popular Search</h1>
                     <ul className="text-base font-normal text-foreground flex flex-col gap-2">
-                        <li className="cursor-pointer">Foundation & Compact</li>
-                        <li className="cursor-pointer">MakeUp Serum</li>
-                        <li className="cursor-pointer">Eyeliner</li>
-                        <li className="cursor-pointer">Bridal Cosmetics</li>
-                        <li className="cursor-pointer">Nail Polish</li>
-                        <li className="cursor-pointer">Foundation & Compact</li>
-                        <li className="cursor-pointer">Eye MakeUp & Mascara</li>
+                        <li className="cursor-pointer hover:text-primary">Foundation & Compact</li>
+                        <li className="cursor-pointer hover:text-primary">MakeUp Serum</li>
+                        <li className="cursor-pointer hover:text-primary">Eyeliner</li>
+                        <li className="cursor-pointer hover:text-primary">Bridal Cosmetics</li>
+                        <li className="cursor-pointer hover:text-primary">Nail Polish</li>
+                        <li className="cursor-pointer hover:text-primary">Foundation & Compact</li>
+                        <li className="cursor-pointer hover:text-primary">Eye MakeUp & Mascara</li>
                     </ul>
                 </section>
                 <section className="flex flex-col gap-5">

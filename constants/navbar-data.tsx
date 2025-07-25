@@ -23,7 +23,7 @@ export const getNavigationItems = async (): Promise<NavigationItem[]> => {
             { name: "Home", href: "/" },
             categoryDropdown,
             { name: "Best Seller", href: "/best-seller", hasDropdown: true },
-            { name: "Sale", href: "/sale" },
+            // { name: "Sale", href: "/sale" },
             { name: "Blogs", href: "/blogs" },
             { name: "About Us", href: "/about" },
             { name: "Contact Us", href: "/contact" },

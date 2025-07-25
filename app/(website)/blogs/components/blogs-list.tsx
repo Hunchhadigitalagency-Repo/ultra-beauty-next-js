@@ -1,15 +1,16 @@
 "use client";
 
 import React from "react";
-import BlogCard from "../../components/blogs/blog-card";
-import SectionHeader from "@/components/common/header/section-header";
-import SearchBox from "@/components/common/filter/search-box";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import { IBlog } from "@/types/cms";
+import BlogCard from "../../components/blogs/blog-card";
+import InfiniteScroll from "react-infinite-scroll-component";
+import SearchBox from "@/components/common/filter/search-box";
+import BlogScrabbledLoader from "@/components/ui/blog-scribble";
+import SectionHeader from "@/components/common/header/section-header";
+import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
 
 const BlogsList = () => {
+
   const {
     data: blogs,
     loading,

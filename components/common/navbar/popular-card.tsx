@@ -6,12 +6,12 @@ const PopularCard = ({ image }: { image: string }) => {
     return (
         <div className='flex relative flex-col w-full gap-4 p-2 border-[1px] border-primary rounded-md'>
             {/* Image Section */}
-            <div className='mb-2 relative w-full h-40 sm:h-60 md:h-60'>
+            <div className='mb-2 relative w-full h-40 sm:h-60 md:h-60 overflow-hidden rounded-lg group cursor-pointer '>
                 <Image
                     src={image}
                     alt={'Product Image'}
                     fill
-                    className="object-cover group-hover:scale-105 rounded-md transition-transform duration-300"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
             </div>
 

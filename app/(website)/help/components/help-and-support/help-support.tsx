@@ -34,7 +34,7 @@ const items = [
 ]
 
 
-const HelpSupportSection = () => {
+const HelpSupportSection: React.FunctionComponent = () => {
   return (
     <section className='padding space-y-2'>
       <SectionHeader
@@ -54,9 +54,13 @@ const HelpSupportSection = () => {
               <div className="bg-pink-100 p-2 rounded">
                 <Laptop className="text-[#FF2B5F] w-5 h-5" />
               </div>
-              <h2 className="text-lg font-playfair font-bold text-[#FF2B5F]">{item.title}</h2>
+              <h2 className="text-lg font-playfair font-bold text-[#FF2B5F]">
+                {item.title}
+              </h2>
             </div>
-            <p className="text-sm font-poppins text-gray-600">{item.desc}</p>
+            <p className="text-sm font-poppins text-gray-600">{
+              item.desc}
+            </p>
           </Link>
         ))}
       </div>

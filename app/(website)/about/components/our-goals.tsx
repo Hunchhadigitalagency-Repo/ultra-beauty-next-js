@@ -1,8 +1,8 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import map from "@/assets/features.png";
 
-const OurGoals = () => {
+const OurGoals: React.FunctionComponent = () => {
   return (
     <section className="bg-primary padding">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start py-16">

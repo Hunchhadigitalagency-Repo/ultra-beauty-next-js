@@ -2,7 +2,7 @@ import React from "react";
 import CheckoutDetails from "./components/checkout-details";
 import SectionHeader from "@/components/common/header/section-header";
 
-const CheckoutPage = () => {
+const CheckoutPage: React.FunctionComponent = () => {
   return (
     <main className="space-y-4 padding">
       <SectionHeader

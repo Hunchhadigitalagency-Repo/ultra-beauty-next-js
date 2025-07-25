@@ -4,7 +4,7 @@ import moira from "@/assets/MORIA.png";
 import letan from "@/assets/LeTan.png";
 import urban from "@/assets/URBAN.png";
 import australis from "@/assets/australis.png";
-import image from "@/assets/brandsCareer.png"
+import brandsHeroImage from "@/assets/brandsCareer.png"
 import MainBrandcard from './main-section-brand-card';
 import LinkText from '@/components/common/header/link-text';
 import SectionHeader from '@/components/common/header/section-header';
@@ -17,13 +17,13 @@ const BRANDS_LIST = [
     { image: australis }
 ];
 
-const BrandsSection = () => {
+const BrandsSection: React.FunctionComponent = () => {
 
     return (
         <section className="padding-y">
             <div className="relative min-h-[150px] md:min-h-[400px] z-30 w-full bg-cover bg-center"
                 style={{
-                    backgroundImage: `url(${image})`, 
+                    backgroundImage: `url(${brandsHeroImage.src})`,
                 }}>
                 <div className='absolute inset-0 bg-black/40'>
                     {/* main section */}
@@ -47,7 +47,7 @@ const BrandsSection = () => {
                         {/* Right - Brand Carousel */}
                         <div className="w-full  md:pb-14">
                             <div className='flex justify-end mr-4  sm:mr-8 md:mr-16 py-3'>
-                                <LinkText className='text-white text-xs' title="ALL BRANDS" href="/shop"/>
+                                <LinkText className='text-white text-xs' title="ALL BRANDS" href="/shop" />
                             </div>
                             <Carousel>
                                 <CarouselContent className="flex gap-4 sm:gap-6 md:gap-7">
@@ -56,7 +56,7 @@ const BrandsSection = () => {
                                             key={index}
                                             className="basis-1/2 md:basis-[35%] lg:basis-[40%]"
                                         >
-                                            <MainBrandcard image={brand.image}/>
+                                            <MainBrandcard image={brand.image} />
                                         </CarouselItem>
                                     ))}
                                 </CarouselContent>

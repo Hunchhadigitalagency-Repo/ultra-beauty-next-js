@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import ShippingForm from "./shipping-details-form";
-import OrderSummary from "../../cart/components/order-summary";
-import CheckoutProductHeader from "./checkout-product-header";
-import CheckoutProductCard from "./checkout-product-card";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import ShippingForm from "./shipping-details-form";
+import CheckoutProductCard from "./checkout-product-card";
+import CheckoutProductHeader from "./checkout-product-header";
+import OrderSummary from "../../cart/components/order-summary";
 
-const CheckoutDetails = () => {
+const CheckoutDetails: React.FunctionComponent = () => {
   return (
     <section className=" space-y-4">
       <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">

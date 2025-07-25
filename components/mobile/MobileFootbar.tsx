@@ -16,7 +16,7 @@ const MobileFootbar = () => {
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 w-full z-50 bg-blue-500 md:hidden">
+        <nav className="fixed bottom-0 left-0 w-full z-50 bg-primary md:hidden">
             <div className="flex justify-around px-4 py-2">
                 {navItems.map((item) => {
                     const isActive = pathname === item.path;

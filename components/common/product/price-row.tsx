@@ -17,7 +17,7 @@ const PriceRow = ({
   discountClassName,
   priceClassname,
 }: PriceRowProps) => {
-  console.log("this are the items", previousPrice, price, discountTag)
+  // console.log("this are the items", previousPrice, price, discountTag)
   return (
     <div className={`md:items-center  gap-3 md:gap-5  ${className}`}>
       <span className={`flex w-full justify-between ${priceClassname}`}>

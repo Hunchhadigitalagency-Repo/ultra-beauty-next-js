@@ -10,7 +10,8 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-const ProductSort = () => {
+const ProductSort: React.FunctionComponent = () => {
+
     const [selectedValue, setSelectedValue] = useState("apple");
 
     return (

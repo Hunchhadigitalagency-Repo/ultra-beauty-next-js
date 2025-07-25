@@ -1,11 +1,11 @@
-import HeroCarousel from "@/components/common/carousel/hero-carousel";
 import React from "react";
-
-import DifferentiatorSection from "../../../components/common/differentiator/differentiator-section";
-import Testimonials from "@/components/common/testimonials/testimonials";
 import AllProducts from "../shop/components/all-products";
+import HeroCarousel from "@/components/common/carousel/hero-carousel";
+import Testimonials from "@/components/common/testimonials/testimonials";
+import DifferentiatorSection from "../../../components/common/differentiator/differentiator-section";
 
-const SalePage = () => {
+
+const SalePage: React.FunctionComponent = () => {
   return (
     <div>
       <HeroCarousel />

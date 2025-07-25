@@ -1,10 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { FaRegBell } from "react-icons/fa";
-// import { FaArrowRight } from "react-icons/fa6";
-// import { FaArrowLeft } from "react-icons/fa6";
-import Rectangle1 from "@/assets/Rectangle227.png";
-import image1 from "@/assets/Luxury-Beauty.png";
 import {
   Carousel,
   CarouselContent,
@@ -12,21 +7,27 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-const UltraBeauty = () => {
-  const CATEGORY_LIST = [
-    {
-      title: "Something One",
-      description:
-        " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
-      
-    },
-    {
-      title: "Something Two",
-      description:
-        " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
-      
-    },
-  ];
+import { FaRegBell } from "react-icons/fa";
+import image1 from "@/assets/Luxury-Beauty.png";
+import Rectangle1 from "@/assets/Rectangle227.png";
+
+const CATEGORY_LIST = [
+  {
+    title: "Something One",
+    description:
+      " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
+
+  },
+  {
+    title: "Something Two",
+    description:
+      " Aesthetic and hygiene related functions. Cosmetic formulations often contain a combination of water, emollients, humectants,preservatives, fragrances, colorants, and active ingredients.",
+
+  },
+];
+
+const UltraBeauty: React.FunctionComponent = () => {
+
   return (
     <div
       className=" w-full padding text-white bg-contain my-25 relative"
@@ -48,17 +49,10 @@ const UltraBeauty = () => {
 
         <div className="w-full h-60 ">
           <Carousel className="w-full " opts={{ align: 'start' }}>
-            {/* <div className='flex justify-between pb-4'>
-              <h1 className="text-primary font-playfair font-bold text-3xl">Most Popular</h1>
-            </div> */}
-
-
             <div className="absolute bottom-0 right-10 flex space-x-2 z-10">
-                           <CarouselPrevious className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
-                           
-                            <CarouselNext className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
-                        </div>
-
+              <CarouselPrevious className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
+              <CarouselNext className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
+            </div>
             <CarouselContent className="-ml-1 lg:-ml-4 w-full">
               {CATEGORY_LIST.map((category, index) => (
                 <CarouselItem
@@ -69,14 +63,16 @@ const UltraBeauty = () => {
                     <div className="bg-[#FADADD] text-black  md:w-[86px] md:h-[86px] rounded-full flex justify-center items-center md:min-w-[86px] md:min-h-[86px] min-w-[60px] min-h-[60px] w-[60px] h-[60px]">
                       <FaRegBell className="text-2xl" />
                     </div>
-                     <div>
-                    <h3 className="text-xl md:text-2xl font-playfair text-bold text-[#FF2B5F] py-2 ">{category.title}</h3>
-                    <p className=" text-sm md:text-base md:tracking-tighter text-justify">
-                      {category.description}
-                    </p>
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-playfair text-bold text-[#FF2B5F] py-2 ">
+                        {category.title}
+                      </h3>
+                      <p className=" text-sm md:text-base md:tracking-tighter text-justify">
+                        {category.description}
+                      </p>
+                    </div>
                   </div>
-                  </div>
-                 
+
                 </CarouselItem>
               ))}
             </CarouselContent>

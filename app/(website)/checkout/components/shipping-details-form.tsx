@@ -1,13 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Form,
   FormControl,
@@ -16,14 +8,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
 import {
   ShippingFormValues,
   shippingSchema,
 } from "@/schemas/checkout/checkout-schema";
 import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 
 export default function ShippingForm() {
+
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
     defaultValues: {

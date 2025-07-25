@@ -2,11 +2,11 @@
 import React from "react";
 import CheckoutFilledPage from "./components/checkout-filled";
 
-const CheckoutFilled = () => {
+const CheckoutFilled: React.FunctionComponent = () => {
     return (
-    <>
-    <CheckoutFilledPage />
-    </>
+        <>
+            <CheckoutFilledPage />
+        </>
     );
 };
 

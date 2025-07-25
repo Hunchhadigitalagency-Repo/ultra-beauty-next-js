@@ -106,7 +106,7 @@ export default function Navbar() {
 
           {/* Right side icons */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(!searchOpen)} className="hidden md:flex hover:text-primary">
+            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(!searchOpen)} className=" hover:text-primary">
               <Search className={`size-5  ${searchOpen && "text-primary"}`} />
             </Button>
 
