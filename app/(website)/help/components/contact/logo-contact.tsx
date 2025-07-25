@@ -1,5 +1,5 @@
-import React from 'react'
-import { Mail, Navigation, Phone } from 'lucide-react'
+import React from 'react';
+import { Mail, Navigation, Phone } from 'lucide-react';
 
 const DirectContact = () => {
   return (
