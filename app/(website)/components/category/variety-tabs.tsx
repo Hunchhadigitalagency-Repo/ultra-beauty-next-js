@@ -1,9 +1,9 @@
 "use client";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import VarietyTabContent from "./variety-tab-content";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const settings = [
   { name: "Kitchen", categoryId: 36 },
@@ -11,7 +11,8 @@ const settings = [
   { name: "Pregnancy", categoryId: 3 },
 ];
 
-const VarietyTabs = () => {
+const VarietyTabs: React.FunctionComponent = () => {
+
   const [activeTab, setActiveTab] = useState<string>(settings[0].name);
 
   return (

@@ -1,8 +1,8 @@
-import SectionHeader from "@/components/common/header/section-header";
 
 import React from "react";
 import KnowYourProductTabs from "./know-your-product-tabs";
 import LinkText from "@/components/common/header/link-text";
+import SectionHeader from "@/components/common/header/section-header";
 
 const KnowYourProductSection = () => {
   return (
@@ -12,10 +12,11 @@ const KnowYourProductSection = () => {
           title="Know Your Product Better"
           description="Get the detail overview of the products"
         />
-
-        <LinkText title="Shop Now" href="/shop" />
+        <LinkText
+          title="Shop Now"
+          href="/shop"
+        />
       </div>
-
       <KnowYourProductTabs />
     </section>
   );

@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React from 'react';
 import {
     Carousel,
     CarouselContent,
@@ -8,8 +8,8 @@ import {
     CarouselPrevious
 } from '@/components/ui/carousel';
 import LinkText from '@/components/common/header/link-text';
-import SectionHeader from '@/components/common/header/section-header';
 import ProductCard from '@/components/common/cards/product-card';
+import SectionHeader from '@/components/common/header/section-header';
 
 type Product = {
     id: number;

@@ -15,7 +15,7 @@ const BRAND: BrandAdsBannerProps = {
     brandColor: '#FF0000'
 };
 
-const BrandAdsBanner = () => {
+const BrandAdsBanner: React.FunctionComponent = () => {
     return (
         <div className='padding'>
             {BRAND &&
