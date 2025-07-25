@@ -1,6 +1,6 @@
+import { ITeamCard } from "@/types/website";
 import TeamCarousel from "@/components/common/carousel/team-carousel";
 import SectionHeader from "@/components/common/header/section-header";
-import { ITeamCard } from "@/types/website";
 
 export const teamMembers: ITeamCard[] = [
   {

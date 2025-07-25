@@ -1,9 +1,10 @@
-// import BlogCard from "@/app/(website)/components/blogs/blog-card";
-import LinkText from "@/components/common/header/link-text";
-import SectionHeader from "@/components/common/header/section-header";
 import React from "react";
+import LinkText from "@/components/common/header/link-text";
+// import BlogCard from "@/app/(website)/components/blogs/blog-card";
+import SectionHeader from "@/components/common/header/section-header";
 
-const ReadMoreBlogs = () => {
+const ReadMoreBlogs: React.FunctionComponent = () => {
+
   // const blogAuther = {
   //   id: 1,
   //   username: "Auther",

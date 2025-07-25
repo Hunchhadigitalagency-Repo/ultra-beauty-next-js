@@ -1,6 +1,6 @@
-import SectionHeader from "@/components/common/header/section-header";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import SectionHeader from "@/components/common/header/section-header";
 
 const valuesData = [
   {
@@ -29,7 +29,7 @@ const valuesData = [
   },
 ];
 
-const OurValues = () => {
+const OurValues: React.FunctionComponent = () => {
   return (
     <section className="bg-[#EDF8FF]">
       <div className="space-y-8 padding">

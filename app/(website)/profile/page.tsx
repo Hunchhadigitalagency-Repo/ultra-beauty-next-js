@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import SectionHeader from "@/components/common/header/section-header";
 import { PROFILE_TABS } from "./components/profile-tabs";
+import SectionHeader from "@/components/common/header/section-header";
 
 const Profile: React.FunctionComponent = () => {
+
   const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
 
   return (

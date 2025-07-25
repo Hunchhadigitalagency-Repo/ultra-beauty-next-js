@@ -1,7 +1,7 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 
-const OurVisions = () => {
+const OurVisions: React.FunctionComponent = () => {
   return (
     <section className="bg-[#EDF8FF]">
       <div className="padding grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16 items-center">

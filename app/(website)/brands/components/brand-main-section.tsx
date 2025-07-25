@@ -17,7 +17,7 @@ const BRANDS_LIST = [
     { image: australis }
 ];
 
-const BrandsSection = () => {
+const BrandsSection: React.FunctionComponent = () => {
 
     return (
         <section className="padding-y">

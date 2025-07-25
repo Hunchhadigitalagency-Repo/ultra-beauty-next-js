@@ -1,10 +1,10 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import frameIcon from "@/assets/Frame.png";
 import groupIcon from "@/assets/Group.png";
 import vectorIcon from "@/assets/Vector.png";
 
-const SignatureSection = () => {
+const SignatureSection: React.FunctionComponent = () => {
   return (
     <div className="w-full md:w-full z-10 lg:w-1/2 ">
       <p className="text-sm md:text-base font-playfair mb-2">
@@ -65,7 +65,7 @@ const SignatureSection = () => {
         </li>
       </ul>
 
-      <button className="bg-[#FF2B5F] text-white py-2 rounded-full text-sm md:text-base font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
+      <button className="bg-primary text-white py-2 rounded-full text-sm md:text-base font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
         SHOP NOW →
       </button>
     </div>

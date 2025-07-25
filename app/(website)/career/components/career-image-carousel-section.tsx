@@ -17,7 +17,7 @@ const OFFERS_LIST = [
     { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
 ]
 
-const CareerImageCarouselSection = () => {
+const CareerImageCarouselSection: React.FunctionComponent = () => {
     return (
         <section className='pb-0 lg:pb-10'>
             <div className="relative">

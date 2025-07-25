@@ -1,6 +1,6 @@
-import SectionHeader from '@/components/common/header/section-header'
-import { CreditCard } from 'lucide-react'
-import React from 'react'
+import React from 'react';
+import { CreditCard } from 'lucide-react';
+import SectionHeader from '@/components/common/header/section-header';
 
 const JobsSection: React.FunctionComponent = () => {
     return (

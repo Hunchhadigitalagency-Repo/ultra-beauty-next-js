@@ -31,7 +31,7 @@ const BrandItems = [
   }
 ]
 
-const BrandsDescSection = () => {
+const BrandsDescSection: React.FunctionComponent = () => {
   return (
     <section className='padding space-y-8'>
       <div className='flex flex-col md:flex-row gap-5 justify-between'>

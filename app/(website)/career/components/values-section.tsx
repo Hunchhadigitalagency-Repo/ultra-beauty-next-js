@@ -29,7 +29,7 @@ const VALUES = [
     },
 ];
 
-const ValuesSection = () => {
+const ValuesSection: React.FunctionComponent = () => {
     return (
         <section className="p-5 md:p-10 bg-secondary flex flex-col gap-5">
             <SectionHeader

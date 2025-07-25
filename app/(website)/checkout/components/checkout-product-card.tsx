@@ -1,14 +1,14 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CheckoutProductCardProps {
   item: any;
 }
 
-const CheckoutProductCard = ({ item }: CheckoutProductCardProps) => {
+const CheckoutProductCard: React.FunctionComponent<CheckoutProductCardProps> = ({ item }) => {
   return (
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg bg-white">
       <div className="flex gap-3 sm:gap-4 w-full sm:w-auto items-start">
@@ -26,7 +26,9 @@ const CheckoutProductCard = ({ item }: CheckoutProductCardProps) => {
 
         <div className="flex-1 sm:hidden">
           <div className="flex items-start justify-between">
-            <h3 className="font-medium text-sm leading-tight flex-1 pr-2">{item.name}</h3>
+            <h3 className="font-medium text-sm leading-tight flex-1 pr-2">
+              {item.name}
+            </h3>
             <Button
               variant="ghost"
               size="sm"
@@ -42,8 +44,12 @@ const CheckoutProductCard = ({ item }: CheckoutProductCardProps) => {
       <div className="flex-1 space-y-3 sm:space-y-4">
         <div className="space-y-2">
           <div className="flex flex-wrap gap-2 text-xs font-medium text-foreground">
-            <span className="border px-2 py-1 bg-[#FAFAFA]">Color: {item.color || 'Blue'}</span>
-            <span className="border px-2 py-1 bg-[#FAFAFA]">Size: {item.size || 'M'}</span>
+            <span className="border px-2 py-1 bg-[#FAFAFA]">
+              Color: {item.color || 'Blue'}
+            </span>
+            <span className="border px-2 py-1 bg-[#FAFAFA]">
+              Size: {item.size || 'M'}
+            </span>
           </div>
 
           <h3 className="hidden sm:block font-playfair font-medium text-base md:text-lg lg:text-xl pt-2 leading-tight">{item.name}</h3>

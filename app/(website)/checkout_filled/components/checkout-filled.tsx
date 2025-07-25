@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import OrderSummary from "../../cart/components/order-summary";
-import CheckoutProductCard from "../../checkout/components/checkout-product-card";
-import SectionHeader from "@/components/common/header/section-header";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, RefreshCcw } from "lucide-react";
+import OrderSummary from "../../cart/components/order-summary";
+import SectionHeader from "@/components/common/header/section-header";
+import CheckoutProductCard from "../../checkout/components/checkout-product-card";
 import CheckoutProductHeader from "../../checkout/components/checkout-product-header";
-import Link from "next/link";
 
-const CheckoutFilledPage = () => {
+const CheckoutFilledPage: React.FunctionComponent = () => {
     return (
         <div className="p-4 ml-10">
             <div className="mb-6">
