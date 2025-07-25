@@ -25,7 +25,7 @@ const GlowKitList = [
 
 ]
 
-const GlowKitSection = () => {
+const GlowKitSection: React.FunctionComponent = () => {
   return (
     <section className="padding flex flex-col gap-2 md:gap-4">
       <div className="flex justify-between gap-4 ">
@@ -34,9 +34,9 @@ const GlowKitSection = () => {
           titleClassName="font-playfair text-[#333333]"
           description="Make yourself Up to fit the every Occassion"
         />
-        <LinkText title="ALL BRANDS" href="/shop"/>
+        <LinkText title="ALL BRANDS" href="/shop" />
       </div>
-{/* Image section */}
+      {/* Image section */}
       <div className="relative w-full">
         <Carousel>
           <CarouselContent className='-ml-2 md:-ml-4 lg:-ml-8'>
@@ -44,7 +44,11 @@ const GlowKitSection = () => {
               <CarouselItem
                 key={index}
                 className="pl-2 md:pl-4 lg:pl-8 basis-1/3">
-                <GlowKitCard image={kit.image} title={kit.title} desc={kit.desc}/>
+                <GlowKitCard
+                  image={kit.image}
+                  title={kit.title}
+                  desc={kit.desc}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>

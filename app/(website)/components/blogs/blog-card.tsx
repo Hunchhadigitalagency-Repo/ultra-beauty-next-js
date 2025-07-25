@@ -1,15 +1,15 @@
 "use client";
 
-// import { Button } from "@/components/ui/button";
-import { IBlog } from "@/types/cms";
-import DOMPurify from "dompurify";
-import { Calendar, UserCircle2Icon } from "lucide-react";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import DOMPurify from "dompurify";
+import { IBlog } from "@/types/cms";
 import { useRouter } from "next/navigation";
+// import { Button } from "@/components/ui/button";
+import { Calendar, UserCircle2Icon } from "lucide-react";
 
 
-const BlogCard = ({
+const BlogCard: React.FunctionComponent<IBlog> = ({
   id,
   title,
   // sub_title,
@@ -18,8 +18,7 @@ const BlogCard = ({
   cover_image,
   created_at,
   description,
-}: // features,
-  IBlog) => {
+}) => {
   const formattedDate = created_at
     ? new Date(created_at).toLocaleDateString(undefined, {
       year: "numeric",
@@ -73,7 +72,9 @@ const BlogCard = ({
         ))} */}
       </div>
 
-      <h3 className="text-xl font-playfair font-semibold text-foreground">{title}</h3>
+      <h3 className="text-xl font-playfair font-semibold text-foreground">
+        {title}
+      </h3>
       {/* {sub_title && (
         <p className="text-sm text-muted-foreground">{sub_title}</p>
       )} */}
@@ -94,7 +95,9 @@ const BlogCard = ({
 
         <div className="text-accent-foreground flex items-center gap-2">
           <Calendar className="w-4 h-4" />
-          <span className="font-medium text-sm">{formattedDate}</span>
+          <span className="font-medium text-sm">
+            {formattedDate}
+          </span>
         </div>
       </div>
 

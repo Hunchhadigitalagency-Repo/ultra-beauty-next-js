@@ -1,8 +1,8 @@
-import SectionHeader from "@/components/common/header/section-header";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import SectionHeader from "@/components/common/header/section-header";
 
-const Companies = () => {
+const Companies: React.FunctionComponent = () => {
   return (
     <section className="grid grid-cols-1 sm:grid-cols-3 gap-24 padding bg-green-100">
       <div className="sm:col-span-1 flex items-center ">
