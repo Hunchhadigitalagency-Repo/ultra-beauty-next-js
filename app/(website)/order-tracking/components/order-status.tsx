@@ -28,7 +28,7 @@ interface OrderStatusProps {
     status: OrderStatusMap;
 }
 
-const OrderStatus: React.FC<OrderStatusProps> = ({ status }) => {
+const OrderStatus: React.FunctionComponent<OrderStatusProps> = ({ status }) => {
     return (
         <div className="flex items-center justify-between w-full max-w-4xl mx-auto px-4 flex-wrap sm:flex-nowrap">
             {steps.map((step, index) => {

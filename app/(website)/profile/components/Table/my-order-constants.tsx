@@ -1,5 +1,6 @@
 import { OrderResponse } from "@/types/profile";
 import { Col } from "@/types/table";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export const MyOrderConstants = (
@@ -19,9 +20,15 @@ export const MyOrderConstants = (
         },
         {
             title: 'Items',
-            render: () => (
-                <div>
-                    Images
+            render: (order: OrderResponse) => (
+                <div className="flex gap-2">
+                    {
+                        order.items.slice(0, 3).map((item, index) => (
+                            <div key={index} className="relative w-10 h-10">
+                                <Image src={item.image} alt="" className="object-cover rounded-sm" layout="fill" />
+                            </div>
+                        ))
+                    }
                 </div>
             )
         },
@@ -36,7 +43,6 @@ export const MyOrderConstants = (
                     className="text-primary cursor-pointer"
                     onClick={() => router.push('/my_orders')}
                 >
-
                     Manage
                 </button>
             ),

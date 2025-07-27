@@ -14,13 +14,13 @@ interface TimelineProps {
     statuses: StatusItem[];
 }
 
-const DeliveryTimeline: React.FC<TimelineProps> = ({ statuses }) => {
+const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) => {
     return (
-        <div className="p-2 md:p-4 w-full md:w-1/2">
+        <div className="p-2 md:p-4 w-full lg:w-1/2">
             {statuses.map((status, idx) => (
                 <div
                     key={idx}
-                    className={`flex items-start relative flex-row`}
+                    className={`flex w-full justify-center items-center relative flex-row`}
                 >
                     <div className="w-[140px] text-sm text-gray-700 flex-shrink-0 sm:mb-0 ">
                         {status.date}
@@ -28,7 +28,7 @@ const DeliveryTimeline: React.FC<TimelineProps> = ({ statuses }) => {
 
                     <div className="relative mx-4 flex flex-col items-center">
                         <div
-                            className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-white z-10 ${status.isActive ? "bg-green-500" : "bg-blue-600"
+                            className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-white z-10 ${status.isActive ? "bg-green-500" : "bg-[#7FBCFF]"
                                 }`}
                         >
                             ✓
@@ -38,7 +38,7 @@ const DeliveryTimeline: React.FC<TimelineProps> = ({ statuses }) => {
                         )}
                     </div>
 
-                    <div className="flex-1">
+                    <div className="">
                         <h3
                             className={`text-sm md:text-base font-semibold ${status.isActive ? "text-green-500" : "text-black"
                                 }`}
@@ -47,11 +47,6 @@ const DeliveryTimeline: React.FC<TimelineProps> = ({ statuses }) => {
                         </h3>
                         <p className="text-xs md:text-sm text-gray-700">
                             {status.description}<br />
-                            {status.reviewLink && (
-                                <a href="#" className="text-blue-600 hover:underline">
-                                    Leave a review
-                                </a>
-                            )}
                         </p>
                     </div>
                 </div>

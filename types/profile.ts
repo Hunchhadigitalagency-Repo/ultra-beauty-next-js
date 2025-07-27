@@ -7,7 +7,7 @@ export type OrderResponse = {
     id: number;
     orderNumber: string;
     orderDate: string;
-    items: Items;
+    items: Items[];
     status: string;
     quantity: number;
     total: number;
