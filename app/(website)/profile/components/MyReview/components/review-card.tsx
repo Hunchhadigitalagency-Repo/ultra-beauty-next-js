@@ -22,7 +22,7 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
                         />
                     </div>
                 </div>
-                <p className='font-medium self-center text-sm md:text-base'>
+                <p className='font-medium self-center text-sm md:text-base '>
                     {description}
                 </p>
             </div>
@@ -39,6 +39,7 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
                 setIsModalOpen={setIsReviewModalOpen}
                 title='Sleek Pregnancy Cushion with some random text abd long text'
                 image='https://www.shutterstock.com/image-photo/washington-dc-usa-april-7-600nw-2609091587.jpg'
+                description='A product tha will help the Preganancy women to grow and some random text that fitx'
             />
         </div>
     )
