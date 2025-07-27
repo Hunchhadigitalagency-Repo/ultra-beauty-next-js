@@ -1,9 +1,12 @@
 import { OrderResponse } from "@/types/profile";
 import { Col } from "@/types/table";
+import { useRouter } from "next/navigation";
 
 export const MyOrderConstants = (
-    // onDeleteClick: (order: OrderResponse) => void
+
 ): Col<OrderResponse>[] => {
+
+    const router = useRouter();
 
     return [
         {
@@ -15,41 +18,28 @@ export const MyOrderConstants = (
             render: (order: OrderResponse) => order.orderDate,
         },
         {
-            title: 'Status',
-            render: (order: OrderResponse) => (
-                <span
-                    className={
-                        order.status === 'Delivered'
-                            ? 'text-green-600'
-                            : order.status === 'Processed'
-                                ? 'text-yellow-600'
-                                : order.status === 'Canceled'
-                                    ? 'text-red-600'
-                                    : ''
-                    }
-                >
-                    {order.status}
-                </span>
-            ),
-        },
-        {
-            title: 'Quantity',
-            render: (order: OrderResponse) => order.quantity,
+            title: 'Items',
+            render: () => (
+                <div>
+                    Images
+                </div>
+            )
         },
         {
             title: 'Total',
             render: (order: OrderResponse) => `$${order.total}`,
         },
-        // {
-        //     title: 'Action',
-        //     render: (order: OrderResponse) => (
-        //         <button
-        //             className="text-[#1477B4] cursor-pointer"
-        //             onClick={() => onDeleteClick(order)}
-        //         >
-        //             Delete
-        //         </button>
-        //     ),
-        // },
+        {
+            title: 'Action',
+            render: () => (
+                <button
+                    className="text-primary cursor-pointer"
+                    onClick={() => router.push('/my_orders')}
+                >
+
+                    Manage
+                </button>
+            ),
+        },
     ];
 };

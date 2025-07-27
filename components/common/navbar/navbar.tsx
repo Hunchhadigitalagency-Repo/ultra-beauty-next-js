@@ -75,7 +75,7 @@ export default function Navbar() {
           <div className="max-w-7xl mx-auto">
             {/* Categories Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-              {item.children.map((child, index) => (
+              {item.children.map((child) => (
                 <Link
                   key={child.name}
                   href={child.href}
@@ -83,18 +83,18 @@ export default function Navbar() {
                   onClick={() => setActiveMegaMenu(null)}
                 >
                   <div className="flex flex-col items-center text-center space-y-3">
-                  
+
                     <div>
                       <h3 className="font-medium text-gray-900 group-hover:text-primary transition-colors duration-200 text-sm">
                         {child.name}
                       </h3>
-                
+
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
-            
+
             {/* Featured Section */}
             <div className="border-t border-gray-200 pt-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -104,8 +104,8 @@ export default function Navbar() {
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 mb-1 text-sm">Featured Products</h4>
                       <p className="text-xs text-gray-600 mb-3">Discover our latest collection</p>
-                      <Link 
-                        href="/shop/" 
+                      <Link
+                        href="/shop/"
                         className="text-primary font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
                         onClick={() => setActiveMegaMenu(null)}
                       >
@@ -114,15 +114,15 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-br from-emerald-50 via-emerald-25 to-transparent p-6 rounded-xl border border-emerald-100 hover:border-emerald-200 transition-all duration-200 group cursor-pointer">
                   <div className="flex items-start space-x-4">
-                   
+
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 mb-1 text-sm">Best Sellers</h4>
                       <p className="text-xs text-gray-600 mb-3">Most popular items this month</p>
-                      <Link 
-                        href="/shop/" 
+                      <Link
+                        href="/shop/"
                         className="text-emerald-600 font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
                         onClick={() => setActiveMegaMenu(null)}
                       >
@@ -131,15 +131,15 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-gradient-to-br from-orange-50 via-orange-25 to-transparent p-6 rounded-xl border border-orange-100 hover:border-orange-200 transition-all duration-200 group cursor-pointer">
                   <div className="flex items-start space-x-4">
-                  
+
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 mb-1 text-sm">Sale Items</h4>
                       <p className="text-xs text-gray-600 mb-3">Up to 50% off selected items</p>
-                      <Link 
-                        href="/shop/" 
+                      <Link
+                        href="/shop/"
                         className="text-orange-600 font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
                         onClick={() => setActiveMegaMenu(null)}
                       >
@@ -162,7 +162,7 @@ export default function Navbar() {
         <div className="padding-x py-2 relative">
           {/* Search Popup */}
           {searchOpen && <SearchModal />}
-          
+
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center">
@@ -176,35 +176,32 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
-                <div 
-                  key={item.name} 
+                <div
+                  key={item.name}
                   className="relative"
                   onMouseEnter={() => handleMouseEnter(item.name, item.hasDropdown || false)}
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.hasDropdown ? (
                     <button
-                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${
-                        isActiveHeader(item.href)
+                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
                           ? "text-primary font-medium"
                           : "text-foreground font-normal"
-                      }`}
+                        }`}
                     >
                       <span>{item.name}</span>
-                      <ChevronDown 
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          activeMegaMenu === item.name ? 'rotate-180' : ''
-                        }`} 
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${activeMegaMenu === item.name ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
-                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${
-                        isActive(item.href)
+                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
                           ? "text-primary font-medium"
                           : "text-foreground font-normal"
-                      }`}
+                        }`}
                     >
                       {item.name}
                     </Link>
@@ -215,10 +212,10 @@ export default function Navbar() {
 
             {/* Right side icons */}
             <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => setSearchOpen(!searchOpen)} 
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSearchOpen(!searchOpen)}
                 className="hover:text-primary"
               >
                 <Search className={`size-5 ${searchOpen && "text-primary"}`} />
