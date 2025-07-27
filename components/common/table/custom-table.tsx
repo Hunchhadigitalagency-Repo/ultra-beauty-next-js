@@ -94,14 +94,14 @@ const CustomTable = <T,>({
                 </th>
               )}
               {hasSerialNo && (
-                <th className="px-4 py-3 font-medium text-sm text-left whitespace-nowrap">
+                <th className="px-4 text-gray py-3 font-medium text-sm text-left whitespace-nowrap">
                   S.N.
                 </th>
               )}
               {cols.map((col, idx) => (
                 <th
                   key={idx}
-                  className={`px-4 py-3 font-medium text-[13px] text-gray-600 uppercase text-left whitespace-nowrap ${firstHeaderWidth && idx === 0 ? firstHeaderWidth : ""
+                  className={`px-4 py-3 font-medium text-[13px] text-gray uppercase text-left whitespace-nowrap ${firstHeaderWidth && idx === 0 ? firstHeaderWidth : ""
                     } ${idx === cols.length - 1 && "text-right"} `}
                 >
                   <div className="">{col.title}</div>
@@ -157,7 +157,7 @@ const CustomTable = <T,>({
                           ? "bg-white"
                           : "bg-white"
                       }
-                      hover:bg-gray-100/50 border-t border-gray-200 first:border-t-0 text-sm
+                      hover:bg-[#FAFAFA] cursor-pointer border-t border-gray-200 first:border-t-0 text-sm
                     `}
                   >
                     {enableBulkSelect && (
