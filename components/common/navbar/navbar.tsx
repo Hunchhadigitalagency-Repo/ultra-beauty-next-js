@@ -10,6 +10,7 @@ import { NavigationItem } from "@/types/website";
 import { usePathname, useRouter } from "next/navigation";
 import { getNavigationItems } from "../../../constants/navbar-data";
 import { Search, ShoppingCart, Bell, Heart, CircleUser, ChevronDown } from "lucide-react";
+import MegaMenu from "./mega-menu";
 
 const menuItems: { name: string; href: string }[] = [
   { name: "Foundation & Compact", href: "/shop" },
@@ -54,8 +55,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
-  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
-  const [megaMenuTimeout, setMegaMenuTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [activeMegaMenu, setActiveMegaMenu] = useState<boolean>(false);
+
   const router = useRouter();
   const path = usePathname();
 
@@ -71,72 +72,17 @@ export default function Navbar() {
   const isActive = (pathname: string) => path === pathname;
   const isActiveHeader = (pathname: string) => path.startsWith(pathname);
 
-  const handleMouseEnter = (itemName: string, hasDropdown: boolean) => {
-    if (megaMenuTimeout) {
-      clearTimeout(megaMenuTimeout);
-      setMegaMenuTimeout(null);
-    }
-    if (hasDropdown) {
-      setActiveMegaMenu(itemName);
-    }
-  };
+  const toggleMenu = () => {
+    setActiveMegaMenu(!activeMegaMenu)
+  }
 
-  const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setActiveMegaMenu(null);
-    }, 150);
-    setMegaMenuTimeout(timeout);
-  };
-
-  const handleMegaMenuMouseEnter = () => {
-    if (megaMenuTimeout) {
-      clearTimeout(megaMenuTimeout);
-      setMegaMenuTimeout(null);
-    }
-  };
-
-  const handleMegaMenuMouseLeave = () => {
-    setActiveMegaMenu(null);
-  };
-
-  const renderMegaMenu = (item: NavigationItem, index: number) => {
-    // console
-    if (!item.children || item.children.length === 0) return null;
-
-    return (
-      <div
-        key={index}
-        className="absolute shadow-sm top-full left-0 w-full bg-white  z-40 opacity-0 translate-y-2 animate-in fade-in slide-in-from-top-2 duration-200"
-        style={{ opacity: 1, transform: 'translateY(0)' }}
-        onMouseEnter={handleMegaMenuMouseEnter}
-        onMouseLeave={handleMegaMenuMouseLeave}
-      >
-        <div className="padding space-y-8">
-          <div className="">
-            {/* Categories Grid */}
-            <div className="grid grid-cols-1 border-t py-5 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {menuItems.map((child, index) => (
-                <Link
-                  key={index}
-                  href={child.href}
-                  className="group rounded-lg hover:border-primary/20 transition-all duration-200"
-                  onClick={() => setActiveMegaMenu(null)}
-                >
-                  <div className="flex flex-col items-start text-center ">
-                    <div>
-                      <h3 className="font-poppins text-foreground hover:text-primary text-sm">
-                        {child.name}
-                      </h3>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  const isShopByCategory = (navItem:string) => {
+    console.log("hello")
+   if(navItem==="Shop by Category"){
+    toggleMenu()
+   }
+}
+  
 
   return (
     <>
@@ -158,31 +104,24 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
-                <div
-                  key={item.name}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(item.name, item.hasDropdown || false)}
-                  onMouseLeave={handleMouseLeave}
-                >
+                <div key={item.name} className="relative">
+
                   {item.hasDropdown ? (
-                    <button
+                    <button onClick={()=>isShopByCategory(item.name)}
                       className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
-                        ? "text-primary font-medium"
-                        : "text-foreground font-normal"
+                          ? "text-primary font-medium"
+                          : "text-foreground font-normal"
                         }`}
                     >
                       <span>{item.name}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${activeMegaMenu === item.name ? 'rotate-180' : ''
-                          }`}
-                      />
+                      <ChevronDown className="w-4 h-4 transition-transform duration-200" />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
                       className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
-                        ? "text-primary font-medium"
-                        : "text-foreground font-normal"
+                          ? "text-primary font-medium"
+                          : "text-foreground font-normal"
                         }`}
                     >
                       {item.name}
@@ -255,11 +194,7 @@ export default function Navbar() {
 
       {/* Mega Menu Overlay */}
       {activeMegaMenu && (
-        <div className="relative">
-          {navigationItems
-            .filter((item) => item.name === activeMegaMenu && item.hasDropdown)
-            .map((item, index) => renderMegaMenu(item, index))}
-        </div>
+        <MegaMenu menuItems={menuItems} toggleMenu={toggleMenu}/>
       )}
     </>
   );
