@@ -17,8 +17,10 @@ import { Button } from '@/components/ui/button';
 import GenericModal from '@/components/common/modals/generic-modal';
 import { ReviewModalProps } from '@/types/profile';
 
+
 const ReviewModal: React.FC<ReviewModalProps> = ({
     title,
+    description,
     image,
     isModalOpen,
     setIsModalOpen,
@@ -46,11 +48,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             {isModalOpen && (
                 <GenericModal
                     title="Rate and Review purchased Product"
+                    description ="Review the product"
+                    titleClassName='text-sm xl:text-xl font-playfair font-semibold text-primary font-bold'
+                    descriptionClassName='text-xs xl:text-xs'
                     setIsOptionClick={() => {
                         setIsModalOpen(false);
                         form.reset();
                     }}
                 >
+                    
                     <Form {...form}>
                         <form
                             id="review-form"
@@ -58,20 +64,22 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                         >
                             <div className="flex gap-5">
                                 <div className="flex justify-center items-center">
-                                    <div className="w-14 h-14 md:w-20 md:h-20 relative shrink-0">
+                                    <div className="w-20 h-30 md:w-30 md:h-full relative shrink-0">
                                         <Image
                                             fill
                                             src={image}
                                             alt="Product Image"
-                                            className="rounded-sm object-cover"
+                                            className="rounded-br-[30px] object-cover "
                                         />
                                     </div>
                                 </div>
 
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <p className="font-medium break-words text-sm md:text-base font-playfair">
+                                    <p className="font-semibold break-words text-sm  font-playfair ">
                                         {title}
                                     </p>
+                                    <p className='text-xs '>{description}</p>
+                                   
                                     <FormField
                                         control={form.control}
                                         name="rating"
@@ -91,7 +99,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                             </div>
 
                             <div className="mt-4">
-                                <p className="text-sm md:text-base font-semibold text-[#5D5D5D]">
+                                <p className="text-xs md:sm font-semibold text-[#5D5D5D]">
                                     Review Detail
                                 </p>
                                 <FormField
@@ -102,7 +110,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                             <FormControl>
                                                 <Textarea
                                                     placeholder="What do you think about this Product?"
-                                                    className="min-h-[120px] resize-none"
+                                                    className="min-h-[120px] resize-none placeholder:text-xs"
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -112,11 +120,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 />
                             </div>
 
-                            <div className="flex justify-end pt-4 pb-2 gap-4">
+                            <div className="w-full  pt-4 pb-2 gap-4">
                                 <Button
                                     form="review-form"
                                     variant="default"
                                     type="submit"
+                                    className='w-full'
                                 >
                                     Save
                                 </Button>

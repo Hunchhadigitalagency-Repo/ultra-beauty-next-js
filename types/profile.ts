@@ -23,6 +23,7 @@ export interface ReviewModalProps {
     image: string;
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;
+    description:string;
 }
 
 export interface ReviewHistoryCardProps {
