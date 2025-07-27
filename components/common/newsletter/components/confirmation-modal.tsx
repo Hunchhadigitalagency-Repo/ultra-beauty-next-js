@@ -8,6 +8,7 @@ interface ConfirmationModalProps {
 }
 
 const ConfirmationModal: React.FunctionComponent<ConfirmationModalProps> = ({ onClose }) => {
+    console.log('Confirmation model rendered');
     return (
         <GenericModal title="News Letter Confirm" setIsOptionClick={onClose} >
             <div className="flex flex-col gap-6">
