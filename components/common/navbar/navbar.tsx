@@ -20,6 +20,47 @@ export default function Navbar() {
   const router = useRouter();
   const path = usePathname();
 
+  const menuItems: { name: string; href: string }[] = [
+    { name: "Foundation & Compact", href: "/shop" },
+    { name: "MakeUp Serum", href: "/shop" },
+    { name: "Eyeliner", href: "/shop" },
+    { name: "Birdal Cosmetics", href: "/shop" },
+    { name: "Nailpolish", href: "/shop" },
+    { name: "Lipstick", href: "/shop" },
+    { name: "EyeMakeUp & Mascara", href: "/shop" },
+    { name: "Foundation & Compact", href: "/shop" },
+    { name: "MakeUp Serum", href: "/shop" },
+    { name: "Eyeliner", href: "/shop" },
+    { name: "Birdal Cosmetics", href: "/shop" },
+    { name: "Nailpolish", href: "/shop" },
+    { name: "Lipstick", href: "/shop" },
+    { name: "EyeMakeUp & Mascara", href: "/shop" },
+    { name: "Foundation & Compact", href: "/shop" },
+    { name: "MakeUp Serum", href: "/shop" },
+    { name: "Eyeliner", href: "/shop" },
+    { name: "Birdal Cosmetics", href: "/shop" },
+    { name: "Nailpolish", href: "/shop" },
+    { name: "Lipstick", href: "/shop" },
+    { name: "EyeMakeUp & Mascara", href: "/shop" },
+    { name: "Foundation & Compact", href: "/shop" },
+    { name: "MakeUp Serum", href: "/shop" },
+    { name: "Eyeliner", href: "/shop" },
+    { name: "Birdal Cosmetics", href: "/shop" },
+    { name: "Nailpolish", href: "/shop" },
+    { name: "Lipstick", href: "/shop" },
+    { name: "EyeMakeUp & Mascara", href: "/shop" },
+    { name: "Foundation & Compact", href: "/shop" },
+    { name: "MakeUp Serum", href: "/shop" },
+    { name: "Eyeliner", href: "/shop" },
+    { name: "Birdal Cosmetics", href: "/shop" },
+    { name: "Nailpolish", href: "/shop" },
+    { name: "Lipstick", href: "/shop" },
+    { name: "EyeMakeUp & Mascara", href: "/shop" }
+   
+  ];
+  
+
+
   useEffect(() => {
     const fetchNavigationItems = async () => {
       const data = await getNavigationItems();
@@ -66,90 +107,32 @@ export default function Navbar() {
 
     return (
       <div
-        className="absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl z-40 opacity-0 translate-y-2 animate-in fade-in slide-in-from-top-2 duration-200"
+        className="absolute top-full left-0 w-full bg-white  z-40 opacity-0 translate-y-2 animate-in fade-in slide-in-from-top-2 duration-200"
         style={{ opacity: 1, transform: 'translateY(0)' }}
         onMouseEnter={handleMegaMenuMouseEnter}
         onMouseLeave={handleMegaMenuMouseLeave}
       >
-        <div className="padding-x py-8">
+        <div className="padding space-y-8">
           <div className="max-w-7xl mx-auto">
             {/* Categories Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-              {item.children.map((child, index) => (
+            <div className="grid grid-cols-1 border-t py-5 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mb-8">
+              {menuItems.map((child) => (
                 <Link
                   key={child.name}
                   href={child.href}
-                  className="group p-4 rounded-lg border border-gray-100 hover:border-primary/20 hover:bg-gray-50/50 transition-all duration-200 hover:shadow-md"
+                  className="group rounded-lg hover:border-primary/20 transition-all duration-200"
                   onClick={() => setActiveMegaMenu(null)}
                 >
-                  <div className="flex flex-col items-center text-center space-y-3">
-                  
+                  <div className="flex flex-col items-start text-center ">
                     <div>
-                      <h3 className="font-medium text-gray-900 group-hover:text-primary transition-colors duration-200 text-sm">
+                      <h3 className="font-poppins text-foreground hover:text-primary text-sm">
                         {child.name}
                       </h3>
-                
                     </div>
                   </div>
                 </Link>
               ))}
-            </div>
-            
-            {/* Featured Section */}
-            <div className="border-t border-gray-200 pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 rounded-xl border border-primary/10 hover:border-primary/20 transition-all duration-200 group cursor-pointer">
-                  <div className="flex items-start space-x-4">
-
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-1 text-sm">Featured Products</h4>
-                      <p className="text-xs text-gray-600 mb-3">Discover our latest collection</p>
-                      <Link 
-                        href="/shop/" 
-                        className="text-primary font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
-                        onClick={() => setActiveMegaMenu(null)}
-                      >
-                        Shop Now →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gradient-to-br from-emerald-50 via-emerald-25 to-transparent p-6 rounded-xl border border-emerald-100 hover:border-emerald-200 transition-all duration-200 group cursor-pointer">
-                  <div className="flex items-start space-x-4">
-                   
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-1 text-sm">Best Sellers</h4>
-                      <p className="text-xs text-gray-600 mb-3">Most popular items this month</p>
-                      <Link 
-                        href="/shop/" 
-                        className="text-emerald-600 font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
-                        onClick={() => setActiveMegaMenu(null)}
-                      >
-                        View All →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gradient-to-br from-orange-50 via-orange-25 to-transparent p-6 rounded-xl border border-orange-100 hover:border-orange-200 transition-all duration-200 group cursor-pointer">
-                  <div className="flex items-start space-x-4">
-                  
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-1 text-sm">Sale Items</h4>
-                      <p className="text-xs text-gray-600 mb-3">Up to 50% off selected items</p>
-                      <Link 
-                        href="/shop/" 
-                        className="text-orange-600 font-medium text-xs hover:underline inline-flex items-center group-hover:translate-x-1 transition-transform"
-                        onClick={() => setActiveMegaMenu(null)}
-                      >
-                        Shop Sale →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </div> 
           </div>
         </div>
       </div>
