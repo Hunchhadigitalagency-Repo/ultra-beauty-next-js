@@ -11,6 +11,45 @@ import { usePathname, useRouter } from "next/navigation";
 import { getNavigationItems } from "../../../constants/navbar-data";
 import { Search, ShoppingCart, Bell, Heart, CircleUser, ChevronDown } from "lucide-react";
 
+const menuItems: { name: string; href: string }[] = [
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" }
+
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -19,47 +58,6 @@ export default function Navbar() {
   const [megaMenuTimeout, setMegaMenuTimeout] = useState<NodeJS.Timeout | null>(null);
   const router = useRouter();
   const path = usePathname();
-
-  const menuItems: { name: string; href: string }[] = [
-    { name: "Foundation & Compact", href: "/shop" },
-    { name: "MakeUp Serum", href: "/shop" },
-    { name: "Eyeliner", href: "/shop" },
-    { name: "Birdal Cosmetics", href: "/shop" },
-    { name: "Nailpolish", href: "/shop" },
-    { name: "Lipstick", href: "/shop" },
-    { name: "EyeMakeUp & Mascara", href: "/shop" },
-    { name: "Foundation & Compact", href: "/shop" },
-    { name: "MakeUp Serum", href: "/shop" },
-    { name: "Eyeliner", href: "/shop" },
-    { name: "Birdal Cosmetics", href: "/shop" },
-    { name: "Nailpolish", href: "/shop" },
-    { name: "Lipstick", href: "/shop" },
-    { name: "EyeMakeUp & Mascara", href: "/shop" },
-    { name: "Foundation & Compact", href: "/shop" },
-    { name: "MakeUp Serum", href: "/shop" },
-    { name: "Eyeliner", href: "/shop" },
-    { name: "Birdal Cosmetics", href: "/shop" },
-    { name: "Nailpolish", href: "/shop" },
-    { name: "Lipstick", href: "/shop" },
-    { name: "EyeMakeUp & Mascara", href: "/shop" },
-    { name: "Foundation & Compact", href: "/shop" },
-    { name: "MakeUp Serum", href: "/shop" },
-    { name: "Eyeliner", href: "/shop" },
-    { name: "Birdal Cosmetics", href: "/shop" },
-    { name: "Nailpolish", href: "/shop" },
-    { name: "Lipstick", href: "/shop" },
-    { name: "EyeMakeUp & Mascara", href: "/shop" },
-    { name: "Foundation & Compact", href: "/shop" },
-    { name: "MakeUp Serum", href: "/shop" },
-    { name: "Eyeliner", href: "/shop" },
-    { name: "Birdal Cosmetics", href: "/shop" },
-    { name: "Nailpolish", href: "/shop" },
-    { name: "Lipstick", href: "/shop" },
-    { name: "EyeMakeUp & Mascara", href: "/shop" }
-
-  ];
-
-
 
   useEffect(() => {
     const fetchNavigationItems = async () => {
@@ -101,24 +99,25 @@ export default function Navbar() {
     setActiveMegaMenu(null);
   };
 
-  const renderMegaMenu = (item: NavigationItem) => {
+  const renderMegaMenu = (item: NavigationItem, index: number) => {
     // console
     if (!item.children || item.children.length === 0) return null;
 
     return (
       <div
-        className="absolute top-full left-0 w-full bg-white  z-40 opacity-0 translate-y-2 animate-in fade-in slide-in-from-top-2 duration-200"
+        key={index}
+        className="absolute shadow-sm top-full left-0 w-full bg-white  z-40 opacity-0 translate-y-2 animate-in fade-in slide-in-from-top-2 duration-200"
         style={{ opacity: 1, transform: 'translateY(0)' }}
         onMouseEnter={handleMegaMenuMouseEnter}
         onMouseLeave={handleMegaMenuMouseLeave}
       >
         <div className="padding space-y-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="">
             {/* Categories Grid */}
-            <div className="grid grid-cols-1 border-t py-5 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mb-8">
-              {menuItems.map((child) => (
+            <div className="grid grid-cols-1 border-t py-5 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {menuItems.map((child, index) => (
                 <Link
-                  key={child.name}
+                  key={index}
                   href={child.href}
                   className="group rounded-lg hover:border-primary/20 transition-all duration-200"
                   onClick={() => setActiveMegaMenu(null)}
@@ -259,7 +258,7 @@ export default function Navbar() {
         <div className="relative">
           {navigationItems
             .filter((item) => item.name === activeMegaMenu && item.hasDropdown)
-            .map((item) => renderMegaMenu(item))}
+            .map((item, index) => renderMegaMenu(item, index))}
         </div>
       )}
     </>
