@@ -7,7 +7,7 @@ export type OrderResponse = {
     id: number;
     orderNumber: string;
     orderDate: string;
-    items: Items;
+    items: Items[];
     status: string;
     quantity: number;
     total: number;
@@ -23,6 +23,7 @@ export interface ReviewModalProps {
     image: string;
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;
+    description:string;
 }
 
 export interface ReviewHistoryCardProps {

@@ -8,12 +8,11 @@ interface OrderProductProps {
     item: any;
 }
 
-const status = "delivered";
 
 const OrderProductDetails = ({ item }: OrderProductProps) => {
 
 
-   
+
     return (
         <div className="relative flex flex-row justify-between items-start md:items-center gap-2 p-2 md:gap-4 md:p-4  bg-white top-2">
             {/* Product Image */}
@@ -38,30 +37,30 @@ const OrderProductDetails = ({ item }: OrderProductProps) => {
                         {item.name || "A product that helps to reduce wrinkles and makes glowing skin."}
                     </h3>
                 </div>
-            
+
                 {/* Price + Buttons */}
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 min-w-[180px] w-full md:w-auto">
                     {/* Price + Buttons in a single row on small screens */}
                     {/* Delivered order status */}
-                    {status==="delivered" ?(
-                        
-                         <div className="flex justify-between items-center gap-10 w-full flex-wrap sm:flex-nowrap">
-                         <div className="bg-[#FFE5EC] border border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
-                           Write Review
-                         </div>
-                         <div className="bg-[#FFE5EC] border border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
-                          Return Order
-                         </div>
-                       </div>
-                    ): (
-                        <div className="flex gap-1 items-center text-primary  hover:text-primary text-xs md:text-sm font-medium h-auto p-0">
-                        <h1>
-                            Cancel Order
+                    {item.status === "delivered" ? (
+
+                        <div className="flex justify-between items-center gap-10 w-full flex-wrap sm:flex-nowrap">
+                            <div className="bg-[#FFE5EC] border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
+                                Write Review
+                            </div>
+                            <div className="bg-[#FFE5EC] border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
+                                Return Order
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex cursor-pointer gap-1 items-center text-primary  hover:text-primary text-xs md:text-sm font-medium h-auto p-0">
+                            <h1>
+                                Cancel Order
                             </h1>
-                        <CircleAlert />
-                    </div>
+                            <CircleAlert />
+                        </div>
                     )}
-                    
+
                 </div>
             </div>
 

@@ -1,10 +1,11 @@
-import React from 'react'
-import OrderStatus from './order-status'
-import StatusHeader from './status-header'
-import DeliveryTimeline from './delivery-timeline';
+import React from 'react';
+import OrderStatus from './order-status';
+import StatusHeader from './status-header';
 import OrderProduct from './order-product';
+import DeliveryTimeline from './delivery-timeline';
 
-const OrderTrack = () => {
+const OrderTrack: React.FunctionComponent = () => {
+
     const data = [
         {
             date: "Jun 15, 2025, 10:15 PM",
@@ -41,17 +42,17 @@ const OrderTrack = () => {
     ];
 
     return (
-        <>
+        <React.Fragment>
             <OrderStatus
                 status={{
                     processing: 'complete',
                     packed: 'complete',
-                    shipped: 'onProcess',
-                    delivered: 'pending',
+                    shipped: 'complete',
+                    delivered: 'complete',
                 }}
             />
             <StatusHeader />
-            <div className="flex flex-col md:flex-row justify-between">
+            <div className="flex flex-col space-y-8 lg:flex-row justify-between">
 
                 <DeliveryTimeline statuses={data} />
                 <OrderProduct
@@ -62,10 +63,10 @@ const OrderTrack = () => {
                     rating={4.7}
                     price={2499}
                     quantity={2}
+                    date={'03/21/2025'}
                 />
             </div>
-
-        </>
+        </React.Fragment>
     )
 }
 
