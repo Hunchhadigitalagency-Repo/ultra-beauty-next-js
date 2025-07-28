@@ -76,13 +76,13 @@ export default function Navbar() {
     setActiveMegaMenu(!activeMegaMenu)
   }
 
-  const isShopByCategory = (navItem:string) => {
+  const isShopByCategory = (navItem: string) => {
     console.log("hello")
-   if(navItem==="Shop by Category"){
-    toggleMenu()
-   }
-}
-  
+    if (navItem === "Shop by Category") {
+      toggleMenu()
+    }
+  }
+
 
   return (
     <>
@@ -107,10 +107,10 @@ export default function Navbar() {
                 <div key={item.name} className="relative">
 
                   {item.hasDropdown ? (
-                    <button onClick={()=>isShopByCategory(item.name)}
+                    <button onClick={() => isShopByCategory(item.name)}
                       className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
                         }`}
                     >
                       <span>{item.name}</span>
@@ -120,8 +120,8 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
                         }`}
                     >
                       {item.name}
@@ -194,7 +194,7 @@ export default function Navbar() {
 
       {/* Mega Menu Overlay */}
       {activeMegaMenu && (
-        <MegaMenu menuItems={menuItems} toggleMenu={toggleMenu}/>
+        <MegaMenu menuItems={menuItems} toggleMenu={toggleMenu} />
       )}
     </>
   );
