@@ -17,6 +17,7 @@ import PromotionalCarousel from "@/components/common/carousel/promotional-carous
 import BeautyVideoSection from "./components/beauty-video/beauty-video-section";
 
 
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white space-y-4">
@@ -36,6 +37,7 @@ export default function HomePage() {
       <BrandsCard />
       <PromoVideoSection />
       <Blogs />
+     
     </main>
   );
 }
