@@ -12,50 +12,13 @@ import { getNavigationItems } from "../../../constants/navbar-data";
 import { Search, ShoppingCart, Bell, Heart, CircleUser, ChevronDown } from "lucide-react";
 import MegaMenu from "./mega-menu";
 
-const menuItems: { name: string; href: string }[] = [
-  { name: "Foundation & Compact", href: "/shop" },
-  { name: "MakeUp Serum", href: "/shop" },
-  { name: "Eyeliner", href: "/shop" },
-  { name: "Birdal Cosmetics", href: "/shop" },
-  { name: "Nailpolish", href: "/shop" },
-  { name: "Lipstick", href: "/shop" },
-  { name: "EyeMakeUp & Mascara", href: "/shop" },
-  { name: "Foundation & Compact", href: "/shop" },
-  { name: "MakeUp Serum", href: "/shop" },
-  { name: "Eyeliner", href: "/shop" },
-  { name: "Birdal Cosmetics", href: "/shop" },
-  { name: "Nailpolish", href: "/shop" },
-  { name: "Lipstick", href: "/shop" },
-  { name: "EyeMakeUp & Mascara", href: "/shop" },
-  { name: "Foundation & Compact", href: "/shop" },
-  { name: "MakeUp Serum", href: "/shop" },
-  { name: "Eyeliner", href: "/shop" },
-  { name: "Birdal Cosmetics", href: "/shop" },
-  { name: "Nailpolish", href: "/shop" },
-  { name: "Lipstick", href: "/shop" },
-  { name: "EyeMakeUp & Mascara", href: "/shop" },
-  { name: "Foundation & Compact", href: "/shop" },
-  { name: "MakeUp Serum", href: "/shop" },
-  { name: "Eyeliner", href: "/shop" },
-  { name: "Birdal Cosmetics", href: "/shop" },
-  { name: "Nailpolish", href: "/shop" },
-  { name: "Lipstick", href: "/shop" },
-  { name: "EyeMakeUp & Mascara", href: "/shop" },
-  { name: "Foundation & Compact", href: "/shop" },
-  { name: "MakeUp Serum", href: "/shop" },
-  { name: "Eyeliner", href: "/shop" },
-  { name: "Birdal Cosmetics", href: "/shop" },
-  { name: "Nailpolish", href: "/shop" },
-  { name: "Lipstick", href: "/shop" },
-  { name: "EyeMakeUp & Mascara", href: "/shop" }
 
-];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
-  const [activeMegaMenu, setActiveMegaMenu] = useState<boolean>(false);
+  const [activeMegaMenu, setActiveMegaMenu] = useState(false);
 
   const router = useRouter();
   const path = usePathname();
@@ -72,17 +35,12 @@ export default function Navbar() {
   const isActive = (pathname: string) => path === pathname;
   const isActiveHeader = (pathname: string) => path.startsWith(pathname);
 
-  const toggleMenu = () => {
-    setActiveMegaMenu(!activeMegaMenu)
+  const handleCategoryClick = (navItem: string, value: boolean) => {
+    if (navItem === "Shop by Category") {
+      setActiveMegaMenu(value);
+    }
   }
 
-  const isShopByCategory = (navItem:string) => {
-    console.log("hello")
-   if(navItem==="Shop by Category"){
-    toggleMenu()
-   }
-}
-  
 
   return (
     <>
@@ -90,6 +48,8 @@ export default function Navbar() {
         <div className="padding-x py-2 relative">
           {/* Search Popup */}
           {searchOpen && <SearchModal />}
+          {/* Mega Menu */}
+          {activeMegaMenu && <MegaMenu />}
 
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -107,21 +67,24 @@ export default function Navbar() {
                 <div key={item.name} className="relative">
 
                   {item.hasDropdown ? (
-                    <button onClick={()=>isShopByCategory(item.name)}
+                    <button onClick={() => handleCategoryClick(item.name, !activeMegaMenu)}
                       className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
                         }`}
                     >
                       <span>{item.name}</span>
-                      <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${item.name === "Shop by Category" && activeMegaMenu
+                        ? "transform rotate-180 text-primary"
+                        : ""
+                        }`} />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
                       className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
                         }`}
                     >
                       {item.name}
@@ -191,11 +154,6 @@ export default function Navbar() {
           </div>
         </div>
       </header>
-
-      {/* Mega Menu Overlay */}
-      {activeMegaMenu && (
-        <MegaMenu menuItems={menuItems} toggleMenu={toggleMenu}/>
-      )}
     </>
   );
 }

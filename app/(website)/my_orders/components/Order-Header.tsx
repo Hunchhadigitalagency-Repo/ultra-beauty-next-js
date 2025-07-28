@@ -29,24 +29,24 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
                 </div>
 
                 {/* Right side: Status */}
-                <div  className="flex flex-wrap gap-2 items-center md:gap-6 text-xs md:text-sm">
+                <div className="flex flex-wrap gap-2 items-center md:gap-6 text-xs md:text-sm">
                     <h4>
                         Total Items: {totalItems}
                     </h4>
                     <Link href="/order-tracking">
-                        {status==="delivered" ?(
-                            <span  className="text-white text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
-                            {status}
-                        </span>
-                        ):
-                        <span  className="text-white text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
-                        {status}
-                    </span>
+                        {status === "delivered" ? (
+                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
+                                {status}
+                            </span>
+                        ) :
+                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
+                                {status}
+                            </span>
                         }
-                    
+
                     </Link>
                 </div>
-                
+
             </div>
 
             <OrderProductDetails
@@ -62,27 +62,29 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
                     currentPrice: 45000,
                     discount: 20,
                     quantity: 1,
-                    selected: true
-                    
+                    selected: true,
+                    status: 'delivered'
+
                 }}
             />
 
-<OrderProductDetails
-  item={{
-    id: 2,
-    name: "Sensanori Vitamin Cream for Antiaging",
-    description:
-      "A product that helps to reduce wrinkles and makes skin glowing.",
-    image: orderImage,
-    color: "Ivory White",
-    size: "Large",
-    originalPrice: 50000,
-    currentPrice: 40000,
-    discount: 20,
-    quantity: 2,
-    selected: false
-  }}
-/>
+            <OrderProductDetails
+                item={{
+                    id: 2,
+                    name: "Sensanori Vitamin Cream for Antiaging",
+                    description:
+                        "A product that helps to reduce wrinkles and makes skin glowing.",
+                    image: orderImage,
+                    color: "Ivory White",
+                    size: "Large",
+                    originalPrice: 50000,
+                    currentPrice: 40000,
+                    discount: 20,
+                    quantity: 2,
+                    selected: false,
+                    status: 'packed'
+                }}
+            />
         </section>
     );
 };
