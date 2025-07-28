@@ -21,14 +21,17 @@ export const MyOrderConstants = (
         {
             title: 'Items',
             render: (order: OrderResponse) => (
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                     {
                         order.items.slice(0, 3).map((item, index) => (
-                            <div key={index} className="relative w-10 h-10">
-                                <Image src={item.image} alt="" className="object-cover rounded-sm" layout="fill" />
+                            <div key={index}>
+                                <div className="relative w-10 h-10">
+                                    <Image src={item.image} alt="" className="object-cover rounded-sm" layout="fill" />
+                                </div>
                             </div>
                         ))
                     }
+                    {order.items.length > 3 && <span>+{order.items.length - 3}</span>}
                 </div>
             )
         },
