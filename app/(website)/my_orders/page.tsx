@@ -3,9 +3,7 @@ import Order from './components/Orders';
 
 const MyOrders = () => {
     return (
-        <>
-            <Order />
-        </>
+        <Order />
     )
 }
 

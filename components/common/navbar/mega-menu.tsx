@@ -2,27 +2,49 @@ import Link from 'next/link'
 import React from 'react'
 
 
-interface MegaMenuType {
-  name: string;
-  href: string;
-  
-}
+const menuItems: { name: string; href: string }[] = [
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" },
+  { name: "Foundation & Compact", href: "/shop" },
+  { name: "MakeUp Serum", href: "/shop" },
+  { name: "Eyeliner", href: "/shop" },
+  { name: "Birdal Cosmetics", href: "/shop" },
+  { name: "Nailpolish", href: "/shop" },
+  { name: "Lipstick", href: "/shop" },
+  { name: "EyeMakeUp & Mascara", href: "/shop" }
 
-interface MegaMenuProps {
-  menuItems: MegaMenuType[];
-  toggleMenu:()=>void;
+];
 
+const MegaMenu: React.FunctionComponent = () => {
 
-}
-
-
-
-const MegaMenu:React.FunctionComponent<MegaMenuProps> = ({menuItems,toggleMenu}) => {
   return (
-    <div
-      className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4"
-      style={{ opacity: 1, transform: 'translateY(0)' }}
-    >
+    <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4">
       <div className="padding space-y-8">
         <div className="">
           {/* Categories Grid */}
@@ -32,7 +54,6 @@ const MegaMenu:React.FunctionComponent<MegaMenuProps> = ({menuItems,toggleMenu})
                 key={index}
                 href={child.href}
                 className="group rounded-lg hover:border-primary/20 transition-all duration-200"
-                onClick={toggleMenu}
               >
                 <div className="flex flex-col items-start text-center ">
                   <div>
