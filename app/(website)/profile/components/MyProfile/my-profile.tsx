@@ -1,38 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import OrderTable from '../Table/order-table';
+import { ORDER_DETAILS } from '@/constants/order-data';
+import ProfileModal from './components/profile-modal';
+import ShippingDetailsModal from './components/shipping-details-modal';
+import ShippingModal from './components/shipping-modal';
 
-export const data = [
-    {
-        id: 1,
-        orderNumber: 'ORD-001',
-        orderDate: '2025-07-10',
-        items: [
-            {
-                image: 'https://images.unsplash.com/photo-1567001193226-f2ed96e9f9f3?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                description: 'Soap',
-            }, {
-                image: 'https://images.unsplash.com/photo-1614159102397-ccd6c2400397?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                description: 'Oil',
-            }
-        ],
-        status: 'Delivered',
-        quantity: 2,
-        total: 1200,
-    }
-];
 
 const MyProfile: React.FunctionComponent = () => {
 
+    const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+    const [showShippingModal, setShowShippingModal] = useState<boolean>(false);
+    const [showShippingDetailsModal, setShowShippingDetailsModal] = useState<boolean>(false);
+
+    const toggleProfileModal = () => {
+        setShowProfileModal(prev => !prev)
+    }
+
+    const toggleShippingModal = () => {
+        setShowShippingModal(prev => !prev)
+    }
+
+    const toggleShippingDetailsModal = () => {
+        setShowShippingDetailsModal(prev => !prev)
+    }
 
     return (
         <section className="flex flex-col gap-8 bg-[#FAFAFA]">
+
+            {/* Profile Modal */}
+            {showProfileModal && <ProfileModal onClose={toggleProfileModal} />}
+
+            {/* Shipping Details Modal */}
+            {showShippingDetailsModal && <ShippingDetailsModal onClose={toggleShippingDetailsModal} />}
+
+            {/* Shipping Modal */}
+            {showShippingModal && <ShippingModal onClose={toggleShippingModal} />}
+
             <div className="grid grid-cols-1 lg:grid-cols-[0.35fr_0.65fr] gap-10">
                 {/* Personal Information */}
                 <div className="border border-[#E2E2E2] rounded-sm">
                     <div className="flex justify-between items-center p-3">
-                        <p className="font-medium text-sm md:text-base">Personal Information</p>
-                        <p className="text-primary cursor-pointer text-sm md:text-base">Change</p>
+                        <p className="font-medium text-sm md:text-base">
+                            Personal Information
+                        </p>
+                        <button
+                            onClick={toggleProfileModal}
+                            className="text-primary cursor-pointer text-sm md:text-base"
+                        >
+                            Change
+                        </button>
                     </div>
                     <div className="border-t border-[#CFCECE] p-4 flex gap-4">
                         <div className="flex justify-center items-center">
@@ -58,15 +75,26 @@ const MyProfile: React.FunctionComponent = () => {
                 {/* Shipping Details */}
                 <div className="border border-[#E2E2E2] rounded-sm">
                     <div className="flex justify-between items-center p-3">
-                        <p className="font-medium text-sm md:text-base flex gap-3">
+                        <p className="font-medium text-sm md:text-base flex items-center gap-3">
                             Shipping Details
-                            <span className="text-[#7C7C7C] font-normal uppercase">
+                            <span className="text-[#7C7C7C] font-normal text-xs md:text-base uppercase">
                                 default address
                             </span>
                         </p>
-                        <p className="text-primary cursor-pointer text-sm md:text-base">
-                            Change
-                        </p>
+                        <div className='flex gap-2 md:gap-3 lg:gap-5'>
+                            <button
+                                onClick={toggleShippingDetailsModal}
+                                className="text-primary cursor-pointer text-sm md:text-base"
+                            >
+                                View
+                            </button>
+                            <button
+                                onClick={toggleShippingModal}
+                                className="text-primary cursor-pointer text-sm md:text-base"
+                            >
+                                Change
+                            </button>
+                        </div>
                     </div>
                     <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
                         <p className="text-primary font-semibold text-lg">Hemant Jung Karki</p>
@@ -81,7 +109,7 @@ const MyProfile: React.FunctionComponent = () => {
 
             <div className="flex flex-col gap-3">
                 <h1 className="text-primary font-medium text-xl">Recent Orders</h1>
-                <OrderTable data={data} />
+                <OrderTable data={ORDER_DETAILS} />
             </div>
         </section>
     );

@@ -7,7 +7,7 @@ interface GenericModalProps {
     title: string;
     description?: string;
     titleClassName?: string;
-    descriptionClassName?:string;
+    descriptionClassName?: string;
     setIsOptionClick: (value: boolean) => void;
 }
 
@@ -26,8 +26,8 @@ const GenericModal: React.FC<GenericModalProps> = ({
 
     return (
         <Dialog defaultOpen={true} onOpenChange={closeDialog}>
-            <DialogContent className="sm:w-[484px] rounded-t-lg py-4 px-5 flex flex-col justify-between gap-3 bg-white">
-                <DialogTitle className="pt-1 pb-4">
+            <DialogContent className=" rounded-t-lg py-4 px-5 flex flex-col justify-between gap-3 bg-white">
+                <DialogTitle className="pt-1">
                     <SectionHeader
                         title={title}
                         description={description}

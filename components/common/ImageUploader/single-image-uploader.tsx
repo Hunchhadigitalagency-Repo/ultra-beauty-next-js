@@ -63,21 +63,19 @@ export default function SingleImageUploader({
       {showDragDrop && (
         <label
           htmlFor="cover-upload"
-          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer flex ${
-            size === "small" ? "py-1" : "justify-center"
-          } items-center gap-6`}
+          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer flex ${size === "small" ? "py-1" : "justify-center"
+            } items-center gap-6`}
         >
           <ImagePlus
-            className={` ${
-              size === "small"
-                ? " text-gray-900 w-8 h-8"
-                : " text-gray-500 w-20 h-20"
-            }`}
+            className={` ${size === "small"
+              ? " text-gray-900 w-8 h-8"
+              : " text-gray-500 w-20 h-20"
+              }`}
             strokeWidth={0.5}
           />
           <div className="">
             <span className="text-sm text-gray-600">Drag and drop or </span>
-            <span className="text-blue-600">upload image</span>
+            <span className="text-sm text-primary">upload image</span>
           </div>
           <input
             id="cover-upload"

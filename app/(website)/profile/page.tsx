@@ -10,7 +10,10 @@ const Profile: React.FunctionComponent = () => {
 
   return (
     <main className="padding flex flex-col gap-5 lg:gap-10">
-      <SectionHeader title="Profile" description="See Profile Details" />
+      <SectionHeader
+        title="Profile"
+        description="See Profile Details"
+      />
       <section className="flex flex-col lg:flex-row gap-12">
         <aside className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-1 gap-2 lg:bg-secondary lg:p-5 rounded-lg min-w-60 h-fit">
           {PROFILE_TABS.map((tab, index) => (
@@ -24,7 +27,9 @@ const Profile: React.FunctionComponent = () => {
             </button>
           ))}
         </aside>
-        <div className="flex-1">{PROFILE_TABS[activeTabIndex].component}</div>
+        <div className="flex-1">
+          {PROFILE_TABS[activeTabIndex].component}
+        </div>
       </section>
     </main>
   );

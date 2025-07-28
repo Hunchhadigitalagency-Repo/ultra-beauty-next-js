@@ -26,7 +26,6 @@ export default function Navbar() {
   useEffect(() => {
     const fetchNavigationItems = async () => {
       const data = await getNavigationItems();
-      console.log(data);
       setNavigationItems(data);
     };
     fetchNavigationItems();
