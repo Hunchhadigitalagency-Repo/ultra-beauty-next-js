@@ -44,11 +44,11 @@ const ProfileModal: React.FunctionComponent<ProfileModalProps> = ({ onClose }) =
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(ProfileSchema),
         defaultValues: {
-            email: undefined,
-            phoneNumber: undefined,
-            dateOfBirth: undefined,
-            gender: undefined,
-            profileImage: undefined
+            email: '',
+            phoneNumber: '',
+            gender: undefined,         // or '' if you want a controlled default
+            dateOfBirth: undefined,    // or null if your date picker uses it
+            profileImage: undefined,
         }
     });
 

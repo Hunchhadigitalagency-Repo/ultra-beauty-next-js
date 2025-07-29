@@ -1,26 +1,37 @@
-import MyCancellations from "./MyCancellation/my-cancellations";
+import {
+    LucideIcon,
+    UserRoundPlus,
+    ShoppingCart,
+    Undo2,
+    NotebookText,
+    BookHeart,
+    BookType,
+    BookX
+} from "lucide-react";
 import MyOrders from "./my-orders";
-import MyProfile from "./MyProfile/my-profile";
 import MyReturns from "./my-returns";
-import ReviewHistory from "./MyReview/components/review-history";
-import ToBeReviewed from "./MyReview/components/to-be-reviewed";
+import MyWishlist from "./my-wishlist";
 import MyReviews from "./MyReview/my-reviews";
 import MyTestimonials from "./my-testimonials";
-import MyWishlist from "./my-wishlist";
+import MyProfile from "./MyProfile/my-profile";
+import ToBeReviewed from "./MyReview/components/to-be-reviewed";
+import MyCancellations from "./MyCancellation/my-cancellations";
+import ReviewHistory from "./MyReview/components/review-history";
 
 type Tab = {
     name: string;
+    icon: LucideIcon
     component: React.ReactNode;
 };
 
 export const PROFILE_TABS: Tab[] = [
-    { name: 'Profile', component: <MyProfile /> },
-    { name: 'My Orders', component: <MyOrders /> },
-    { name: 'My Returns', component: <MyReturns /> },
-    { name: 'My Reviews', component: <MyReviews /> },
-    { name: 'My Cancellation', component: <MyCancellations /> },
-    { name: 'My Wishlist', component: <MyWishlist /> },
-    { name: 'Testimonial', component: <MyTestimonials /> },
+    { name: 'Profile', icon: UserRoundPlus, component: <MyProfile /> },
+    { name: 'My Orders', icon: ShoppingCart, component: <MyOrders /> },
+    { name: 'My Returns', icon: Undo2, component: <MyReturns /> },
+    { name: 'My Reviews', icon: NotebookText, component: <MyReviews /> },
+    { name: 'My Cancellation', icon: BookX, component: <MyCancellations /> },
+    { name: 'My Wishlist', icon: BookHeart, component: <MyWishlist /> },
+    { name: 'Testimonial', icon: BookType, component: <MyTestimonials /> },
 ];
 
 

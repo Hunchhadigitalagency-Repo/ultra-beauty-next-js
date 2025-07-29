@@ -3,8 +3,8 @@ import * as z from 'zod';
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export const ProfileSchema = z.object({
-    email: z.string().email().optional(),
-    phoneNumber: z.string().min(10, 'Phone number is too short').optional(),
+    email: z.string().email().or(z.literal('')).optional(),
+    phoneNumber: z.string().min(10, 'Phone number is too short').or(z.literal('')).optional(),
     gender: z.enum(['male', 'female', 'others']).optional(),
     dateOfBirth: z.date({
         required_error: 'Date of birth is required',

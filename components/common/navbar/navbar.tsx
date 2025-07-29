@@ -11,6 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getNavigationItems } from "../../../constants/navbar-data";
 import { Search, ShoppingCart, Bell, Heart, CircleUser, ChevronDown } from "lucide-react";
 import MegaMenu from "./mega-menu";
+import NotificationModal from "./notification-modal";
 
 
 
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
   const [activeMegaMenu, setActiveMegaMenu] = useState(false);
+  const [showNotification, setShowNotification] = useState(false)
 
   const router = useRouter();
   const path = usePathname();
@@ -49,6 +51,9 @@ export default function Navbar() {
           {searchOpen && <SearchModal />}
           {/* Mega Menu */}
           {activeMegaMenu && <MegaMenu />}
+
+          {/* Notification */}
+          {showNotification && <NotificationModal onClose={() => setShowNotification(false)} />}
 
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -143,7 +148,12 @@ export default function Navbar() {
                 <CircleUser className={`size-5 ${isActive("/profile") && "text-primary"}`} />
               </Button>
 
-              <Button variant="ghost" size="icon" className="hidden md:flex hover:text-primary">
+              <Button
+                onClick={() => setShowNotification(prev => !prev)}
+                variant="ghost"
+                size="icon"
+                className="hidden md:flex hover:text-primary"
+              >
                 <Bell className="size-5" />
               </Button>
 
