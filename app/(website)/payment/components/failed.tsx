@@ -1,7 +1,8 @@
 import React from "react";
 import { RxCross2 } from "react-icons/rx";
 
-const Failed = () => {
+const Failed: React.FunctionComponent = () => {
+
   return (
     <div className="flex justify-center items-center border-2 lg:h-120 h-auto py-20 lg:py-0">
       <div className="flex flex-col gap-4 text-center">
@@ -16,7 +17,7 @@ const Failed = () => {
           payment method
         </p>
         <button className="text-xs md:text-sm bg-primary px-5 py-2 mx-auto text-white">
-         Back to payment
+          Back to payment
         </button>
       </div>
     </div>

@@ -7,6 +7,7 @@ import SectionHeader from "@/components/common/header/section-header";
 
 
 const AboutHeroSection: React.FunctionComponent = () => {
+
   return (
     <section className="padding-y">
       <div className="relative h-90 md:h-120 overflow-visible ">
@@ -28,7 +29,7 @@ const AboutHeroSection: React.FunctionComponent = () => {
               titleClassName="text-white md:text-2xl xl:text-5xl font-playfair md:leading-14 text-3xl font-bold text-xl"
               descriptionClassName="text-white md:mt-5 mt-2 text-sm md:text-base"
             />
-            <button className="bg-[#FF2B5F] lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 border-white-300 text-sm px-2 py-2">
+            <button className="bg-primary lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 border-white-300 text-sm px-2 py-2">
               <Link href="/shop">
                 View New Collection
               </Link>

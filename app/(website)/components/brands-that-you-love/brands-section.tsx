@@ -69,11 +69,11 @@ const BrandsSection: React.FunctionComponent = () => {
           opts={{ align: "start", loop: true }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}>
-          <CarouselContent className="flex gap-7">
+          <CarouselContent className="-ml-4">
             {BRANDS_LIST.map((brand, index) => (
               <CarouselItem
                 key={index}
-                className="basis-[45%]  sm:basis-1/2 md:basis-[32%] lg:basis-[23%]"
+                className="basis-[45%]  pl-4 sm:basis-1/2 md:basis-[32%] lg:basis-1/4"
               >
                 <BrandsCard image={brand.image} />
               </CarouselItem>
