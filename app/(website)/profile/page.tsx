@@ -20,9 +20,12 @@ const Profile: React.FunctionComponent = () => {
             <button
               key={index}
               onClick={() => setActiveTabIndex(index)}
-              className={`flex items-center justify-center lg:justify-start rounded-md not-only:bg-secondary px-5 py-2 font-medium text-sm md:text-base cursor-pointer ${index === activeTabIndex && "text-primary"
+              className={`flex items-center justify-center gap-4 lg:justify-start rounded-md not-only:bg-secondary px-5 py-2 font-medium text-sm md:text-base cursor-pointer ${index === activeTabIndex && "text-primary"
                 }`}
             >
+              <span className={`p-1 hidden xl:block rounded-sm ${index === activeTabIndex && 'bg-primary'}`}>
+                <tab.icon className={`w-4 h-4 ${index === activeTabIndex && 'text-white'}`} />
+              </span>
               {tab.name}
             </button>
           ))}
