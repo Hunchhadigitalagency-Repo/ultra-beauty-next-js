@@ -59,7 +59,7 @@ export default function HeroSection() {
   }, [api, isHovered]);
 
   return (
-    <section className="relative h-60 md:h-[500px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
+    <section className="relative h-60 md:h-96 md:py-10 padding bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
       <Carousel
         setApi={setApi}
         className="w-full h-full"
@@ -68,10 +68,10 @@ export default function HeroSection() {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Section */}
-        <CarouselContent className="w-full md:h-[500px] lg:h-[calc(100vh-130px)]">
+        <CarouselContent>
           {slides.map((slide, index) => (
-            <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
-              <div className="relative  h-36 md:h-96 lg:w-[1403px]  lg:h-[80%]  overflow-hidden rounded-md">
+            <CarouselItem key={slide.id} className="w-full h-[650px] overflow-hidden rounded-md ">
+              <div className="relative w-full h-44 md:h-72 lg:h-[80%] overflow-hidden rounded-md">
                 <div className="absolute inset-0 ">
                   <Image
                     src={slide.image || "/placeholder.svg"}
@@ -91,7 +91,7 @@ export default function HeroSection() {
           <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-16 border-none shadow-none bg-transparent" />
         </div>
         
-        <div className="absolute -bottom-4 right-0  md:right-0 lg:bottom-2 lg:right-0 -translate-x-1/2 z-20 flex space-x-2">
+        <div className="absolute bottom-0 right-0 md:bottom-1 md:right-0 lg:bottom-2 lg:right-0 flex space-x-2">
           {slides.map((_, i) => (
             <button
               key={i}
