@@ -1,17 +1,16 @@
 "use client";
-
 import Image from "next/image";
 import DOMPurify from "dompurify";
+import { Heart } from "lucide-react";
+import React, { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from "@/components/ui/accordion";
-import { Heart } from "lucide-react";
-import React, { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 type ProductImage = {
   id: number;
@@ -40,6 +39,7 @@ const methods = [
 
 
 const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({
+
   images,
   // is_flash_sale,
 }) => {
@@ -48,9 +48,9 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-auto">
       {/* Main Image (responsive height) */}
-      <div className="relative w-full h-[250px] sm:h-[400px] md:h-[500px] lg:h-[400px]">
+      <div className="relative w-full h-44 md:h-80 xl:h-96">
         {selectedImage && (
           <Image
             src={selectedImage}
@@ -91,7 +91,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
       )}
 
       {/* Flash Sale Badge */}
-      <div className="flex justify-between text-white w-full bg-[#4A90E2] rounded-lg px-3 py-2 ">
+      <div className="flex justify-between text-white  w-96 md:w-full bg-[#4A90E2] rounded-lg px-3 py-2 ">
         <span className="font-bold font-poppins"> Flash Sales</span>
         <span className="font-poppins">Ends in 48:00:00 Hrs</span>
       </div>
@@ -102,7 +102,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           <AccordionItem
             key={method.title}
             value={`${method.title}`}
-            className="rounded-lg  py-2 bg-white border-none"
+            className="rounded-lg  py-2 bg-white border-none w-96 md:w-full"
           >
             <AccordionTrigger className="text-left px-4 font-poppins cursor-pointer bg-secondary text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary text-lg">
               <div

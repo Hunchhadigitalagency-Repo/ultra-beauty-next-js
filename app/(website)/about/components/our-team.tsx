@@ -47,7 +47,6 @@ const OurTeam = () => {
         description="Hear our talented team"
         className="items-start"
       />
-
       <TeamCarousel />
     </section>
   );

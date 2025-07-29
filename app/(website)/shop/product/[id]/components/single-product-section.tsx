@@ -90,14 +90,14 @@ const SingleProductSection: React.FunctionComponent = () => {
   return (
     <section className="padding space-y-6">
       <div>
-        <div className="flex justify-end pl-8 w-full  mb-4">
-          <div className="flex justify-between w-1/2">
-            <span className="font-poppins font-medium text-sm text-[#7A7A7A]">
+        <div className="flex justify-end p-2 w-full  mb-4">
+          <div className="flex justify-between w-full">
+            <span className="font-poppins font-medium text-xs  md:text-sm text-[#7A7A7A]">
               Ubiya Derma
             </span>
             <div className="flex ">
               <RatingStars rating={rating} />
-              <span className="text-sm text-[#333333]">
+              <span className="text-xs md:text-sm text-[#333333]">
                 {rating}/5 Star Rating by 349 people
               </span>
             </div>

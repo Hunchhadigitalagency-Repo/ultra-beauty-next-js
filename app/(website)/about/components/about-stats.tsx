@@ -3,7 +3,6 @@ import React from "react";
 import explorebg from '@/assets/explorebg.png';
 import blackrectangle from "@/assets/exploreBlackRectangle.png";
 
-
 export const aboutStatsData = [
   {
     title: "2000M+",
@@ -30,14 +29,14 @@ const AboutStats: React.FunctionComponent = () => {
         backgroundPosition: 'center',
       }}
     >
-      <div className="border-red-600 padding-x py-5"
+      <div className="padding-x py-5"
         style={{
           backgroundImage: `url(${blackrectangle.src})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold  max-w-4xl text-[#FF2B5F] font-playfair">
+        <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold  max-w-4xl text-primary font-playfair">
           Explore the trusted products
           <span className="hidden md:inline">
             , categories....
