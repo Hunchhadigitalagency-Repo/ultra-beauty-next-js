@@ -8,7 +8,6 @@ interface HelperProps {
   items: string[];
 }
 
-
 const Helper: React.FunctionComponent<HelperProps> = ({ headerTitle, headerDesc, helperTitle ,items}) => {
 
   return (
@@ -36,7 +35,6 @@ const Helper: React.FunctionComponent<HelperProps> = ({ headerTitle, headerDesc,
           For any confusion contact us
         </button>
       </div>
-
     </section>
   )
 }

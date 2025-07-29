@@ -73,7 +73,7 @@ const BrandsSection: React.FunctionComponent = () => {
             {BRANDS_LIST.map((brand, index) => (
               <CarouselItem
                 key={index}
-                className="basis-[45%]  sm:basis-1/2 md:basis-[32%] lg:basis-[23%]"
+                className="basis-[55%] sm:basis-1/2 md:basis-[32%] lg:basis-[23%]"
               >
                 <BrandsCard image={brand.image} />
               </CarouselItem>

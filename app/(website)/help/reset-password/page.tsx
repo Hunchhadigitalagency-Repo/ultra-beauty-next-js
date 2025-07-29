@@ -1,7 +1,6 @@
 import React from 'react';
 import Helper from './helper-section';
 
-
 const items = [
   "First go to the login screen.",
   "You will see reset password link.",
@@ -11,6 +10,7 @@ const items = [
 ]
 
 const ResetPassword = () => {
+  
   return (
     <div>
       <Helper

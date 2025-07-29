@@ -20,11 +20,11 @@ const BeautyVideoSection: React.FunctionComponent = () => {
     <section className="padding space-y-4">
       <div className="relative w-full">
         <Carousel>
-          <CarouselContent className="flex gap-7">
+          <CarouselContent className="flex">
             {BeautyVideosList.map((video, index) => (
               <CarouselItem
                 key={index}
-                className="basis-[45%] sm:basis-1/2 md:basis-[32%] lg:basis-[32%]">
+                className="basis-[45%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
                 <BeautyVideoContent
                   src={video.src}
                   poster={video.poster}
