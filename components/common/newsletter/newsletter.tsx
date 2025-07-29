@@ -21,7 +21,12 @@ export default function Newsletter() {
     if (!consent || !email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) return;
     try {
       setStatus("loading");
-      setTimeout(() => setStatus("done"), 1000); // simulate delay
+      setTimeout(() => {
+        setStatus("done");
+        setEmail('');
+        setConsent(false);
+      }, 1000); // simulate delay
+
     } catch {
       setStatus("error");
     }

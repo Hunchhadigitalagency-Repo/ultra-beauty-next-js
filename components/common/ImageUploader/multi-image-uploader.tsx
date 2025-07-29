@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { UploadIcon, X } from "lucide-react";
+import { File, UploadIcon, X } from "lucide-react";
 
 import { toast } from "sonner";
 import { handleError } from "@/lib/error-handler";
@@ -32,7 +32,7 @@ export default function MultiImageUploader({
   isEdit = false,
 }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-//   const [showDragDrop, setShowDragDrop] = useState(true);
+  //   const [showDragDrop, setShowDragDrop] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
 
@@ -105,58 +105,82 @@ export default function MultiImageUploader({
 
   return (
     <div className="space-y-6">
-        <div
-          className={`space-y-4 ${
-            isDragging
-              ? "bg-gray-100 border-2 border-dashed border-primary"
-              : ""
+      <div
+        className={`space-y-4 ${isDragging
+          ? "bg-gray-100 border-2 border-dashed border-primary"
+          : ""
           }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <label
-            htmlFor="file-input"
-            className={`flex items-center justify-center h-36 w-full border-2 rounded-md cursor-pointer bg-white ${
-              isDragging ? "border-primary bg-primary/10" : ""
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <label
+          htmlFor="file-input"
+          className={`flex items-center justify-center h-36 w-full border-2 rounded-md cursor-pointer bg-white ${isDragging ? "border-primary bg-primary/10" : ""
             }`}
-          >
-            <div className="flex flex-col items-center text-gray-500">
-              <UploadIcon className="size-10" />
-              <span className="text-sm mt-2">Drag & Drop or Click Here</span>
-              <span className="text-xs">Supported File: {accept}</span>
-              <span className="text-xs mt-1">Maximum file size: 1MB</span>
-            </div>
-            <input
-              ref={inputRef}
-              id="file-input"
-              type="file"
-              name="file"
-              accept={accept}
-              className="hidden"
-              multiple={isMultiple}
-              onChange={handleFileChange}
-            />
-          </label>
-        </div>
-  
+        >
+          <div className="flex flex-col items-center text-gray-500">
+            <UploadIcon className="size-10" />
+            <span className="text-sm mt-2">Drag & Drop or Click Here</span>
+            <span className="text-xs">Supported File: {accept}</span>
+            <span className="text-xs mt-1">Maximum file size: 1MB</span>
+          </div>
+          <input
+            ref={inputRef}
+            id="file-input"
+            type="file"
+            name="file"
+            accept={accept}
+            className="hidden"
+            multiple={isMultiple}
+            onChange={handleFileChange}
+          />
+        </label>
+      </div>
 
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {value?.map((item, index) => {
+          const fileObj = item.file;
+          const isString = typeof fileObj === "string";
+          const fileName = isString
+            ? fileObj.split("/").pop() || "file"
+            : fileObj.name;
+
+          const fileExtension = fileName.split(".").pop()?.toLowerCase();
+
+          const isImage = ["jpg", "jpeg", "png", "webp"].includes(fileExtension || "");
+          const isPDF = fileExtension === "pdf";
+          const isDoc = ["doc", "docx"].includes(fileExtension || "");
+
           return (
-            <div className="relative" key={index}>
-              <Image
-                src={
-                  typeof item.file === "string"
-                    ? item.file
-                    : URL.createObjectURL(item.file) || "/placeholder.svg"
-                }
-                width={100}
-                height={100}
-                alt="Content cover"
-                className="h-32 object-cover rounded-lg"
-              />
+            <div className="relative border" key={index}>
+              {isImage ? (
+                <Image
+                  src={
+                    isString
+                      ? fileObj as string
+                      : URL.createObjectURL(fileObj as File) || "/placeholder.svg"
+                  }
+                  width={100}
+                  height={100}
+                  alt="Uploaded"
+                  className="h-32 object-cover rounded-lg"
+                />
+              ) : (
+                <div className="h-32 flex flex-col items-center justify-center bg-gray-100 text-gray-700 border rounded-lg p-2 text-center">
+                  {isPDF && <p>
+                    <File />
+                    PDF
+                  </p>}
+                  {isDoc && <p>
+                    <File />
+                    DOC
+                  </p>}
+                  <p className="text-xs mt-2 px-1 truncate w-full">{fileName}</p>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => handleDeleteFile(index)}
@@ -168,6 +192,7 @@ export default function MultiImageUploader({
             </div>
           );
         })}
+
 
         {/* {!showDragDrop && (
           <Button
