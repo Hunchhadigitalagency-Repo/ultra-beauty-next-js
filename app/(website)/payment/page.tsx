@@ -5,7 +5,7 @@ import Failed from './components/failed'
 import BrandsSection from '../components/brands-that-you-love/brands-section'
 
 const Payments = () => {
-  const status : 'paid' | 'unpaid' | 'failed' = 'paid'
+  const status : 'paid' | 'unpaid' | 'failed' = 'failed'
   
   function Renderstatus(){
     if(status==='paid'){
@@ -20,7 +20,10 @@ const Payments = () => {
   
 <>
 {Renderstatus()}
- <BrandsSection/>
+
+<BrandsSection />
+
+ 
 </>
     
     

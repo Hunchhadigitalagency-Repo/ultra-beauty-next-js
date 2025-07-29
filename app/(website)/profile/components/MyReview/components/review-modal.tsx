@@ -7,15 +7,15 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import Image from 'next/image';
-import { useForm } from 'react-hook-form';
-import { StarRating } from '@/components/common/form/star-rating-input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ReviewFormValues, ReviewSchema } from '@/schemas/cms/review-schema';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import GenericModal from '@/components/common/modals/generic-modal';
 import { ReviewModalProps } from '@/types/profile';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Textarea } from '@/components/ui/textarea';
+import GenericModal from '@/components/common/modals/generic-modal';
+import { StarRating } from '@/components/common/form/star-rating-input';
+import { ReviewFormValues, ReviewSchema } from '@/schemas/cms/review-schema';
 
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
@@ -49,14 +49,13 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                 <GenericModal
                     title="Rate and Review purchased Product"
                     description ="Review the product"
-                    titleClassName='text-sm xl:text-xl font-playfair font-semibold text-primary font-bold'
-                    descriptionClassName='text-xs xl:text-xs'
+                    titleClassName='text-sm md:text-base xl:text-xl font-playfair font-semibold text-primary font-bold'
+                    descriptionClassName='text-xs md:text-xs xl:text-xs'
                     setIsOptionClick={() => {
                         setIsModalOpen(false);
                         form.reset();
                     }}
-                >
-                    
+                >  
                     <Form {...form}>
                         <form
                             id="review-form"
@@ -75,7 +74,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 </div>
 
                                 <div className="flex-1 flex flex-col gap-2">
-                                    <p className="font-semibold break-words text-sm  font-playfair ">
+                                    <p className="font-semibold break-words text-sm md:text-base  font-playfair ">
                                         {title}
                                     </p>
                                     <p className='text-xs '>{description}</p>
