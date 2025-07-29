@@ -23,7 +23,7 @@ const Unpaid: React.FunctionComponent = () => {
     const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null)
 
     return (
-        <section className="padding flex flex-col gap-5 lg:gap-10 h-170">
+        <section className="padding flex flex-col gap-5 lg:gap-10 h-auto">
             <SectionHeader
                 title="Payment"
                 description="Payment for your products"
