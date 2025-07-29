@@ -34,11 +34,11 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
                     </h4>
                     <Link href="/order-tracking">
                         {status === "delivered" ? (
-                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
+                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
                                 {status}
                             </span>
                         ) :
-                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
+                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
                                 {status}
                             </span>
                         }
