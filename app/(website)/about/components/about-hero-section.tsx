@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import aboutheroimage from "@/assets/bg-hero.png";
 import { FaArrowRightLong } from "react-icons/fa6";
 import SectionHeader from "@/components/common/header/section-header";
@@ -28,7 +29,9 @@ const AboutHeroSection: React.FunctionComponent = () => {
               descriptionClassName="text-white md:mt-5 mt-2 text-sm md:text-base"
             />
             <button className="bg-[#FF2B5F] lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 border-white-300 text-sm px-2 py-2">
-              View New Collection
+              <Link href="/shop">
+                View New Collection
+              </Link>
               <FaArrowRightLong />
             </button>
           </div>

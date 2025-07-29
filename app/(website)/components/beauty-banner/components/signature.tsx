@@ -1,8 +1,7 @@
 import React from "react";
-import Image from "next/image";
-import frameIcon from "@/assets/Frame.png";
-import groupIcon from "@/assets/Group.png";
-import vectorIcon from "@/assets/Vector.png";
+import { FaRegStar } from 'react-icons/fa';
+import { BiCollection } from 'react-icons/bi';
+import { GiBottleVapors } from 'react-icons/gi';
 
 const SignatureSection: React.FunctionComponent = () => {
   return (
@@ -23,8 +22,8 @@ const SignatureSection: React.FunctionComponent = () => {
 
       <ul className="space-y-6">
         <li className="flex items-start gap-4 my-4">
-          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1">
-            <Image src={frameIcon} alt="Frame Icon" className="w-5 h-5" />
+          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1 text-primary">
+           <GiBottleVapors size={24} />
           </div>
           <div>
             <h3 className="font-semibold font-playfair text-sm md:text-base lg:text-lg">
@@ -37,8 +36,8 @@ const SignatureSection: React.FunctionComponent = () => {
         </li>
 
         <li className="flex items-start gap-4 my-4">
-          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1">
-            <Image src={vectorIcon} alt="Vector Icon" className="w-5 h-5" />
+          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1 text-primary">
+             <FaRegStar size={24} />
           </div>
           <div>
             <h3 className="font-semibold font-playfair text-sm md:text-base lg:text-lg">
@@ -51,8 +50,8 @@ const SignatureSection: React.FunctionComponent = () => {
         </li>
 
         <li className="flex items-start gap-4 my-4">
-          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1">
-            <Image src={groupIcon} alt="Group Icon" className="w-5 h-5" />
+          <div className="w-10 h-10 bg-[#FFEBED] rounded-full flex items-center justify-center mt-1 text-primary">
+            <BiCollection size={24} />
           </div>
           <div>
             <h3 className="font-semibold font-playfair text-sm md:text-base lg:text-lg">
