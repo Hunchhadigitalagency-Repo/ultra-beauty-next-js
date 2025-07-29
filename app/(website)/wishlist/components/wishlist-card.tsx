@@ -39,7 +39,7 @@ const WishlistCard = ({
             alt={name}
             width={150}
             height={150}
-            className="rounded-lg object-cover border w-full h-full"
+            className="rounded-lg object-cover border md:w-40 md:h-full"
           />
           {discountTag && (
             <span className="absolute  bg-primary text-white text-xs md:text-sm px-2 py-1 rounded-full right-2 bottom-2">
