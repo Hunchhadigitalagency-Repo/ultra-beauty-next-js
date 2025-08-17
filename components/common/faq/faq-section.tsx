@@ -14,7 +14,7 @@ import {
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 export default function FAQSection() {
-  const { data, isLoading:loading, error } = useFetchData<FAQResponse>(
+  const { data, isLoading:loading, error } = useFetchData<FAQResponse[]>(
     "cms/faqs/?pagination=false"
   );
 

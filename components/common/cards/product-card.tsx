@@ -7,36 +7,19 @@ import RatingStars from "../product/rating-stars";
 import PriceRow from "../product/price-row";
 import { useRouter } from "next/navigation";
 import { IFeature } from "@/types/product";
-
-interface ProductCardProps {
-  id: number;
-  imageSrc: string;
-  brandname?: string;
-  alt: string;
-  title: string;
-  description: string;
-  features?: IFeature[];
-  rating: number;
-  /** the current, active price */
-  price: string;
-  /** optional old price to show crossed out */
-  previousPrice?: string;
-  /** e.g. "20% OFF", "Save $30" */
-  discountTag?: string;
-  onAddToCart?: () => void;
-  onToggleWishlist?: (id: number, isWishlisted: boolean) => void;
-  isWishlisted?: boolean;
-}
+import { ProductCardProps } from "@/types/product";
 
 const ProductCard = ({
-  id,
+  slug,
   imageSrc,
-  // alt,
-  brandname,
+  alt,
+  isFlashSale,
   title,
-  // price,
+  price,
+  brand,
   rating,
-  onToggleWishlist,
+  discountTag,
+  onToggleWishlist = () => { },
   isWishlisted,
 }: ProductCardProps) => {
 
@@ -44,20 +27,20 @@ const ProductCard = ({
   const router = useRouter();
   return (
 
-    <section className="w-full bg-white flex flex-col justify-between gap-2 md:gap-3 lg:gap-4 rounded-lg overflow-hidden">
+    <section className="flex flex-col justify-between w-full gap-2 overflow-hidden bg-white rounded-lg md:gap-3 lg:gap-4">
 
       {/* Image Section */}
-      <div onClick={() => router.push(`/shop/product/${id}`)} className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
+      <div onClick={() => router.push(`/shop/product/${slug}`)} className="relative mb-2 w-full h-40 sm:h-60 md:h-72 lg:h-[350px] overflow-hidden rounded-lg group cursor-pointer">
         <Image
           src={imageSrc}
-          alt={''}
+          alt={alt}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
         <div className="absolute top-3 right-3">
           <span className="bg-red-600 text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
-            Fash Sale
+            { isFlashSale && "Flash Sale"}
           </span>
         </div>
 
@@ -69,18 +52,18 @@ const ProductCard = ({
       </div>
 
       {/* Content */}
-      <div className=" flex flex-col">
-        <p className="text-[#7A7A7A] text-xs sm:text-sm">
-          {brandname}
+      <div className="flex flex-col ">
+        <p className="text-[#7A7A7A] text-xs line-clamp-1 sm:text-sm ">
+          {brand.name}
         </p>
-        <h3 className="text-base md:text-lg lg:text-xl font-medium font-playfair text-foreground">
+        <h3 className="text-base font-medium md:text-lg lg:text-xl font-playfair text-foreground">
           {title}
         </h3>
       </div>
 
       <div className="flex flex-col gap-2 md:gap-3 lg:gap-4">
         {/* Rating and wishlist */}
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <RatingStars rating={rating} />
             <span className=" ml-0 md:ml-2 text-foreground text-[10px] md:text-base font-medium">
@@ -89,7 +72,7 @@ const ProductCard = ({
           </div>
 
           <button
-            onClick={() => onToggleWishlist?.(id, isWishlisted ? true : false)}
+            onClick={() => onToggleWishlist?.(slug, isWishlisted ? true : false)}
             className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors ${isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
               } cursor-pointer`}
             aria-label="Toggle Wishlist"
@@ -100,11 +83,11 @@ const ProductCard = ({
 
         {/* Price row */}
         <PriceRow
-          previousPrice={"3200"}
-          price={"3000"}
+          discountTag={discountTag}
+          price={price}
         />
         {/* Add To Bag Button */}
-        <button className="bg-secondary w-full flex font-medium text-xs sm:text-sm md:text-base uppercase flex-row gap-2 justify-center items-center py-2">
+        <button className="flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium uppercase bg-secondary sm:text-sm md:text-base">
           <ShoppingBag className="w-4 h-4" />
           Add To Bag
         </button>
