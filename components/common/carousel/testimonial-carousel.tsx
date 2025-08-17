@@ -27,7 +27,7 @@ export default function TestimonialCarousel() {
 
   const {
     data: TESTIMONIALS,
-    isLoading:loading,
+    isLoading: loading,
     error
   } = useFetchData<ITestimonial[]>('cms/testimonials/?pagination=false');
 

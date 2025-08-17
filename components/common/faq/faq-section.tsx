@@ -14,7 +14,7 @@ import {
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 export default function FAQSection() {
-  const { data, isLoading:loading, error } = useFetchData<FAQResponse[]>(
+  const { data, isLoading: loading, error } = useFetchData<FAQResponse[]>(
     "cms/faqs/?pagination=false"
   );
 
@@ -49,14 +49,14 @@ export default function FAQSection() {
               className="rounded-none px-6 py-2 bg-white"
             >
               <AccordionTrigger className={`text-left !font-playfair cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-medium text-xl ${playfair.className}`}>
-              
+
                 <span
                   style={{ fontFamily: "Playfair Display" }}
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(faq.question, { FORBID_ATTR: ['style'] }),
                   }}
                 />
-          
+
               </AccordionTrigger>
               <AccordionContent className="text-foreground font-poppins text-sm leading-relaxed pt-2 pb-4">
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.answer) }} />
