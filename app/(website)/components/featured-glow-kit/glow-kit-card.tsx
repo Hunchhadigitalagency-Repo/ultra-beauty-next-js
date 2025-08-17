@@ -6,16 +6,24 @@ interface GlowKitProps {
   title: string;
   desc: string;
 }
-const GlowKitCard: React.FC<GlowKitProps> = ({ image }) => {
+const GlowKitCard: React.FC<GlowKitProps> = ({ image, title, desc }) => {
   return (
-    <div className="flex justify-center items-center w-full  rounded-md">
-      <div className="relative  w-full h-32 md:h-60 lg:h-80 xl:h-96 overflow-hidden rounded-lg">
+    <div className="flex flex-col gap-3 justify-center items-center w-full">
+      <div className="relative w-full h-44 md:h-60 lg:h-80 xl:h-96 overflow-hidden rounded-md">
         <Image
           src={image}
           alt="brand logo"
           layout="fill"
           objectFit="cover"
         />
+      </div>
+      <div className=" flex flex-col">
+        <p className="text-[#7A7A7A] text-center text-xs sm:text-sm">
+          {title}
+        </p>
+        <h3 className="text-base md:text-lg lg:text-xl font-semibold font-playfair text-foreground">
+          {desc}
+        </h3>
       </div>
     </div>
   )

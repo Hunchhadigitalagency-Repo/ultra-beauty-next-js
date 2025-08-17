@@ -8,9 +8,9 @@ import BusinessBenifits from "./components/business-benifits";
 import BrandsSection from "../components/brands-that-you-love/brands-section";
 
 
-const AboutPage = () => {
+const AboutPage: React.FunctionComponent = () => {
   return (
-    <main className="space-y-8">
+    <section className="space-y-8">
       <AboutHeroSection />
       <BrandsSection />
       <UltraBeauty />
@@ -18,7 +18,7 @@ const AboutPage = () => {
       <BusinessBenifits />
       <AboutStats />
       <OurTeam />
-    </main>
+    </section>
   );
 };
 

@@ -1,22 +1,30 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import { CircleAlert } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface OrderProductProps {
     item: any;
 }
 
-
 const OrderProductDetails = ({ item }: OrderProductProps) => {
 
+    const router = useRouter();
 
+    const handleCancelOrder = () => {
+        router.push('/cancel-order')
+    };
+
+    const handleReturnOrder = () => {
+        router.push('/return-order')
+    };
 
     return (
-        <div className="relative flex flex-row justify-between items-start md:items-center gap-2 p-2 md:gap-4 md:p-4  bg-white top-2">
+
+        <div className="relative flex flex-row items-start gap-2 p-2 md:gap-4 md:p-4 bg-white top-2">
             {/* Product Image */}
-            <div className="relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
+            <div className="relative flex-shrink-0 w-24 h-24 md:w-32 md:h-28 rounded-lg overflow-hidden">
                 <Image
                     src={item.image || "/placeholder.svg"}
                     alt={item.name}
@@ -25,61 +33,57 @@ const OrderProductDetails = ({ item }: OrderProductProps) => {
                     className="object-cover w-full h-full"
                 />
             </div>
-
-            {/* Quantity, Info, Price, Buttons */}
-            <div className="flex flex-col md:flex-row gap-4 flex-1 md:items-center md:justify-between w-full mt-1">
-                {/* Quantity + Info */}
-                <div className="flex flex-col md:mt-2 mt-8">
-                    <h3 className="font-bold font-playfair text-sm md:text-2xl text-foreground leading-snug line-clamp-2">
-                        {item.name || "Sensanori Vitamin Cream for Antiaging"}
-                    </h3>
-                    <h3 className="md:block hidden text-xs md:text-sm text-foreground leading-snug line-clamp-2">
-                        {item.name || "A product that helps to reduce wrinkles and makes glowing skin."}
-                    </h3>
+            <div className="flex flex-col xl:flex-row gap-2 w-full md:justify-between">
+                <div className="space-y-2">
+                    {/* Boxes */}
+                    <div className=" flex justify-between gap-3 md:gap-9">
+                        <div className="border-[1px] border-gray-500 px-1 py-1  md:font-semibold font-poppins text-xs md:text-sm">
+                            Date:{item.Date || "27/06/2025"}
+                        </div>
+                        <div
+                            className="border-[1px] border-gray-500 px-1 py-1  md:font-semibold font-poppins text-xs md:text-sm">
+                            Quantity: {item.quantity || 10}
+                        </div>
+                        <div className="border-[1px] border-gray-500 px-1 py-1 md:font-semibold font-poppins text-xs md:text-sm">
+                            Nrs {item.price || "45,000"}
+                        </div>
+                    </div>
+                    {/* Title Description */}
+                    <div className="flex flex-col max-w-[60vw]">
+                        <h3 className="font-bold font-playfair text-sm md:text-xl xl:text-2xl text-foreground leading-snug line-clamp-2">
+                            {item.name}
+                        </h3>
+                        <h3 className="text-xs md:text-sm text-foreground leading-snug truncate line-clamp-2">
+                            {item.description}
+                        </h3>
+                    </div>
                 </div>
 
-                {/* Price + Buttons */}
-                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 min-w-[180px] w-full md:w-auto">
-                    {/* Price + Buttons in a single row on small screens */}
-                    {/* Delivered order status */}
+                {/* Review Return */}
+                <div className="flex  md:items-center md:gap-3 justify-end xl:justify-between w-full">
                     {item.status === "delivered" ? (
-
-                        <div className="flex justify-between items-center gap-10 w-full flex-wrap sm:flex-nowrap">
-                            <div className="bg-[#FFE5EC] border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
+                        <div className="flex justify-end gap-5 md:items-start items-center md:flex-row  xl:flex-row xl:justify-end w-full">
+                            <button className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
                                 Write Review
-                            </div>
-                            <div className="bg-[#FFE5EC] border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-3 py-1 text-[12px] md:text-sm whitespace-nowrap">
+                            </button>
+                            <button
+                                onClick={handleReturnOrder}
+                                className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
+                            >
                                 Return Order
-                            </div>
+                            </button>
                         </div>
                     ) : (
-                        <div className="flex cursor-pointer gap-1 items-center text-primary  hover:text-primary text-xs md:text-sm font-medium h-auto p-0">
-                            <h1>
-                                Cancel Order
-                            </h1>
-                            <CircleAlert />
-                        </div>
+                        <button
+                            onClick={handleCancelOrder}
+                            className="flex justify-end items-center gap-2 w-full cursor-pointer md:items-center text-primary hover:text-primary text-xs md:text-sm font-medium"
+                        >
+                            Cancel Order
+                            <CircleAlert className="w-4 h-4" />
+                        </button>
                     )}
-
                 </div>
             </div>
-
-
-            {/* Cancel + Info (top-right absolute) */}
-            <div className="absolute top-3 left-35 flex justify-between gap-9">
-                <div className="border border-gray-500 px-2 py-0.5 font-semibold font-poppins text-sm">
-                    Date:{item.Date || "27/06/2025"}
-                </div>
-                <div
-                    className="border border-gray-500 px-2 py-0.5 font-semibold font-poppins text-sm">
-                    Quantity: {item.quantity || 10}
-
-                </div>
-                <div className="border border-gray-500 px-2 py-0.5 font-semibold font-poppins text-sm">
-                    Nrs. {item.price || "45,000"}
-                </div>
-            </div>
-
         </div>
     );
 };

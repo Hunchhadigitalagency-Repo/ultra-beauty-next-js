@@ -1,7 +1,7 @@
 import React from "react";
-import orderImage from "@/assets/Rectangle976.png"
-import OrderProductDetails from "./Order-Details";
 import Link from "next/link";
+import OrderProductDetails from "./Order-Details";
+import orderImage from "@/assets/Rectangle976.png";
 
 interface OrderProducts {
     quantity: number;
@@ -22,12 +22,11 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
 
     return (
         <section>
-            <div className="md:h-12 h-10 px-4 md:px-6 bg-[#FFEBED] rounded-sm font-medium text-custom-black text-sm flex items-center justify-between">
+            <div className="md:h-12 h-10 px-4 md:px-6 bg-secondary rounded-sm font-medium text-custom-black text-sm flex items-center justify-between">
                 {/* Left side: Order Info */}
-                <div className="flex flex-wrap gap-2 md:gap-6 font-poppins text-xs md:text-sm">
+                <div className="flex flex-wrap gap-2 md:gap-6 xl:gap-8 font-poppins text-xs md:text-sm">
                     <h4>Order No:{itemId}</h4>
                 </div>
-
                 {/* Right side: Status */}
                 <div className="flex flex-wrap gap-2 items-center md:gap-6 text-xs md:text-sm">
                     <h4>
@@ -35,18 +34,16 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
                     </h4>
                     <Link href="/order-tracking">
                         {status === "delivered" ? (
-                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
+                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
                                 {status}
                             </span>
                         ) :
-                            <span className="text-white text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
+                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
                                 {status}
                             </span>
                         }
-
                     </Link>
                 </div>
-
             </div>
 
             <OrderProductDetails
@@ -67,7 +64,6 @@ const OrderHeader: React.FunctionComponent<OrderHearderDetails> = ({ itemId, tot
 
                 }}
             />
-
             <OrderProductDetails
                 item={{
                     id: 2,

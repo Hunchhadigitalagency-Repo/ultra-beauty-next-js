@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const ClientTrust: React.FunctionComponent = () => {
+
   return (
     <div className='py-8 space-y-3'>
       <h1 className='text-center font-bold text-xl md:text-3xl font-playfair'>

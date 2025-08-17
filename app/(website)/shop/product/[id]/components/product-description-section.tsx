@@ -43,25 +43,25 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
     : null;
 
   return (
-    <div className="space-y-8 ">
+    <div className="space-y-8 w-auto grid grid-cols-1">
       <div>
-        <h1 className="text-2xl font-bold font-playfair text-foreground mb-2">
+        <h1 className="text-base md:text-xl xl:text-2xl font-bold font-playfair text-foreground mb-2">
           {product.name}
         </h1>
-        <div className=" flex items-center justify-between " >
-          <Badge className="bg-primary w-36 h-10 font-poppins font-light text-white text-[20px] mb-2">
+        <div className=" flex items-center w-96 md:w-full justify-between" >
+          <Badge className="bg-primary px-2 py-1 font-poppins font-light text-white text-sm md:text-base xl:text-xl mb-2">
             Best Seller
           </Badge>
-          <span className="text-sm text-foreground font-poppins font-medium pl-28">
+          <span className="text-xs md:text-base xl:text-base text-foreground font-poppins font-medium pl-28">
             #15 SOLD
           </span>
-          <span className="text-sm text-foreground font-poppins font-medium inline-flex gap-2 items-center">
+          <span className="text-xs md:text-base xl:text-base text-foreground font-poppins font-medium inline-flex gap-2 items-center">
             <Truck />
             Fast Delivery
-            <Info />
+            <Info className="w-5 h-5 md:w-10"/>
           </span>
         </div>
-        <div className="flex items-center gap-2 justify-between bg-secondary px-4 py-2 rounded-sm">
+        <div className="flex items-center gap-2 justify-between  bg-secondary px-4 py-1 md:py-2 rounded-sm">
           <span className="text-l font-medium">
             Details
           </span>
@@ -100,7 +100,7 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
         <h3 className="font-medium mb-2">
           Size
         </h3>
-        <div className="flex gap-8">
+        <div className="flex gap-2 md:gap-5 xl:gap-8">
           {["150 Gram", "200 Gram", "450 Gram", "650 Gram"].map((size, i) => (
             <Button
               key={size}
@@ -115,9 +115,9 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
       </div>
       {/* Product Price */}
       <div className="flex items-center gap-9">
-        <div className="flex justify-between gap-20">
+        <div className="flex justify-between gap-10  md:gap-20">
           <div className="flex flex-col gap-3 ">
-            <h1 className="font-semibold text-xl">
+            <h1 className="font-semibold text-base md:text-base xl:text-xl">
               NPR.{discountedPrice}
             </h1>
             {discountedPrice && (
@@ -126,18 +126,18 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
                   <p className="line-through text-[#7A7A7A] font-medium" >
                     NPR.{product.price}
                   </p>
-                  <p className="bg-primary h-7 w-28 pl-5 py-1 font-medium text-sm  font-poppins text-white rounded-full">
+                  <button className="bg-primary px-2 py-1 md:px-4 md:py-2  font-medium text-xs xl:text-sm  font-poppins text-white rounded-full">
                     {product.discount_percentage}%OFF
-                  </p>
+                  </button>
                 </>
               </div>
             )}
           </div>
-          <Badge className="bg-primary text-sm font-poppins text-[#FFFFFF] w-32 h-10">
+          <Button className="bg-primary text-sm font-poppins text-[#FFFFFF] px-2 py-1 md:px-4 md:py-3">
             Available
-          </Badge>
+          </Button>
           <QuantityRow
-            className="w-42 h-10"
+            className=" xl:w-42 xl:h-10"
             onDecrease={() => console.log("Decrease")}
             onIncrease={() => console.log("Increase")}
           />
@@ -146,7 +146,7 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
       </div>
       {/* ADD To Bag button */}
       <Button
-        className="w-full text-[#FFFFFF] font-bold h-12 rounded-sm bg-primary"
+        className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-8 rounded-sm bg-primary"
         onClick={() => addToCart(product.id, 1)}
       >
         ADD TO BAG
@@ -159,10 +159,10 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
             SHARE:
           </span>
           <div className="flex gap-8 ">
-            <FaFacebookMessenger className="h-7 w-7 text-[#5D5D5D]" />
-            <FaInstagram className="h-7 w-7 text-[#5D5D5D]" />
-            <FaXTwitter className="h-7 w-7 text-[#5D5D5D]" />
-            <FaTiktok className="h-7 w-7 text-[#5D5D5D]" />
+            <FaFacebookMessenger className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
+            <FaInstagram className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
+            <FaXTwitter className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
+            <FaTiktok className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
           </div>
         </div>
         <span className="text-sm text-foreground font-poppins font-medium inline-flex gap-2 items-center">
@@ -175,7 +175,7 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
         <span className="text-sm text-foreground font-poppins font-medium">
           We Accept
         </span>
-        <div className="flex gap-7 items-center">
+        <div className="flex gap-2 md:gap-7 items-center">
           <div className="flex justify-center items-center flex-col">
             <Image src={coin.src} alt="COD" width={26} height={36} className="rounded-full " />
             <span className="text-sm font-poppins font-bold">
