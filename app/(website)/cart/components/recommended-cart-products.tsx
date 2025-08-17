@@ -14,6 +14,10 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
       description: "Comfort Pillow / Premium Quality",
       imageSrc:
         "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg",
+      brand: {
+        id: 1,
+        name: "The Comfort Zone",
+      },
     },
     {
       id: 2,
@@ -21,14 +25,18 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
       description: "Elegant Linen / Soft Touch",
       imageSrc:
         "https://img.freepik.com/free-photo/minimal-linen-cushion-covers-sofa_53876-123961.jpg",
+      brand: {
+        id: 1,
+        name: "The Comfort Zone",
+      }
     },
   ];
 
   return (
-    <section className="flex flex-col md:flex-col padding space-y-6">
+    <section className="flex flex-col space-y-6 md:flex-col padding">
       {/* Header centered */}
-      <div className="text-center space-y-4">
-        <h4 className="text-xl text-custom-black font-semibold">
+      <div className="space-y-4 text-center">
+        <h4 className="text-xl font-semibold text-custom-black">
           The Comfort that is different
         </h4>
 
@@ -41,7 +49,7 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
         <div className="flex justify-center">
           <Button
             variant="default"
-            className="text-black rounded-full w-fit h-11 uppercase"
+            className="text-black uppercase rounded-full w-fit h-11"
           >
             Shop Now <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
@@ -49,7 +57,7 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
       </div>
 
       {/* Mobile layout: horizontal scroll */}
-      <div className="sm:hidden flex gap-4 overflow-x-auto no-scrollbar pb-2">
+      <div className="flex gap-4 pb-2 overflow-x-auto sm:hidden no-scrollbar">
         {products.map((product) => (
           <div
             key={product.id}
@@ -58,6 +66,7 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
             <ProductCard
               id={product.id}
               title={product.title}
+              brand={product.brand}
               description={product.description}
               imageSrc={product.imageSrc}
               alt="Product Image"
@@ -71,11 +80,12 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
       </div>
 
       {/* Desktop layout: larger ProductCards */}
-      <div className="hidden sm:grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+      <div className="hidden grid-cols-2 gap-6 sm:grid lg:grid-cols-2 xl:grid-cols-2">
         {products.map((product) => (
           <div key={product.id} className="w-full">
             <ProductCard
               id={product.id}
+              brand={product.brand}
               title={product.title}
               description={product.description}
               imageSrc={product.imageSrc}

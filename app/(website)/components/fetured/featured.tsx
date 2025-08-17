@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
 import ProductSection from "../product/product-section";
-import FeaturedProducts from "../featured-products/featured-products-section";
 import useFetchData from "@/hooks/use-fetch";
-import ProductType from "../product/product-section";
 import { Result } from "@/types/product";
 
 interface FeaturedProductResponse extends Result {

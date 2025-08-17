@@ -23,31 +23,6 @@ import { Result } from "@/types/product";
 //     price: string;
 // };
 
-type Product = {
-  id: number;
-  name: string;
-  price: string;
-  images: [
-    {
-      id: number;
-      file: string;
-      file_type: string;
-      created_at: string;
-      updated_at: string;
-    }
-  ];
-  average_rating: number;
-  flash_sale_discount: string;
-  category: {
-    id: number;
-    name: string;
-  };
-  brand: {
-    id: number;
-    name: string;
-  };
-};
-
 interface ProductResponse extends Result {
   id: number;
 }
@@ -100,6 +75,8 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({
                 className="pl-4 h-full basis-[45%] sm:basis-1/2 md:basis-1/2 lg:basis-1/4"
               >
                 <ProductCard
+                  id={product.id}
+                  description={product.detail_description}
                   imageSrc={product.images?.[0]?.file}
                   brand={product.brand}
                   alt={product.name}
@@ -116,7 +93,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({
           </CarouselContent>
 
           {/* Navigation Arrows */}
-          <CarouselPrevious className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200  lg:flex -left-2 top-1/2 hover:bg-gray-50" />
+          <CarouselPrevious className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
           <CarouselNext className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
         </Carousel>)}
         

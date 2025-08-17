@@ -10,11 +10,9 @@ interface PriceRowProps {
 }
 
 const PriceRow = ({
-  previousPrice,
   price,
   discountTag,
   className,
-  discountClassName,
   priceClassname,
 }: PriceRowProps) => {
   // console.log("this are the items", previousPrice, price, discountTag)

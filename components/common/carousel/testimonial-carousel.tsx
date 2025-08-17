@@ -29,7 +29,7 @@ export default function TestimonialCarousel() {
     data: TESTIMONIALS,
     isLoading:loading,
     error
-  } = useFetchData<ITestimonial>('cms/testimonials/?pagination=false');
+  } = useFetchData<ITestimonial[]>('cms/testimonials/?pagination=false');
 
 
   useEffect(() => {
@@ -58,8 +58,8 @@ export default function TestimonialCarousel() {
     return () => clearInterval(interval);
   }, [api, isHovered]);
 
-  if (loading) return <p className="text-center text-muted-foreground text-sm">Loading...</p>;
-  if (error) return <p className="text-center text-red-500 text-sm font-medium">
+  if (loading) return <p className="text-sm text-center text-muted-foreground">Loading...</p>;
+  if (error) return <p className="text-sm font-medium text-center text-red-500">
     Something Went Wrong While Fetching FAQs
   </p>
 
@@ -87,8 +87,8 @@ export default function TestimonialCarousel() {
         </CarouselContent>
 
         {/* Navigation Arrows */}
-        <CarouselPrevious className="absolute -left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
-        <CarouselNext className="absolute -right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
+        <CarouselPrevious className="absolute text-gray-600 -translate-y-1/2 bg-white border-gray-200 -left-4 top-1/2 hover:bg-gray-50" />
+        <CarouselNext className="absolute text-gray-600 -translate-y-1/2 bg-white border-gray-200 -right-4 top-1/2 hover:bg-gray-50" />
       </Carousel>
 
       {/* Page indicator */}

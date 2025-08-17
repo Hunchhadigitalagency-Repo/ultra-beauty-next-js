@@ -151,9 +151,11 @@ export interface Result {
 }
 
 export interface ProductCardProps {
+  id: number;
+  description: string;
   slug?: string;
   imageSrc: string;
-  brand: Brand;
+  brand?: Brand;
   alt: string;
   isFlashSale?: boolean;
   isNew?: boolean;
@@ -163,7 +165,7 @@ export interface ProductCardProps {
   discountTag?: string;
   onAddToCart?: () => void;
   onToggleWishlist?: (
-    slug: string | undefined,
+    slug: number | undefined,
     isWishlisted: boolean | undefined
   ) => void;
   isWishlisted?: boolean;

@@ -6,7 +6,6 @@ import { Heart, ShoppingBag } from "lucide-react";
 import RatingStars from "../product/rating-stars";
 import PriceRow from "../product/price-row";
 import { useRouter } from "next/navigation";
-import { IFeature } from "@/types/product";
 import { ProductCardProps } from "@/types/product";
 
 const ProductCard = ({
@@ -19,7 +18,7 @@ const ProductCard = ({
   brand,
   rating,
   discountTag,
-  onToggleWishlist = () => { },
+  // onToggleWishlist = () => { },
   isWishlisted,
 }: ProductCardProps) => {
 
@@ -54,7 +53,7 @@ const ProductCard = ({
       {/* Content */}
       <div className="flex flex-col ">
         <p className="text-[#7A7A7A] text-xs line-clamp-1 sm:text-sm ">
-          {brand.name}
+          {brand?.name}
         </p>
         <h3 className="text-base font-medium md:text-lg lg:text-xl font-playfair text-foreground">
           {title}
@@ -72,7 +71,7 @@ const ProductCard = ({
           </div>
 
           <button
-            onClick={() => onToggleWishlist?.(slug, isWishlisted ? true : false)}
+            // onClick={() => onToggleWishlist?.(slug, isWishlisted ? true : false)}
             className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors ${isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
               } cursor-pointer`}
             aria-label="Toggle Wishlist"
