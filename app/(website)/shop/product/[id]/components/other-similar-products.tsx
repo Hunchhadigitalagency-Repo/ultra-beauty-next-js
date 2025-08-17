@@ -16,7 +16,7 @@ const OtherSimilarProducts: React.FunctionComponent = () => {
         <LinkText href="/" title="Go to Shop" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <ProductCard
           id={1}
           title="Sleek Pregnancy Cushion with some random text abd long text"
@@ -25,7 +25,6 @@ const OtherSimilarProducts: React.FunctionComponent = () => {
           alt="Black office chair"
           rating={4.5}
           price="$24,000"
-          previousPrice="$23,000"
           discountTag="20% OFF"
 
           onAddToCart={() => console.log("Add to Cart")}

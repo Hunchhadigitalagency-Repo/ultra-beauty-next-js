@@ -2,7 +2,7 @@ import React from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 interface BrandsCardProps {
-  image: StaticImageData;
+  image: StaticImageData | string;
 }
 
 const BrandsCard: React.FC<BrandsCardProps> = ({ image }) => {

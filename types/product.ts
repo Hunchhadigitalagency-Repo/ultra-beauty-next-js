@@ -25,7 +25,7 @@ export interface Inventory {
   name: string;
 }
 
-export interface IProductImage{
+export interface IProductImage {
   id: number;
   file: string;
   file_type: string;
@@ -37,9 +37,9 @@ export interface IProductImage{
 export interface IProduct {
   id: number;
   variants: ProductVariant[];
-  images: IProductImage[]; 
+  images: IProductImage[];
   category: Category;
-  subcategory: Category | null; 
+  subcategory: Category | null;
   inventory: Inventory;
   name: string;
   sku: string;
@@ -90,4 +90,83 @@ export interface IProductFilter {
   inventories: any[]; // Replace `any` with actual inventory type if known
   price_range: PriceRangeFilter;
   attributes: any[]; // Replace `any` with actual attribute type if known
+}
+
+export interface ProductImagesResponse {
+  id: number;
+  file: string;
+  file_type: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Variant {
+  id: number;
+  item_name: string;
+  item_price: string;
+  item_quantity: number;
+  item_image: any;
+  sku: string;
+  product_variants: ProductVariant[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Brand {
+  id: number;
+  name: string;
+}
+export interface Result {
+  variants: Variant[];
+  images: ProductImagesResponse[];
+  category: Category;
+  tax_applied: any;
+  brand: Brand;
+  subcategory: any;
+  inventory: any;
+  my_wishlist: boolean;
+  average_rating: number;
+  total_reviews: number;
+  name: string;
+  sku: string;
+  quantity: number;
+  general_description: string;
+  detail_description: string;
+  price: string;
+  discount_percentage: string;
+  flash_end_date: string;
+  flash_sale_discount: string;
+  is_flash_sale: boolean;
+  slug_name: string;
+  is_published: boolean;
+  is_Featured: boolean;
+  is_new: boolean;
+  is_best_seller: boolean;
+  is_tax_applicable: boolean;
+  tutorial: any;
+  youtube_link: string;
+  created_at: string;
+  updated_at: string;
+  package: any[];
+}
+
+export interface ProductCardProps {
+  id: number;
+  description: string;
+  slug?: string;
+  imageSrc: string;
+  brand?: Brand;
+  alt: string;
+  isFlashSale?: boolean;
+  isNew?: boolean;
+  title: string;
+  rating: number;
+  price: string;
+  discountTag?: string;
+  onAddToCart?: () => void;
+  onToggleWishlist?: (
+    slug: number | undefined,
+    isWishlisted: boolean | undefined
+  ) => void;
+  isWishlisted?: boolean;
 }

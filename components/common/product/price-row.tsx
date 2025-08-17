@@ -1,7 +1,7 @@
 import React from "react";
 
 interface PriceRowProps {
-  previousPrice: string;
+  previousPrice?: string;
   price: string;
   discountTag?: string;
   className?: string;
@@ -10,31 +10,29 @@ interface PriceRowProps {
 }
 
 const PriceRow = ({
-  previousPrice,
   price,
   discountTag,
   className,
-  discountClassName,
   priceClassname,
 }: PriceRowProps) => {
   // console.log("this are the items", previousPrice, price, discountTag)
   return (
     <div className={`md:items-center  gap-3 md:gap-5  ${className}`}>
       <span className={`flex w-full justify-between ${priceClassname}`}>
-        <span className="text-primary text-sm md:text-xl font-medium ">
+        <span className="text-sm font-medium text-primary md:text-xl ">
           Nrs. {price}
         </span>
-        <span className="text-sm md:text-base font-normal text-[#7A7A7A] line-through">
-          Nrs. {previousPrice}
+        <span className="text-sm font-normal font-bold text-green-500 md:text-base ">
+          {discountTag?.split(".")[0]}%
         </span>
       </span>
-      {
+      {/* {
         discountTag && (
           <span className={`bg-[#FF2B5F] text-white px-3 py-0.5 rounded-full ${discountClassName}`}>
             {discountTag}% Off
           </span>
         )
-      }
+      } */}
     </div >
   );
 };
