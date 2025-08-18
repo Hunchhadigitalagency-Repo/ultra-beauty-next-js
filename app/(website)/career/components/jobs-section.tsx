@@ -23,13 +23,13 @@ interface CareerJobResponse {
 
 
 const JobsSection: React.FunctionComponent = () => {
-    const { data, isLoading, error } = useFetchData<CareerJobResponse[]>(
+    const { data, loading, error } = useFetchData<CareerJobResponse[]>(
         "public-career/"
     )
 
     const [activeJobIndex, setActiveJobIndex] = useState<number>(0)
 
-    if (isLoading) return <p>Loading jobs...</p>;
+    if (loading) return <p>Loading jobs...</p>;
     if (error) return <p>Error loading jobs: {error?.message}</p>;
     if (!data || !data.length) return <p>No jobs available.</p>;
 

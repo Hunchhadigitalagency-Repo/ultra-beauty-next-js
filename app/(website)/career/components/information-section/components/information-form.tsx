@@ -37,7 +37,7 @@ interface CareerJobResponse {
 }
 
 export default function InformationForm() {
-    const { data, isLoading: loading, error } = useFetchData<CareerJobResponse[]>("public-career/");
+    const { data, loading, error } = useFetchData<CareerJobResponse[]>("public-career/");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const form = useForm<InformationFormValues>({
