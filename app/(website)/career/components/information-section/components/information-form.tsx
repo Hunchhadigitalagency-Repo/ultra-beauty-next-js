@@ -10,19 +10,34 @@ import {
 } from "@/components/ui/form";
 
 import { toast } from "sonner";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import apiBase from "@/services/api-base-instance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InformationFormValues, informationSchema } from "@/schemas/information/information-schema";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import useFetchData from "@/hooks/use-fetch";
 
-
+interface CareerJobResponse {
+    slug: string
+    job_title: string
+    job_description: string
+    job_requirement: string
+    job_responsibility: string
+    job_type: string
+    position: string
+    location: string
+    end_date: string
+    salary: number
+    is_active: boolean
+    total_applications: number
+}
 
 export default function InformationForm() {
-
+    const { data, isLoading: loading, error } = useFetchData<CareerJobResponse[]>("public-career/");
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const form = useForm<InformationFormValues>({
@@ -33,15 +48,30 @@ export default function InformationForm() {
             phone: '',
             position: '',
             cv: '',
-            resume: ''
+            cover_letter: '',
+            g_recaptcha_response: ""
 
         },
     });
+    const recaptchaRef = useRef<ReCAPTCHA>(null)
 
-    async function onSubmit(values: InformationFormValues) {
+    async function onSubmit(data: InformationFormValues) {
         try {
+            const formData = new FormData();
+            formData.append("full_name", data.fullname);
+            formData.append("career", data.position);
+            formData.append("email", data.email);
+            formData.append("phone_no", data.phone);
+            formData.append("g_recaptcha_response", data.g_recaptcha_response);
+
+            if (data.cv instanceof File) {
+                formData.append("cv", data.cv);
+            }
+            if (data.cover_letter instanceof File) {
+                formData.append("cover_letter", data.cover_letter);
+            }
             setIsLoading(true);
-            const response = await apiBase.post('cms/contactus/', values);
+            const response = await apiBase.post('/cms/application/', formData);
             if (response.status === 201) {
                 toast.success('Message Sent Successfully')
             }
@@ -53,6 +83,7 @@ export default function InformationForm() {
             setIsLoading(false)
         }
     }
+
 
     return (
         <div className="space-y-6">
@@ -128,17 +159,24 @@ export default function InformationForm() {
                                     Position
                                 </FormLabel>
                                 <FormControl>
-                                    <Select onValueChange={field.onChange} value={field.value}>
+                                    <Select onValueChange={field.onChange}
+                                        value={field.value}>
                                         <SelectTrigger className="text-xs">
                                             <SelectValue placeholder="Please select the position you're applying for" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                <SelectItem value="apple">Apple</SelectItem>
-                                                <SelectItem value="banana">Banana</SelectItem>
-                                                <SelectItem value="blueberry">Blueberry</SelectItem>
-                                                <SelectItem value="grapes">Grapes</SelectItem>
-                                                <SelectItem value="pineapple">Pineapple</SelectItem>
+                                                {loading && <SelectItem value="Loading">
+                                                    Loading...
+                                                </SelectItem>}
+                                                {error && <SelectItem value="Failed">
+                                                    Failed to load positions
+                                                </SelectItem>}
+                                                {data && data.map((job, index) => (
+                                                    <SelectItem key={index} value={job.slug}>
+                                                        {job.position}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -149,61 +187,74 @@ export default function InformationForm() {
                     />
 
 
-                    <div className="flex flex-col xl:flex-row gap-0 xl:gap-6 space-y-6 xl:space-y-0">
-                        {/* CV */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
                             name="cv"
-                            render={({ field: { onChange, onBlur, name, ref } }) => (
+                            render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-sm font-medium text-custom-black">
-                                        CV
+                                    <FormLabel>
+                                        CV or Resume
                                     </FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="file"
-                                            placeholder="Upload your CV"
-                                            className="border-gray-300 text-sm sm:text-xs focus:border-primary"
-                                            onChange={(e) => {
-                                                onChange(e.target.files?.[0]);
-                                            }}
-                                            onBlur={onBlur}
-                                            name={name}
-                                            ref={ref}
-                                        />
+                                        <div className="flex flex-col items-center gap-2">
+                                            <Input
+                                                type="file"
+                                                accept=".pdf"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0] || null;
+                                                    field.onChange(file);
+
+                                                }}
+                                            />
+
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        {/* CV */}
                         <FormField
                             control={form.control}
-                            name="resume"
-                            render={({ field: { onChange, onBlur, name, ref } }) => (
+                            name="cover_letter"
+                            render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-sm font-medium text-custom-black">
-                                        Resume
-                                    </FormLabel>
+                                    <FormLabel>Cover Letter</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            type="file"
-                                            placeholder="Upload your CV"
-                                            className="border-gray-300 text-sm sm:text-xs focus:border-primary"
-                                            onChange={(e) => {
-                                                onChange(e.target.files?.[0]);
-                                            }}
-                                            onBlur={onBlur}
-                                            name={name}
-                                            ref={ref}
-                                        />
+                                        <div className="flex flex-col items-center gap-2">
+
+                                            <Input
+                                                type="file"
+                                                accept=".pdf"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0] || null;
+                                                    field.onChange(file);
+
+                                                }}
+                                            />
+
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-
+                    <FormField
+                        control={form.control}
+                        name="g_recaptcha_response"
+                        render={() => <FormMessage />}
+                    />
+                    <ReCAPTCHA
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
+                        size="normal"
+                        ref={recaptchaRef}
+                        onChange={(token: string | null) => {
+                            if (token) {
+                                form.setValue("g_recaptcha_response", token)
+                            }
+                        }}
+                    />
                     {/* Submit Button */}
                     <Button
                         disabled={isLoading}
