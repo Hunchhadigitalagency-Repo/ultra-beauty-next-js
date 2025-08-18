@@ -9,13 +9,13 @@ interface FeaturedProductResponse extends Result {
 }
 
 const Featured = () => {
-  const { data, isLoading, error } =
+  const { data, loading, error } =
     useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
 
   return (
     <ProductSection
       products={data}
-      isLoading={isLoading}
+      isLoading={loading}
       error={error}
       headerTitle="Featured Brand"
       headerDescription="Make yourself Up to fit the every  Occassion"

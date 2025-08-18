@@ -1,22 +1,18 @@
 "use client";
 import React from "react";
 import BlogCard from "./blog-card";
-// import { IBlog } from "@/types/cms";
-import { dummyBlogs } from "@/constants/blog-data";
 import LinkText from "@/components/common/header/link-text";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-// import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-
+import useFetchData from "@/hooks/use-fetch";
+import { BlogsList } from "@/types/cms";
 
 const Blogs: React.FunctionComponent = () => {
+  const { data, loading, error } = useFetchData<BlogsList>(
+    `cms/blogs/?page=1&page_size=3`
+  );
 
-  // const { data: blogs, loading } = useInfiniteFetchNoToken<IBlog>(
-  //   "/cms/blogs/?",
-  //   3
-  // );
-
-  const loading = false;
+  console.log("Blog response from backend hai tw", data);
 
   return (
     <section className="padding space-y-8">
@@ -26,19 +22,30 @@ const Blogs: React.FunctionComponent = () => {
           description="See the Inside story and Useful content from our side"
           titleClassName="font-playfair"
         />
-        <LinkText
-          title="See All"
-          href="/blogs"
-        />
+        <LinkText title="See All" href="/blogs" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {dummyBlogs.slice(0, 3).map((blog) => (
-          <BlogCard key={blog.id} {...blog} />
-        ))}
-      </div>
-
-      {loading && <BlogScrabbledLoader />}
+      {loading ? (
+        <BlogScrabbledLoader />
+      ) : error ? (
+        <p className="text-center text-red-500 text-sm font-medium">
+          Something Went Wrong While Fetching Blogs
+        </p>
+      ) : data?.results.length === 0 ? (
+        <p className="text-center text-muted-foreground text-sm">
+          No Blogs found
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data && data.results.length > 0 ? (
+            data.results.map((blog, index) => {
+              return <BlogCard key={index} {...blog} />;
+            })
+          ) : (
+            <p className="text-red-400">No data found</p>
+          )}
+        </div>
+      )}
     </section>
   );
 };
