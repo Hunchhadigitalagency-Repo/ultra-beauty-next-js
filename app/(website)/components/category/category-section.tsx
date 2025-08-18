@@ -25,7 +25,7 @@ interface CategoryResponse {
 }
 
 const CategorySection: React.FunctionComponent = () => {
-  const { data, isLoading, error } = useFetchData<CategoryResponse[]>(
+  const { data, loading, error } = useFetchData<CategoryResponse[]>(
     `dropdown/category?is_not_empty=True`
   );
   // console.log(data, "category response from backend hai");
@@ -42,7 +42,7 @@ const CategorySection: React.FunctionComponent = () => {
         <LinkText title="Glow Shop" href="/shop" />
       </div>
       <div className="relative">
-        {isLoading ? (
+        {loading ? (
           <p className="text-center text-muted-foreground text-sm">
             Loading Categories...
           </p>

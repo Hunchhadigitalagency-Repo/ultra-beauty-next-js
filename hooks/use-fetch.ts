@@ -1,38 +1,39 @@
 "use client"
+import api from "@/services/api-instance";
+import { useState, useEffect, useCallback } from "react";
 import apiBase from "@/services/api-base-instance";
-import { useState, useEffect } from "react";
 
 interface FetchDropdownHook<T> {
   data: T | null;
-  isLoading: boolean;
+  loading: boolean;
   error: Error | null;
+  refetch: () => void;
 }
+const useFetchData = <T>(url: string, token?: boolean): FetchDropdownHook<T> => {
 
-const useFetchData = <T>(url: string): FetchDropdownHook<T> => {
   const [data, setData] = useState<T | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const API = token ? api : apiBase;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await apiBase.get(url);
-
-        if (response.status === 200) {
-          setData(response.data);
-        }
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await API.get(url);
+      if (response.status === 200) {
+        setData(response.data);
       }
-    };
-
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, [API, url]);
+  useEffect(() => {
     fetchData();
-  }, [url]);
-
-  return { data, isLoading, error };
+  }, [fetchData]);
+  return { data, loading, error, refetch: fetchData };
 };
 
 export default useFetchData;

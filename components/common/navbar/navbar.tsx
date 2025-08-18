@@ -9,18 +9,24 @@ import { Button } from "@/components/ui/button";
 import { NavigationItem } from "@/types/website";
 import { usePathname, useRouter } from "next/navigation";
 import { getNavigationItems } from "../../../constants/navbar-data";
-import { Search, ShoppingCart, Bell, Heart, CircleUser, ChevronDown } from "lucide-react";
+import {
+  Search,
+  ShoppingCart,
+  Bell,
+  Heart,
+  CircleUser,
+  ChevronDown,
+} from "lucide-react";
 import MegaMenu from "./mega-menu";
 import NotificationModal from "./notification-modal";
-
-
+import { useAppSelector } from "@/redux/hooks";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
   const [activeMegaMenu, setActiveMegaMenu] = useState(false);
-  const [showNotification, setShowNotification] = useState(false)
+  const [showNotification, setShowNotification] = useState(false);
 
   const router = useRouter();
   const path = usePathname();
@@ -40,8 +46,10 @@ export default function Navbar() {
     if (navItem === "Shop by Category") {
       setActiveMegaMenu(value);
     }
-  }
+  };
 
+  const { isLoggedIn } = useAppSelector((state) => state.authentication);
+  console.log(isLoggedIn, "status of user");
 
   return (
     <>
@@ -53,14 +61,18 @@ export default function Navbar() {
           {activeMegaMenu && <MegaMenu />}
 
           {/* Notification */}
-          {showNotification && <NotificationModal onClose={() => setShowNotification(false)} />}
+          {showNotification && (
+            <NotificationModal onClose={() => setShowNotification(false)} />
+          )}
 
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <span className="text-base md:text-xl text-center font-playfair font-medium text-primary leading-none">
-                Ultra Beauty<br />
-                <span className="font-poppins text-sm md:text-base">&</span><br />
+                Ultra Beauty
+                <br />
+                <span className="font-poppins text-sm md:text-base">&</span>
+                <br />
                 Brand
               </span>
             </Link>
@@ -69,27 +81,34 @@ export default function Navbar() {
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <div key={item.name} className="relative">
-
                   {item.hasDropdown ? (
-                    <button onClick={() => handleCategoryClick(item.name, !activeMegaMenu)}
-                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
-                        ? "text-primary font-medium"
-                        : "text-foreground font-normal"
-                        }`}
+                    <button
+                      onClick={() =>
+                        handleCategoryClick(item.name, !activeMegaMenu)
+                      }
+                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${
+                        isActiveHeader(item.href)
+                          ? "text-primary font-medium"
+                          : "text-foreground font-normal"
+                      }`}
                     >
                       <span>{item.name}</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${item.name === "Shop by Category" && activeMegaMenu
-                        ? "transform rotate-180 text-primary"
-                        : ""
-                        }`} />
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-200 ${
+                          item.name === "Shop by Category" && activeMegaMenu
+                            ? "transform rotate-180 text-primary"
+                            : ""
+                        }`}
+                      />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
-                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
-                        ? "text-primary font-medium"
-                        : "text-foreground font-normal"
-                        }`}
+                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${
+                        isActive(item.href)
+                          ? "text-primary font-medium"
+                          : "text-foreground font-normal"
+                      }`}
                     >
                       {item.name}
                     </Link>
@@ -115,7 +134,11 @@ export default function Navbar() {
                 className="relative hover:text-primary"
                 onClick={() => router.push("/wishlist")}
               >
-                <Heart className={`size-5 ${isActive("/wishlist") && "text-primary"}`} />
+                <Heart
+                  className={`size-5 ${
+                    isActive("/wishlist") && "text-primary"
+                  }`}
+                />
                 <Badge
                   variant="destructive"
                   className="absolute -top-2 -right-2 size-4 rounded-full p-0 flex items-center justify-center text-xs"
@@ -130,7 +153,9 @@ export default function Navbar() {
                 className="relative hover:text-primary"
                 onClick={() => router.push("/cart")}
               >
-                <ShoppingCart className={`size-5 ${isActive("/cart") && "text-primary"}`} />
+                <ShoppingCart
+                  className={`size-5 ${isActive("/cart") && "text-primary"}`}
+                />
                 <Badge
                   variant="destructive"
                   className="absolute -top-2 -right-2 size-4 rounded-full p-0 flex items-center justify-center text-xs"
@@ -138,18 +163,23 @@ export default function Navbar() {
                   1
                 </Badge>
               </Button>
+              {isLoggedIn ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative hover:text-primary"
+                  onClick={() => router.push("/profile")}
+                >
+                  <CircleUser
+                    className={`size-5 ${
+                      isActive("/profile") && "text-primary"
+                    }`}
+                  />
+                </Button>
+              ) : ""}
 
               <Button
-                variant="ghost"
-                size="icon"
-                className="relative hover:text-primary"
-                onClick={() => router.push("/profile")}
-              >
-                <CircleUser className={`size-5 ${isActive("/profile") && "text-primary"}`} />
-              </Button>
-
-              <Button
-                onClick={() => setShowNotification(prev => !prev)}
+                onClick={() => setShowNotification((prev) => !prev)}
                 variant="ghost"
                 size="icon"
                 className="hidden md:flex hover:text-primary"

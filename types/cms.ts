@@ -8,6 +8,11 @@ export type BlogCategory = {
   name: string;
 };
 
+export interface links {
+  next: string;
+  previous: string | null;
+}
+
 export interface IBlog {
   id: number;
   title: string;
@@ -25,6 +30,13 @@ export interface IBlog {
   recommended_products: any[];
 }
 
+export interface BlogsList{
+  links: links;
+  count: number;
+  total_pages: number;
+  current_page: number;
+  results: IBlog[];
+}
 export interface IPartnerCompany {
   id: number;
   name: string;

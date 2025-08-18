@@ -14,12 +14,12 @@ import {
 const playfair = Playfair_Display({ subsets: ['latin'] });
 
 export default function FAQSection() {
-  const { data, isLoading: loading, error } = useFetchData<FAQResponse[]>(
+  const { data, loading, error } = useFetchData<FAQResponse[]>(
     "cms/faqs/?pagination=false"
   );
 
   return (
-    <section className="padding space-y-8">
+    <section className="space-y-8 padding">
       {/* Header */}
       <SectionHeader
         title="What People Normally Ask"
@@ -29,24 +29,24 @@ export default function FAQSection() {
 
       {/* FAQ Accordion */}
       {loading ? (
-        <p className="text-center text-muted-foreground text-sm">
+        <p className="text-sm text-center text-muted-foreground">
           Loading FAQs...
         </p>
       ) : error ? (
-        <p className="text-center text-red-500 text-sm font-medium">
+        <p className="text-sm font-medium text-center text-red-500">
           Something Went Wrong While Fetching FAQs
         </p>
       ) : data?.length === 0 ? (
-        <p className="text-center text-muted-foreground text-sm">
+        <p className="text-sm text-center text-muted-foreground">
           No FAQs found
         </p>
       ) : (
-        <Accordion type="single" collapsible className="flex  pt-5 flex-col gap-2">
+        <Accordion type="single" collapsible className="flex flex-col gap-2 pt-5">
           {data?.map((faq) => (
             <AccordionItem
               key={faq.id}
               value={`${faq.id}`}
-              className="rounded-none px-6 py-2 bg-white"
+              className="px-6 py-2 bg-white rounded-none"
             >
               <AccordionTrigger className={`text-left !font-playfair cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-medium text-xl ${playfair.className}`}>
 
@@ -58,7 +58,7 @@ export default function FAQSection() {
                 />
 
               </AccordionTrigger>
-              <AccordionContent className="text-foreground font-poppins text-sm leading-relaxed pt-2 pb-4">
+              <AccordionContent className="pt-2 pb-4 text-sm leading-relaxed text-foreground font-poppins">
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.answer) }} />
               </AccordionContent>
             </AccordionItem>

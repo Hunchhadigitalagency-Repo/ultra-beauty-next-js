@@ -32,3 +32,19 @@ export interface ReviewHistoryCardProps {
     rating: number;
     review: string
 }
+
+ export interface AuthenticatedAuthProfile {
+  username: string
+  bio: string
+  email: string
+  profile_picture: string | null
+  phone_number: any
+  first_name: string
+  last_name: string
+  address: any
+  is_verified: boolean
+  display_name: any
+  google_id: any
+  google_avatar: any
+  user_type: string
+}
