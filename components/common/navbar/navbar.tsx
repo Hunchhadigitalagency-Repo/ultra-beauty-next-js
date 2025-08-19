@@ -49,7 +49,7 @@ export default function Navbar() {
   };
 
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
-  console.log(isLoggedIn, "status of user");
+  // console.log(isLoggedIn, "status of user");
 
   return (
     <>
@@ -176,7 +176,9 @@ export default function Navbar() {
                     }`}
                   />
                 </Button>
-              ) : ""}
+              ) : (
+                ""
+              )}
 
               <Button
                 onClick={() => setShowNotification((prev) => !prev)}

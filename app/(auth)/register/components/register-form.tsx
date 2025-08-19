@@ -20,11 +20,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { register } from "@/lib/api/auth/auth-api";
 import { useAppDispatch } from "@/redux/hooks";
-import {
-
-  setProfileDetails,
-
-} from "@/redux/features/authentication-slice";
+import { setProfileDetails } from "@/redux/features/authentication-slice";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -54,11 +50,12 @@ export default function UserRegisterForm() {
       setLoading(true);
 
       const res = await register(data);
-      console.log(res)
+      console.log(res);
       if (res.status === 201) {
         dispatch(setProfileDetails(res.data?.user));
         toast.success("Registration Successful", {
-          description: "You have successfully registered. Please login to continue.",
+          description:
+            "You have successfully registered. Please login to continue.",
         });
         router.push("/login");
       }
@@ -185,7 +182,10 @@ export default function UserRegisterForm() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
+                        <FaEyeSlash
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <FaEye
                           className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
@@ -226,7 +226,10 @@ export default function UserRegisterForm() {
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
                     >
                       {showConfirmPassword ? (
-                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
+                        <FaEyeSlash
+                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
+                          aria-hidden="true"
+                        />
                       ) : (
                         <FaEye
                           className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
