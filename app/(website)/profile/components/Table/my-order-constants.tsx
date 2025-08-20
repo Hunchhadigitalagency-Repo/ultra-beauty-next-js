@@ -9,21 +9,36 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
   return [
     {
       title: "Order Number",
-      render: (order: OrderResponse) => order.orderNumber,
+      render: (order: OrderResponse) => order.id,
     },
     {
       title: "Order Date",
-      render: (order: OrderResponse) => order.orderDate,
+      render: (order: OrderResponse) => {
+        if (!order.order_created) return "N/A";
+
+        const date = new Date(order.order_created);
+        const year = date.getFullYear();
+        const onlyLastTwoDigitsOfYear = year.toString().slice(-2);
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12;
+
+        return `${month}/${day}/${onlyLastTwoDigitsOfYear}, ${hours}:${minutes} ${ampm}`;
+      },
     },
     {
       title: "Items",
       render: (order: OrderResponse) => (
         <div className="flex gap-2 items-center">
-          {order.items.slice(0, 3).map((item, index) => (
+          {order?.order_details?.slice(0, 3).map((item, index) => (
             <div key={index}>
               <div className="relative w-10 h-10">
                 <Image
-                  src={item.image}
+                  src={item.product.image}
                   alt=""
                   className="object-cover rounded-sm"
                   layout="fill"
@@ -31,13 +46,25 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
               </div>
             </div>
           ))}
-          {order.items.length > 3 && <span>+{order.items.length - 3}</span>}
+          {order?.order_details?.length > 3 && <span>+{order?.order_details?.length - 3}</span>}
+        </div>
+      ),
+    },
+    {
+      title: "Status",
+      render: (order: OrderResponse) => order.payment_status === "paid" ? (
+        <div className="block text-white">
+          <span className="inline-block  bg-green-400 text-white py-2 px-3 rounded-sm">Paid</span>
+        </div>
+      ) : (
+        <div className="text-white">
+          <span className="inline-block block bg-red-400  text-white py-2 px-4 rounded-sm">Pending</span>
         </div>
       ),
     },
     {
       title: "Total",
-      render: (order: OrderResponse) => `$${order.total}`,
+      render: (order: OrderResponse) => `${order.total_amount === 0 ? "NaN" : "Nrs." + order.total_amount}`,
     },
     {
       title: "Action",
