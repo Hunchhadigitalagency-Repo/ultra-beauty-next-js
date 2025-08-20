@@ -56,7 +56,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
         <div className="text-accent-foreground flex items-center gap-2">
           <UserCircle2Icon className="w-4 h-4" />
           <span className="font-medium text-sm">
-            {author.username || "Unknown Author"}
+            {author?.username || "Unknown Author"}
           </span>
         </div>
 
