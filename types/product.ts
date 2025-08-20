@@ -15,6 +15,32 @@ export interface ProductVariant {
   updated_at: string;
 }
 
+
+export interface Link {
+  next: string;
+  previous: string;
+}
+
+export interface BrandResponse {
+  links: Link;
+  count: number;
+  page_size: number;
+  total_pages: number;
+  current_page: number;
+  results: BrandThatYouLove[];
+}
+
+export interface BrandThatYouLove {
+  id: number
+  brand_name: string
+  brand_image: string
+  description?: string
+  is_featured: boolean
+  is_active: boolean
+  created_at: string
+  updated_at: string
+  is_deleted: boolean
+}
 export interface Category {
   id: number;
   name: string;

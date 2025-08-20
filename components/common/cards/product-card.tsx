@@ -80,9 +80,8 @@ const ProductCard = ({
 
           <button
             // onClick={() => onToggleWishlist?.(slug, isWishlisted ? true : false)}
-            className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors ${
-              isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
-            } cursor-pointer`}
+            className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors ${isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
+              } cursor-pointer`}
             aria-label="Toggle Wishlist"
           >
             <Heart fill="red" stroke="red" className="w-4 h-4 md:w-6 md:h-6" />

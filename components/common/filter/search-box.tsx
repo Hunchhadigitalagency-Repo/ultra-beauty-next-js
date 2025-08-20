@@ -1,27 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import useDebounce from "@/hooks/use-debounce";
 import {
   clearSearchQuery,
   setSearchQuery,
 } from "@/redux/features/filter-slice";
+import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/use-debounce";
+import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+interface SearchBoxProps extends React.ComponentProps<typeof Input> {
+  className?: string;
+  placeholder?: string;
+  iconClassName?: string;
+  sendValue?: (value: string) => void;
+}
+
 
 const SearchBox = ({
   className,
   placeholder = "Search",
-  iconClassName
-}: {
-  className?: string;
-  placeholder?: string;
-  iconClassName?: string;
-}) => {
+  iconClassName,
+  sendValue,
+  ...props
+}: SearchBoxProps) => {
+
   const dispatch = useAppDispatch();
   const { searchQuery } = useAppSelector((state) => state.filter);
   const [searchInput, setSearchInput] = useState(searchQuery || "");
@@ -32,16 +37,23 @@ const SearchBox = ({
     setSearchInput(searchQuery || "");
   }, [searchQuery]);
 
-  // Update Redux store with debounced value
   useEffect(() => {
     const search = debouncedValue?.trim();
     dispatch(setSearchQuery(search));
-  }, [debouncedValue, dispatch]);
+
+    if (sendValue) {
+      sendValue(search); // <-- lift debounced value to parent
+    }
+  }, [debouncedValue, dispatch, sendValue]);
 
   const handleClear = () => {
     dispatch(clearSearchQuery());
     setSearchInput("");
+    if (sendValue) {
+      sendValue(""); // also lift cleared value
+    }
   };
+
 
   useEffect(() => {
     return () => {
@@ -63,6 +75,7 @@ const SearchBox = ({
           placeholder={placeholder}
           value={searchInput}
           required
+          {...props}
         />
         {searchInput ? (
           <Button
