@@ -15,6 +15,7 @@ import { Col } from "@/types/table";
 interface TableProps<T> {
   cols: Col<T>[];
   data: T[];
+  error?: Error | null
   bordered?: boolean;
   hoverable?: boolean;
   striped?: boolean;
@@ -60,14 +61,14 @@ const CustomTable = <T,>({
 
   // Handle select all
   const handleSelectAll = () => {
-    const allIds = data.map((item) => getItemId(item));
+    const allIds = data?.map((item) => getItemId(item));
     dispatch(toggleSelectAll(allIds));
   };
 
   // Check if all items are selected
   const isAllSelected =
-    data.length > 0 &&
-    selectedIds?.length === data.length &&
+    data?.length > 0 &&
+    selectedIds?.length === data?.length &&
     data.every((item) => selectedIds.includes(getItemId(item)));
 
   const isIndeterminate =
@@ -127,7 +128,7 @@ const CustomTable = <T,>({
                   </div>
                 </td>
               </tr>
-            ) : data.length === 0 ? (
+            ) : data?.length === 0 ? (
               <tr>
                 <td colSpan={totalCols}>
                   <div className="flex items-center justify-center h-[300px]">
@@ -136,7 +137,7 @@ const CustomTable = <T,>({
                 </td>
               </tr>
             ) : (
-              data.map((item, rowIndex) => {
+              data?.map((item, rowIndex) => {
                 const itemId = getItemId(item);
                 const isSelected = selectedIds.includes(itemId);
 

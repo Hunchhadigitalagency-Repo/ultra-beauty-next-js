@@ -12,17 +12,6 @@ import ProductCard from "@/components/common/cards/product-card";
 import SectionHeader from "@/components/common/header/section-header";
 import { Result } from "@/types/product";
 
-// type Product = {
-//     id: number;
-//     imageSrc: string;
-//     alt: string;
-//     title: string;
-//     description: string;
-//     brand: string;
-//     rating: number;
-//     price: string;
-// };
-
 interface ProductResponse extends Result {
   id: number;
 }

@@ -11,8 +11,6 @@ export interface IOrderItem {
   status: "Delivered" | "Packed" | "Placed" | "Shipped";
 }
 
-
-
 export interface IOrderDetail {
   id: number;
   order: number;
@@ -64,7 +62,6 @@ export interface IProductVariant {
   updated_at: string;
 }
 
-
 export interface IVariantAttribute {
   id: number;
   attribute_id: number;
@@ -74,8 +71,6 @@ export interface IVariantAttribute {
   created_at: string;
   updated_at: string;
 }
-
-
 
 export interface IOrderResponse {
   id: number;
@@ -107,8 +102,6 @@ export interface IOrderResponse {
   shipping_info: IShippingInfo;
   order_details: IOrderDetail[];
 }
-
-
 
 export interface IShippingInfo {
   id: number;

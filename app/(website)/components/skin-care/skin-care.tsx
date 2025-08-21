@@ -9,11 +9,11 @@ interface FeaturedProductResponse extends Result {
 }
 
 const SkinCare = () => {
-      const { data, isLoading, error } =
+      const { data, loading, error } =
     useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
     return (
         <ProductSection
-            isLoading={isLoading}
+            isLoading={loading}
             error={error}
             products={data}
             headerTitle='Skin Care'

@@ -8,11 +8,11 @@ interface FeaturedProductResponse extends Result {
   id: number;
 }
 const TrendingSection: React.FunctionComponent = () => {
-  const { data, isLoading, error } =
+  const { data, loading, error } =
     useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
   return (
     <ProductSection
-      isLoading={isLoading}
+      isLoading={loading}
       error={error}
       products={data}
       headerTitle="Loved By EveryOne"

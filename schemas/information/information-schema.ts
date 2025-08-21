@@ -15,7 +15,8 @@ export const informationSchema = z.object({
     phone: z.string().min(10, "Phone number should be at least 10 characters long"),
     position: z.string().min(3, "Position must be selected"),
     cv: fileSchema,
-    resume: fileSchema,
+    cover_letter: fileSchema,
+    g_recaptcha_response: z.string().min(1, "reCAPTCHA verification failed"),
 });
 
 export type InformationFormValues = z.infer<typeof informationSchema>;

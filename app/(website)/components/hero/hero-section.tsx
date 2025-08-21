@@ -58,7 +58,7 @@ export interface Category {
 export default function HeroSection() {
 
 
-  const { data, isLoading, error } = useFetchData<HeroSectionResponse[]>(
+  const { data, loading, error } = useFetchData<HeroSectionResponse[]>(
     "/cms/banner-general/"
   )
 
@@ -82,7 +82,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative h-60 md:h-[500px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
-      {isLoading ? (
+      {loading ? (
         <p className="text-sm text-center text-muted-foreground">
           Loading Banners
         </p>

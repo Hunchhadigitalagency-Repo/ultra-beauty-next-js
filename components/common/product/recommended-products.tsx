@@ -26,7 +26,6 @@ const RecommendedProducts = () => {
           rating={4.5}
           price="$24,000"
           discountTag="20% OFF"
-         
           onAddToCart={() => console.log("Add to Cart")}
         />
       </div>
