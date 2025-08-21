@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { logout } from "@/lib/api/auth/auth-api";
 import { handleError } from "@/lib/error-handler";
-import {
-  setAccessToken,
-  setRefreshToken,
-} from "@/redux/features/authentication-slice";
+import { resetAuthentication } from "@/redux/features/authentication-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -35,14 +32,14 @@ const LogoutModal = ({
   const { accessToken, refreshToken } = useAppSelector(
     (state) => state.authentication
   );
+
   const handleLogout = async () => {
     try {
       const response = await logout(accessToken, refreshToken);
       if (response.status === 205) {
         toast.success("Logged Out Successfully!");
-        dispatch(setAccessToken(""));
-        dispatch(setRefreshToken(""));
-        router.replace("/");
+        dispatch(resetAuthentication())
+        router.push("/");
       }
     } catch (err) {
       handleError(err, toast);

@@ -1,16 +1,12 @@
 import React from "react";
 import AllProducts from "./components/all-products";
-// import HeroCarousel from "@/components/common/carousel/hero-carousel";
-// import Testimonials from "@/components/common/testimonials/testimonials";
-// import DifferentiatorSection from "../../../components/common/differentiator/differentiator-section";
+import HeroSection from "../components/hero/hero-section";
 
-const ShopPage = () => {
+const ShopPage: React.FunctionComponent = () => {
   return (
-    <main className="">
-      {/* <HeroCarousel /> */}
+    <main className="space-y-8">
+      <HeroSection />
       <AllProducts />
-      {/* <DifferentiatorSection hasButton={false} /> */}
-      {/* <Testimonials /> */}
     </main>
   );
 };

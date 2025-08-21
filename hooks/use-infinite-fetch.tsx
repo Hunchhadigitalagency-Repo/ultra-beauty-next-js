@@ -1,10 +1,9 @@
 "use client";
-
-import { useState, useEffect, useCallback, useRef } from "react";
-
-import { useAppSelector } from "@/redux/hooks";
-import api from "@/services/api-instance";
 import { ETypes } from "@/types/table";
+import api from "@/services/api-instance";
+import { useAppSelector } from "@/redux/hooks";
+import apiBase from "@/services/api-base-instance";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 export interface InfiniteFetchResult<T> {
   data: T[];
@@ -18,8 +17,10 @@ export function useInfiniteFetch<T>(
   path: string,
   queryParam?: string,
   queryValue?: string,
-  type?: string
+  type?: string,
+  token?: boolean
 ): InfiniteFetchResult<T> {
+
   const { criteria } = useAppSelector((state) => state.filter);
 
   const buildUrl = useCallback(
@@ -49,19 +50,21 @@ export function useInfiniteFetch<T>(
     [queryParam, queryValue, criteria, type]
   );
 
-  const { refetch } = useAppSelector((state) => state.table);
+  const { refetch, } = useAppSelector((state) => state.table);
 
   const [data, setData] = useState<T[]>([]);
   const [nextUrl, setNextUrl] = useState<string | null>(buildUrl(path));
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(0)
   const initialLoadRef = useRef(true);
+
+  const API = token ? api : apiBase;
 
   const fetchNext = useCallback(async () => {
     if (!nextUrl || loading) return;
     setLoading(true);
     try {
-      const response = await api.get(nextUrl);
+      const response = await API.get(nextUrl);
       const payload = response.data;
       if (Array.isArray(payload.results)) {
         setData((prev) => [...prev, ...payload.results]);

@@ -7,6 +7,8 @@ import ShippingModal from "./components/shipping-modal";
 import useFetchData from "@/hooks/use-fetch";
 import { AuthProfileResponse, RecentOrdersResponseWithPagination } from "@/types/profile";
 import { useAppSelector } from "@/redux/hooks";
+import ProfileInformationLoader from "./components/profile-information-loader";
+import ShippingInformationLoader from "./components/shipping-information-loader";
 
 const MyProfile: React.FunctionComponent = () => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -26,10 +28,8 @@ const MyProfile: React.FunctionComponent = () => {
     setShowShippingDetailsModal((prev) => !prev);
   };
 
-  const { data, error, loading, refetch } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
+  const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
   const { data: orderData, error: orderError, loading: orderLoading } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders`, true);
-
-
 
   const { profile } = useAppSelector(
     (state) => state.authentication.profileDetails
@@ -40,7 +40,7 @@ const MyProfile: React.FunctionComponent = () => {
       : profile?.profile_picture;
 
   return (
-    <section className="flex flex-col gap-8 bg-[#FAFAFA]">
+    <section className="flex flex-col gap-8 bg-white">
       {/* Profile Modal */}
       {showProfileModal && (
         <ProfileModal
@@ -73,14 +73,15 @@ const MyProfile: React.FunctionComponent = () => {
               Change
             </button>
           </div>
+
           {loading ? (
-            <p className="text-sm text-center text-muted-foreground">
-              Loading User Profile ...
-            </p>
+            <ProfileInformationLoader />
           ) : error ? (
-            <p className="text-sm font-medium text-center text-red-500">
-              Something Went Wrong While Fetching User Profile
-            </p>
+            <div className="border-t border-[#CFCECE] p-4 flex justify-center items-center h-35">
+              <p className="text-sm font-medium text-center text-red-500 tracking-wide">
+                Something Went Wrong While Fetching Shipping Details ...
+              </p>
+            </div>
           ) : (
             <div className="border-t border-[#CFCECE] p-4 flex gap-4">
               <div className="flex justify-center items-center">
@@ -137,13 +138,13 @@ const MyProfile: React.FunctionComponent = () => {
           </div>
 
           {loading ? (
-            <p className="text-sm text-center text-muted-foreground">
-              Loading Shipping Details ...
-            </p>
+            <ShippingInformationLoader />
           ) : error ? (
-            <p className="text-sm font-medium text-center text-red-500">
-              Something Went Wrong While Fetching Shipping Details ...
-            </p>
+            <div className="border-t border-[#CFCECE] p-4 flex justify-center items-center h-35">
+              <p className="text-sm font-medium text-center text-red-500 tracking-wide">
+                Something Went Wrong While Fetching Shipping Details ...
+              </p>
+            </div>
           ) : (
             <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
               <p className="text-primary font-semibold text-lg">

@@ -4,7 +4,7 @@ import { NavigationItem } from "@/types/website";
 
 export const getNavigationItems = async (): Promise<NavigationItem[]> => {
     try {
-        const res = await apiBase.get("/categoriesdropdown");
+        const res = await apiBase.get("/category/");
         const categories = res.data;
         const categoryDropdown: NavigationItem = {
             name: "Shop by Category",

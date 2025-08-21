@@ -64,10 +64,10 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
             className="min-w-[85%] max-w-[85%] flex-shrink-0"
           >
             <ProductCard
-              id={product.id}
+              // id={product.id}
               title={product.title}
-              brand={product.brand}
-              description={product.description}
+              // brand={product.brand}
+              // description={product.description}
               imageSrc={product.imageSrc}
               alt="Product Image"
               rating={4.5}
@@ -84,10 +84,10 @@ const RecommendedCartProducts: React.FunctionComponent = () => {
         {products.map((product) => (
           <div key={product.id} className="w-full">
             <ProductCard
-              id={product.id}
-              brand={product.brand}
+              // id={product.id}
+              // brand={product.brand}
               title={product.title}
-              description={product.description}
+              // description={product.description}
               imageSrc={product.imageSrc}
               alt="Product Image"
               rating={4.5}

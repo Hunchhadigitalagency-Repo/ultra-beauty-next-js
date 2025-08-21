@@ -1,23 +1,21 @@
-import { CartItem } from "@/types/cart";
 import CartItemCard from "./cart-item-card";
+import { CartResultType } from "@/types/cart";
 
 interface CartItemsListProps {
-  items: CartItem[]
-  onItemUpdate: (id: string, updates: Partial<CartItem>) => void
-  onItemRemove: (id: string) => void
-  formatPrice: (price: number) => string
+  items: CartResultType[]
+  onRemove: (id: number) => void
+  refetch: () => void
 }
 
-export default function CartItemsList({ items, onItemUpdate, onItemRemove, formatPrice }: CartItemsListProps) {
+export default function CartItemsList({ items, onRemove, refetch }: CartItemsListProps) {
   return (
     <div className="space-y-4">
       {items.map((item) => (
         <CartItemCard
+          refetch={refetch}
+          onRemove={onRemove}
           key={item.id}
           item={item}
-          onUpdate={(updates) => onItemUpdate(item.id, updates)}
-          onRemove={() => onItemRemove(item.id)}
-          formatPrice={formatPrice}
         />
       ))}
     </div>
