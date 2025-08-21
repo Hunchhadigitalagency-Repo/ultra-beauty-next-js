@@ -47,7 +47,7 @@ export default function Navbar() {
       setActiveMegaMenu(value);
     }
   };
-
+  const wishlistCount = useAppSelector((state) => state.navbar.wishlistCount)
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
   // console.log(isLoggedIn, "status of user");
 
@@ -86,29 +86,26 @@ export default function Navbar() {
                       onClick={() =>
                         handleCategoryClick(item.name, !activeMegaMenu)
                       }
-                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${
-                        isActiveHeader(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
-                      }`}
+                      className={`flex items-center space-x-1 text-foreground hover:text-primary transition-colors text-sm py-2 ${isActiveHeader(item.href)
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
+                        }`}
                     >
                       <span>{item.name}</span>
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          item.name === "Shop by Category" && activeMegaMenu
-                            ? "transform rotate-180 text-primary"
-                            : ""
-                        }`}
+                        className={`w-4 h-4 transition-transform duration-200 ${item.name === "Shop by Category" && activeMegaMenu
+                          ? "transform rotate-180 text-primary"
+                          : ""
+                          }`}
                       />
                     </button>
                   ) : (
                     <Link
                       href={item.href}
-                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${
-                        isActive(item.href)
-                          ? "text-primary font-medium"
-                          : "text-foreground font-normal"
-                      }`}
+                      className={`text-foreground hover:text-primary transition-colors text-sm py-2 ${isActive(item.href)
+                        ? "text-primary font-medium"
+                        : "text-foreground font-normal"
+                        }`}
                     >
                       {item.name}
                     </Link>
@@ -131,20 +128,20 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:text-primary"
+                className="relative hover:text-secondary"
                 onClick={() => router.push("/wishlist")}
               >
-                <Heart
-                  className={`size-5 ${
-                    isActive("/wishlist") && "text-primary"
-                  }`}
-                />
-                <Badge
-                  variant="destructive"
-                  className="absolute -top-2 -right-2 size-4 rounded-full p-0 flex items-center justify-center text-xs"
-                >
-                  1
-                </Badge>
+                <Heart className={`size-5 ${isActive("/wishlist") && "text-secondary"}`} />
+                {wishlistCount > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute flex items-center justify-center w-5 h-5 p-1 text-xs rounded-full -top-2 -right-2"
+                  >
+                    {wishlistCount}
+                  </Badge>
+                )
+                }
+
               </Button>
 
               <Button
@@ -171,9 +168,8 @@ export default function Navbar() {
                   onClick={() => router.push("/profile")}
                 >
                   <CircleUser
-                    className={`size-5 ${
-                      isActive("/profile") && "text-primary"
-                    }`}
+                    className={`size-5 ${isActive("/profile") && "text-primary"
+                      }`}
                   />
                 </Button>
               ) : (

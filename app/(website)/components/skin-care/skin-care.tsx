@@ -9,18 +9,18 @@ interface FeaturedProductResponse extends Result {
 }
 
 const SkinCare = () => {
-      const { data, loading, error } =
+  const { data, loading, error } =
     useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
-    return (
-        <ProductSection
-            isLoading={loading}
-            error={error}
-            products={data}
-            headerTitle='Skin Care'
-            headerDescription='Care your skin like never before'
-            headerLink='/shop'
-        />
-    )
+  return (
+    <ProductSection
+      isLoading={loading}
+      error={error}
+      products={data}
+      headerTitle='Skin Care'
+      headerDescription='Care your skin like never before'
+      headerLink='/shop'
+    />
+  )
 }
 
 export default SkinCare

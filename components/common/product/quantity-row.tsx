@@ -6,28 +6,33 @@ import { Minus, Plus } from "lucide-react";
 interface QuantityRowProps {
   onDecrease: () => void;
   onIncrease: () => void;
-  className?: string
+  className?: string;
+  value?: number;
+  loading?: boolean
 }
 
-const QuantityRow = ({ onDecrease, onIncrease, className }: QuantityRowProps) => {
+const QuantityRow = ({ onDecrease, onIncrease, className, value, loading }: QuantityRowProps) => {
   return (
     <div className={`flex items-center ${className}`}>
+
       <Button
+        disabled={loading}
         variant="ghost"
         size="icon"
-        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-transparent "
+        className="w-4 h-4 bg-transparent rounded-full md:h-8 md:w-8 "
         onClick={onDecrease}
       >
-        <Minus className="h-4 w-4" />
+        <Minus className="w-4 h-4" />
       </Button>
-      <span className="px-4 py-2 min-w-[50px] text-center">1</span>
+      <span className="px-4 py-2 min-w-[50px] text-center">{value}</span>
       <Button
+        disabled={loading}
         variant="ghost"
         size="icon"
-        className="h-4 w-4 md:h-8 md:w-8 rounded-full bg-transparent"
+        className="w-4 h-4 bg-transparent rounded-full md:h-8 md:w-8"
         onClick={onIncrease}
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="w-4 h-4" />
       </Button>
     </div>
   );

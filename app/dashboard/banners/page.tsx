@@ -38,7 +38,7 @@ const BannerPage = () => {
             cols={BannerConstant(dispatch)}
             data={data as IBanner[]}
             loading={loading && data.length === 0}
-            onRowClick={() => {}}
+            onRowClick={() => { }}
             height="h-auto"
           />
         </InfiniteScroll>

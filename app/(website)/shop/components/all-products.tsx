@@ -1,70 +1,65 @@
 "use client";
-
 import { Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
+import { useDispatch } from "react-redux";
+import { Result } from "@/types/product";
 import MobileFilter from "./mobile-filter";
-import { useParams } from "next/navigation";
-// import useCheckToken from "@/hooks/use-check-token";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
+import useCheckToken from "@/hooks/use-check-token";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
-// import { createWishList } from "@/lib/api/wishlist/wishlist-apis";
 import SectionHeader from "@/components/common/header/section-header";
 import { ScribbleProductCard } from "@/components/ui/product-scribble";
-import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
-
-const PRODUCTS = [
-  { id: 1, imageSrc: 'https://images.unsplash.com/photo-1619352520578-8fefbfa2f904?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Red Lipstick', title: 'Red Lipstick', description: 'A beautiful red lipstick for all occasions', brand: {id: 5, name: "The Comfort Zone"}, rating: 4.5, price: '$19.99' },
-  { id: 2, imageSrc: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Calvin Klein Soft Tube', title: ' Soft Tube', description: 'A soft tube from Calvin Klein', brand: {id: 4, name: "The Comfort Zone"}, rating: 4.0, price: '$29.99' },
-  { id: 3, imageSrc: 'https://images.unsplash.com/photo-1657297950139-179a9a70ea9e?q=80&w=1065&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', brand: {id: 3, name: "The Comfort Zone"},alt: 'Jewelry', title: 'Jewelry', description: 'Elegant jewelry for special occasions', rating: 4.8, price: '$49.99' },
-  { id: 4, imageSrc: 'https://images.unsplash.com/photo-1512351660358-6bed42b7b842?q=80&w=927&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', alt: 'Lip Glow Color Reviver Balm', title: 'Lip Balm', description: 'A color reviver balm for your lips', brand: {id: 1, name: "The Comfort Zone"}, rating: 4.2, price: '$22.99', }
-]
+import { toggleWishlist } from "@/utils/wishList-utility";
 
 const AllProducts = () => {
 
-  const id = useParams().id as string;
-  const path = id ? `products/?category=${id}` : "products";
-
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useCheckToken();
   const [showFilter, setShowFilter] = useState(false);
+  const { selectedCategories } = useAppSelector(state => state.category);
+  const { isLoggedIn } = useAppSelector((state) => state.authentication);
+  const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  // const { isAuthenticated } = useCheckToken()
-  const { data: products, loading, hasMore, fetchNext } = useInfiniteFetchNoToken(path, 6);
 
-  console.log("this is the product details ", products);
+  const categoryQuery = selectedCategories.length > 0
+    ? `?category=${selectedCategories.join(',')}`
+    : '';
 
-  // const toggleWishList = (id: string | undefined) => {
-  //   if (!isAuthenticated) {
-  //     return;
-  //   }
-  //   const response = createWishList(id);
-  //   console.log('this is the whish list updated', response)
-  // }
+  const path = `public-products${categoryQuery}`;
 
-  if (loading && products.length === 0) {
-    return (
-      <section className="space-y-8 padding">
-        <SectionHeader
-          title="All Products"
-          description="Get list of the items here so you can buy"
-        />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[...Array(3)].map((_, index) => (
-            <ScribbleProductCard key={index} />
-          ))}
-        </div>
-      </section>
-    );
+  const {
+    data: products,
+    loading,
+  } = useInfiniteFetch<Result>(path, undefined, undefined, undefined, isLoggedIn);
+
+
+  const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {
+    if (!slug) return;
+
+    setWishlistUpdates((prev) => ({
+      ...prev,
+      [slug]: !isWishlisted,
+    }));
+
+    toggleWishlist(slug,
+      isWishlisted,
+      isAuthenticated,
+      router,
+      dispatch)
   };
 
-  const toggleFilter = () => {
-    setShowFilter(!showFilter)
-  }
 
+  const toggleFilter = () => {
+    setShowFilter(!showFilter);
+  };
 
   return (
-
     <section className="relative flex flex-col gap-8 padding">
       <div className="flex flex-row items-center justify-between gap-4">
         <SectionHeader title={`All Products (${210})`} description="" />
@@ -77,51 +72,36 @@ const AllProducts = () => {
       <div className="flex flex-row gap-16">
         <FilterSection />
         <div className="flex-1">
-          <InfiniteScroll
-            dataLength={products.length}
-            next={fetchNext}
-            hasMore={hasMore}
-            loader={
-              <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2 lg:grid-cols-3">
+          {loading || products?.length === 0 ? (
+            <section>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {[...Array(3)].map((_, index) => (
                   <ScribbleProductCard key={index} />
                 ))}
               </div>
-            }
-            endMessage={
-              <p className="mt-4 text-sm text-center text-muted-foreground">
-                You’ve reached the end!
-              </p>
-            }
-          >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {PRODUCTS.map((product: any) => (
+            </section>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {products?.map((product, index) => (
                 <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  brand={product.brand}
-                  // title={product.name}
-                  title={product.title}
-                  price={`Nrs. ${product.price}`}
-                  // imageSrc={product.images?.[0]?.file || "/fallback-image.jpg"}
-                  imageSrc={product.imageSrc}
+                  key={`${Math.random}${index}`}
+                  slug={product.slug_name}
+                  imageSrc={product.images?.[0]?.file}
                   alt={product.name}
-                  description={product.description}
-                  rating={product.rating || 5}
-                  isWishlisted={product.my_wishlist}
-                  // onToggleWishlist={toggleWishList}
+                  isFlashSale={product.is_flash_sale}
+                  title={product.name}
+                  price={product.price}
+                  discountTag={product.discount_percentage}
+                  rating={product.average_rating}
+                  isWishlisted={wishlistUpdates[product.slug_name] ?? product.my_wishlist}
+                  onToggleWishlist={handleToggleWishlist}
                 />
               ))}
             </div>
-          </InfiniteScroll>
+          )}
         </div>
       </div>
-      {/* Mobile Filter */}
-      {showFilter && (
-        <MobileFilter
-          onclose={toggleFilter}
-        />
-      )}
+      {showFilter && <MobileFilter onclose={toggleFilter} />}
     </section>
   );
 };

@@ -1,20 +1,21 @@
+
 import React from 'react';
-// import FAQSection from '@/components/common/faq/faq-section';
-import OtherSimilarProducts from './components/other-similar-products';
+import Review from './components/review';
+import TechnicalDetails from './components/technical-details';
 import SingleProductSection from './components/single-product-section';
-// import Testimonials from '@/components/common/testimonials/testimonials';
-// import RecommendationCarousel from '@/components/common/carousel/recommendation-carousel';
-// import DifferentiatorSection from '@/components/common/differentiator/differentiator-section';
+import DetailDecription from './components/detail-description-section';
+
+
+
 
 const SingleProductPage: React.FunctionComponent = () => {
+
   return (
     <main>
       <SingleProductSection />
-      {/* <RecommendationCarousel />
-       <DifferentiatorSection hasButton={false} />
-       <Testimonials />
-       <FAQSection /> */}
-      <OtherSimilarProducts />
+      <DetailDecription />
+      <TechnicalDetails />
+      <Review />
     </main>
   )
 }

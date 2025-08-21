@@ -24,10 +24,11 @@ import SingleImageUploader from "@/components/common/ImageUploader/single-image-
 interface ProfileModalProps {
   data: AuthProfileResponse | null;
   imageUrl: string | undefined;
+  onUpdate: () => void;
   onClose: () => void;
 }
 
-const ProfileModal: React.FunctionComponent<ProfileModalProps> = ({ onClose, data, imageUrl }) => {
+const ProfileModal: React.FunctionComponent<ProfileModalProps> = ({ onClose, data, imageUrl, onUpdate }) => {
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(ProfileSchema),
@@ -47,8 +48,26 @@ const ProfileModal: React.FunctionComponent<ProfileModalProps> = ({ onClose, dat
     form.append("last_name", data.last_name ?? "");
     form.append("phone_number", data.phone_number ?? "");
     form.append("address", data.address ?? "");
-    form.append("profile_picture", data.profile_picture ?? "");
-    updateMyProfile(form);
+
+    if (data.profile_picture instanceof File) {
+      form.append("profile_picture", data.profile_picture);
+    }
+
+    const handleUpdateMyProfile = async () => {
+      try {
+        const response = await updateMyProfile(form);
+
+        if (response.status === 200) {
+          onUpdate();
+        } else {
+          throw new Error(`Failed to update profile. Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
+
+    handleUpdateMyProfile();
     onClose();
   };
 

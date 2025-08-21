@@ -5,9 +5,8 @@ import ProfileModal from "./components/profile-modal";
 import ShippingDetailsModal from "./components/shipping-details-modal";
 import ShippingModal from "./components/shipping-modal";
 import useFetchData from "@/hooks/use-fetch";
-import { AuthProfileResponse } from "@/types/profile";
+import { AuthProfileResponse, RecentOrdersResponseWithPagination } from "@/types/profile";
 import { useAppSelector } from "@/redux/hooks";
-import { ORDER_DETAILS } from '@/constants/order-data';
 
 const MyProfile: React.FunctionComponent = () => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -27,7 +26,10 @@ const MyProfile: React.FunctionComponent = () => {
     setShowShippingDetailsModal((prev) => !prev);
   };
 
-  const { data } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
+  const { data, error, loading, refetch } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
+  const { data: orderData, error: orderError, loading: orderLoading } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders`, true);
+
+
 
   const { profile } = useAppSelector(
     (state) => state.authentication.profileDetails
@@ -44,6 +46,7 @@ const MyProfile: React.FunctionComponent = () => {
         <ProfileModal
           data={data}
           imageUrl={typeof imgSource === "string" ? imgSource : ""}
+          onUpdate={refetch}
           onClose={toggleProfileModal}
         />
       )}
@@ -70,32 +73,42 @@ const MyProfile: React.FunctionComponent = () => {
               Change
             </button>
           </div>
-          <div className="border-t border-[#CFCECE] p-4 flex gap-4">
-            <div className="flex justify-center items-center">
-              <div className=" relative w-20 h-20">
-                {imgSource && (
-                  <Image
-                    src={typeof imgSource === "string" ? imgSource : ""}
-                    alt="Profile"
-                    layout="fill"
-                    className="object-cover rounded-full"
-                  />
-                )}
+          {loading ? (
+            <p className="text-sm text-center text-muted-foreground">
+              Loading User Profile ...
+            </p>
+          ) : error ? (
+            <p className="text-sm font-medium text-center text-red-500">
+              Something Went Wrong While Fetching User Profile
+            </p>
+          ) : (
+            <div className="border-t border-[#CFCECE] p-4 flex gap-4">
+              <div className="flex justify-center items-center">
+                <div className=" relative w-20 h-20">
+                  {imgSource && (
+                    <Image
+                      src={typeof imgSource === "string" ? imgSource : ""}
+                      alt="Profile"
+                      layout="fill"
+                      className="object-cover rounded-full"
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <p className="text-primary font-semibold text-lg">
+                  {data?.first_name + " " + data?.last_name}
+                </p>
+                <p className="font-medium text-sm">{data?.email}</p>
+                <p className="font-medium text-sm">
+                  Phone: {data?.phone_number ? data?.phone_number : "N/A"}
+                </p>
+                <p className="font-medium text-sm text-[#5D5D5D]">
+                  Address: {data?.address ? data?.address : "N/A"}
+                </p>
               </div>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <p className="text-primary font-semibold text-lg">
-                {data?.first_name + " " + data?.last_name}
-              </p>
-              <p className="font-medium text-sm">{data?.email}</p>
-              <p className="font-medium text-sm">
-                Phone: {data?.phone_number ? data?.phone_number : "N/A"}
-              </p>
-              <p className="font-medium text-sm text-[#5D5D5D]">
-                Address: {data?.address ? data?.address : "N/A"}
-              </p>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Shipping Details */}
@@ -122,24 +135,35 @@ const MyProfile: React.FunctionComponent = () => {
               </button>
             </div>
           </div>
-          <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
-            <p className="text-primary font-semibold text-lg">
-              {data?.first_name + " " + data?.last_name}
+
+          {loading ? (
+            <p className="text-sm text-center text-muted-foreground">
+              Loading Shipping Details ...
             </p>
-            <p className="font-medium text-sm">{data?.email}</p>
-            <p className="font-medium text-sm">
-              {data?.phone_number ? data?.phone_number : "N/A"}
+          ) : error ? (
+            <p className="text-sm font-medium text-center text-red-500">
+              Something Went Wrong While Fetching Shipping Details ...
             </p>
-            <p className="font-medium text-sm">
-              {data?.address ? data?.address : "N/A"}
-            </p>
-          </div>
+          ) : (
+            <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
+              <p className="text-primary font-semibold text-lg">
+                {data?.first_name + " " + data?.last_name}
+              </p>
+              <p className="font-medium text-sm">{data?.email}</p>
+              <p className="font-medium text-sm">
+                {data?.phone_number ? data?.phone_number : "N/A"}
+              </p>
+              <p className="font-medium text-sm">
+                {data?.address ? data?.address : "N/A"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
         <h1 className="text-primary font-medium text-xl">Recent Orders</h1>
-        <OrderTable data={ORDER_DETAILS} />
+        <OrderTable isLoading={orderLoading} isError={orderError} data={orderData?.results} />
       </div>
     </section>
   );

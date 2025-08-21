@@ -1,16 +1,20 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import { setupListeners } from "@reduxjs/toolkit/query";
-import storage from "redux-persist/lib/storage";
-import authentication from "./features/authentication-slice";
+import cart from './features/cart-slice';
 import table from "./features/table-slice";
 import filter from "./features/filter-slice";
 import setting from "./features/setting-slice";
+import storage from "redux-persist/lib/storage";
+import category from './features/category-slice';
+import navbar from "./features/wishList-slice"
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { persistStore, persistReducer } from "redux-persist";
+import authentication from "./features/authentication-slice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["authentication", "setting"],
+  whitelist: ["authentication", "setting", "cart", "navbar"],
+
 };
 
 const rootReducer = combineReducers({
@@ -18,6 +22,9 @@ const rootReducer = combineReducers({
   table: table,
   filter: filter,
   setting: setting,
+  category: category,
+  cart: cart,
+  navbar: navbar
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

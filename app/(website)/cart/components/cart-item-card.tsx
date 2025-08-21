@@ -1,93 +1,145 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CartItemCardProps } from "@/types/cart";
 import { Checkbox } from "@/components/ui/checkbox";
+import { updateCart } from "@/lib/api/cart/cart-apis";
 import PriceRow from "@/components/common/product/price-row";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { clearVoucherData, toggleCartItem, updateCartItemQuantity } from "@/redux/features/cart-slice";
 import QuantityRow from "@/components/common/product/quantity-row";
+import { calculateDiscountedPrice } from "@/lib/cart-utils";
 
-export default function CartItemCard({
-  item,
-  onUpdate,
-  onRemove,
-}: CartItemCardProps) {
+export default function CartItemCard({ item, onRemove, refetch }: CartItemCardProps) {
+
+  const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const Variants = item.product_variant?.product_variants;
+  const { cartItem } = useAppSelector(state => state.cart);
+  const { profileDetails } = useAppSelector(state => state.authentication);
+  const quantity = item.quantity;
+
+
+  const handleUpdate = async (type: string) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      if (type === "decrement" && quantity === 1) {
+        onRemove(item.id);
+        return;
+      }
+
+      const newQuantity = type === "increment" ? quantity + 1 : quantity - 1;
+
+      dispatch(updateCartItemQuantity({
+        id: item.id,
+        quantity: newQuantity
+      }));
+
+      await updateCart(profileDetails.id, item.product.slug_name, newQuantity, item.id);
+      refetch()
+
+    } catch (error) {
+      dispatch(updateCartItemQuantity({
+        id: item.id,
+        quantity: quantity
+      }));
+      console.error("Failed to update cart quantity:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onCheckboxChange = () => {
+    dispatch(toggleCartItem({
+      id: item.id,
+      quantity: item.quantity,
+      price: (parseFloat(calculateDiscountedPrice(item.product.price, item.product.discount_percentage))).toString(),
+      discount_percentage: item.product.discount_percentage,
+      tax_applied: item.product.tax_applied
+    }));
+    dispatch(clearVoucherData())
+  }
+
   return (
-    <div className="relative flex flex-col p-4 rounded-lg bg-white border-b">
-      <div className="flex flex-row gap-4 items-start">
+    <div className="relative flex flex-col p-2 bg-white border-b rounded-lg md:p-4">
+      <div className="flex justify-end w-full mb-2">
+        <Button
+          variant="ghost"
+          className="w-8 h-8 p-0 text-black top-2 hover:text-red-700"
+          onClick={() => onRemove(item.id)}
+          aria-label="Remove item"
+        >
+          <X className="w-5 h-5" />
+        </Button>
+      </div>
+      <div className="flex flex-row items-start gap-4">
         <div className="flex items-center gap-3 shrink-0">
           <Checkbox
-            className="bg-white border-gray-300 h-5 w-5 mt-1 "
-            checked={item.selected}
-            onCheckedChange={(checked) => onUpdate({ selected: !!checked })}
+            className="w-4 h-4 mt-1 bg-white border-gray-300 md:w-5 md:h-5 "
+            checked={cartItem.some(cartItem => cartItem.id === item.id)}
+            onCheckedChange={onCheckboxChange}
           />
-          <div className="relative w-[90px] h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+          <div className="relative w-[80px] h-[80px] md:w-[110px] md:h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
             <Image
-              src={item.image || "/placeholder.svg"}
-              alt={item.name}
+              src={item.product.images[0].file || "/placeholder.svg"}
+              alt={item.product.name}
               fill
               className="object-cover"
             />
-            <div className="absolute bottom-1 right-1 bg-primary text-white text-xs px-2 py-1 rounded-full">
-              20% Off
-            </div>
+            {
+              item.product.discount_percentage &&
+              <div className="absolute bottom-1 right-1 bg-secondary text-white text-[10px] md:text-xs px-1 md:px-2 py-1 rounded-full">
+                {parseFloat(item.product.discount_percentage)}% Off
+              </div>
+            }
           </div>
         </div>
 
-        <div className="flex flex-col flex-1 w-full">
-          <div className="flex gap-2 mb-2">
-            <Badge variant="outline" className="bg-gray-50 border-gray-200 md:h-[30px] md:w-[100px] rounded-[2px]">
-              Color: {item.color}
-            </Badge>
-            <Badge variant="outline" className="bg-gray-50 border-gray-200 md:h-[30px] md:w-[100px] rounded-[2px]">
-              Size: {item.size}
-            </Badge>
+        <div className="flex flex-col flex-1 w-full gap-3">
+          <div className="grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+            {
+              Variants?.map((item) => (
+                <Badge key={item.id} variant="outline" className="w-full py-1 border-gray-200 rounded-xs bg-gray-50 md:py-2">
+                  {item.attribute.name.toUpperCase()}: {item.attribute_variant.name.toUpperCase()}
+                </Badge>
+              ))
+            }
           </div>
 
-          <div className="hidden md:block mb-3">
-            <h3 className="text-base lg:text-2xl font-playfair font-semibold text-gray-900 mb-1">
-              {item.name}
+          <div className="">
+            <h3 className="mb-1 text-base font-semibold text-gray-900 lg:text-2xl">
+              {item.product.name}
             </h3>
-            <p className="text-sm text-gray-600 leading-snug line-clamp-2">
-              {item.description}
+            <p dangerouslySetInnerHTML={{ __html: item.product.general_description }} className="text-sm leading-snug text-gray-600 line-clamp-2">
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4  mb-3">
-            <PriceRow
-              previousPrice={`${item.originalPrice.toLocaleString()}`}
-              price={`${item.currentPrice.toLocaleString()}`}
-              className="flex flex-col md:flex-row "
-              discountClassName="w-[74px] md:w-[80px]  text-[12px]  md:text-sm"
-              priceClassname="w-[200px] md:w-[250px]"
-            />
-            <QuantityRow
-              className="-mt-13 ml-28 md:mt-auto md:ml-none "
-              onDecrease={() => onUpdate({ quantity: Math.max(1, item.quantity - 1) })}
-              onIncrease={() => onUpdate({ quantity: item.quantity + 1 })}
-            />
+          <div className="flex flex-col gap-4 md:flex-row md:justify-between">
+            <div className="w-full">
+              <PriceRow
+                discountTag={item.product.discount_percentage}
+                previousPrice={item.product.discount_percentage ? item.product.price : undefined}
+                price={calculateDiscountedPrice(item.product.price, item.product.discount_percentage) || item.product.price}
+                discountClassName="text-[12px]  md:text-sm"
+              />
+            </div>
+            <div className="flex justify-end w-full">
+              <QuantityRow
+                loading={loading}
+                onDecrease={() => handleUpdate('decrement')}
+                value={quantity}
+                onIncrease={() => handleUpdate('increment')}
+              />
+            </div>
           </div>
-
-          <p className="block md:hidden text-[10px] -mt-2 md:mt-auto font-semibold text-gray-600 leading-snug mb-3 ">
-            {item.description}
-          </p>
         </div>
       </div>
-
-      <h3 className="md:hidden mt-1 text-base font-semibold text-gray-900 ml-8">
-        {item.name}
-      </h3>
-
-      <Button
-        variant="ghost"
-        className="absolute top-2 right-0 text-black hover:text-red-700 w-8 h-8 p-0"
-        onClick={onRemove}
-        aria-label="Remove item"
-      >
-        <X className="w-5 h-5" />
-      </Button>
     </div>
   );
 }

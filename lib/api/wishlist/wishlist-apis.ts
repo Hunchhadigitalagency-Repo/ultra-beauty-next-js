@@ -1,16 +1,20 @@
-import api from "@/services/api-instance"
+import api from "@/services/api-instance";
 
-export const createWishList = async (products: number) => {
-    const product_ids = [products]
-    const response = await api.post('/wishlists/', { product_ids })
+export const createWishList = async (products: string | undefined) => {
+    const product_slugs = [products];
+    const response = await api.post("/wishlists/", { product_slugs });
     return response;
 }
 
-export const deleteWishlist = async (productId: number) => {
+export const deleteWishlist = async (productId: string | undefined) => {
     const response = await api.delete("/wishlists/", {
         data: {
-            product_ids: [productId],
+            product_slugs: [productId],
         },
     });
+    return response;
+};
+export const deleteAllWishlist = async () => {
+    const response = await api.delete("/wishlists/");
     return response;
 };
