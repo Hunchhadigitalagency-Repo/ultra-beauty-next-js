@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import Image from 'next/image';
-import CancelOrderImage from "@/assets/Rectangle976.png";
+import CancelOrderImage from "@/assets/-.png";
 import SectionHeader from '@/components/common/header/section-header';
 
 interface Product {
