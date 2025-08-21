@@ -56,6 +56,7 @@ const AllProducts = () => {
 
 
   const toggleFilter = () => {
+    //lets test only
     setShowFilter(!showFilter);
   };
 
