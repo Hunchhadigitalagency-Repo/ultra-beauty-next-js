@@ -1,50 +1,78 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CartResultType } from "@/types/cart";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ShippingForm from "./shipping-details-form";
 import CheckoutProductCard from "./checkout-product-card";
+import React, { useEffect, useMemo, useState } from "react";
 import CheckoutProductHeader from "./checkout-product-header";
 import OrderSummary from "../../cart/components/order-summary";
+import { applyVoucher, getCartItemsByIds } from "@/lib/api/cart/cart-apis";
+import { setVoucherData } from "@/redux/features/cart-slice";
+import { ShippingFormValues } from "@/schemas/checkout/checkout-schema";
+
 
 const CheckoutDetails: React.FunctionComponent = () => {
+
+  const shippingFee = 150;
+  const dispatch = useAppDispatch();
+  const [voucher, setVoucher] = useState('');
+  const [cartData, setCartData] = useState<CartResultType[]>()
+  const { cartItem } = useAppSelector((state) => state.cart);
+  const cartIds = useMemo(() => cartItem.map((item) => item.id), [cartItem]);
+  const [formDetails, setFormDetails] = useState<ShippingFormValues | null>(null);
+
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        if (cartIds.length === 0) return;
+        const response = await getCartItemsByIds(cartIds);
+        setCartData(response.data);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+    fetchCartData();
+  }, [cartIds]);
+
+  const handleApplyVoucher = async () => {
+    const response = await applyVoucher(voucher);
+    if (response.status === 200) {
+      dispatch(setVoucherData(response.data))
+    }
+  }
+
   return (
-    <section className=" space-y-4">
-      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+    <section className="space-y-4 ">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
         {/* Cart Items */}
-        <div className="lg:col-span-5 space-y-6">
-          <ShippingForm />
+        <div className="lg:col-span-5 order-2 space-y-6">
+          <ShippingForm
+            onChange={setFormDetails}
+          />
           <section className="space-y-4">
-            <div className="space-y-4">
-              <CheckoutProductHeader
-                selectedItem={1}
-                totalItems={5}
-                totalQuantity={2}
-              />
-              <CheckoutProductCard
-                item={{
-                  id: 1,
-                  name: "Sleek Pregnancy Cushion with some random text abd long text",
-                  description:
-                    "Pregnancy Care / Pillow/ Name of the Project will go here and it can be long but with some long text",
-                  image:
-                    "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1038&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                  color: "Blue",
-                  size: "XXL",
-                  originalPrice: 45000,
-                  currentPrice: 45000,
-                  discount: 20,
-                  quantity: 1,
-                  selected: true,
-                }}
-              />
-            </div>
+            {
+              cartData?.map((item, index) => (
+                <div key={item.id} className="space-y-4">
+                  <CheckoutProductHeader
+                    selectedItem={index + 1}
+                    totalItems={cartData.length}
+                    totalQuantity={item.quantity}
+                  />
+                  <CheckoutProductCard
+                    item={item}
+                  />
+                </div>
+              ))
+            }
           </section>
           <div className="flex items-center justify-end">
             <Link
               href={"/shop"}
-              className="text-foreground transition-all duration-300 ease-in-out flex items-center gap-2 uppercase text-xl"
+              className="flex items-center gap-2 text-xl uppercase transition-all duration-300 ease-in-out text-foreground"
             >
               <span className="font-bold uppercase">Continue Shopping </span>
               <ArrowRight />
@@ -53,17 +81,16 @@ const CheckoutDetails: React.FunctionComponent = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="order-1 space-y-6 lg:col-span-2">
           <OrderSummary
-            location={"location"}
-            totalItems={5}
-            subtotal={590}
-            shippingFee={1500}
-            total={15000}
-            voucherCode={"voucherCode"}
-            onVoucherCodeChange={(code) => console.log(code)}
-            onApplyVoucher={() => console.log("Apply Voucher")}
-            isCheckout={true}
+            shippingDetails={formDetails}
+            applyVoucher
+            totalItems={cartItem.length}
+            shippingFee={shippingFee}
+            voucherCode={voucher}
+            onVoucherCodeChange={setVoucher}
+            onApplyVoucher={handleApplyVoucher}
+            isCheckout={false}
           />
         </div>
       </div>

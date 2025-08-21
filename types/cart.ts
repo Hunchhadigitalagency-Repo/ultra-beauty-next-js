@@ -1,26 +1,88 @@
+import { ShippingFormValues } from "@/schemas/checkout/checkout-schema"
+import { Links, Result, Tax, Variant } from "./product"
+
 export interface CartItem {
-  id: string
-  name: string
-  description: string
-  image: string
-  color: string
-  size: string
-  originalPrice: number
-  currentPrice: number
-  discount: number
+  id: number,
+  quantity: number,
+  price: string
+}
+
+export interface CartResponse {
+  links: Links
+  count: number
+  page_size: number
+  total_pages: number
+  current_page: number
+  results: CartResultType[]
+}
+
+export interface CartResultType {
+  id: number
+  user: string
+  product: CartResult
+  product_variant: Variant
   quantity: number
-  selected: boolean
+  added_at: string
+}
+
+interface CartResult extends Result {
+  id: number,
+  image: string;
 }
 
 
 export interface CartItemCardProps {
-  item: CartItem
-  onUpdate: (updates: Partial<CartItem>) => void
-  onRemove: () => void
-  formatPrice: (price: number) => string
+  item: CartResultType,
+  onRemove: (id: number) => void
+  refetch: () => void
 }
 
 
 export interface LocationCardProps {
   location: string
+}
+
+
+// Cart Slice Types
+
+export interface CartItem {
+  id: number,
+  quantity: number,
+  price: string,
+  discount_percentage?: string,
+  tax_applied: Tax | null,
+}
+export interface Coupon {
+  code: string,
+  discount_percentage: string
+}
+export interface VoucherItem {
+  coupon: Coupon
+}
+export interface CartSelectionState {
+  cartItem: CartItem[];
+  shippingDetails: ShippingFormValues | null;
+  voucherData: VoucherItem | null,
+  orderId?: number | null
+}
+
+
+// Shipping Details Types
+
+export interface ShippingLocation {
+  name?: string;
+  phoneNumbers?: string[],
+  address?: string;
+  fulladress?: string
+}
+export interface OrderSummaryProps {
+  tax?: number;
+  totalItems: number;
+  shippingFee: number;
+  shippingDetails: ShippingFormValues | null;
+  voucherCode?: string;
+  onVoucherCodeChange?: (code: string) => void;
+  onApplyVoucher?: () => void;
+  isCheckout?: boolean;
+  applyVoucher?: boolean
 }

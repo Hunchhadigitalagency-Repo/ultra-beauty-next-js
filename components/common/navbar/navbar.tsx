@@ -39,7 +39,9 @@ export default function Navbar() {
   //   }
   // };
 
+
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
+  const { wishlistCount } = useAppSelector((state) => state.navbar);
   const { data } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
 
 
@@ -119,19 +121,20 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:text-primary"
+                className="relative hover:text-secondary"
                 onClick={() => router.push("/wishlist")}
               >
-                <Heart
-                  className={`size-5 ${isActive("/wishlist") && "text-primary"
-                    }`}
-                />
-                <Badge
-                  variant="destructive"
-                  className="absolute -top-2 -right-2 size-4 rounded-full p-0 flex items-center justify-center text-xs"
-                >
-                  1
-                </Badge>
+                <Heart className={`size-5 ${isActive("/wishlist") && "text-secondary"}`} />
+                {wishlistCount > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute flex items-center justify-center w-5 h-5 p-1 text-xs rounded-full -top-2 -right-2"
+                  >
+                    {wishlistCount}
+                  </Badge>
+                )
+                }
+
               </Button>
 
               <Button

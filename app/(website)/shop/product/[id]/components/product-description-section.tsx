@@ -1,27 +1,34 @@
 "use client";
-import React from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import esewa from "@/assets/esewa.png";
-// import { sr } from "date-fns/locale";
 import khalti from "@/assets/khalti.png";
-import { Product } from "@/types/website";
 import coin from "@/assets/coin-dollar.png";
-import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import globalIime from "@/assets/globalIme.png";
 import mastercard from "@/assets/mastercard.png";
 import { addToCart } from "@/lib/api/cart/cart-apis";
-// import PriceRow from "@/components/common/product/price-row";
+import { getOptions } from "@/utils/single-product-utility";
+import { clearCartItems, clearVoucherData } from "@/redux/features/cart-slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import QuantityRow from "@/components/common/product/quantity-row";
+import RatingStars from "@/components/common/product/rating-stars";
+import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
+import
+React,
+{
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import {
-  Info,
-  Minus,
+  BadgeCheck,
   Plus,
   ShoppingCart,
-  SquareCheck,
-  Truck,
+  SquareCheck
 } from "lucide-react";
-
 import {
   FaInstagram,
   FaTiktok,
@@ -29,11 +36,67 @@ import {
   FaFacebookMessenger
 } from "react-icons/fa6";
 
-interface Props {
-  product: Product;
-}
 
-const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) => {
+const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product }) => {
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [quantity, setQuantity] = useState(1);
+  const [errors, setErrors] = useState<ErrorState>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttribute[]>([]);
+  const { isLoggedIn, profileDetails } = useAppSelector((state) => state.authentication);
+  const userId = profileDetails.id || null;
+
+  const attributeOrder = useMemo(() => {
+    return (
+      product.variants[0]?.product_variants.map(
+        (pv) => pv.attribute.name
+      ) || []
+    );
+  }, [product.variants]);
+
+
+  const optionStep = getOptions({
+    selectedAttribute: selectedAttributes,
+    product: product,
+    attributeOrder: attributeOrder
+  });
+
+  const variantId = optionStep.data?.map(item => item.id).toString();
+
+
+  const validateSelection = useCallback(() => {
+    const newErrors: ErrorState = {};
+
+    attributeOrder.forEach(attrName => {
+      if (!selectedAttributes.some(sel => sel.name === attrName)) {
+        newErrors[attrName] = `Please select a variant for ${attrName}`;
+      } else {
+        newErrors[attrName] = null;
+      }
+    });
+
+    setErrors(prevErrors => {
+      const isEqual = attributeOrder.every(
+        attrName => prevErrors[attrName] === newErrors[attrName]
+      );
+      if (isEqual) {
+        return prevErrors;
+      }
+      return newErrors;
+    });
+
+    return !Object.values(newErrors).some(err => err !== null);
+  }, [attributeOrder, selectedAttributes, setErrors]);
+
+
+
+  useEffect(() => {
+    if (!hasSubmitted) return;
+    validateSelection();
+  }, [selectedAttributes, hasSubmitted, validateSelection]);
 
   const discountedPrice = product.discount_percentage
     ? (
@@ -42,120 +105,176 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
     ).toFixed(2)
     : null;
 
+
+  function handleSelect(name: string, value: string) {
+    setSelectedAttributes((prev) => {
+      const existingIndex = prev.findIndex(attr => attr.name === name);
+      if (existingIndex !== -1) {
+        const updated = [...prev];
+        updated[existingIndex] = { name, value };
+        return updated;
+      }
+      return [...prev, { name, value }];
+    });
+  }
+
+  const handleSubmit = () => {
+
+    setHasSubmitted(true);
+    validateSelection();
+    if (isLoggedIn) {
+      if (variantId !== undefined && userId) {
+        addToCart(userId, product.slug_name, quantity, parseFloat(variantId));
+        dispatch(clearCartItems());
+        dispatch(clearVoucherData())
+        toast.success("Product added to cart successfully!");
+        setSelectedAttributes([]);
+        setErrors({});
+        setHasSubmitted(false)
+        setQuantity(1)
+      }
+    } else {
+      router.push('/login')
+    }
+  };
+
+
   return (
-    <div className="space-y-8 w-auto grid grid-cols-1">
-      <div>
-        <h1 className="text-base md:text-xl xl:text-2xl font-bold font-playfair text-foreground mb-2">
-          {product.name}
-        </h1>
-        <div className=" flex items-center w-96 md:w-full justify-between" >
-          <Badge className="bg-primary px-2 py-1 font-poppins font-light text-white text-sm md:text-base xl:text-xl mb-2">
-            Best Seller
-          </Badge>
-          <span className="text-xs md:text-base xl:text-base text-foreground font-poppins font-medium pl-28">
+    <div className="flex flex-col justify-start w-full space-y-8 ">
+      <div className="flex flex-col gap-5" >
+        <div className="flex justify-between w-full gap-3">
+          <div className="flex gap-5 items-center">
+            <RatingStars rating={product.average_rating} />
+            <span className="font-medium text-sm text-primary">
+              {product.average_rating}
+            </span>
+          </div>
+          <span className="text-xs font-medium md:text-base xl:text-base text-foreground font-poppins">
             #15 SOLD
           </span>
-          <span className="text-xs md:text-base xl:text-base text-foreground font-poppins font-medium inline-flex gap-2 items-center">
-            <Truck />
-            Fast Delivery
-            <Info className="w-5 h-5 md:w-10"/>
-          </span>
         </div>
-        <div className="flex items-center gap-2 justify-between  bg-secondary px-4 py-1 md:py-2 rounded-sm">
-          <span className="text-l font-medium">
-            Details
-          </span>
-          <Button variant="ghost" size="icon">
-            <Minus className="size-5" />
+        <h1 className="mb-2 text-base font-medium md:text-xl xl:text-2xl text-foreground">
+          {product.name}
+        </h1>
+        <div className="flex items-center justify-between">
+          <Button className="text-white rounded-full bg-primary">
+            <BadgeCheck className="w-5 h-5 md:w-10 md:h-10" />
+            In Stock
           </Button>
-
+          <span className="text-base font-medium text-primary md:text-xl">
+            {product.brand.brand_name}
+          </span>
         </div>
-        {product.general_description && (
+        <div>
+        </div>
+      </div>
+      {product.general_description && (
+        <div className="mb-4 text-sm leading-relaxed text-foreground font-poppins">
           <div
-            className="text-foreground font-poppins text-sm mb-4 leading-relaxed"
+            className={`${expanded ? "" : "line-clamp-3"
+              }`}
             dangerouslySetInnerHTML={{ __html: product.general_description }}
           />
-        )}
-      </div>
-      {/* Variant Products section */}
-      <div>
-        <div className="flex gap-2">
-          {product.variants.slice(0, 5).map((variant, i) => (
-            <div className="border border-[#D8D8D8] rounded-md" key={i}>
-              <Image
-                src={variant?.item_image
-                  || product.images?.[0]?.file || ""}
-                alt={`Bundle item ${i}`}
-                width={120}
-                height={120}
-                className="rounded-lg object-cover"
-              />
-            </div>
 
-          ))}
-        </div>
-      </div>
-      {/* Products Size */}
-      <div>
-        <h3 className="font-medium mb-2">
-          Size
-        </h3>
-        <div className="flex gap-2 md:gap-5 xl:gap-8">
-          {["150 Gram", "200 Gram", "450 Gram", "650 Gram"].map((size, i) => (
-            <Button
-              key={size}
-              variant={i === 1 ? "default" : "outline"}
-              size="sm"
-              className="min-w-[50px]"
+          {product.general_description && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-sm font-medium text-secondary hover:text-primary hover:underline"
             >
-              {size}
-            </Button>
-          ))}
+              {expanded ? "Read Less" : "Read More"}
+            </button>
+          )}
         </div>
-      </div>
-      {/* Product Price */}
-      <div className="flex items-center gap-9">
-        <div className="flex justify-between gap-10  md:gap-20">
-          <div className="flex flex-col gap-3 ">
-            <h1 className="font-semibold text-base md:text-base xl:text-xl">
-              NPR.{discountedPrice}
-            </h1>
-            {discountedPrice && (
-              <div className="flex justify-between gap-5">
-                <>
-                  <p className="line-through text-[#7A7A7A] font-medium" >
-                    NPR.{product.price}
-                  </p>
-                  <button className="bg-primary px-2 py-1 md:px-4 md:py-2  font-medium text-xs xl:text-sm  font-poppins text-white rounded-full">
-                    {product.discount_percentage}%OFF
-                  </button>
-                </>
-              </div>
+
+      )}
+
+      {/* Variants */}
+      {attributeOrder.map((attrName) => {
+        const alreadySelected = selectedAttributes.find(a => a.name === attrName);
+
+        const options = [
+          ...new Set(
+            product.variants
+              .filter(variant =>
+                selectedAttributes
+                  .filter(sel => sel.name !== attrName)
+                  .every(sel =>
+                    variant.product_variants.some(
+                      pv =>
+                        pv.attribute.name === sel.name &&
+                        pv.attribute_variant.name === sel.value
+                    )
+                  )
+              )
+              .map(v => {
+                const pv = v.product_variants.find(p => p.attribute.name === attrName);
+                return pv ? pv.attribute_variant.name : null;
+              })
+              .filter(Boolean)
+          ),
+        ];
+
+        return (
+          <div key={attrName} className="flex items-center gap-5 mb-4">
+            <h3 className="font-semibold">
+              {attrName.charAt(0).toUpperCase() + attrName.slice(1)}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {options.map(opt => (
+                <button
+                  key={opt}
+                  className={`px-5 py-1 border rounded-full cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
+                    }`}
+                  onClick={() => {
+                    if (opt !== null) handleSelect(attrName, opt);
+                  }}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+            {errors[attrName] && (
+              <p className="mt-1 text-sm text-red-600">{errors[attrName]}</p>
             )}
           </div>
-          <Button className="bg-primary text-sm font-poppins text-[#FFFFFF] px-2 py-1 md:px-4 md:py-3">
-            Available
-          </Button>
-          <QuantityRow
-            className=" xl:w-42 xl:h-10"
-            onDecrease={() => console.log("Decrease")}
-            onIncrease={() => console.log("Increase")}
-          />
-        </div>
+        );
+      })}
 
+      {/* Product Price */}
+      <div className="flex items-center justify-between w-full ">
+        {discountedPrice !== null &&
+          <h1 className="text-base font-semibold md:text-base xl:text-xl">
+            NPR.{quantity === 1 ? discountedPrice : quantity * parseFloat(discountedPrice)}
+          </h1>
+        }
+        {discountedPrice && (
+          <div className="flex items-center gap-10">
+            <button className="px-2 py-1 text-xs font-medium text-white rounded-full bg-secondary md:px-4 md:py-2 xl:text-sm font-poppins">
+              {product.discount_percentage}%OFF
+            </button>
+            <p className="line-through text-[#7A7A7A] font-medium" >
+              NPR.{product.price}
+            </p>
+          </div>
+        )}
+        <QuantityRow
+          value={quantity}
+          onDecrease={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+          onIncrease={() => setQuantity((prev) => (prev + 1))}
+        />
       </div>
       {/* ADD To Bag button */}
       <Button
-        className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-8 rounded-sm bg-primary"
-        onClick={() => addToCart(product.id, 1)}
+        onClick={handleSubmit}
+        className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-6 rounded-sm bg-primary"
       >
-        ADD TO BAG
+        ADD TO CART
         <ShoppingCart />
       </Button>
       {/* Share Section */}
-      <div className="flex items-center justify-between  ">
+      <div className="flex items-center justify-between ">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-poppins text-foreground font-medium">
+          <span className="text-sm font-medium font-poppins text-foreground">
             SHARE:
           </span>
           <div className="flex gap-8 ">
@@ -165,20 +284,16 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
             <FaTiktok className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
           </div>
         </div>
-        <span className="text-sm text-foreground font-poppins font-medium inline-flex gap-2 items-center">
-          Delivery Info
-          <Info />
-        </span>
       </div>
       {/* Payment Section */}
-      <div className="flex items-center gap-2 justify-between bg-[#FFEBED] px-4 py-2 rounded-sm">
-        <span className="text-sm text-foreground font-poppins font-medium">
+      <div className="flex items-center justify-between bg-[#EEEEEE] px-4 rounded-sm">
+        <span className="text-sm font-medium text-foreground font-poppins">
           We Accept
         </span>
-        <div className="flex gap-2 md:gap-7 items-center">
-          <div className="flex justify-center items-center flex-col">
+        <div className="flex items-center gap-2 md:gap-7">
+          <div className="flex flex-col items-center justify-center">
             <Image src={coin.src} alt="COD" width={26} height={36} className="rounded-full " />
-            <span className="text-sm font-poppins font-bold">
+            <span className="text-sm font-bold font-poppins">
               C.O.D
             </span>
           </div>
@@ -189,19 +304,19 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
         </div>
       </div>
       {/*Bundle Product Section */}
-      {product.variants?.length >= 2 && (
+      {product.variants?.length >= 1 && (
         <div className="space-y-4">
-          <h2 className="font-bold text-lg">Bundle and Save</h2>
+          <h2 className="text-lg font-bold">Bundle and Save</h2>
           <div className="flex items-center justify-between gap-20">
-            <div className="flex  items-center gap-3">
+            <div className="flex items-center gap-3">
               {product.variants.slice(0, 2).map((variant, i) => (
                 <React.Fragment key={i}>
                   <Image
-                    src={variant?.image || product.images?.[0]?.file || ""}
+                    src={product.images?.[0]?.file || ""}
                     alt={`Bundle item ${i}`}
                     width={120}
                     height={120}
-                    className="rounded-lg object-cover"
+                    className="object-cover rounded-lg"
                   />
                   {i !== 0 && (
                     <Button variant="ghost" size="icon">
@@ -215,15 +330,15 @@ const ProductDescriptionSection: React.FunctionComponent<Props> = ({ product }) 
               {product.variants.slice(0, 2).map((variant, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <SquareCheck />
-                  <h3 className="font-medium text-sm">
-                    {variant?.name || "Hair Cleaner for anti dandruf property and selsun property"}
+                  <h3 className="text-sm font-medium">
+                    {"Hair Cleaner for anti dandruf property and selsun property"}
                   </h3>
                 </div>
 
               ))}
             </div>
           </div>
-          <Button className="w-full text-primary border border-primary rounded-sm font-bold  h-12 bg-white">
+          <Button className="w-full h-12 font-bold bg-white border rounded-sm text-primary border-primary">
             Add Bundle To Bag
             <ShoppingCart />
           </Button>

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, RefreshCcw } from "lucide-react";
 import OrderSummary from "../../cart/components/order-summary";
 import SectionHeader from "@/components/common/header/section-header";
-import CheckoutProductCard from "../../checkout/components/checkout-product-card";
 import CheckoutProductHeader from "../../checkout/components/checkout-product-header";
 
 const CheckoutFilledPage: React.FunctionComponent = () => {
@@ -17,7 +16,6 @@ const CheckoutFilledPage: React.FunctionComponent = () => {
                     description="Purchase the item from here"
                 />
             </div>
-
             <div className="flex flex-col lg:flex-row gap-8 mb-8">
                 <div className="flex flex-col gap-4">
 
@@ -46,20 +44,14 @@ const CheckoutFilledPage: React.FunctionComponent = () => {
                                 Continue and Pay
                             </Button>
                         </div>
-
                     </div>
-
                     <div className="w-full lg:w-[350px] shrink-0 md:hidden">
                         <OrderSummary
-                            location={"location"}
+                            shippingDetails={null}
                             totalItems={5}
-                            subtotal={590}
                             shippingFee={1500}
-                            total={15000}
-                            voucherCode={"voucherCode"}
-                            onVoucherCodeChange={(code) => console.log(code)}
-                            onApplyVoucher={() => console.log("Apply Voucher")}
                             isCheckout={true}
+                            applyVoucher={false}
                         />
                     </div>
 
@@ -68,45 +60,6 @@ const CheckoutFilledPage: React.FunctionComponent = () => {
                             selectedItem={1}
                             totalItems={5}
                             totalQuantity={2}
-                        />
-                        <CheckoutProductCard
-                            item={{
-                                id: 1,
-                                name: "Sleek Pregnancy Cushion with some random text abd long text",
-                                description:
-                                    "Pregnancy Care / Pillow/ Name of the Project will go here and it can be long but with some long text",
-                                image:
-                                    "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
-                                color: "Blue",
-                                size: "XXL",
-                                originalPrice: 45000,
-                                currentPrice: 45000,
-                                discount: 20,
-                                quantity: 1,
-                                selected: true,
-                            }}
-                        />
-                        <CheckoutProductHeader
-                            selectedItem={1}
-                            totalItems={5}
-                            totalQuantity={2}
-                        />
-                        <CheckoutProductCard
-                            item={{
-                                id: 1,
-                                name: "Sleek Pregnancy Cushion with some random text abd long text",
-                                description:
-                                    "Pregnancy Care / Pillow/ Name of the Project will go here and it can be long but with some long text",
-                                image:
-                                    "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740",
-                                color: "Blue",
-                                size: "XXL",
-                                originalPrice: 45000,
-                                currentPrice: 45000,
-                                discount: 20,
-                                quantity: 1,
-                                selected: true,
-                            }}
                         />
                         <Link
                             href={"/shop"}
@@ -119,20 +72,13 @@ const CheckoutFilledPage: React.FunctionComponent = () => {
                 </div>
                 <div className="w-full lg:w-[350px] shrink-0 hidden md:block">
                     <OrderSummary
-                        location={"location"}
+                        shippingDetails={null}
                         totalItems={5}
-                        subtotal={590}
                         shippingFee={1500}
-                        total={15000}
-                        voucherCode={"voucherCode"}
-                        onVoucherCodeChange={(code) => console.log(code)}
-                        onApplyVoucher={() => console.log("Apply Voucher")}
                         isCheckout={true}
                     />
                 </div>
             </div>
-
-
         </div>
     );
 };
