@@ -18,7 +18,7 @@ export interface IDropdownFilterOption {
 }
 
 export interface ICategoryDropdown{
-  id: string;
+  id: number;
   name: string;
-  subcategories: Omit<ICategoryDropdown, "subcategories">[];
+  subcategories: IDropdownFilterOption[];
 }
