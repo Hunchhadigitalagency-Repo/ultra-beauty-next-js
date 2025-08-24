@@ -8,6 +8,7 @@ import MobileFilterMenu from "@/components/mobile/MobileFilterMenu";
 import AnnouncementBar from "@/components/common/navbar/announcement-bar";
 
 const WebsiteLayout = ({ children }: { children: React.ReactNode }) => {
+
   return (
     <div className="bg-white">
       <AnnouncementBar />
