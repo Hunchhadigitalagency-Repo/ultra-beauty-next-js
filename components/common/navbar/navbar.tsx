@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import MobileMenu from "./mobile-menu";
-import { useState, useRef } from "react";
+import { useState } from "react";
+import MegaMenu from "./mega-menu";
 import SearchModal from "./search-modal";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { useAppSelector } from "@/redux/hooks";
+import { Button } from "@/components/ui/button";
+import NotificationModal from "./notification-modal";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Search,
   ShoppingCart,
@@ -17,11 +19,8 @@ import {
   // ChevronDown,
 } from "lucide-react";
 
-import NotificationModal from "./notification-modal";
-import { useAppSelector } from "@/redux/hooks";
 // import useFetchData from "@/hooks/use-fetch";
 // import { ICategoryDropdown } from "@/types/dropdown";
-import MegaMenu from "./mega-menu";
 
 export default function Navbar() {
 
@@ -134,210 +133,188 @@ export default function Navbar() {
     }
   ];
 
-  const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [activeMegaMenu, setActiveMegaMenu] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
   const router = useRouter();
   const path = usePathname();
 
 
   const isActive = (pathname: string) => path === pathname;
-  // const isActiveHeader = (pathname: string) => path.startsWith(pathname);
-
-
-
-
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   // const { data } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
 
-  const handleCategoryEnter = (id: number) => {
+  const handleCategoryEnter = (id: number | null) => {
     setIsDropdownVisible(true);
     setActiveCategory(id);
-    setActiveMegaMenu(true);
   };
-
-  const handleSubCategoryLeave = () => {
-    setIsDropdownVisible(false);
-    setActiveMegaMenu(false);
-    setActiveCategory(null);
-  }
-
 
   const handleCategoryClick = (id: number) => {
     console.log(id)
-    // dispatch(toggleCategory({ id, checked: true }))
     router.push('/shop');
+    setIsDropdownVisible(false);
   }
 
+  const handleCategoryLeave = () => {
+    setIsDropdownVisible(false);
+  };
+
   const selectedCategory = data?.find(item => item.id === activeCategory);
-
   const subCategoriesData = selectedCategory?.subcategories || [];
+  const hasSubcategories = selectedCategory && selectedCategory.subcategories.length >= 1 ? true : false;
+
   return (
-    <>
-      <header className="relative bg-secondary border-b border-gray-200 sticky top-0 z-50">
-        <div className="padding-x py-2">
-          {/* Search Popup */}
-          {searchOpen && <SearchModal />}
-          {/* Mega Menu */}
-          {activeMegaMenu && <MegaMenu onMouseLeave={handleSubCategoryLeave} dropdownProducts={subCategoriesData} />}
+    <header className="relative sticky top-0 z-50 border-b border-gray-200 bg-secondary" onMouseLeave={handleCategoryLeave}>
+      <div className="py-2 padding-x">
+        {/* Search Popup */}
+        {searchOpen && <SearchModal />}
 
-          {/* Notification */}
-          {showNotification && (
-            <NotificationModal onClose={() => setShowNotification(false)} />
-          )}
+        {/* Mega Menu */}
+        {isDropdownVisible && <MegaMenu isDropDownVisible={isDropdownVisible} hasSubcategories={hasSubcategories}
+          dropdownProducts={subCategoriesData} setDropdownVisible={setIsDropdownVisible} />}
 
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className="text-base whitespace-nowrap md:text-xl text-center font-playfair font-medium text-primary leading-none">
-                Ultra Beauty
-                <br />
-                <span className="font-poppins text-sm md:text-base">&</span>
-                <br />
-                Brand
-              </span>
-            </Link>
+        {/* Notification */}
+        {showNotification && (
+          <NotificationModal onClose={() => setShowNotification(false)} />
+        )}
 
-            {/* Desktop Navigation */}
-            <nav className="w-full lg:flex justify-center items-center space-x-8" ref={navRef}>
-              <div className="flex justify-center items-center">
-                <div className="static-nav flex gap-8">
-                  <p className="nav-link"><Link href="/">Home</Link></p>
-                  <p className="nav-link pr-7"><Link href="/shop">GlowShop</Link></p>
-                </div>
-
-                {/* navbar for fetched cateogries */}
-                <div className="max-w-[600px]">
-                  {
-                    data?.length < 5 ? (
-                      <div className="flex gap-8">
-                        {data?.slice(0, 4).map((category) => (
-                          <button
-                            key={category.id}
-                            className="flex items-center w-auto gap-1 text-white cursor-pointer font-poppins whitespace-nowrap"
-                            onMouseEnter={() => handleCategoryEnter(category.id)}
-                            // onMouseLeave={handleCategoryLeave}
-                            onClick={() => handleCategoryClick(category.id)}
-                          >
-                            {category.name}
-                            {category?.subcategories?.length > 0 && <ChevronDown
-                              className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
-                                ? "rotate-180"
-                                : ""
-                                }`}
-                            />}
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="flex gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
-                        {data?.map((category) => (
-                          <button
-                            key={category.id}
-                            className="flex items-center w-auto gap-1 text-black cursor-pointer font-poppins whitespace-nowrap"
-                            onMouseEnter={() => handleCategoryEnter(category.id)}
-                            onClick={() => handleCategoryClick(category.id)}
-                          >
-                            {category.name}
-                            {category?.subcategories?.length > 0 && <ChevronDown
-                              className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
-                                ? "rotate-180"
-                                : ""
-                                }`}
-                            />}
-
-                          </button>
-                        ))}
-                      </div>
-                    )
-                  }
-
-                </div>
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center">
+            <span className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
+              Ultra Beauty
+              <br />
+              <span className="text-sm font-poppins md:text-base">&</span>
+              <br />
+              Brand
+            </span>
+          </Link>
+          {/* Desktop Navigation */}
+          <nav className="items-center justify-center hidden w-full space-x-8 lg:flex">
+            <div className="flex items-center justify-center">
+              <div className="flex gap-8 static-nav md:text-sm">
+                <p className="nav-link"><Link href="/">Home</Link></p>
+                <p className="nav-link pr-7"><Link href="/shop">GlowShop</Link></p>
               </div>
-            </nav>
-
-            {/* Right side icons */}
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="hover:text-primary"
-              >
-                <Search className={`size-5 ${searchOpen && "text-primary"}`} />
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative hover:text-secondary"
-                onClick={() => router.push("/wishlist")}
-              >
-                <Heart className={`size-5 ${isActive("/wishlist") && "text-secondary"}`} />
-                {wishlistCount > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute flex items-center justify-center w-5 h-5 p-1 text-xs rounded-full -top-2 -right-2"
-                  >
-                    {wishlistCount}
-                  </Badge>
-                )
+              {/* navbar for fetched cateogries */}
+              <div className="max-w-[300px] text-sm  md:text-sm lg:max-w-[300px] xl:max-w-[480px]">
+                {
+                  data?.length < 5 ? (
+                    <div className="flex gap-8">
+                      {data?.slice(0, 4).map((category) => (
+                        <button
+                          key={category.id}
+                          className="flex items-center w-auto gap-1 text-white cursor-pointer font-poppins whitespace-nowrap"
+                          onMouseEnter={() => handleCategoryEnter(category.id)}
+                          onClick={() => handleCategoryClick(category.id)}
+                        >
+                          {category.name}
+                          {category?.subcategories?.length > 0 && <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
+                              ? "rotate-180"
+                              : ""
+                              }`}
+                          />}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+                      {data?.map((category) => (
+                        <button
+                          key={category.id}
+                          className="flex items-center w-auto gap-1 text-black cursor-pointer font-poppins whitespace-nowrap snap-start"
+                          onMouseEnter={() => handleCategoryEnter(category.id)}
+                          onClick={() => handleCategoryClick(category.id)}
+                        >
+                          {category.name}
+                          {category?.subcategories?.length > 0 && <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
+                              ? "rotate-180"
+                              : ""
+                              }`}
+                          />}
+                        </button>
+                      ))}
+                    </div>
+                  )
                 }
-
-              </Button>
-
+              </div>
+            </div>
+          </nav>
+          {/* Right side icons */}
+          <div className="flex items-center gap-4 md:gap-1 xl:gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="hover:text-primary md:text-sm"
+            >
+              <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative hover:text-secondary"
+              onClick={() => router.push("/wishlist")}
+            >
+              <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-secondary"}`} />
+              {wishlistCount > 0 && (
+                <Badge
+                  variant="destructive"
+                  className="absolute flex items-center justify-center w-5 h-5 p-1 text-xs rounded-full -top-2 -right-2"
+                >
+                  {wishlistCount}
+                </Badge>
+              )
+              }
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative hover:text-primary"
+              onClick={() => router.push("/cart")}
+            >
+              <ShoppingCart
+                className={`size-5 md:size-4 xl:size-5 ${isActive("/cart") && "text-primary"}`}
+              />
+              <Badge
+                variant="destructive"
+                className="absolute flex items-center justify-center p-0 text-xs rounded-full -top-2 -right-2 size-4"
+              >
+                1
+              </Badge>
+            </Button>
+            {isLoggedIn ? (
               <Button
                 variant="ghost"
                 size="icon"
                 className="relative hover:text-primary"
-                onClick={() => router.push("/cart")}
+                onClick={() => router.push("/profile")}
               >
-                <ShoppingCart
-                  className={`size-5 ${isActive("/cart") && "text-primary"}`}
+                <CircleUser
+                  className={`size-5 md:size-4 xl:size-5 ${isActive("/profile") && "text-primary"
+                    }`}
                 />
-                <Badge
-                  variant="destructive"
-                  className="absolute -top-2 -right-2 size-4 rounded-full p-0 flex items-center justify-center text-xs"
-                >
-                  1
-                </Badge>
               </Button>
-              {isLoggedIn ? (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative hover:text-primary"
-                  onClick={() => router.push("/profile")}
-                >
-                  <CircleUser
-                    className={`size-5 ${isActive("/profile") && "text-primary"
-                      }`}
-                  />
-                </Button>
-              ) : (
-                ""
-              )}
-
-              <Button
-                onClick={() => setShowNotification((prev) => !prev)}
-                variant="ghost"
-                size="icon"
-                className="hidden md:flex hover:text-primary"
-              >
-                <Bell className="size-5" />
-              </Button>
-
-              {/* Mobile menu */}
-              <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-            </div>
+            ) : (
+              ""
+            )}
+            <Button
+              onClick={() => setShowNotification((prev) => !prev)}
+              variant="ghost"
+              size="icon"
+              className="hidden md:flex hover:text-primary"
+            >
+              <Bell className="size-5 md:size-4 xl:size-5" />
+            </Button>
+            {/* Mobile menu */}
+            {/* <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} /> */}
           </div>
-        </div >
-      </header >
-    </>
+        </div>
+      </div >
+    </header >
   );
 }
