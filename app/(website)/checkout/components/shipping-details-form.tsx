@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import {
   ShippingFormValues,
   shippingSchema,
@@ -18,15 +18,27 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addShippingDetails } from "@/redux/features/cart-slice";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 
-export default function ShippingForm() {
+
+interface ShippinFormProps {
+  onChange: (value: ShippingFormValues) => void;
+}
+
+
+export default function ShippingForm({ onChange }: ShippinFormProps) {
+
+  const dispatch = useAppDispatch();
+  const { shippingDetails } = useAppSelector(state => state.cart);
 
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
-    defaultValues: {
+    defaultValues: shippingDetails ? shippingDetails : {
       firstName: "",
       lastName: "",
       phoneNumber: "",
@@ -42,16 +54,22 @@ export default function ShippingForm() {
     },
   });
 
-  const router = useRouter()
+
+  const router = useRouter();
+  const watchedValues = useWatch({ control: form.control });
+
+  useEffect(() => {
+    onChange(watchedValues as ShippingFormValues)
+  }, [watchedValues, onChange])
 
   function onSubmit(values: ShippingFormValues) {
-    console.log(values);
+    dispatch(addShippingDetails(values));
     router.push('/payment')
   }
 
   return (
     <div className="space-y-6 bg-white">
-      <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base">
+      <div className="py-2 px-4 bg-[#EEEEEE] rounded-sm font-medium text-custom-black text-base">
         <h2 className="">Shipping details</h2>
       </div>
 
@@ -343,6 +361,7 @@ export default function ShippingForm() {
           {/* Submit Button */}
           <div className="flex justify-end pt-4">
             <Button
+              disabled={!form.formState.isValid}
               type="submit"
               className="bg-primary text-white px-8 py-2 rounded-md"
             >

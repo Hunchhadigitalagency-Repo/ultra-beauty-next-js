@@ -54,6 +54,9 @@ export const authentication = createSlice({
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
+    resetAuthentication: () => {
+      return initialState
+    }
   },
 });
 
@@ -66,5 +69,6 @@ export const {
   toggleRefetch,
   setUserType,
   setIsLoggedIn,
+  resetAuthentication
 } = authentication.actions;
 export default authentication.reducer;

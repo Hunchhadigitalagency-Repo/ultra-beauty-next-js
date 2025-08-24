@@ -38,7 +38,7 @@ export interface Brand {
 }
 const BrandsSection: React.FunctionComponent = () => {
 
-  const { data } = useFetchData<BrandResponse>("/public-brands");
+  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands");
   const brandDetails = data?.results
 
   const [api, setApi] = useState<CarouselApi>();
@@ -79,21 +79,34 @@ const BrandsSection: React.FunctionComponent = () => {
       </div>
       {/* Brand Images section */}
       <div className="relative w-full">
-        <Carousel setApi={setApi}
-          opts={{ align: "start", loop: true }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}>
-          <CarouselContent className="-ml-4">
-            {brandDetails?.map((brand, index) => (
-              <CarouselItem
-                key={index}
-                className="basis-[45%]  pl-4 sm:basis-1/2 md:basis-[32%] lg:basis-1/4"
-              >
-                <BrandsCard image={brand.brand_image} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        {loading ? (
+          <p className="text-sm text-center text-muted-foreground">
+            Loading FAQs...
+          </p>
+        ) : error ? (
+          <p className="text-sm font-medium text-center text-red-500">
+            Something Went Wrong While Fetching FAQs
+          </p>
+        ) : data?.results.length === 0 ? (
+          <p className="text-sm text-center text-muted-foreground">
+            No FAQs found
+          </p>
+        ) : (
+          <Carousel setApi={setApi}
+            opts={{ align: "start", loop: true }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
+            <CarouselContent className="-ml-4">
+              {brandDetails?.map((brand, index) => (
+                <CarouselItem
+                  key={index}
+                  className="basis-[45%]  pl-4 sm:basis-1/2 md:basis-[32%] lg:basis-1/4"
+                >
+                  <BrandsCard image={brand.brand_image} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>)}
       </div>
     </section>
   );

@@ -34,7 +34,7 @@ interface Brand {
 
 const BrandsSection: React.FunctionComponent = () => {
 
-    const { data } = useFetchData<BrandResponse>("/public-brands");
+    const { data, loading, error } = useFetchData<BrandResponse>("/public-brands");
     const brandDetails = data?.results
 
     const [api, setApi] = useState<CarouselApi>();
@@ -89,30 +89,44 @@ const BrandsSection: React.FunctionComponent = () => {
                         </div>
 
                         {/* Right - Brand Carousel */}
-                        <div className="w-full md:pb-14">
-                            <div className='flex justify-end py-4 mr-4 sm:mr-8 md:mr-16'>
-                                <LinkText className='text-xs text-white hover:text-secondary'
-                                    title="ALL BRANDS"
-                                    href="/shop" />
-                            </div>
-                            <Carousel
-                                setApi={setApi}
-                                opts={{ align: "start", loop: true }}
-                                onMouseEnter={() => setIsHovered(true)}
-                                onMouseLeave={() => setIsHovered(false)}>
-                                <CarouselContent
-                                    className="flex gap-5 sm:gap-6 md:gap-7">
-                                    {brandDetails?.map((brand, index) => (
-                                        <CarouselItem
-                                            key={index}
-                                            className="basis-1/2 md:basis-[35%] lg:basis-[40%] "
-                                        >
-                                            <MainBrandcard image={brand?.brand_image} />
-                                        </CarouselItem>
-                                    ))}
-                                </CarouselContent>
-                            </Carousel>
-                        </div>
+
+                        {loading ? (
+                            <p className="text-sm text-center text-muted-foreground">
+                                Loading Brands Hero Section
+                            </p>
+                        ) : error ? (
+                            <p className="text-sm font-medium text-center text-red-500">
+                                Something Went Wrong While Fetching Brands Hero Section Details
+                            </p>
+                        ) : data?.results.length === 0 ? (
+                            <p className="text-sm text-center text-muted-foreground">
+                                No Brands Hero Section Details Found
+                            </p>
+                        ) : (
+                            <div className="w-full md:pb-14">
+                                <div className='flex justify-end py-4 mr-4 sm:mr-8 md:mr-16'>
+                                    <LinkText className='text-xs text-white hover:text-secondary'
+                                        title="ALL BRANDS"
+                                        href="/shop" />
+                                </div>
+                                <Carousel
+                                    setApi={setApi}
+                                    opts={{ align: "start", loop: true }}
+                                    onMouseEnter={() => setIsHovered(true)}
+                                    onMouseLeave={() => setIsHovered(false)}>
+                                    <CarouselContent
+                                        className="flex gap-5 sm:gap-6 md:gap-7">
+                                        {brandDetails?.map((brand, index) => (
+                                            <CarouselItem
+                                                key={index}
+                                                className="basis-1/2 md:basis-[35%] lg:basis-[40%] "
+                                            >
+                                                <MainBrandcard image={brand?.brand_image} />
+                                            </CarouselItem>
+                                        ))}
+                                    </CarouselContent>
+                                </Carousel>
+                            </div>)}
                     </div>
 
                 </div>
