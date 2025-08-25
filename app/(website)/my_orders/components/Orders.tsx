@@ -19,7 +19,7 @@ const Order: React.FunctionComponent = () => {
                 status={'delivered'}
                 orderItems={orderItems}
             />
-            <OrderPayment/>
+            <OrderPayment />
         </section>
     )
 }

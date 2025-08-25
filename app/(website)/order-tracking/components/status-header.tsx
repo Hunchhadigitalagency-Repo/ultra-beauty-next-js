@@ -28,7 +28,7 @@ const StatusHeader: React.FunctionComponent = () => {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="text-black hover:text-red-700 text-xs md:text-sm font-medium h-auto p-0"
+                                className="bg-yellow-600 text-black hover:text-red-700 text-xs md:text-sm font-medium h-auto p-0"
                             >
                                 Cancel Order
                             </Button>
