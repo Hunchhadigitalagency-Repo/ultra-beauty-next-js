@@ -18,12 +18,12 @@ import {
   CircleUser,
   // ChevronDown,
 } from "lucide-react";
+import MobileMenu from "./mobile-menu";
 
 // import useFetchData from "@/hooks/use-fetch";
 // import { ICategoryDropdown } from "@/types/dropdown";
 
 export default function Navbar() {
-
   const data = [
     {
       id: 1,
@@ -137,10 +137,11 @@ export default function Navbar() {
   const [showNotification, setShowNotification] = useState(false);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+
+
   const router = useRouter();
   const path = usePathname();
-
-
   const isActive = (pathname: string) => path === pathname;
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
   const { wishlistCount } = useAppSelector((state) => state.navbar);
@@ -257,10 +258,10 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="relative hover:text-secondary"
+              className="relative hover:text-primary"
               onClick={() => router.push("/wishlist")}
             >
-              <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-secondary"}`} />
+              <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-primary"}`} />
               {wishlistCount > 0 && (
                 <Badge
                   variant="destructive"
@@ -311,7 +312,7 @@ export default function Navbar() {
               <Bell className="size-5 md:size-4 xl:size-5" />
             </Button>
             {/* Mobile menu */}
-            {/* <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+            <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
         </div>
       </div >
