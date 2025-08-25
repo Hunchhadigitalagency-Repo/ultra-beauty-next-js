@@ -4,13 +4,11 @@ import {
     ShoppingCart,
     Undo2,
     NotebookText,
-    BookHeart,
     BookType,
     BookX
 } from "lucide-react";
 import MyOrders from "./my-orders";
 import MyReturns from "./my-returns";
-import MyWishlist from "./my-wishlist";
 import MyReviews from "./MyReview/my-reviews";
 import MyTestimonials from "./my-testimonials";
 import MyProfile from "./MyProfile/my-profile";
@@ -30,7 +28,6 @@ export const PROFILE_TABS: Tab[] = [
     { name: 'My Returns', icon: Undo2, component: <MyReturns /> },
     { name: 'My Reviews', icon: NotebookText, component: <MyReviews /> },
     { name: 'My Cancellation', icon: BookX, component: <MyCancellations /> },
-    { name: 'My Wishlist', icon: BookHeart, component: <MyWishlist /> },
     { name: 'Testimonial', icon: BookType, component: <MyTestimonials /> },
 ];
 
