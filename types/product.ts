@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export interface IFeature {
   label: string;
   position: string;
@@ -251,7 +253,7 @@ export interface ErrorState {
 
 export interface ProductImagesSectionProps {
   images: ProductImagesResponse[];
-  description: string;
+  description: string | undefined;
   is_flash_sale?: boolean;
   flashEndDate?: string;
   isWishlisted?: boolean;

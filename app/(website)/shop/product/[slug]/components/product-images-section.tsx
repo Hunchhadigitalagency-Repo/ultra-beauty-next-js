@@ -7,7 +7,9 @@ import React, { useEffect, useState } from "react";
 import { ProductImagesSectionProps, TimeLeftProps } from "@/types/product";
 
 
-const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({ images, is_flash_sale, flashEndDate, onToggleWishlist, isWishlisted }) => {
+const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({ images, is_flash_sale, flashEndDate,
+  onToggleWishlist,
+  isWishlisted }) => {
 
   const [timeLeft, setTimeLeft] = useState<TimeLeftProps>({
     days: 0,

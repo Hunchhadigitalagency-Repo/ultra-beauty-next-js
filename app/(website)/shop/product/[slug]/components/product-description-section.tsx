@@ -10,10 +10,10 @@ import globalIime from "@/assets/globalIme.png";
 import mastercard from "@/assets/mastercard.png";
 import { addToCart } from "@/lib/api/cart/cart-apis";
 import { getOptions } from "@/utils/single-product-utility";
-import { clearCartItems, clearVoucherData } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import QuantityRow from "@/components/common/product/quantity-row";
 import RatingStars from "@/components/common/product/rating-stars";
+import QuantityRow from "@/components/common/product/quantity-row";
+import { clearCartItems, clearVoucherData } from "@/redux/features/cart-slice";
 import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
 import
 React,
@@ -66,7 +66,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
   const variantId = optionStep.data?.map(item => item.id).toString();
 
-
   const validateSelection = useCallback(() => {
     const newErrors: ErrorState = {};
 
@@ -91,8 +90,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     return !Object.values(newErrors).some(err => err !== null);
   }, [attributeOrder, selectedAttributes, setErrors]);
 
-
-
   useEffect(() => {
     if (!hasSubmitted) return;
     validateSelection();
@@ -104,7 +101,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       (Number(product.price) * Number(product.discount_percentage)) / 100
     ).toFixed(2)
     : null;
-
 
   function handleSelect(name: string, value: string) {
     setSelectedAttributes((prev) => {
@@ -119,7 +115,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
   }
 
   const handleSubmit = () => {
-
     setHasSubmitted(true);
     validateSelection();
     if (isLoggedIn) {
@@ -138,14 +133,13 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     }
   };
 
-
   return (
     <div className="flex flex-col justify-start w-full space-y-8 ">
       <div className="flex flex-col gap-5" >
         <div className="flex justify-between w-full gap-3">
-          <div className="flex gap-5 items-center">
+          <div className="flex items-center gap-5">
             <RatingStars rating={product.average_rating} />
-            <span className="font-medium text-sm text-primary">
+            <span className="text-sm font-medium text-primary">
               {product.average_rating}
             </span>
           </div>

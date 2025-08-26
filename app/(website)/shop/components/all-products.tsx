@@ -3,29 +3,28 @@ import { Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { Result } from "@/types/product";
 import MobileFilter from "./mobile-filter";
-import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
+import { useToggleWishlist } from "@/utils/wishList-utility";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
 import SectionHeader from "@/components/common/header/section-header";
 import { ScribbleProductCard } from "@/components/ui/product-scribble";
-import { toggleWishlist } from "@/utils/wishList-utility";
 
 const AllProducts = () => {
 
-  const router = useRouter();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { isAuthenticated } = useCheckToken();
   const [showFilter, setShowFilter] = useState(false);
   const { selectedCategories } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
+  const toggleWishlist = useToggleWishlist();
 
   const categoryQuery = selectedCategories.length > 0
     ? `?category=${selectedCategories.join(',')}`
@@ -49,14 +48,11 @@ const AllProducts = () => {
 
     toggleWishlist(slug,
       isWishlisted,
-      isAuthenticated,
-      router,
-      dispatch)
+      isAuthenticated)
   };
 
 
   const toggleFilter = () => {
-    //lets test only
     setShowFilter(!showFilter);
   };
 
