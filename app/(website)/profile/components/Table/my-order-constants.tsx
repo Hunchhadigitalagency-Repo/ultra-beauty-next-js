@@ -51,16 +51,28 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       ),
     },
     {
-      title: "Status",
-      render: (order: OrderResponse) => order.payment_status === "paid" ? (
+      title: "Order Status",
+      render: (order: OrderResponse) => order?.order_status?.name === "Pending" ? (
         <div className="block text-white">
-          <span className="inline-block  bg-green-400 text-white py-2 px-3 rounded-sm">Paid</span>
+          <span className="inline-block  bg-yellow-400 text-white py-2 px-3 rounded-sm">Pending</span>
+        </div>
+      ) : order?.order_status?.name === "Cancelled" ? (
+        <div className="text-white">
+          <span className="inline-block block bg-red-400  text-white py-2 px-4 rounded-sm">Cancelled</span>
+        </div>
+      ) : order?.order_status?.name === "Returned" ? (
+        <div className="text-white">
+          <span className="inline-block block bg-orange-400  text-white py-2 px-4 rounded-sm">Returned</span>
+        </div>
+      ) : order?.order_status?.name === "Delivered" ? (
+        <div className="text-white">
+          <span className="inline-block block  bg-green-400  text-white py-2 px-4 rounded-sm">Delivered</span>
         </div>
       ) : (
         <div className="text-white">
-          <span className="inline-block block bg-red-400  text-white py-2 px-4 rounded-sm">Pending</span>
+          <span className="inline-block block bg-gray-400  text-white py-2 px-4 rounded-sm">Unknown Status</span>
         </div>
-      ),
+      )
     },
     {
       title: "Total",
@@ -68,10 +80,10 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
     },
     {
       title: "Action",
-      render: () => (
+      render: (order: OrderResponse) => (
         <button
           className="text-primary cursor-pointer"
-          onClick={() => router.push("/my_orders")}
+          onClick={() => router.push(`/my-orders/${order.id}`)}
         >
           Manage
         </button>

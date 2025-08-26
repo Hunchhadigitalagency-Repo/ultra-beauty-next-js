@@ -161,7 +161,7 @@ const MyProfile: React.FunctionComponent = () => {
           )}
         </div>
       </div>
-
+      {/* Recent Orders */}
       <div className="flex flex-col gap-3">
         <h1 className="text-primary font-medium text-xl">Recent Orders</h1>
         <OrderTable isLoading={orderLoading} isError={orderError} data={orderData?.results} />
