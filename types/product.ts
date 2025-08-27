@@ -142,7 +142,7 @@ export interface Result {
   sku: string
   quantity: number
   general_description: string
-  detail_description: string
+  detail_description: string | undefined
   price: string
   discount_percentage: string
   flash_end_date: string
@@ -224,7 +224,7 @@ export interface BrandResponse {
 
 export interface Brand {
   id: number
-  brand_name: string
+  name: string
   brand_image: string
   description?: string
   is_featured: boolean
@@ -257,11 +257,11 @@ export interface ProductImagesSectionProps {
   is_flash_sale?: boolean;
   flashEndDate?: string;
   isWishlisted?: boolean;
+  is_new?: boolean;
   onToggleWishlist: () => void;
 }
 
 export interface TimeLeftProps {
-  days: number;
   hours: number,
   minutes: number,
   seconds: number
