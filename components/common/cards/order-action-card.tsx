@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
-import Image from 'next/image';
-import CancelOrderImage from "@/assets/-.png";
+// import Image from 'next/image';
+// import CancelOrderImage from "@/assets/-.png";
 import SectionHeader from '@/components/common/header/section-header';
 
 interface Product {
@@ -36,12 +36,12 @@ const OrderActionCard: React.FunctionComponent<ActionCardProps> = ({ product }) 
             <div className=" relative flex flex-row  items-start md:items-start gap-2 p-2 md:gap-4 md:p-4 w-full">
                 {/* Product Image */}
                 <div className="relative flex-shrink-0 w-28 h-28 md:w-48 md:h-56  rounded-lg overflow-hidden">
-                    <Image
+                    {/* <Image
                         src={CancelOrderImage || "/placeholder.svg"}
                         alt={""}
                         layout='fill'
                         className="object-cover"
-                    />
+                    /> */}
                 </div>
                 <div className='py-2 md:py-5 w-full'>
                     <SectionHeader
