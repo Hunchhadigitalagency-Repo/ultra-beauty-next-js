@@ -18,7 +18,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
 
   const pad = (n: number) => n.toString().padStart(2, "0");
 
-
   const [selectedImage, setSelectedImage] = useState<string>(
     images?.[0]?.file || ""
   );
@@ -116,8 +115,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </div>
         ) : null
       }
-
-
       {/* Detail Description */}
       <DetailDecription />
     </div >
