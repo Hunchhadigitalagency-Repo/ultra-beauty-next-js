@@ -1,16 +1,19 @@
 "use client";
 import React from "react";
-import ProductSection from "../product/product-section";
-import useFetchData from "@/hooks/use-fetch";
 import { Result } from "@/types/product";
+import useFetchData from "@/hooks/use-fetch";
+import ProductSection from "../product/product-section";
 
 interface FeaturedProductResponse extends Result {
   id: number;
 }
 const TrendingSection: React.FunctionComponent = () => {
+
   const { data, loading, error } =
-    useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
+    useFetchData<FeaturedProductResponse[]>(`featuredproduct`, true);
+
   return (
+
     <ProductSection
       isLoading={loading}
       error={error}

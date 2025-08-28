@@ -33,7 +33,7 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
     {
       title: "Items",
       render: (order: OrderResponse) => (
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           {order?.order_details?.slice(0, 3).map((item, index) => (
             <div key={index}>
               <div className="relative w-10 h-10">
@@ -54,23 +54,23 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       title: "Order Status",
       render: (order: OrderResponse) => order?.order_status?.name === "Pending" ? (
         <div className="block text-white">
-          <span className="inline-block  bg-yellow-400 text-white py-2 px-3 rounded-sm">Pending</span>
+          <span className="inline-block px-3 py-2 text-white bg-yellow-400 rounded-sm">Pending</span>
         </div>
       ) : order?.order_status?.name === "Cancelled" ? (
         <div className="text-white">
-          <span className="inline-block block bg-red-400  text-white py-2 px-4 rounded-sm">Cancelled</span>
+          <span className=" inline-block px-4 py-2 text-white bg-red-400 rounded-sm">Cancelled</span>
         </div>
       ) : order?.order_status?.name === "Returned" ? (
         <div className="text-white">
-          <span className="inline-block block bg-orange-400  text-white py-2 px-4 rounded-sm">Returned</span>
+          <span className="inline-block px-4 py-2 text-white bg-orange-400 rounded-sm">Returned</span>
         </div>
       ) : order?.order_status?.name === "Delivered" ? (
         <div className="text-white">
-          <span className="inline-block block  bg-green-400  text-white py-2 px-4 rounded-sm">Delivered</span>
+          <span className="inline-block px-4 py-2 text-white bg-green-400 rounded-sm">Delivered</span>
         </div>
       ) : (
         <div className="text-white">
-          <span className="inline-block block bg-gray-400  text-white py-2 px-4 rounded-sm">Unknown Status</span>
+          <span className=" inline-block px-4 py-2 text-white bg-gray-400 rounded-sm">Unknown Status</span>
         </div>
       )
     },
@@ -82,8 +82,8 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       title: "Action",
       render: (order: OrderResponse) => (
         <button
-          className="text-primary cursor-pointer"
-          onClick={() => router.push(`/my-orders/${order.id}`)}
+          className="cursor-pointer text-primary"
+          onClick={() => router.push(`/my_orders/${order.id}`)}
         >
           Manage
         </button>

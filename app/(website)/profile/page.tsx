@@ -39,7 +39,7 @@ const Profile: React.FunctionComponent = () => {
         </div>
       </section>
       <section className="flex flex-col gap-12 lg:flex-row">
-        <aside className="grid hidden grid-cols-2 gap-2 rounded-lg sm:grid-cols-4 lg:block lg:grid-cols-1 lg:bg-secondary lg:p-5 min-w-60 h-fit">
+        <aside className="grid grid-cols-2 gap-2 rounded-lg sm:grid-cols-4 lg:block lg:grid-cols-1 lg:bg-secondary lg:p-5 min-w-60 h-fit">
           {
             PROFILE_TABS.map((tab, index) => (
               <button

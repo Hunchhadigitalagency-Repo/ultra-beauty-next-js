@@ -4,7 +4,7 @@ import filter from "./features/filter-slice";
 import setting from "./features/setting-slice";
 import storage from "redux-persist/lib/storage";
 import category from './features/category-slice';
-import navbar from "./features/wishList-slice"
+import navbar from "./features/wishList-slice";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { persistStore, persistReducer } from "redux-persist";
 import authentication from "./features/authentication-slice";

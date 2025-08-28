@@ -1,14 +1,14 @@
-import React, { useState } from "react";
 import Image from "next/image";
-import OrderTable from '../Table/order-table';
-import ProfileModal from "./components/profile-modal";
-import ShippingDetailsModal from "./components/shipping-details-modal";
-import ShippingModal from "./components/shipping-modal";
+import React, { useState } from "react";
 import useFetchData from "@/hooks/use-fetch";
-import { AuthProfileResponse, RecentOrdersResponseWithPagination } from "@/types/profile";
+import OrderTable from '../Table/order-table';
 import { useAppSelector } from "@/redux/hooks";
+import ProfileModal from "./components/profile-modal";
+import ShippingModal from "./components/shipping-modal";
+import ShippingDetailsModal from "./components/shipping-details-modal";
 import ProfileInformationLoader from "./components/profile-information-loader";
 import ShippingInformationLoader from "./components/shipping-information-loader";
+import { AuthProfileResponse, RecentOrdersResponseWithPagination } from "@/types/profile";
 
 const MyProfile: React.FunctionComponent = () => {
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
@@ -62,13 +62,13 @@ const MyProfile: React.FunctionComponent = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[0.35fr_0.65fr] gap-10">
         {/* Personal Information */}
         <div className="border border-[#E2E2E2] rounded-sm">
-          <div className="flex justify-between items-center p-3">
-            <p className="font-medium text-sm md:text-base">
+          <div className="flex items-center justify-between p-3">
+            <p className="text-sm font-medium md:text-base">
               Personal Information
             </p>
             <button
               onClick={toggleProfileModal}
-              className="text-primary cursor-pointer text-sm md:text-base"
+              className="text-sm cursor-pointer text-primary md:text-base"
             >
               Change
             </button>
@@ -78,14 +78,14 @@ const MyProfile: React.FunctionComponent = () => {
             <ProfileInformationLoader />
           ) : error ? (
             <div className="border-t border-[#CFCECE] p-4 flex justify-center items-center h-35">
-              <p className="text-sm font-medium text-center text-red-500 tracking-wide">
+              <p className="text-sm font-medium tracking-wide text-center text-red-500">
                 Something Went Wrong While Fetching Shipping Details ...
               </p>
             </div>
           ) : (
             <div className="border-t border-[#CFCECE] p-4 flex gap-4">
-              <div className="flex justify-center items-center">
-                <div className=" relative w-20 h-20">
+              <div className="flex items-center justify-center">
+                <div className="relative w-20 h-20 ">
                   {imgSource && (
                     <Image
                       src={typeof imgSource === "string" ? imgSource : ""}
@@ -97,11 +97,11 @@ const MyProfile: React.FunctionComponent = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <p className="text-primary font-semibold text-lg">
+                <p className="text-lg font-semibold text-primary">
                   {data?.first_name + " " + data?.last_name}
                 </p>
-                <p className="font-medium text-sm">{data?.email}</p>
-                <p className="font-medium text-sm">
+                <p className="text-sm font-medium">{data?.email}</p>
+                <p className="text-sm font-medium">
                   Phone: {data?.phone_number ? data?.phone_number : "N/A"}
                 </p>
                 <p className="font-medium text-sm text-[#5D5D5D]">
@@ -114,8 +114,8 @@ const MyProfile: React.FunctionComponent = () => {
 
         {/* Shipping Details */}
         <div className="border border-[#E2E2E2] rounded-sm">
-          <div className="flex justify-between items-center p-3">
-            <p className="font-medium text-sm md:text-base flex items-center gap-3">
+          <div className="flex items-center justify-between p-3">
+            <p className="flex items-center gap-3 text-sm font-medium md:text-base">
               Shipping Details
               <span className="text-[#7C7C7C] font-normal text-xs md:text-base uppercase">
                 default address
@@ -124,13 +124,13 @@ const MyProfile: React.FunctionComponent = () => {
             <div className="flex gap-2 md:gap-3 lg:gap-5">
               <button
                 onClick={toggleShippingDetailsModal}
-                className="text-primary cursor-pointer text-sm md:text-base"
+                className="text-sm cursor-pointer text-primary md:text-base"
               >
                 View
               </button>
               <button
                 onClick={toggleShippingModal}
-                className="text-primary cursor-pointer text-sm md:text-base"
+                className="text-sm cursor-pointer text-primary md:text-base"
               >
                 Change
               </button>
@@ -141,20 +141,20 @@ const MyProfile: React.FunctionComponent = () => {
             <ShippingInformationLoader />
           ) : error ? (
             <div className="border-t border-[#CFCECE] p-4 flex justify-center items-center h-35">
-              <p className="text-sm font-medium text-center text-red-500 tracking-wide">
+              <p className="text-sm font-medium tracking-wide text-center text-red-500">
                 Something Went Wrong While Fetching Shipping Details ...
               </p>
             </div>
           ) : (
             <div className="border-t border-[#CFCECE] p-4 flex flex-col gap-1.5">
-              <p className="text-primary font-semibold text-lg">
+              <p className="text-lg font-semibold text-primary">
                 {data?.first_name + " " + data?.last_name}
               </p>
-              <p className="font-medium text-sm">{data?.email}</p>
-              <p className="font-medium text-sm">
+              <p className="text-sm font-medium">{data?.email}</p>
+              <p className="text-sm font-medium">
                 {data?.phone_number ? data?.phone_number : "N/A"}
               </p>
-              <p className="font-medium text-sm">
+              <p className="text-sm font-medium">
                 {data?.address ? data?.address : "N/A"}
               </p>
             </div>
@@ -163,7 +163,7 @@ const MyProfile: React.FunctionComponent = () => {
       </div>
       {/* Recent Orders */}
       <div className="flex flex-col gap-3">
-        <h1 className="text-primary font-medium text-xl">Recent Orders</h1>
+        <h1 className="text-xl font-medium text-primary">Recent Orders</h1>
         <OrderTable isLoading={orderLoading} isError={orderError} data={orderData?.results} />
       </div>
     </section>

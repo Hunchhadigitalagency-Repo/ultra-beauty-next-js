@@ -1,5 +1,11 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
+import { Result } from '@/types/product';
+import { useAppSelector } from '@/redux/hooks';
+import LinkText from '@/components/common/header/link-text';
+import { useToggleWishlist } from '@/utils/wishList-utility';
+import ProductCard from '@/components/common/cards/product-card';
+import SectionHeader from '@/components/common/header/section-header';
 import {
   Carousel,
   CarouselContent,
@@ -7,10 +13,6 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
-import LinkText from '@/components/common/header/link-text';
-import ProductCard from '@/components/common/cards/product-card';
-import SectionHeader from '@/components/common/header/section-header';
-import { Result } from '@/types/product';
 
 interface ProductResponse extends Result {
   id: number
@@ -28,7 +30,23 @@ interface ProductSectionProps {
 }
 
 const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTitle, headerDescription, headerLink, products, buttonText, isLoading, error }) => {
+
+  const toggleWishlist = useToggleWishlist();
+  const { isLoggedIn } = useAppSelector((state) => state.authentication)
+  const [isWishlisted, setIsWishlisted] = useState<Record<string, boolean>>({});
+
+  const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {
+    if (!slug) return;
+    toggleWishlist(slug, isWishlisted, isLoggedIn);
+
+    setIsWishlisted((prev) => ({
+      ...prev,
+      [slug]: !isWishlisted,
+    }));
+  };
+
   return (
+
     <section className="space-y-4 padding">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader
@@ -74,9 +92,9 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
                         title={product.name}
                         price={product.price}
                         rating={product.average_rating}
-                        onToggleWishlist={() => { }}
-                        isWishlisted={false}
                         slug={product.slug_name}
+                        isWishlisted={isWishlisted[product.slug_name] ?? product.my_wishlist}
+                        onToggleWishlist={handleToggleWishlist}
                       />
                     </div>
                   </CarouselItem>

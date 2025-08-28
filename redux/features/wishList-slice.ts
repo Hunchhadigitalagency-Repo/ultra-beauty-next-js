@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 
 interface NavbarState {
     wishlistCount: number;
@@ -12,6 +13,9 @@ const navbarSlice = createSlice({
     name: "navbar",
     initialState,
     reducers: {
+        setWishlistCount: (state, action: PayloadAction<number>) => {
+            state.wishlistCount = action.payload;
+        },
         increaseWishlistCount: (state) => {
             state.wishlistCount = state.wishlistCount + 1;
         },
@@ -26,6 +30,7 @@ const navbarSlice = createSlice({
 export const {
     increaseWishlistCount,
     decreaseWishlistCount,
+    setWishlistCount
 } = navbarSlice.actions;
 
 export default navbarSlice.reducer;

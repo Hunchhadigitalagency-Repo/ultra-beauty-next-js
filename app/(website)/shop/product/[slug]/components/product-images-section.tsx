@@ -18,7 +18,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
 
   const pad = (n: number) => n.toString().padStart(2, "0");
 
-
   const [selectedImage, setSelectedImage] = useState<string>(
     images?.[0]?.file || ""
   );
@@ -72,7 +71,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
             className={`size-5 ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-500"}`} />
         </Button>
         {
-          is_new && <Badge className="absolute px-7 top-4 right-4 bg-blue-400 text-base text-white rounded-full">
+          is_new && <Badge className="absolute text-base text-white bg-blue-400 rounded-full px-7 top-4 right-4">
             New
           </Badge>
         }
@@ -108,16 +107,14 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           is_flash_sale &&
           new Date(flashEndDate).getDate() > new Date().getDate()
           && new Date(flashEndDate).getTime() > Date.now() ? (
-          <div className="flex justify-between px-3 py-3 text-white rounded w-96 md:w-full bg-blue-400">
-            <p className="font-semibold font-poppins pl-2">Flash Sales</p>
+          <div className="flex justify-between px-3 py-3 text-white bg-blue-400 rounded w-96 md:w-full">
+            <p className="pl-2 font-semibold font-poppins">Flash Sales</p>
             <p className="text-base font-sfpro">
               Ends in {pad(timeLeft.hours)}:{pad(timeLeft.minutes)}:{pad(timeLeft.seconds)} Hrs
             </p>
           </div>
         ) : null
       }
-
-
       {/* Detail Description */}
       <DetailDecription />
     </div >

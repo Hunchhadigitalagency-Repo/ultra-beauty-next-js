@@ -12,6 +12,7 @@ import useCheckToken from "@/hooks/use-check-token";
 import ProductImagesSection from "./product-images-section";
 import { useToggleWishlist } from "@/utils/wishList-utility";
 import ProductDescriptionSection from "./product-description-section";
+import SingleProductInformationLoader from "./single-product-information-loader";
 
 interface SingleProductResponse extends Result {
   id: number
@@ -26,7 +27,7 @@ const SingleProductSection: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<SingleProductResponse>(`public-products/${slug}`);
   const [isWishlisted, setIsWishlisted] = useState<boolean | undefined>(data?.my_wishlist);
 
-  if (!data || loading) return <div>Loading...</div>;
+  if (!data || loading) return <div className="mt-4 ml-4 sm:mt-6 sm:mx-14"><SingleProductInformationLoader /></div>;
   if (error) return <div>Error...</div>;
   const {
     images,
