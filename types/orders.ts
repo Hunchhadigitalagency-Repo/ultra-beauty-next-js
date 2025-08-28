@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export interface IOrderItem {
   id: number;
   imageUrl: string;
@@ -117,3 +119,97 @@ export interface IShippingInfo {
   building: string;
   order_id: number;
 }
+
+// Order-details-0------------------------------------------------------------------------------------------
+export interface CreateOrderResponse {
+  id: number
+  user: User
+  payment_method: string
+  payment_status: string
+  order_status: OrderStatus
+  order_created: string
+  sub_total: string
+  discount_amount: string
+  tax_amount: string
+  shipping_fee: string
+  coupon_discount: string
+  total_amount: string
+  shipping_info: ShippingInfo
+  order_details: OrderDetail[]
+}
+
+export interface User {
+  id: number
+  username: string
+  email: string
+  first_name: string
+  last_name: string
+}
+
+export interface OrderStatus {
+  id: number
+  name: string
+  position: number
+  is_active: boolean
+}
+
+export interface ShippingInfo {
+  id: number
+  first_name: string
+  last_name: string
+  phone_no: string
+  alternate_phone_no: string
+  email: string
+  address: string
+  city: string
+  province: string
+  landmark: string
+  building: string
+}
+
+export interface OrderDetail {
+  id: number
+  image: StaticImageData | string,
+  product: Product
+  product_variant: any
+  quantity: number
+  price: string
+  discount_amount: string
+  vat_amount: string
+  total_price: string
+  name: string
+  detail_description: string
+}
+
+export interface Product {
+  id: number
+  image: string
+  name: string
+  sku: string
+  quantity: number
+  general_description: string
+  detail_description: string
+  price: string
+  discount_percentage: string
+  flash_end_date: string
+  flash_sale_discount: string
+  is_flash_sale: boolean
+  slug_name: string
+  is_published: boolean
+  is_Featured: boolean
+  is_new: boolean
+  is_best_seller: boolean
+  is_tax_applicable: boolean
+  tutorial: any
+  youtube_link: string
+  created_at: string
+  updated_at: string
+  same_as_parent_name: boolean
+  attribute_price: boolean
+  attribute_discount: boolean
+  attribute_image: boolean
+  brand: number
+  tax_applied: number
+  package: number[]
+}
+// order details end------------------------------------------------------------------------------

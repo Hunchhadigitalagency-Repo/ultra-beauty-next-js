@@ -9,12 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/common/form/star-rating-input";
-import { TestimonialForm, testimonialSchema } from "@/schemas/testimonials/testimonial-schema";
+import { TestimonialFormValues, testimonialSchema } from "@/schemas/cms/testimonials-schema";
 
 
 
 export default function MyTestimonials() {
-    const form = useForm<TestimonialForm>({
+    const form = useForm<TestimonialFormValues>({
         resolver: zodResolver(testimonialSchema),
         defaultValues: {
             name: "",
@@ -27,7 +27,7 @@ export default function MyTestimonials() {
         },
     });
 
-    function onSubmit(values: TestimonialForm) {
+    function onSubmit(values: TestimonialFormValues) {
         console.log("Form Values:", values);
     }
 

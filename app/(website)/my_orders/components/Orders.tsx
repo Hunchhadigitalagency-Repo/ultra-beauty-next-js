@@ -2,10 +2,18 @@ import React from 'react';
 import OrderHeader from './Order-Header';
 import SectionHeader from '@/components/common/header/section-header';
 import OrderPayment from './Order-payment';
+import { useParams } from 'next/navigation';
+import useFetchData from '@/hooks/use-fetch';
+import { CreateOrderResponse } from '@/types/orders';
+
 
 const Order: React.FunctionComponent = () => {
 
-    const orderItems: any = [];
+    const { id } = useParams();
+    const { data, loading, error } = useFetchData<CreateOrderResponse>(`order/${id}/`, true)
+
+
+
 
     return (
         <section className="padding space-y-4">
@@ -13,13 +21,24 @@ const Order: React.FunctionComponent = () => {
                 title='Order Details'
                 description='See all the order details'
             />
-            <OrderHeader
-                itemId={"#90910398123"}
-                totalItems={2}
-                status={'delivered'}
-                orderItems={orderItems}
-            />
-            <OrderPayment />
+
+            {loading ? (
+                <p className="text-sm text-center text-muted-foreground">
+                    Loading Orders
+                </p>
+            ) : error ? (
+                <p className="text-sm font-medium text-center text-red-500">
+                    Something Went Wrong While Fetching Orders
+                </p>
+            ) : data?.order_details.length === 0 ? (
+                <p className="text-sm text-center text-muted-foreground">
+                    No Order Details Found
+                </p>
+            ) : (<>
+                <OrderHeader
+                    orderItems={data}
+                />
+                <OrderPayment /></>)}
         </section>
     )
 }
