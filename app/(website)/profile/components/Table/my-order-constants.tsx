@@ -83,7 +83,7 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       render: (order: OrderResponse) => (
         <button
           className="text-primary cursor-pointer"
-          onClick={() => router.push(`/my-orders/${order.id}`)}
+          onClick={() => router.push(`/my_orders/${order.id}`)}
         >
           Manage
         </button>
