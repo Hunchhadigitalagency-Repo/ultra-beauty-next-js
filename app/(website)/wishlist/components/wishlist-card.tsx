@@ -1,11 +1,11 @@
 import React from "react";
 import Image from "next/image";
 import DOMPurify from "dompurify";
+import { useDispatch } from "react-redux";
 import { ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PriceRow from "@/components/common/product/price-row";
 import RatingStars from "@/components/common/product/rating-stars";
-import { useDispatch } from "react-redux";
 import { decreaseWishlistCount } from "@/redux/features/wishList-slice";
 
 interface WishlistCardProps {
@@ -13,7 +13,7 @@ interface WishlistCardProps {
   name: string;
   description: string;
   rating: number;
-  previousPrice: string;
+  previousPrice: string | undefined;
   price: string;
   discountTag: string;
   slug?: string;
@@ -26,33 +26,26 @@ const WishlistCard = ({
   description,
   rating,
   previousPrice,
-  price,
   discountTag,
   deleteWishlist,
+  price,
   slug,
 }: WishlistCardProps) => {
 
   const dispatch = useDispatch();
 
   return (
-    <section className="relative flex flex-col gap-4 md:flex-row ">
+
+    <section className="relative flex flex-col gap-4 mt-5 md:flex-row">
       <div className="flex flex-row flex-1 gap-4 md:gap-6">
         {/* Image */}
-        <div className="flex items-center ">
-          <div className="relative w-20 h-20 lg:w-32 lg:h-32">
-            <Image
-              src={image}
-              alt={name}
-              layout="fill"
-              className="object-cover rounded-lg"
-            />
-            {discountTag && (
-              <span className="absolute px-2 py-1 text-xs text-white rounded-full bg-primary md:text-sm right-1 bottom-1">
-                {/* {Math.floor(Number(discountTag))}% Off */}
-                {discountTag} Off
-              </span>
-            )}
-          </div>
+        <div className="relative w-20 h-20 lg:w-32 lg:h-32">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover rounded-lg"
+          />
         </div>
         {/* Details */}
         <div className="flex flex-col flex-1">
@@ -96,10 +89,8 @@ const WishlistCard = ({
               {/* Price */}
               <PriceRow
                 previousPrice={previousPrice}
+                discountTag={discountTag}
                 price={price}
-                className="flex flex-col justify-start lg:gap-12 md:flex-row "
-                discountClassName="text-[15px] md:text-sm w-[100px]"
-                priceClassname="w-[220px] md:w-[300px] "
               />
             </div>
             {/* Button */}

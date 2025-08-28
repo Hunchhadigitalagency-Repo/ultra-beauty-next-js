@@ -9,7 +9,13 @@ interface FetchDropdownHook<T> {
   error: Error | null;
   refetch: () => void;
 }
-const useFetchData = <T>(url: string, token?: boolean): FetchDropdownHook<T> => {
+interface UseFetchDataOptions {
+  config?: Record<string, any>;
+}
+
+const useFetchData = <T>(url: string, token?: boolean,
+  { config = {} }: UseFetchDataOptions = {}
+): FetchDropdownHook<T> => {
 
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

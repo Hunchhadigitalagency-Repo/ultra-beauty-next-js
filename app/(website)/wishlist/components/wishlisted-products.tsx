@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import { CiHeart } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import WishlistCard from "./wishlist-card";
@@ -9,7 +10,8 @@ import useFetchData from "@/hooks/use-fetch";
 import { WishListResponse } from "@/types/wishlist";
 import useCheckToken from "@/hooks/use-check-token";
 import WishListData from "@/constants/wishlist-data";
-import { decreaseWishlistCount } from "@/redux/features/wishList-slice";
+import { calculateDiscountedPrice } from "@/lib/cart-utils";
+import { setWishlistCount } from "@/redux/features/wishList-slice";
 import SectionHeader from "@/components/common/header/section-header";
 import WishlistCardSkeleton from "@/components/ui/wishlist-scribble-loader";
 import { deleteAllWishlist, deleteWishlist } from "@/lib/api/wishlist/wishlist-apis";
@@ -22,10 +24,14 @@ const WishlistedProducts = () => {
   const wishListData = data?.results[0]?.products
   const dispatch = useDispatch();
 
-
-  const deleteWishlistClient = (slug: string) => {
-    deleteWishlist(slug);
-    refetch()
+  const deleteWishlistClient = async (slug: string) => {
+    try {
+      await deleteWishlist(slug);
+      await refetch();
+      toast.success('Item removed from wishlist');
+    } catch (error) {
+      toast.error(`Error removing item from wishlist: ${error}`);
+    }
   };
 
   if (authLoading) {
@@ -48,8 +54,7 @@ const WishlistedProducts = () => {
 
   const handleClearAllWishlist = () => {
     deleteAllWishlist().then(refetch)
-    dispatch(decreaseWishlistCount())
-
+    dispatch(setWishlistCount(0))
   }
 
   return (
@@ -71,7 +76,7 @@ const WishlistedProducts = () => {
 
         </div>
 
-        <div className="flex flex-col gap-8 ">
+        <div className="flex flex-col">
           {loading ? (
             <React.Fragment>
               <WishlistCardSkeleton />
@@ -85,16 +90,16 @@ const WishlistedProducts = () => {
                 name={product.name}
                 description={product.general_description || ""}
                 rating={product.average_rating}
-                previousPrice={product.price || "0"}
-                price={product.price || "0"}
-                discountTag={product.discount_percentage || "0%"}
+                previousPrice={product.discount_percentage ? product.price : undefined}
+                price={calculateDiscountedPrice(product.price, product.discount_percentage) || product.price}
+                discountTag={product.discount_percentage || ""}
                 slug={product.slug_name}
                 deleteWishlist={deleteWishlistClient}
               />
             ))
           ) : (
-            <p className="text-sm text-center text-gray-500">
-              No wishlist items found.
+            <p className="text-sm text-center pt-51 text-muted-foreground">
+              No wishlisted items found.
             </p>
           )}
         </div>

@@ -8,33 +8,36 @@ interface PriceRowProps {
   discountClassName?: string;
   priceClassname?: string;
 }
-
 const PriceRow = ({
+  previousPrice,
   price,
   discountTag,
   className,
+  discountClassName,
   priceClassname,
 }: PriceRowProps) => {
-  // console.log("this are the items", previousPrice, price, discountTag)
+
   return (
-    <div className={`md:items-center  gap-3 md:gap-5  ${className}`}>
+
+    <div className={`md:items-center gap-3 md:gap-5  ${className}`}>
       <span className={`flex w-full justify-between ${priceClassname}`}>
-        <span className="text-sm font-medium text-primary md:text-xl ">
+        <span className="text-base font-medium text-primary md:text-lg ">
           Nrs. {price}
         </span>
-        <span className="text-sm font-normal font-bold text-green-500 md:text-base ">
-          {discountTag && `${discountTag?.split(".")[0]}% off`}
-        </span>
-      </span>
-      {/* {
-        discountTag && (
-          <span className={`bg-[#FF2B5F] text-white px-3 py-0.5 rounded-full ${discountClassName}`}>
-            {discountTag}% Off
+        {Number(previousPrice) > 0 && (
+          <span className={`text-gray-400 text-[16px] font-semibold line-through`}>
+            Nrs. {previousPrice}
           </span>
-        )
-      } */}
-    </div >
+        )}
+        {
+          discountTag && (
+            <span className={`text-[#1CA600] text-sm md:text-base px-3 py-0.5 rounded-full ${discountClassName}`}>
+              {discountTag}% Off
+            </span>
+          )
+        }
+      </span>
+    </div>
   );
 };
-
 export default PriceRow;

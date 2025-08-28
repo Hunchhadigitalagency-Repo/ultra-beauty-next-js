@@ -166,15 +166,21 @@ export default function Navbar() {
   const subCategoriesData = selectedCategory?.subcategories || [];
   const hasSubcategories = selectedCategory && selectedCategory.subcategories.length >= 1 ? true : false;
 
+
   return (
-    <header className="relative sticky top-0 z-50 border-b border-gray-200 bg-secondary" onMouseLeave={handleCategoryLeave}>
+    <header className="relative  top-0 z-50 border-b border-gray-200 bg-secondary"
+      onMouseLeave={handleCategoryLeave}>
       <div className="py-2 padding-x">
+
         {/* Search Popup */}
         {searchOpen && <SearchModal />}
 
         {/* Mega Menu */}
-        {isDropdownVisible && <MegaMenu isDropDownVisible={isDropdownVisible} hasSubcategories={hasSubcategories}
-          dropdownProducts={subCategoriesData} setDropdownVisible={setIsDropdownVisible} />}
+        {isDropdownVisible && <MegaMenu
+          isDropDownVisible={isDropdownVisible}
+          hasSubcategories={hasSubcategories}
+          dropdownProducts={subCategoriesData}
+          setDropdownVisible={setIsDropdownVisible} />}
 
         {/* Notification */}
         {showNotification && (
@@ -196,9 +202,16 @@ export default function Navbar() {
           <nav className="items-center justify-center hidden w-full space-x-8 lg:flex">
             <div className="flex items-center justify-center">
               <div className="flex gap-8 static-nav md:text-sm">
-                <p className="nav-link"><Link href="/">Home</Link></p>
-                <p className="nav-link pr-7"><Link href="/shop">GlowShop</Link></p>
+                <p className="nav-link">
+                  <Link href="/">
+                    Home
+                  </Link></p>
+                <p className="nav-link pr-7">
+                  <Link href="/shop">
+                    GlowShop
+                  </Link></p>
               </div>
+
               {/* navbar for fetched cateogries */}
               <div className="max-w-[300px] text-sm  md:text-sm lg:max-w-[300px] xl:max-w-[480px]">
                 {
