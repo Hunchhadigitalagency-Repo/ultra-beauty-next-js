@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Heart, Eye } from "lucide-react";
@@ -45,10 +46,9 @@ const ProductCard = ({
           fill
           className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
         />
-
         {isFlashSale && (
           <div className="absolute bottom-3 left-3">
-            <span className="bg-primary text-white text-[10px] md:text-sm  px-2 md:px-3 py-1 rounded-full">
+            <span className="bg-secondary text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
               Flash Sale
             </span>
           </div>
@@ -68,17 +68,15 @@ const ProductCard = ({
       <div className="flex flex-col gap-2 md:gap-3 lg:gap-4">
         {/* Price row */}
         <PriceRow
-          previousPrice={"3200"}
           price={price}
           discountTag={discountTag}
         />
-
         {/* Rating and wishlist */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <RatingStars rating={rating} />
             <span className="ml-0 text-xs font-medium md:ml-2 text-foreground md:text-base">
-              {rating}
+              {rating.toFixed(1)}
             </span>
           </div>
 
@@ -98,10 +96,10 @@ const ProductCard = ({
         </div>
 
         {/* Add To Bag Button */}
-        <button className="flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium text-white bg-primary sm:text-sm md:text-base">
+        <Link href={`/shop/product/${slug}`} className="flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium text-white bg-primary sm:text-sm md:text-base">
           <Eye className="w-4 h-4" />
           View Product
-        </button>
+        </Link>
       </div>
     </section>
   );
