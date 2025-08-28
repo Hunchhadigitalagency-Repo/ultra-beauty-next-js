@@ -28,7 +28,7 @@ const RatingStars: React.FC<{ rating: number }> = ({ rating }) => {
       {[...Array(emptyStars)].map((_, i) => (
         <IoStarOutline
           key={`star-empty-${i}`}
-          className="w-3 h-3 md:w-5 md:h-5 text-gray-300"    /* outline only */
+          className="w-3 h-3 text-gray-300 md:w-5 md:h-5"    /* outline only */
           fill="none"
           stroke="currentColor"
         />

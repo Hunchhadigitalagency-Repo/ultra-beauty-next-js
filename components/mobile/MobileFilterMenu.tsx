@@ -1,44 +1,40 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "../ui/navigation-menu";
-import { getNavigationItems } from "@/constants/navbar-data";
+// import {
+//   NavigationMenu,
+// NavigationMenuContent,
+// NavigationMenuItem,
+// NavigationMenuLink,
+// NavigationMenuList,
+// NavigationMenuTrigger,
+// } from "../ui/navigation-menu";
 
 // ✅ Define the type
-interface NavigationItem {
-  name: string;
-  href: string;
-  hasDropdown?: boolean;
-  children?: {
-    name: string;
-    href: string;
-  }[];
-}
+// interface NavigationItem {
+//   name: string;
+//   href: string;
+//   hasDropdown?: boolean;
+//   children?: {
+//     name: string;
+//     href: string;
+//   }[];
+// }
 
 export default function MobileFilterMenu() {
-  const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
+  // const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const items = await getNavigationItems();
-      setNavigationItems(items);
-    };
-    fetchItems();
-  }, []);
+  // useEffect(() => {
+  //   const fetchItems = async () => {
+  //     const items = await getNavigationItems();
+  //     setNavigationItems(items);
+  //   };
+  //   fetchItems();
+  // }, []);
 
   return (
-    <div className="md:hidden px-4 py-2 bg-white shadow-sm border-b  flex justify-around">
-      <NavigationMenu>
-        <NavigationMenuList className="flex gap-x-4 justify-around list-none p-0 m-0">
-          {navigationItems
+    <div className="flex justify-around px-4 py-2 bg-white border-b shadow-sm md:hidden">
+      {/* <NavigationMenu> */}
+      {/* <NavigationMenuList className="flex justify-around p-0 m-0 list-none gap-x-4"> */}
+      {/* {navigationItems
             .filter(
               (item) =>
                 item.name === "Shop by Category" ||
@@ -58,7 +54,7 @@ export default function MobileFilterMenu() {
                         <NavigationMenuLink asChild key={child.name}>
                           <Link
                             href={child.href}
-                            className="block px-3 py-1 text-sm text-foreground hover:bg-gray-100 rounded"
+                            className="block px-3 py-1 text-sm rounded text-foreground hover:bg-gray-100"
                           >
                             {child.name}
                           </Link>
@@ -78,9 +74,9 @@ export default function MobileFilterMenu() {
                   </Link>
                 )}
               </NavigationMenuItem>
-            ))}
-        </NavigationMenuList>
-      </NavigationMenu>
+            ))} */}
+      {/* </NavigationMenuList> */}
+      {/* </NavigationMenu> */}
     </div>
   );
 }

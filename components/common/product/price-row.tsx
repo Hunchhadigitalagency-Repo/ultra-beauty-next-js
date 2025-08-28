@@ -23,7 +23,7 @@ const PriceRow = ({
           Nrs. {price}
         </span>
         <span className="text-sm font-normal font-bold text-green-500 md:text-base ">
-          {discountTag?.split(".")[0]}%
+          {discountTag && `${discountTag?.split(".")[0]}% off`}
         </span>
       </span>
       {/* {

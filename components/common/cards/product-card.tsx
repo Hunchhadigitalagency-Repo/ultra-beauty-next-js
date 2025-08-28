@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+import { Heart, Eye } from "lucide-react";
 import PriceRow from "../product/price-row";
 import { useRouter } from "next/navigation";
 import RatingStars from "../product/rating-stars";
-import { Heart, Eye } from "lucide-react";
 import { ProductCardProps } from "@/types/product";
 
 const ProductCard = ({
@@ -45,9 +45,10 @@ const ProductCard = ({
           fill
           className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
         />
+
         {isFlashSale && (
           <div className="absolute bottom-3 left-3">
-            <span className="bg-secondary text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
+            <span className="bg-primary text-white text-[10px] md:text-sm  px-2 md:px-3 py-1 rounded-full">
               Flash Sale
             </span>
           </div>
