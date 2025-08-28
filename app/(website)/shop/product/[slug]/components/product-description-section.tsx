@@ -137,7 +137,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     <div className="flex flex-col justify-start w-full space-y-8 ">
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
-          <h1 className="mb-2 text-base font-medium md:text-xl xl:text-md text-gray-500">
+          <h1 className="mb-2 text-base font-medium text-gray-500 md:text-xl xl:text-md">
             {product.brand.name}
           </h1>
           <div className="flex items-center gap-5">
@@ -147,11 +147,11 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
             </span>
           </div>
         </div>
-        <div className="capitalize text-3xl font-medium line-clamp-2">{product.name}</div>
+        <div className="text-3xl font-medium capitalize line-clamp-2">{product.name}</div>
         <div className="best-seller">
           {
             product.is_best_seller == false && (
-              <Button className="text-white rounded-sm bg-primary mt-4">
+              <Button className="mt-4 text-white rounded-sm bg-primary">
                 Best Seller
               </Button>
             )
@@ -210,28 +210,35 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
           return (
             <div key={attrName} className="flex items-center gap-5 mb-4">
               <h3 className="font-semibold">
-                {attrName.charAt(0).toUpperCase() + attrName.slice(1)}
+                {
+                  attrName.charAt(0).toUpperCase() + attrName.slice(1)
+                }
               </h3>
               <div className="flex flex-wrap gap-2">
-                {options.map(opt => (
-                  <button
-                    key={opt}
-                    className={`px-5 py-1 border rounded-full cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
-                      }`}
-                    onClick={() => {
-                      if (opt !== null) handleSelect(attrName, opt);
-                    }}
-                  >
-                    {opt}
-                  </button>
-                ))}
+                {
+                  options.map(opt => (
+                    <button
+                      key={opt}
+                      className={`px-5 py-1 border rounded-full cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
+                        }`}
+                      onClick={() => {
+                        if (opt !== null) handleSelect(attrName, opt);
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  ))
+                }
               </div>
-              {errors[attrName] && (
-                <p className="mt-1 text-sm text-red-600">{errors[attrName]}</p>
-              )}
+              {
+                errors[attrName] && (
+                  <p className="mt-1 text-sm text-red-600">{errors[attrName]}</p>
+                )
+              }
             </div>
           );
-        })
+        }
+        )
       }
 
       {/* Product Price */}
@@ -248,7 +255,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               <p className="line-through text-[#7A7A7A] font-medium" >
                 NPR. {product.price.split(".")[0]}
               </p>
-              <button className="px-2 py-1 text-xs font-medium text-white rounded-full bg-green-400 md:px-4 md:py-2 xl:text-sm font-poppins">
+              <button className="px-2 py-1 text-xs font-medium text-white bg-green-400 rounded-full md:px-4 md:py-2 xl:text-sm font-poppins">
                 {product.discount_percentage.split(".")[0]}% OFF
               </button>
             </div>
@@ -307,35 +314,41 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         product.variants?.length >= 1 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold">Bundle and Save</h2>
-            <div className="flex items-center justify-between gap-20">
+            <div className="flex flex-col justify-start gap-8 md:flex-row md:gap-20 md:items-center md:justify-between lg:flex-col lg:gap-8 lg:items-start xl:flex-row xl:gap-20 xl:items-center xl:justify-between">
               <div className="flex items-center gap-3">
-                {product.variants.slice(0, 2).map((variant, i) => (
-                  <React.Fragment key={i}>
-                    <Image
-                      src={product.images?.[0]?.file || ""}
-                      alt={`Bundle item ${i}`}
-                      width={120}
-                      height={120}
-                      className="object-cover rounded-lg"
-                    />
-                    {i !== 0 && (
-                      <Button variant="ghost" size="icon">
-                        <Plus className="size-8" />
-                      </Button>
-                    )}
-                  </React.Fragment>
-                ))}
+                {
+                  product.variants.slice(0, 2).map((variant, i) => (
+                    <React.Fragment key={i}>
+                      <Image
+                        src={product.images?.[0]?.file || ""}
+                        alt={`Bundle item ${i}`}
+                        width={120}
+                        height={120}
+                        className="object-cover rounded-lg"
+                      />
+                      {
+                        i !== 0 && (
+                          <Button variant="ghost" size="icon">
+                            <Plus className="size-8" />
+                          </Button>
+                        )
+                      }
+                    </React.Fragment>
+                  ))
+                }
               </div>
               <div className="flex flex-col items-start gap-3">
-                {product.variants.slice(0, 2).map((variant, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <SquareCheck />
-                    <h3 className="text-sm font-medium">
-                      {"Hair Cleaner for anti dandruf property and selsun property"}
-                    </h3>
-                  </div>
+                {
+                  product.variants.slice(0, 2).map((variant, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <SquareCheck />
+                      <h3 className="text-sm font-medium">
+                        {"Hair Cleaner for anti dandruf property and selsun property"}
+                      </h3>
+                    </div>
 
-                ))}
+                  ))
+                }
               </div>
             </div>
             <Button className="w-full h-12 font-bold bg-white border rounded-sm text-primary border-primary">
