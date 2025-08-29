@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ShippingFormValues } from "@/schemas/checkout/checkout-schema";
 import { CartItem, CartSelectionState, VoucherItem } from "@/types/cart";
 
+
 const initialState: CartSelectionState = {
+    cartCount: 0,
     cartItem: [],
     shippingDetails: null,
     voucherData: null,
@@ -76,6 +78,23 @@ const cartSlice = createSlice({
             state.cartItem = [];
             state.shippingDetails = null;
             state.voucherData = null;
+        },
+        increaseCartCount: (state) => {
+            state.cartCount = state.cartCount + 1;
+        },
+        decreaseCartCount: (state) => {
+            if (state.cartCount > 0) {
+                state.cartCount -= 1;
+            }
+        },
+        setCartCount: (state, action: PayloadAction<number>) => {
+            state.cartCount = action.payload
+        },
+        decreaseCartCountBy: (state, action: PayloadAction<number>) => {
+            state.cartCount = state.cartCount - action.payload;
+        },
+        clearCartCount: (state) => {
+            state.cartCount = 0;
         }
     },
 });
@@ -91,7 +110,12 @@ export const {
     clearCart,
     clearCartItems,
     clearVoucherData,
-    setOrderId
+    setOrderId,
+    increaseCartCount,
+    decreaseCartCount,
+    clearCartCount,
+    decreaseCartCountBy,
+    setCartCount
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

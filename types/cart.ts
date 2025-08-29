@@ -60,10 +60,11 @@ export interface VoucherItem {
   coupon: Coupon
 }
 export interface CartSelectionState {
+  cartCount: number;
   cartItem: CartItem[];
   shippingDetails: ShippingFormValues | null;
   voucherData: VoucherItem | null,
-  orderId?: number | null
+  orderId: number | null
 }
 
 

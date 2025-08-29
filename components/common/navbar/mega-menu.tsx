@@ -1,13 +1,9 @@
+import { IDropdownFilterOption } from '@/types/dropdown'
 import Link from 'next/link'
 import React from 'react'
 
-interface DropdownProduct {
-  id: number
-  name: string
-}
-
 interface MegaMenuProps {
-  dropdownProducts: DropdownProduct[]
+  dropdownProducts: IDropdownFilterOption[]
   isDropDownVisible: boolean
   hasSubcategories: boolean | undefined
   setDropdownVisible: React.Dispatch<React.SetStateAction<boolean>>
