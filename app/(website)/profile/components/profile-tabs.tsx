@@ -22,6 +22,8 @@ type Tab = {
     component: React.ReactNode;
 };
 
+
+
 export const PROFILE_TABS: Tab[] = [
     { name: 'Profile', icon: UserRoundPlus, component: <MyProfile /> },
     { name: 'My Orders', icon: ShoppingCart, component: <MyOrders /> },
