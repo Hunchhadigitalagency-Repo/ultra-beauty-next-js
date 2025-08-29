@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const ReviewSchema = z.object({
-    review: z.string().min(2, "Review is required"),
+    review: z.string().optional(),
     rating: z
         .number()
         .min(1, "Rating is required")
