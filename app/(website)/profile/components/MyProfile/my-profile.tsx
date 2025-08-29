@@ -31,6 +31,8 @@ const MyProfile: React.FunctionComponent = () => {
   const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
   const { data: orderData, error: orderError, loading: orderLoading } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders`, true);
 
+  const filtered_Order_Data = orderData?.results?.filter(order => order.order_details.length > 0);
+
   const { profile } = useAppSelector(
     (state) => state.authentication.profileDetails
   );
@@ -164,7 +166,7 @@ const MyProfile: React.FunctionComponent = () => {
       {/* Recent Orders */}
       <div className="flex flex-col gap-3">
         <h1 className="text-xl font-medium text-primary">Recent Orders</h1>
-        <OrderTable isLoading={orderLoading} isError={orderError} data={orderData?.results} />
+        <OrderTable isLoading={orderLoading} isError={orderError} data={filtered_Order_Data} />
       </div>
     </section>
   );

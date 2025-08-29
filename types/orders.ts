@@ -1,4 +1,6 @@
 import { StaticImageData } from "next/image";
+import { ProductVariant } from "./product";
+import { PaginatedResponse } from "@/types/common";
 
 export interface IOrderItem {
   id: number;
@@ -212,4 +214,21 @@ export interface Product {
   tax_applied: number
   package: number[]
 }
+
+export interface CancelResultResponse {
+  order_id: number;
+  order_created: string;
+  product: Product;
+  product_variant: ProductVariant;
+  quantity: number;
+  status: string;
+  price: string;
+  discount_amount: string;
+  vat_amount: string;
+  total_price: string
+}
+export interface CancelOrderResponse extends PaginatedResponse {
+  results: CancelResultResponse[]
+}
+
 // order details end------------------------------------------------------------------------------
