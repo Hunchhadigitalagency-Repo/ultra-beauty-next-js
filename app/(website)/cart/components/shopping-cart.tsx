@@ -9,7 +9,7 @@ import useFetchData from "@/hooks/use-fetch";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import SectionHeader from "@/components/common/header/section-header";
 import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
-import { clearVoucherData, deleteAllCartItem, deleteCartItem } from "@/redux/features/cart-slice";
+import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem } from "@/redux/features/cart-slice";
 
 
 export default function ShoppingCart() {
@@ -39,6 +39,7 @@ export default function ShoppingCart() {
       deleteFromCart(id);
       refetch();
       dispatch(deleteCartItem(id))
+      dispatch(decreaseCartCount())
       toast.success('Item Removed from the Cart')
     } catch (error) {
       toast.error(`Error while removing Item from the cart: ${error}`)
@@ -49,6 +50,7 @@ export default function ShoppingCart() {
     try {
       deleteAllFromCart(id);
       dispatch(deleteAllCartItem())
+      dispatch(clearCartCount())
       refetch();
       toast.success('All Item Removed from the Cart')
     } catch (error) {
@@ -78,7 +80,7 @@ export default function ShoppingCart() {
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
           {/* Cart Items */}
-          <div className="order-2 space-y-4 lg:col-span-5">
+          <div className="order-1 space-y-4 lg:col-span-5">
             <CartHeader
               cartItemsData={cartItemsData}
               onItemRemove={handleSingleCartItemRemove}
@@ -96,12 +98,11 @@ export default function ShoppingCart() {
             }
           </div>
           {/* Sidebar */}
-          <div className="order-1 space-y-6 lg:col-span-2">
+          <div className="order-2 space-y-6 lg:col-span-2">
             <OrderSummary
               shippingDetails={null}
               totalItems={totalQuantity}
               shippingFee={shippingFee}
-              isCheckout={cartItem.length > 0}
             />
           </div>
         </div>

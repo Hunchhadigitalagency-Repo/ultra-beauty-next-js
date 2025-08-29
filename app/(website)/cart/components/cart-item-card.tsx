@@ -113,7 +113,7 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
           </div>
 
           <div className="">
-            <h3 className="mb-1 text-base font-semibold text-gray-900 lg:text-2xl">
+            <h3 className="mb-1 text-base font-semibold font-playfair text-gray-900 lg:text-2xl">
               {item.product.name}
             </h3>
             <p dangerouslySetInnerHTML={{ __html: item.product.general_description }} className="text-sm leading-snug text-gray-600 line-clamp-2">

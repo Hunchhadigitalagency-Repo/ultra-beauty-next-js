@@ -45,7 +45,7 @@ export default function CartHeader({ cartItemIds, onItemRemove, cartItemsData, o
           className="text-red-600 hover:text-red-700">
           <X className="w-4 h-4 mr-1" />
           Delete
-          ({cartItem.length === cartItemIds?.length ? 'All' : `${cartItem.length}`})
+          {cartItem.length === cartItemIds?.length ? ` All (${cartItem.length})` : `(${cartItem.length})`}
         </Button>
       }
     </div>
