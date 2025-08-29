@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Search,
   ShoppingCart,
@@ -195,7 +194,7 @@ export default function Navbar() {
               onClick={() => router.push("/wishlist")}
             >
               <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-primary"}`} />
-              {wishlistCount > 0 && (
+              {isLoggedIn && wishlistCount > 0 && (
                 <Badge
                   variant="destructive"
                   className="absolute flex items-center justify-center size-4 p-1 text-xs rounded-full -top-2 -right-2"

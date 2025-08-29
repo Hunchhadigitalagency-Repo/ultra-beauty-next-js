@@ -1,7 +1,7 @@
-import { OrderResponse } from "@/types/profile";
-import { Col } from "@/types/table";
 import Image from "next/image";
+import { Col } from "@/types/table";
 import { useRouter } from "next/navigation";
+import { OrderResponse } from "@/types/profile";
 
 export const MyOrderConstants = (): Col<OrderResponse>[] => {
   const router = useRouter();
@@ -51,33 +51,24 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       ),
     },
     {
-      title: "Order Status",
-      render: (order: OrderResponse) => order?.order_status?.name === "Pending" ? (
-        <div className="block text-white">
-          <span className="inline-block px-3 py-2 text-white bg-yellow-400 rounded-sm">Pending</span>
-        </div>
-      ) : order?.order_status?.name === "Packing" ? (
-        <div className="text-white">
-          <span className=" inline-block px-4 py-2 text-white bg-blue-400 rounded-sm">Packing</span>
-        </div>
-      ) : order?.order_status?.name === "Placed For Devliery" ? (
-        <div className="text-white">
-          <span className="inline-block px-4 py-2 text-white bg-purple-500 rounded-sm">Placed For Delivery</span>
-        </div>
-      ) : order?.order_status?.name === "Delivering" ? (
-        <div className="text-white">
-          <span className="inline-block px-4 py-2 text-white bg-teal-500 rounded-sm">Delivering</span>
-        </div>
-      ) : order?.order_status?.name === "Delivered" ? (
-        <div className="text-white">
-          <span className="inline-block px-4 py-2 text-white bg-green-400 rounded-sm">Delivered</span>
-        </div>
-      ) : order?.order_status?.name === "Cancelled" ? (
-        <div className="text-white">
-          <span className="inline-block px-4 py-2 text-white bg-red-400 rounded-sm">Cancelled</span>
-        </div>
-      ) : null
+      title: 'Order Status',
+      render: (order: OrderResponse) => (
+        <p
+          className={`text-white py-2 flex items-center justify-center w-24 rounded-md ${(() => {
+            switch (order.order_status.name.toLowerCase()) {
+              case 'delivered': return 'bg-green';
+              case 'cancelled': return 'bg-red';
+              case 'returned': return 'bg-orange';
+              default: return 'bg-yellow';
+            }
+          })()
+            }`}
+        >
+          {order.order_status.name}
+        </p>
+      ),
     },
+
     {
       title: "Total",
       render: (order: OrderResponse) => `${order.total_amount === 0 ? "NaN" : "Nrs." + order.total_amount}`,
