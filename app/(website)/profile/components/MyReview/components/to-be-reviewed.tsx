@@ -7,7 +7,7 @@ import { ReviewsResponse } from '@/types/reviews';
 
 const ToBeReviewed: React.FunctionComponent = () => {
 
-    const { data, loading, error } = useFetchData<ReviewsResponse[]>('unreviews/', true)
+    const { data, loading, error, refetch } = useFetchData<ReviewsResponse[]>('unreviews/', true)
 
     return (
         <section className='flex flex-col gap-4'>
@@ -36,6 +36,9 @@ const ToBeReviewed: React.FunctionComponent = () => {
                                     key={item.id}
                                     image={item.product.images[0].file}
                                     description={item.product.general_description}
+                                    name={item.product.name}
+                                    slug={item.product.slug_name}
+                                    onReviewSave={refetch}
                                 />
                             ))
                         }
