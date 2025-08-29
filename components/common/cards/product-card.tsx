@@ -48,7 +48,7 @@ const ProductCard = ({
         />
         {isFlashSale && (
           <div className="absolute bottom-3 left-3">
-            <span className="bg-secondary text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
+            <span className="bg-primary text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
               Flash Sale
             </span>
           </div>

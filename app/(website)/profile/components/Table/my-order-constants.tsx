@@ -56,23 +56,27 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
         <div className="block text-white">
           <span className="inline-block px-3 py-2 text-white bg-yellow-400 rounded-sm">Pending</span>
         </div>
-      ) : order?.order_status?.name === "Cancelled" ? (
+      ) : order?.order_status?.name === "Packing" ? (
         <div className="text-white">
-          <span className=" inline-block px-4 py-2 text-white bg-red-400 rounded-sm">Cancelled</span>
+          <span className=" inline-block px-4 py-2 text-white bg-blue-400 rounded-sm">Packing</span>
         </div>
-      ) : order?.order_status?.name === "Returned" ? (
+      ) : order?.order_status?.name === "Placed For Devliery" ? (
         <div className="text-white">
-          <span className="inline-block px-4 py-2 text-white bg-orange-400 rounded-sm">Returned</span>
+          <span className="inline-block px-4 py-2 text-white bg-purple-500 rounded-sm">Placed For Delivery</span>
+        </div>
+      ) : order?.order_status?.name === "Delivering" ? (
+        <div className="text-white">
+          <span className="inline-block px-4 py-2 text-white bg-teal-500 rounded-sm">Delivering</span>
         </div>
       ) : order?.order_status?.name === "Delivered" ? (
         <div className="text-white">
           <span className="inline-block px-4 py-2 text-white bg-green-400 rounded-sm">Delivered</span>
         </div>
-      ) : (
+      ) : order?.order_status?.name === "Cancelled" ? (
         <div className="text-white">
-          <span className=" inline-block px-4 py-2 text-white bg-gray-400 rounded-sm">Unknown Status</span>
+          <span className="inline-block px-4 py-2 text-white bg-red-400 rounded-sm">Cancelled</span>
         </div>
-      )
+      ) : null
     },
     {
       title: "Total",
