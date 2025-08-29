@@ -10,6 +10,7 @@ import { OrderSummaryProps } from "@/types/cart";
 import { ArrowRight, Info, MapPin } from "lucide-react";
 import GenericModal from "@/components/common/modals/generic-modal";
 import CircularProgressBar from "@/components/common/circular-progress-bar/circular-progress-bar";
+
 export default function OrderSummary({
   totalItems,
   shippingFee,
@@ -18,18 +19,17 @@ export default function OrderSummary({
   onVoucherCodeChange,
   onApplyVoucher,
   applyVoucher,
-  isCheckout,
+  isCheckout = false,
 }: OrderSummaryProps) {
 
 
   const router = useRouter();
   const progress = [50];
-  const { voucherData, cartItem } = useAppSelector(state => state.cart)
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState<boolean>(false);
+  const { voucherData, cartItem } = useAppSelector(state => state.cart);
   const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
   const { firstName, lastName, address, phoneNumber, alternativePhoneNumber, city } = shippingDetails || {};
 
-  // Calculations
+  // Subtotal and Tax Calculation
   const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price)), 0);
   const taxPercentage = cartItem.reduce((sum, item) => sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0), 0);
   const taxAmount = cartItem.reduce((sum, item) => {
@@ -38,43 +38,46 @@ export default function OrderSummary({
     return sum + tax;
   }, 0);
 
+  // Voucher Discount and Total Calculation
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
   const Total = subTotal + shippingFee + taxAmount - voucherDiscount;
 
 
   return (
-    <div className="bg-[#EEEEEE] rounded-lg p-4 space-y-4">
-      <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
-        <div className="w-full flex justify-between items-center">
-          <h3 className="font-medium text-base text-foreground">Location</h3>
-          <button onClick={() => setIsLocationModalOpen(!isLocationModalOpen)} className="text-sm cursor-pointer text-primary">Change Location</button>
-        </div>
-        <div className="flex gap-2 items-start">
-          <div className="rounded-full size-8 p-2 flex items-center justify-center bg-secondary">
-            <MapPin className="w-6 h-6 text-white" />
+    <div className="bg-secondary rounded-lg p-4 space-y-4">
+      {isCheckout && (
+        <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
+          <div className="flex items-center w-full gap-2">
+            <div className="flex items-center justify-center p-2 rounded-full bg-secondary">
+              <MapPin className="w-4 h-4 text-white" />
+            </div>
+            <h3 className="text-base font-medium text-foreground">Shipping Details</h3>
           </div>
+          <div className="flex items-start gap-2">
 
-          <p className="text-sm flex flex-col font-medium text-custom-black">
-            <span>
-              {firstName}{lastName}
-            </span>
-            <span>
-              {phoneNumber}{alternativePhoneNumber}
-            </span>
-            <span>
-              {address}
-            </span>
-            <span>
-              {address}{city}
-            </span>
-          </p>
+
+            <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
+              <span>
+                {firstName}{lastName}
+              </span>
+              <span>
+                {phoneNumber}{alternativePhoneNumber && `| ${alternativePhoneNumber}`}
+              </span>
+              <span>
+                {address}
+              </span>
+              <span>
+                {address}{city}
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="space-y-2">
-        <h3 className="font-medium text-foreground text-base">Order Summary</h3>
+        <h3 className="text-base font-medium text-foreground">Order Summary</h3>
 
-        <div className="space-y-2 text-base text-custom-black font-medium">
+        <div className="space-y-2 text-base font-medium text-custom-black">
           <div className="flex justify-between">
             <span>Total Item</span>
             <span className="text-foreground">{totalItems}</span>
@@ -101,9 +104,9 @@ export default function OrderSummary({
       {/* Voucher Code */}
       {
         voucherDiscount > 0 && (
-          <div className="flex justify-between text-base text-custom-black font-medium">
+          <div className="flex justify-between text-base font-medium text-custom-black">
             <span>Voucher Discount</span>
-            <span className="text-foreground">-Nrs.{voucherDiscount}</span>
+            <span className="text-foreground">{formatPrice(voucherDiscount)}</span>
           </div>
         )
       }
@@ -114,10 +117,10 @@ export default function OrderSummary({
               placeholder="Enter Voucher Code"
               value={voucherCode}
               onChange={(e) => onVoucherCodeChange?.(e.target.value)}
-              className="text-sm rounded-none h-10 bg-white"
+              className="h-10 text-sm bg-white rounded-none"
             />
             <Button
-              className="bg-primary rounded-none h-10"
+              className="h-10 rounded-none bg-primary"
               onClick={onApplyVoucher}
             >
               Apply
@@ -132,36 +135,35 @@ export default function OrderSummary({
           <span className="text-lg text-foreground">{formatPrice(Total)}</span>
         </div>
         {isCheckout && (
-          <p className="mt-1 text-accent-foreground text-sm text-right">
+          <p className="mt-1 text-sm text-right text-accent-foreground">
             All Tax included
           </p>
         )}
       </div>
 
       <Button
-        className="w-full flex justify-between bg-secondary text-white font-medium"
+        className="flex justify-between w-full font-medium text-white bg-blue"
         onClick={() => setisRewardsModalOpen(!isRewardsModalOpen)}
       >
         Apply For Rewards Points
         <Info className="w-5 h-5" />
       </Button>
 
-      {
-        isCheckout &&
+      {!isCheckout &&
         <Button
-          disabled={!isCheckout}
-          className="w-full bg-primary text-white font-medium"
+          disabled={!cartItem.length}
+          className="w-full font-medium text-white bg-primary"
           onClick={() => router.push("/checkout")}
         >
           Proceed to Checkout
         </Button>
       }
 
-      {isCheckout && (
+      {cartItem.length === 0 && (
         <div className="flex items-center justify-end">
           <Button
             variant="ghost"
-            className=" text-sm hover:text-secondary"
+            className="text-sm hover:text-secondary"
             onClick={() => router.push("/shop")}
           >
             CONTINUE SHOPPING
@@ -169,21 +171,6 @@ export default function OrderSummary({
           </Button>
         </div>
       )}
-      {
-        isLocationModalOpen && (
-          <GenericModal title="Change Delivery Location" setIsOptionClick={() => setIsLocationModalOpen(false)}>
-            <div className="flex flex-col gap-3">
-              <textarea rows={3} className="w-full p-3 border-[1px] outline-0 border-[#E3E3E3] text-gray" placeholder="Type your Location Here ....." />
-              <Button
-                className="w-full bg-primary text-white font-medium"
-                onClick={() => setIsLocationModalOpen(false)}
-              >
-                Change
-              </Button>
-            </div>
-          </GenericModal>
-        )
-      }
 
       {
         isRewardsModalOpen && (
@@ -199,8 +186,8 @@ export default function OrderSummary({
                   renderLabel={(progress) => `${progress}%`}
                 />
                 <div className="flex flex-col gap-2">
-                  <h1 className="font-semibold text-xl">350 Points</h1>
-                  <p className="font-medium text-base">Points till your next purchases</p>
+                  <h1 className="text-xl font-semibold">350 Points</h1>
+                  <p className="text-base font-medium">Points till your next purchases</p>
                 </div>
               </div>
 

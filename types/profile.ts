@@ -16,6 +16,9 @@
 export type ReviewCardProps = {
   image: string;
   description: string;
+  name: string;
+  slug?: string;
+  onReviewSave?: () => void;
 };
 
 export interface ReviewModalProps {
@@ -24,6 +27,8 @@ export interface ReviewModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   description: string;
+  slug?: string;
+  onReviewSave?: () => void;
 }
 
 export interface ReviewHistoryCardProps {

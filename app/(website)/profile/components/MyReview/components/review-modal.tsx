@@ -1,4 +1,15 @@
 import React from 'react';
+import Image from 'next/image';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { ReviewModalProps } from '@/types/profile';
+import { Textarea } from '@/components/ui/textarea';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { postReview } from '@/lib/api/review/review-api';
+import GenericModal from '@/components/common/modals/generic-modal';
+import { StarRating } from '@/components/common/form/star-rating-input';
+import { ReviewFormValues, ReviewSchema } from '@/schemas/cms/review-schema';
 import {
     Form,
     FormControl,
@@ -6,41 +17,34 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import Image from 'next/image';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { ReviewModalProps } from '@/types/profile';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import GenericModal from '@/components/common/modals/generic-modal';
-import { StarRating } from '@/components/common/form/star-rating-input';
-import { ReviewFormValues, ReviewSchema } from '@/schemas/cms/review-schema';
-
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
     title,
     description,
     image,
     isModalOpen,
+    slug,
     setIsModalOpen,
+    onReviewSave
 }) => {
+
     const form = useForm<ReviewFormValues>({
         resolver: zodResolver(ReviewSchema),
     });
 
     const handleSaveReview = async (data: ReviewFormValues) => {
-        try {
-            console.log('Submitting Review:', data);
-            // TODO: API Call
+        const { review, rating } = data;
+        onReviewSave?.();
 
-            toast.success('Review submitted successfully!');
-            setIsModalOpen(false);
-            form.reset();
-        } catch (error) {
-            console.error('Error submitting review:', error);
-            toast.error('Failed to submit review.');
+        if (!slug) {
+            toast.error("Slug is missing, cannot submit review.");
+            return;
         }
+
+        const response = await postReview(slug, review || '', String(rating));
+        toast.success(response.data.message || 'Review submitted successfully!');
+        setIsModalOpen(false);
+        form.reset();
     };
 
     return (
@@ -48,14 +52,14 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             {isModalOpen && (
                 <GenericModal
                     title="Rate and Review purchased Product"
-                    description ="Review the product"
+                    description="Review the product"
                     titleClassName='text-sm md:text-base xl:text-xl font-playfair font-semibold text-primary font-bold'
                     descriptionClassName='text-xs md:text-xs xl:text-xs'
                     setIsOptionClick={() => {
                         setIsModalOpen(false);
                         form.reset();
                     }}
-                >  
+                >
                     <Form {...form}>
                         <form
                             id="review-form"
@@ -78,7 +82,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         {title}
                                     </p>
                                     <p className='text-xs '>{description}</p>
-                                   
+
                                     <FormField
                                         control={form.control}
                                         name="rating"

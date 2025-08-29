@@ -11,12 +11,8 @@ const Order: React.FunctionComponent = () => {
 
     const { id } = useParams();
     const { data, loading, error } = useFetchData<CreateOrderResponse>(`order/${id}/`, true)
-
-
-
-
     return (
-        <section className="padding space-y-4">
+        <section className="space-y-4 padding">
             <SectionHeader
                 title='Order Details'
                 description='See all the order details'
@@ -38,7 +34,7 @@ const Order: React.FunctionComponent = () => {
                 <OrderHeader
                     orderItems={data}
                 />
-                <OrderPayment /></>)}
+                <OrderPayment paymentdetails={data} /></>)}
         </section>
     )
 }

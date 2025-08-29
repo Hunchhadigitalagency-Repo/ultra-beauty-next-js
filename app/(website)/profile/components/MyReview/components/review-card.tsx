@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
 import Image from 'next/image';
-import { ReviewCardProps } from '@/types/profile';
+import React, { useState } from 'react';
 import ReviewModal from './review-modal';
+import { ReviewCardProps } from '@/types/profile';
 
 
-const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description }) => {
+const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description, name, slug }) => {
 
-    const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false)
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 
 
     return (
@@ -37,9 +37,10 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
             <ReviewModal
                 isModalOpen={isReviewModalOpen}
                 setIsModalOpen={setIsReviewModalOpen}
-                title='Sleek Pregnancy Cushion with some random text abd long text'
-                image='https://www.shutterstock.com/image-photo/washington-dc-usa-april-7-600nw-2609091587.jpg'
-                description='A product tha will help the Preganancy women to grow and some random text that fitx'
+                title={name}
+                image={image}
+                description={description}
+                slug={slug}
             />
         </div>
     )

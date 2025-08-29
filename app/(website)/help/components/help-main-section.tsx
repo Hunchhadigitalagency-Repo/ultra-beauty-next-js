@@ -2,10 +2,10 @@ import React from 'react';
 import SearchBox from '@/components/common/filter/search-box';
 import SectionHeader from '@/components/common/header/section-header';
 
-
 const HelpSection: React.FunctionComponent = () => {
 
   return (
+
     <section className='padding'>
       <div className="w-full bg-cover bg-center bg-no-repeat rounded-md"
         style={{

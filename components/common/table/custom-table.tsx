@@ -11,6 +11,7 @@ import {
   toggleSelectAll,
 } from "@/redux/features/table-slice";
 import { Col } from "@/types/table";
+import { AlertCircle } from "lucide-react";
 
 interface TableProps<T> {
   cols: Col<T>[];
@@ -129,8 +130,9 @@ const CustomTable = <T,>({
             ) : data?.length === 0 ? (
               <tr>
                 <td colSpan={totalCols}>
-                  <div className="flex items-center justify-center h-[300px]">
-                    No Data Available!
+                  <div className="h-[300px] w-full flex flex-col items-center justify-center p-6 text-center">
+                    <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                    <p className="text-gray-700 font-medium">No Data Available !</p>
                   </div>
                 </td>
               </tr>

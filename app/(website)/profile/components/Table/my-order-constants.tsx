@@ -3,6 +3,7 @@ import { Col } from "@/types/table";
 import { useRouter } from "next/navigation";
 import { OrderResponse } from "@/types/profile";
 
+
 export const MyOrderConstants = (): Col<OrderResponse>[] => {
   const router = useRouter();
 
@@ -13,22 +14,14 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
     },
     {
       title: "Order Date",
-      render: (order: OrderResponse) => {
-        if (!order.order_created) return "N/A";
-
-        const date = new Date(order.order_created);
-        const year = date.getFullYear();
-        const onlyLastTwoDigitsOfYear = year.toString().slice(-2);
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const day = date.getDate().toString().padStart(2, "0");
-
-        let hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        const ampm = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12 || 12;
-
-        return `${month}/${day}/${onlyLastTwoDigitsOfYear}, ${hours}:${minutes} ${ampm}`;
-      },
+      render: (order: OrderResponse) => new Date(order.order_created).toLocaleString([], {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      }).toUpperCase(),
     },
     {
       title: "Items",
@@ -53,22 +46,17 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
     {
       title: 'Order Status',
       render: (order: OrderResponse) => (
-        <p
-          className={`text-white py-2 flex items-center justify-center w-24 rounded-md ${(() => {
-            switch (order.order_status.name.toLowerCase()) {
-              case 'delivered': return 'bg-green';
-              case 'cancelled': return 'bg-red';
-              case 'returned': return 'bg-orange';
-              default: return 'bg-yellow';
-            }
-          })()
-            }`}
+        <button
+          style={{
+            backgroundColor: order.order_status.primary_color,
+            color: order.order_status.text_color,
+          }}
+          className="w-[100px] rounded-sm py-1 px-2 text-center"
         >
           {order.order_status.name}
-        </p>
-      ),
+        </button>
+      )
     },
-
     {
       title: "Total",
       render: (order: OrderResponse) => `${order.total_amount === 0 ? "NaN" : "Nrs." + order.total_amount}`,
