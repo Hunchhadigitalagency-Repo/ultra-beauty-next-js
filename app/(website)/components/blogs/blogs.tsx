@@ -1,15 +1,15 @@
 "use client";
 import React from "react";
 import BlogCard from "./blog-card";
+import { BlogsList } from "@/types/cms";
+import useFetchData from "@/hooks/use-fetch";
 import LinkText from "@/components/common/header/link-text";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-import useFetchData from "@/hooks/use-fetch";
-import { BlogsList } from "@/types/cms";
 
 const Blogs: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<BlogsList>(
-    `cms/blogs/?page=1&page_size=3`
+    `cms/blogs/?page=1&page_size=3`, true
   );
 
   console.log("Blog response from backend hai tw", data);

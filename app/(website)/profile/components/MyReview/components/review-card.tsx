@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import Image from 'next/image';
-import { ReviewCardProps } from '@/types/profile';
+import React, { useState } from 'react';
 import ReviewModal from './review-modal';
+import { ReviewCardProps } from '@/types/profile';
 
 
 const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description }) => {
