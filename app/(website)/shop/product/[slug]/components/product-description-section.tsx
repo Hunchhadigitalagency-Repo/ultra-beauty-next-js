@@ -1,21 +1,5 @@
 "use client";
-import Image from "next/image";
-import { toast } from "sonner";
-import esewa from "@/assets/esewa.png";
-import khalti from "@/assets/khalti.png";
-import coin from "@/assets/coin-dollar.png";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import globalIime from "@/assets/globalIme.png";
-import mastercard from "@/assets/mastercard.png";
-import { addToCart } from "@/lib/api/cart/cart-apis";
-import { getOptions } from "@/utils/single-product-utility";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import SingleProductAccordion from "./single-product-accordion";
-import RatingStars from "@/components/common/product/rating-stars";
-import QuantityRow from "@/components/common/product/quantity-row";
-import { clearCartItems, clearVoucherData } from "@/redux/features/cart-slice";
-import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
+
 import
 React,
 {
@@ -35,6 +19,24 @@ import {
   FaXTwitter,
   FaFacebookMessenger
 } from "react-icons/fa6";
+import Image from "next/image";
+import { toast } from "sonner";
+import esewa from "@/assets/esewa.png";
+import khalti from "@/assets/khalti.png";
+import coin from "@/assets/coin-dollar.png";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import globalIime from "@/assets/globalIme.png";
+import mastercard from "@/assets/mastercard.png";
+import { addToCart } from "@/lib/api/cart/cart-apis";
+import { getOptions } from "@/utils/single-product-utility";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import SingleProductAccordion from "./single-product-accordion";
+import RatingStars from "@/components/common/product/rating-stars";
+import QuantityRow from "@/components/common/product/quantity-row";
+import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
+import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
+
 
 
 
@@ -121,7 +123,8 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       if (variantId !== undefined && userId) {
         addToCart(userId, product.slug_name, quantity, parseFloat(variantId));
         dispatch(clearCartItems());
-        dispatch(clearVoucherData())
+        dispatch(clearVoucherData());
+        dispatch(increaseCartCount())
         toast.success("Product added to cart successfully!");
         setSelectedAttributes([]);
         setErrors({});
@@ -158,27 +161,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
           }
         </div>
       </div>
-      {/* {
-        product.detail_description && (
-          <div className="mb-4 text-sm leading-relaxed text-foreground font-poppins">
-            <div
-              className={`${expanded ? "" : "line-clamp-4"
-                }`}
-              dangerouslySetInnerHTML={{ __html: product.detail_description }}
-            />
-            {
-              product.detail_description?.length > 50 && (
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="text-sm font-medium text-primary hover:underline"
-                >
-                  {expanded ? "Read Less" : "Read More"}
-                </button>
-              )
-            }
-          </div>
-        )
-      } */}
       <SingleProductAccordion title="Details" description={product.general_description} />
       {/* Variants */}
       {

@@ -114,15 +114,13 @@ const CustomTable = <T,>({
             {loading ? (
               <tr>
                 <td colSpan={totalCols}>
-                  <div className="space-y-4 pt-7">
+                  <div className="space-y-4 pt-2">
                     {Array.from({ length: 5 }).map((_, rowIdx) => (
                       <div
                         key={rowIdx}
                         className="flex justify-between items-center"
                       >
-                        {Array.from({ length: totalCols }).map((_, colIdx) => (
-                          <Skeleton key={colIdx} className="w-[100px] h-10" />
-                        ))}
+                        <Skeleton className="w-full h-10" />
                       </div>
                     ))}
                   </div>
@@ -158,7 +156,7 @@ const CustomTable = <T,>({
                           ? "bg-white"
                           : "bg-white"
                       }
-                      hover:bg-[#FAFAFA] cursor-pointer border-t border-gray-200 first:border-t-0 text-sm
+                      hover:bg-[#FAFAFA] border-t border-gray-200 first:border-t-0 text-sm
                     `}
                   >
                     {enableBulkSelect && (
