@@ -1,15 +1,19 @@
 "use client";
-
 import Link from "next/link";
-import { useState } from "react";
 import MegaMenu from "./mega-menu";
+import MobileMenu from "./mobile-menu";
 import SearchModal from "./search-modal";
+import { useDispatch } from "react-redux";
 import { ChevronDown } from 'lucide-react';
+import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
 import { useAppSelector } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+import { WishListResponse } from "@/types/wishlist";
 import NotificationModal from "./notification-modal";
 import { usePathname, useRouter } from "next/navigation";
+import { setWishlistCount } from "@/redux/features/wishList-slice";
 import {
   Search,
   ShoppingCart,
@@ -18,8 +22,6 @@ import {
   CircleUser,
   // ChevronDown,
 } from "lucide-react";
-import MobileMenu from "./mobile-menu";
-
 // import useFetchData from "@/hooks/use-fetch";
 // import { ICategoryDropdown } from "@/types/dropdown";
 
@@ -142,9 +144,25 @@ export default function Navbar() {
 
   const router = useRouter();
   const path = usePathname();
+  const dispatch = useDispatch();
   const isActive = (pathname: string) => path === pathname;
-  const { isLoggedIn } = useAppSelector((state) => state.authentication);
+  const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
   const { wishlistCount } = useAppSelector((state) => state.navbar);
+  const hasFetched = useRef({ wishlist: false });
+
+  const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
+    config: { headers: { Authorization: `Bearer ${accessToken}` } }
+  });
+
+
+  useEffect(() => {
+    if (wishListData && !hasFetched.current.wishlist) {
+      const count = wishListData.results.reduce((sum, item) => sum + (item.products?.length || 0), 0);
+      dispatch(setWishlistCount(count));
+      hasFetched.current.wishlist = true;
+    }
+  }, [wishListData, dispatch]);
+
   // const { data } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
 
   const handleCategoryEnter = (id: number | null) => {
@@ -275,7 +293,7 @@ export default function Navbar() {
               onClick={() => router.push("/wishlist")}
             >
               <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-primary"}`} />
-              {wishlistCount > 0 && (
+              {isLoggedIn && wishlistCount > 0 && (
                 <Badge
                   variant="destructive"
                   className="absolute flex items-center justify-center w-5 h-5 p-1 text-xs rounded-full -top-2 -right-2"
