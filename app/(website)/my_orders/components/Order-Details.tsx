@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CircleAlert } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
 import DOMPurify from "dompurify";
 
