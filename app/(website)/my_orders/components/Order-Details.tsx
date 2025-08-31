@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CircleAlert } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
 import DOMPurify from "dompurify";
 
@@ -11,8 +11,12 @@ interface OrderProductProps {
     OrderStatus: OrderStatus | undefined
 }
 
+
 const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ OrderDetails, OrderStatus }) => {
     console.log("Order Product ko details", OrderDetails)
+
+    const { id } = useParams()
+
     const router = useRouter();
 
     const handleCancelOrder = () => {
@@ -20,7 +24,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ Order
     };
 
     const handleReturnOrder = () => {
-        router.push('/return-order')
+        router.push(`/return-order/${id}`)
     };
 
     return (
@@ -42,21 +46,12 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ Order
                         <div className="space-y-2">
                             {/* Boxes */}
                             <div className="flex flex-wrap gap-3 md:gap-9">
-                                <div className="border-[1px] border-gray-500 px-1 lg:min-w-70 py-1  md:font-semibold font-poppins text-xs md:text-sm">
-                                    Date: {new Date(item.product.created_at).toLocaleString()}
+                                <div className="border-[1px] border-gray-500 px-1 lg:min-w-30 py-1  md:font-semibold font-poppins text-xs md:text-sm">
+                                    Date: {new Date(item.product.created_at).toLocaleDateString()}
                                 </div>
                                 <div
                                     className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30  md:font-semibold font-poppins text-xs md:text-sm">
                                     Quantity: {item.product.quantity}
-                                </div>
-                                <div className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30 md:font-semibold font-poppins text-xs md:text-sm">
-                                    Nrs {item.product.price}
-                                </div>
-                                <div className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30 md:font-semibold font-poppins text-xs md:text-sm">
-                                    Nrs {item.product.price}
-                                </div>
-                                <div className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30 md:font-semibold font-poppins text-xs md:text-sm">
-                                    Nrs {item.product.price}
                                 </div>
                                 <div className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30 md:font-semibold font-poppins text-xs md:text-sm">
                                     Nrs {item.product.price}

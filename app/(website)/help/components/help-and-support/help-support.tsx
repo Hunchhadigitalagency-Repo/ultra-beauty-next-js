@@ -14,7 +14,7 @@ const HelpSupportSection: React.FunctionComponent = () => {
 
   useEffect(() => {
     setIsClamped(true)
-  });
+  }, []);
 
   return (
     <section className='padding space-y-2'>

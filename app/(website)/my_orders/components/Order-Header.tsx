@@ -10,7 +10,6 @@ interface OrderHeaderDetails {
 }
 
 const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }) => {
-    console.log("Order Items ko details", orderItems)
     const { id, order_details, order_status } = orderItems ?? {};
 
     return (
@@ -37,6 +36,7 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
                             </span>
                         }
                     </Link>
+
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import OrderActionCard from '@/components/common/cards/order-action-card';
+// import OrderActionCard from '@/components/common/cards/order-action-card';
 import CancelOrderForm from './cancel-order-form';
 import SectionHeader from '@/components/common/header/section-header';
 
@@ -16,7 +16,7 @@ const CancelOrder: React.FunctionComponent = () => {
             <div className='px-5 py-2 text-sm md:text-base bg-secondary rounded-md'>
                 Product
             </div>
-            <OrderActionCard
+            {/* <OrderActionCard
                 product={{
                     date: "2025-07-29",
                     quantity: 1,
@@ -28,7 +28,7 @@ const CancelOrder: React.FunctionComponent = () => {
                     title: "Sensanori Vitamin Cream",
                     image: "/some-image.png",
                     descrption: "Wrinkle-reducing cream"
-                }} />
+                }} /> */}
             <CancelOrderForm />
         </div>
 
