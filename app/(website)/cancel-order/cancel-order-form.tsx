@@ -1,6 +1,5 @@
 'use client'
-import Link from 'next/link';
-import DOMPurify from 'dompurify';
+
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
@@ -8,33 +7,35 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
+import { cancelOrder } from '@/lib/api/order/order-apis';
 import SectionHeader from '@/components/common/header/section-header';
+import { PolicyData, CancellationReasons } from '@/constants/cancel-data';
 import { CancelFormValues, CancelOrderSchema } from '@/schemas/cancel-order/cancel_order';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-const PolicyData = [
-    {
-        title: "Cancellation Policy",
-        desc: "Before cancelling the order, kindly read throughly our terms and conditions."
-    }
-]
 
-const CancelOrderForm = () => {
 
-    const [isPolicyOpen] = useState(true);
+type CancelOrderFormProps = {
+    orderId?: number;
+};
+
+
+const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderId }) => {
     const [consent, setConsent] = useState(false);
     const form = useForm<CancelFormValues>({
         resolver: zodResolver(CancelOrderSchema),
         defaultValues: {
             reason: '',
-            field: ''
+            additional_info: ''
         }
     })
     const reasonValue = form.watch("reason");
     const onSubmit = (data: CancelFormValues) => {
-        console.log(data);
+        if (orderId && orderId > 0) {
+            cancelOrder(orderId.toString(), data.reason, data.additional_info ?? '');
+        }
         form.reset();
     }
     return (
@@ -49,42 +50,29 @@ const CancelOrderForm = () => {
                 <form className='py-6' onSubmit={form.handleSubmit(onSubmit)}>
                     <div className='p-10 w-full h-[450px] md:h-[450px]  bg-white rounded-sm'>
                         {/* Terms before cancellation */}
-                        <div className='relative w-full border border-gray-300'>
-                            {isPolicyOpen && (
-                                <Accordion type="single" collapsible >
-                                    {PolicyData?.map((data) => (
-                                        <AccordionItem
-                                            key={data.title}
-                                            value={`${data.title}`}
-                                            className="rounded-lg  bg-white border-none"
-                                        >
-                                            <AccordionTrigger className="text-left px-4 font-playfair font-semibold cursor-pointer  text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary text-lg">
-                                                <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: DOMPurify.sanitize(data.title),
-                                                    }}
-                                                />
-                                            </AccordionTrigger>
-                                            <AccordionContent className="text-foreground text-sm font-poppins leading-relaxed pt-2 px-5 pb-4">
-                                                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.desc) }} />
-                                                <ol className='list-decimal list-inside'>
-                                                    <li>
-                                                        Once you submit this form you agree to cancel the selected item(s) in your order. We will be unable to retrieve your order once it is cancelled.
-                                                    </li>
-                                                    <li>Once you submit this form you agree to cancel the selected item(s) in your order. We will be unable to retrieve your order once it is cancelled.
-
-                                                    </li>
-                                                    <li>Once you submit this form you agree to cancel the selected item(s) in your order. We will be unable to retrieve your order once it is cancelled.
-
-                                                    </li>
-                                                    <li>Once you submit this form you agree to cancel the selected item(s) in your order. We will be unable to retrieve your order once it is cancelled.
-                                                    </li>
-                                                </ol>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    ))}
-                                </Accordion>
-                            )}
+                        <div className='relative w-full'>
+                            <Accordion type="single" collapsible >
+                                <AccordionItem
+                                    value={PolicyData.title}
+                                    className="rounded-lg"
+                                >
+                                    <AccordionTrigger className="text-left py-3 px-4 border font-poppins !rounded-md bg-[#FAFAFA] font-medium cursor-pointer  hover:text-primary hover:no-underline data-[state=open]:text-primary text-sm md:text-base">
+                                        <h1>
+                                            {PolicyData.title}
+                                        </h1>
+                                    </AccordionTrigger>
+                                    <AccordionContent className=" mt-1 border w-full bg-[#FAFAFA] text-primary text-xs md:text-sm font-poppins leading-relaxed pt-2 px-5 pb-4">
+                                        <p>{PolicyData.desc}</p>
+                                        <ol className='list-decimal list-inside'>
+                                            {
+                                                PolicyData.points.map((point, index) => (
+                                                    <li key={index}>{point}</li>
+                                                ))
+                                            }
+                                        </ol>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         </div>
                         {/* Select a reason */}
                         <FormField
@@ -92,21 +80,21 @@ const CancelOrderForm = () => {
                             name="reason"
                             render={({ field }) => (
                                 <FormItem className='py-5'>
-                                    <FormLabel className="text-xs md:text-sm font-medium text-custom-black hover:text-primary">
+                                    <FormLabel className="text-xs font-medium md:text-sm text-custom-black hover:text-primary">
                                         Select a reason
                                     </FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className="text-xs md:text-sm py-3 rounded-md border border-gray-300 text-left px-4">
+                                            <SelectTrigger className="px-4 py-3 text-xs text-left border border-gray-300 rounded-md md:text-sm">
                                                 <SelectValue placeholder="Please select the reason for Cancellation" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    <SelectItem value="apple">Apple</SelectItem>
-                                                    <SelectItem value="banana">Banana</SelectItem>
-                                                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                                                    <SelectItem value="grapes">Grapes</SelectItem>
-                                                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                                                    {CancellationReasons.map((reason, i) => (
+                                                        <SelectItem key={i} value={reason}>
+                                                            {reason}
+                                                        </SelectItem>
+                                                    ))}
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -117,26 +105,26 @@ const CancelOrderForm = () => {
                         />
                         {/* Description field */}
                         <FormField
-                    control={form.control}
-                    name="field"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-sm font-medium text-custom-black">
-                                Additonal Info (Optional)
-                            </FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    placeholder="Please add Additional  info if you like to mention them"
-                                    className="border-gray-300 placeholder:text-xs bg-white focus:border-blue-500 focus:ring-blue-500"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                            control={form.control}
+                            name="additional_info"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-sm font-medium text-custom-black">
+                                        Additonal Info (Optional)
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Please add Additional  info if you like to mention them"
+                                            className="bg-white border-gray-300 placeholder:text-xs focus:border-blue-500 focus:ring-blue-500"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         {/* Check Box */}
-                        <Label className="flex items-start gap-2 text-xs text-black mt-4">
+                        <Label className="flex items-start gap-2 mt-4 text-xs text-black">
                             <input
                                 type="checkbox"
                                 checked={consent}
@@ -147,11 +135,9 @@ const CancelOrderForm = () => {
                         </Label>
 
                         {/* Cancel order button */}
-                        <Link href="/profile/my-cancellation">
-                            <div className='w-full flex justify-end items-center'>
-                                <Button type='submit' disabled={!reasonValue || !consent} className='px-5 py-1 mt-5 md:px-10 md:py-2.5 lg:px-14 lg:py-3 rounded-full bg-primary text-white '>Cancel Order</Button>
-                            </div>
-                        </Link>
+                        <div className='flex items-center justify-end w-full'>
+                            <Button type='submit' disabled={!reasonValue || !consent} className='px-5 py-1 mt-5 md:px-10 md:py-2.5 lg:px-14 lg:py-3 rounded-full bg-primary text-white '>Cancel Order</Button>
+                        </div>
                     </div>
                 </form>
             </Form>
@@ -159,4 +145,4 @@ const CancelOrderForm = () => {
     )
 }
 
-export default CancelOrderForm
+export default CancelOrderForm;
