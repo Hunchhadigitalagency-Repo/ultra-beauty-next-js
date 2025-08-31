@@ -1,8 +1,8 @@
 "use client"
 import React from 'react';
-import SectionHeader from '@/components/common/header/section-header';
 import ReturnForm from './components/return-form';
-import OrderActionCard from '@/components/common/cards/order-action-card';
+import SectionHeader from '@/components/common/header/section-header';
+// import OrderActionCard from '@/components/common/cards/order-action-card';
 
 const ReturnOrder: React.FunctionComponent = () => {
 
@@ -12,10 +12,10 @@ const ReturnOrder: React.FunctionComponent = () => {
                 title='Return  Details'
                 description='See the Return order Details.'
             />
-            <div className='px-5 py-2 text-sm md:text-base bg-secondary rounded-md'>
+            <div className='px-5 py-2 text-sm rounded-md md:text-base bg-secondary'>
                 Product
             </div>
-            <OrderActionCard
+            {/* <OrderActionCard
                 product={{
                     date: "2025-07-29",
                     quantity: 1,
@@ -28,7 +28,7 @@ const ReturnOrder: React.FunctionComponent = () => {
                     image: "/some-image.png",
                     descrption: "Wrinkle-reducing cream"
                 }}
-            />
+            /> */}
             <ReturnForm />
         </section>
     )
