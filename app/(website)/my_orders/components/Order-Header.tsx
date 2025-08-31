@@ -1,7 +1,8 @@
 import React from "react";
-import Link from "next/link";
 import OrderProductDetails from "./Order-Details";
 import { CreateOrderResponse } from "@/types/orders";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 
 
@@ -10,7 +11,28 @@ interface OrderHeaderDetails {
 }
 
 const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }) => {
+
+    const router = useRouter()
+
     const { id, order_details, order_status } = orderItems ?? {};
+
+    const handleCancelOrder = () => {
+        router.push(`/cancel-order/${id}`)
+    };
+
+    const checkOrderStatus = (status: string) => {
+        switch (status) {
+            case 'delivered':
+                return 'bg-green'
+            case 'returned':
+                return 'bg-orange'
+            case 'cancelled':
+                return 'bg-red'
+            default:
+                return 'bg-yellow'
+        }
+    }
+
 
     return (
         <section className="shadow">
@@ -25,25 +47,32 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
                     <h4>
                         Total Items: {order_details?.length}
                     </h4>
-                    <Link href="/order-tracking">
-                        {orderItems?.payment_status === "delivered" ? (
-                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-green rounded-none  text-center">
-                                {order_status?.name}
-                            </span>
-                        ) :
-                            <span className="text-white uppercase text-xs md:text-sm px-3 py-1.5  bg-primary rounded-none  text-center">
-                                {order_status?.name}
-                            </span>
-                        }
-                    </Link>
-
+                    {
+                        order_status?.name &&
+                        <Button
+                            disabled={order_status?.name.toLowerCase() === 'cancelled' || order_status?.name.toLowerCase() === 'returned'}
+                            className={`text-white uppercase text-[10px] md:text-sm px-2 md:px-3 py-1.5 ${order_status?.name && checkOrderStatus(order_status?.name.toLocaleLowerCase())}  rounded-none  text-center`}
+                        >
+                            {orderItems?.order_status.name}
+                        </Button>
+                    }
+                    {
+                        !order_status?.name.toLowerCase().includes('delivered') && (
+                            <Button
+                                disabled={order_status?.name.toLowerCase() === 'cancelled' || order_status?.name.toLowerCase() === 'returned'}
+                                onClick={handleCancelOrder}
+                                className={`text-white cursor-pointer uppercase text-[10px] md:text-sm px-2 md:px-3 py-1.5 bg-red rounded-none  text-center`}>
+                                Cancel Orders
+                            </Button>
+                        )}
                 </div>
             </div>
 
 
             <OrderProductDetails
-                OrderDetails={orderItems?.order_details || []}
-                OrderStatus={orderItems?.order_status}
+                id={id}
+                orderStatus={order_status}
+                orderDetails={orderItems?.order_details || []}
             />
 
         </section>

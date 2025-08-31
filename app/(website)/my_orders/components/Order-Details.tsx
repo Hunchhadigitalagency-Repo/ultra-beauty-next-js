@@ -7,20 +7,18 @@ import { OrderDetail, OrderStatus } from "@/types/orders";
 import DOMPurify from "dompurify";
 
 interface OrderProductProps {
-    OrderDetails: OrderDetail[]
-    OrderStatus: OrderStatus | undefined
+    id?: number;
+    orderDetails: OrderDetail[];
+    // orderDate: string | undefined;
+    orderStatus: OrderStatus | undefined;
 }
 
-
-const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ OrderDetails, OrderStatus }) => {
-    console.log("Order Product ko details", OrderDetails)
-
-    const { id } = useParams()
+const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ orderDetails, orderStatus, id }) => {
 
     const router = useRouter();
 
-    const handleCancelOrder = () => {
-        router.push('/cancel-order')
+    const handleCancelIndividualOrder = (id: number | undefined, productId: number) => {
+        router.push(`/cancel-order/${id}?product=${productId}`);
     };
 
     const handleReturnOrder = () => {
@@ -29,7 +27,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ Order
 
     return (
         <div>
-            {OrderDetails.map((item, index) => (
+            {orderDetails.map((item, index) => (
                 <div className="relative flex flex-row items-start gap-2 p-2 bg-white md:gap-4 md:p-4 top-2" key={index}>
                     {/* Product Image */}
 
@@ -73,7 +71,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ Order
 
                         {/* Review Return */}
                         <div className="flex justify-end w-full md:items-center md:gap-3 xl:justify-between">
-                            {OrderStatus?.name.toLowerCase() === "delivered" ? (
+                            {orderStatus?.name.toLowerCase() === "delivered" ? (
                                 <div className="flex items-center justify-end w-full gap-5 md:items-start md:flex-row xl:flex-row xl:justify-end">
                                     <button className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
                                         Write Review
@@ -85,25 +83,23 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ Order
                                         Return Order
                                     </button>
                                 </div>
-                            ) : OrderStatus?.name.toLowerCase() === "cancelled" ? (
+                            ) : orderStatus?.name.toLowerCase() === "cancelled" ? (
                                 <button
-                                    onClick={handleCancelOrder}
                                     className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer text-primary md:items-center hover:text-primary md:text-sm"
                                 >
                                     Cancelled
 
                                 </button>
-                            ) : OrderStatus?.name.toLowerCase() === "pending" ? (
+                            ) : orderStatus?.name.toLowerCase() === "pending" ? (
                                 <button
-                                    onClick={handleCancelOrder}
+                                    onClick={() => handleCancelIndividualOrder(id, item.id)}
                                     className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer md:items-center text-primary hover:text-primary md:text-sm"
                                 >
                                     Cancel Order
                                     <CircleAlert className="w-4 h-4" />
                                 </button>
-                            ) : OrderStatus?.name.toLowerCase() === "returned" ? (
+                            ) : orderStatus?.name.toLowerCase() === "returned" ? (
                                 <button
-                                    onClick={handleCancelOrder}
                                     className="flex items-center justify-end w-full gap-2 text-xs font-medium text-yellow-600 cursor-pointer md:items-center hover:text-primary md:text-sm"
                                 >
                                     Returned

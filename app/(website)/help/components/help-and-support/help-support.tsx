@@ -62,8 +62,6 @@ const HelpSupportSection: React.FunctionComponent = () => {
           ))}
         </div>
       )}
-
-
     </section>
   )
 }
