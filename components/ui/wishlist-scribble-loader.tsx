@@ -1,6 +1,5 @@
 import React from "react";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const WishlistCardSkeleton = () => {
@@ -28,20 +27,7 @@ const WishlistCardSkeleton = () => {
                 </div>
             </div>
 
-            <div className="flex items-center">
-                <Skeleton
-                    className="flex justify-center w-full h-12 font-medium rounded-full md:w-52"
-                />
-            </div>
-
-            <Button
-                disabled
-                variant="ghost"
-                className="absolute top-[-15px] right-[-25px] md:top-0 md:right-0 w-12 h-12 p-0"
-            >
-                <X className="w-5 h-5 text-gray-300 md:w-6 md:h-6" />
-            </Button>
-
+            <X className="w-5 h-5 text-gray-300 md:w-6 md:h-6" />
 
         </section>
     );

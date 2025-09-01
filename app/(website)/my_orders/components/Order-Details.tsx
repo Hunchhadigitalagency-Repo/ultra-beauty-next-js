@@ -1,21 +1,26 @@
 "use client";
-import React from "react";
 import Image from "next/image";
+import DOMPurify from "dompurify";
+import React, { useState } from "react";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
-import DOMPurify from "dompurify";
+import ReviewModal from "../../profile/components/MyReview/components/review-modal";
+
 
 interface OrderProductProps {
     id?: number;
     orderDetails: OrderDetail[];
     // orderDate: string | undefined;
     orderStatus: OrderStatus | undefined;
+    slug?: string
 }
 
 const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ orderDetails, orderStatus, id }) => {
 
     const router = useRouter();
+    const [selectedProduct, setSelectedProduct] = useState<OrderDetail | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCancelIndividualOrder = (id: number | undefined, productId: number) => {
         router.push(`/cancel-order/${id}?product=${productId}`);
@@ -24,6 +29,12 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
     const handleReturnOrder = () => {
         router.push('/return-order')
     };
+
+    const handleOpenModal = (product: OrderDetail) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
+
 
     return (
         <div>
@@ -73,7 +84,8 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                         <div className="flex justify-end w-full md:items-center md:gap-3 xl:justify-between">
                             {orderStatus?.name.toLowerCase() === "delivered" ? (
                                 <div className="flex items-center justify-end w-full gap-5 md:items-start md:flex-row xl:flex-row xl:justify-end">
-                                    <button className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
+                                    <button onClick={() => handleOpenModal(item)}
+                                        className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
                                         Write Review
                                     </button>
                                     <button
@@ -110,6 +122,16 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                     </div>
                 </div>
             ))}
+            {selectedProduct && (
+                <ReviewModal
+                    title={selectedProduct.product.name}
+                    description={selectedProduct.product.general_description || ""}
+                    image={selectedProduct.product.image}
+                    slug={selectedProduct.product.slug_name}
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                />
+            )}
 
         </div>
     );
