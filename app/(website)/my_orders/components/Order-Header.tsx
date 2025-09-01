@@ -1,11 +1,8 @@
 import React from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import OrderProductDetails from "./Order-Details";
 import { CreateOrderResponse } from "@/types/orders";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-
-
-
 interface OrderHeaderDetails {
     orderItems: CreateOrderResponse | null;
 }
@@ -15,7 +12,6 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
     const router = useRouter()
 
     const { id, order_details, order_status } = orderItems ?? {};
-
     const handleCancelOrder = () => {
         router.push(`/cancel-order/${id}`)
     };
@@ -36,7 +32,6 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
 
     return (
         <section className="shadow">
-
             <div className="flex items-center justify-between h-10 px-4 text-sm font-medium rounded-sm md:h-12 md:px-6 bg-secondary text-custom-black">
                 {/* Left side: Order Info */}
                 <div className="flex flex-wrap gap-2 text-xs md:gap-6 xl:gap-8 font-poppins md:text-sm">
@@ -64,17 +59,15 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
                                 className={`text-white cursor-pointer uppercase text-[10px] md:text-sm px-2 md:px-3 py-1.5 bg-red rounded-none  text-center`}>
                                 Cancel Orders
                             </Button>
-                        )}
+                        )
+                    }
                 </div>
             </div>
-
-
             <OrderProductDetails
                 id={id}
                 orderStatus={order_status}
                 orderDetails={orderItems?.order_details || []}
             />
-
         </section>
     );
 };

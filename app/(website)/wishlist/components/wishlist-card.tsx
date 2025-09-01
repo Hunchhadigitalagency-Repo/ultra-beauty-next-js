@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
+import { X } from "lucide-react";
 import DOMPurify from "dompurify";
 import { useDispatch } from "react-redux";
-import { ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PriceRow from "@/components/common/product/price-row";
 import RatingStars from "@/components/common/product/rating-stars";
@@ -36,8 +36,8 @@ const WishlistCard = ({
 
   return (
 
-    <section className="relative flex flex-col gap-4 mt-5 md:flex-row">
-      <div className="flex flex-row flex-1 gap-4 md:gap-6">
+    <section className="relative  border hover:shadow-md bordee-[#7C7C7C] rounded-md flex flex-col gap-2 mt-5 md:flex-row">
+      <div className="flex flex-row items-center justify-center flex-1 gap-4 p-2 md:gap-6">
         {/* Image */}
         <div className="relative w-20 h-20 lg:w-32 lg:h-32">
           <Image
@@ -92,13 +92,6 @@ const WishlistCard = ({
                 discountTag={discountTag}
                 price={price}
               />
-            </div>
-            {/* Button */}
-            <div className="flex items-center justify-end">
-              <Button className="flex justify-center px-10 py-5 font-medium text-white rounded-full bg-primary">
-                ADD TO CART
-                <ShoppingCart className="ml-2" />
-              </Button>
             </div>
           </div>
         </div>

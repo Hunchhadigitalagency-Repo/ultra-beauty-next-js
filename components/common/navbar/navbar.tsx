@@ -1,11 +1,4 @@
 "use client";
-import {
-  Search,
-  ShoppingCart,
-  Bell,
-  Heart,
-  CircleUser,
-} from "lucide-react";
 import Link from "next/link";
 import MegaMenu from "./mega-menu";
 import MobileMenu from "./mobile-menu";
@@ -23,6 +16,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
+import {
+  Search,
+  ShoppingCart,
+  Bell,
+  Heart,
+  CircleUser,
+} from "lucide-react";
 
 export default function Navbar() {
 
@@ -87,7 +87,7 @@ export default function Navbar() {
 
 
   return (
-    <header className="relative  top-0 z-50 border-b border-gray-200 bg-secondary"
+    <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
       onMouseLeave={handleCategoryLeave}>
       <div className="py-2 padding-x">
 
@@ -197,7 +197,7 @@ export default function Navbar() {
               {isLoggedIn && wishlistCount > 0 && (
                 <Badge
                   variant="destructive"
-                  className="absolute flex items-center justify-center size-4 p-1 text-xs rounded-full -top-2 -right-2"
+                  className="absolute flex items-center justify-center p-1 text-xs rounded-full size-4 -top-2 -right-2"
                 >
                   {wishlistCount}
                 </Badge>

@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
 import { CiHeart } from "react-icons/ci";
@@ -76,26 +77,30 @@ const WishlistedProducts = () => {
 
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           {loading ? (
             <React.Fragment>
               <WishlistCardSkeleton />
               <WishlistCardSkeleton />
             </React.Fragment>
           ) : wishListData && wishListData.length > 0 ? (
-            wishListData?.map((product, index) => (
-              <WishlistCard
-                key={index}
-                image={product.image}
-                name={product.name}
-                description={product.general_description || ""}
-                rating={product.average_rating}
-                previousPrice={product.discount_percentage ? product.price : undefined}
-                price={calculateDiscountedPrice(product.price, product.discount_percentage) || product.price}
-                discountTag={product.discount_percentage || ""}
-                slug={product.slug_name}
-                deleteWishlist={deleteWishlistClient}
-              />
+            wishListData?.map((product) => (
+              <Link
+                key={product.slug_name}
+                href={`/shop/product/${product.slug_name}`}>
+                <WishlistCard
+                  image={product.image}
+                  name={product.name}
+                  description={product.general_description || ""}
+                  rating={product.average_rating}
+                  previousPrice={product.discount_percentage ? product.price : undefined}
+                  price={calculateDiscountedPrice(product.price, product.discount_percentage) || product.price}
+                  discountTag={product.discount_percentage || ""}
+                  slug={product.slug_name}
+                  deleteWishlist={deleteWishlistClient}
+                />
+              </Link>
+
             ))
           ) : (
             <p className="text-sm text-center pt-51 text-muted-foreground">

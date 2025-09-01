@@ -9,11 +9,12 @@ interface ActionCardProps {
 }
 
 const OrderActionCard: React.FunctionComponent<ActionCardProps> = ({ product }) => {
+    const notCancelledOrders = product?.order_details && product.order_details.filter(order => order.status !== "Cancelled");
 
     return (
         <div className='w-full bg-white min-h-56 md:min-h-56 xl:min-h-[80%]'>
             {
-                product && product.order_details.length > 0 ? product.order_details.map((order, index) => (
+                product && notCancelledOrders && notCancelledOrders.length > 0 ? notCancelledOrders.map((order, index) => (
                     <div key={index} className="relative flex flex-row items-start w-full gap-4 p-2 md:items-start md:gap-8 md:p-4">
                         {/* Product Image */}
                         <div className="relative flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg md:w-32 md:h-28">
@@ -25,8 +26,8 @@ const OrderActionCard: React.FunctionComponent<ActionCardProps> = ({ product }) 
                                 className="object-cover w-full h-full"
                             />
                         </div>
-                        <div className='py-2 md:w-full'>
-                            <div className="flex flex-col gap-2 md:max-w-[40vw] lg:max-w-[52vw]">
+                        <div className='py-2 w-full max-w-[60vw] md:w-full'>
+                            <div className="flex flex-col gap-2 md:max-w-[40vw] lg:max-w-[45vw]">
                                 <h3 className="text-sm font-medium font-playfair md:text-xl lg:text-2xl">
                                     {order.product.name}
                                 </h3>
@@ -50,7 +51,7 @@ const OrderActionCard: React.FunctionComponent<ActionCardProps> = ({ product }) 
                                     <h1 className="text-sm font-medium font-poppins md:text-md lg:text-lg">
                                         Total
                                     </h1>
-                                    <h1 className="text-sm font-semibold font-poppins text-primary md:text-md lg:text-xl">
+                                    <h1 className="text-sm font-semibold font-poppins text-primary md:text-md lg:text-lg xl:text-xl">
                                         NRS. {order.total_price}{/* NRS. {product.total} */}
                                     </h1>
                                 </div>
