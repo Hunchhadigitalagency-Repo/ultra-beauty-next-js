@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import ReviewModal from './review-modal';
 import { ReviewCardProps } from '@/types/profile';
+import DOMPurify from 'dompurify';
 
 
 const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description, name, slug }) => {
@@ -22,8 +23,7 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
                         />
                     </div>
                 </div>
-                <p className='font-medium self-center text-sm md:text-base '>
-                    {description}
+                <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} className='font-medium self-center line-clamp-1 w-[80%] text-sm md:text-base '>
                 </p>
             </div>
             <button

@@ -3,11 +3,11 @@ import ReviewCard from './review-card';
 import ReviewLoader from './review-loader';
 import { AlertCircle } from 'lucide-react';
 import useFetchData from '@/hooks/use-fetch';
-import { ReviewsResponse } from '@/types/reviews';
+import { Result } from '@/types/product';
 
 const ToBeReviewed: React.FunctionComponent = () => {
 
-    const { data, loading, error, refetch } = useFetchData<ReviewsResponse[]>('unreviews/', true)
+    const { data, loading, error, refetch } = useFetchData<Result[]>('/unreviews', true)
 
     return (
         <section className='flex flex-col gap-4'>
@@ -24,27 +24,22 @@ const ToBeReviewed: React.FunctionComponent = () => {
                             We couldn’t load the review history data. Please try again.
                         </p>
                     </div>
-                ) : data?.length === 0 ? (
-                    <div>
+                ) : data && data.length > 0 ? (
+                    data.map((item) => (
+                        <ReviewCard
+                            key={item.sku}
+                            image={item.images?.[0]?.file || "/placeholder.png"}
+                            name={item.name || "No Name"}
+                            description={item.general_description || "No Description"}
+                            slug={item.slug_name}
+                            onReviewSave={refetch}
+                        />
+                    ))
+                ) : (
+                    <div className="text-gray-500 text-center">
                         No items to be reviewed.
                     </div>
-                ) : (
-                    <div>
-                        {
-                            data?.map((item) => (
-                                <ReviewCard
-                                    key={item.id}
-                                    image={item.product.images[0].file}
-                                    description={item.product.general_description}
-                                    name={item.product.name}
-                                    slug={item.product.slug_name}
-                                    onReviewSave={refetch}
-                                />
-                            ))
-                        }
-                    </div>
-                )
-            }
+                )}
         </section>
 
     )
