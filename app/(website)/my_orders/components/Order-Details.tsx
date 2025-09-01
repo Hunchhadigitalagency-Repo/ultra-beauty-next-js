@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
-import DOMPurify from "dompurify";
+import { useState } from "react";
 
 interface OrderProductProps {
     id?: number;
@@ -79,50 +80,50 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
 
                             {/* Review Return */}
                             <div className="flex justify-end w-full md:items-center md:gap-3 xl:justify-between">
-                                {orderStatus?.name.toLowerCase() === "delivered" ? (
-                                    <div className="flex items-center justify-end w-full gap-5 md:items-start md:flex-row xl:flex-row xl:justify-end">
-                                        <button className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
-                                            Write Review
-                                        </button>
+                                {
+                                    item?.status.toLowerCase() === "delivered" ? (
+                                        <div className="flex items-center justify-end w-full gap-5 md:items-start md:flex-row xl:flex-row xl:justify-end">
+                                            <button className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
+                                                Write Review
+                                            </button>
+                                            <button
+                                                onClick={handleReturnOrder}
+                                                className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
+                                            >
+                                                Return Order
+                                            </button>
+                                        </div>
+                                    ) : item?.status.toLowerCase() === "cancelled" ? (
                                         <button
-                                            onClick={handleReturnOrder}
-                                            className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
+                                            className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer text-primary md:items-center hover:text-primary md:text-sm"
                                         >
-                                            Return Order
+                                            Cancelled
+
                                         </button>
-                                    </div>
-                                ) : orderStatus?.name.toLowerCase() === "cancelled" ? (
-                                    <button
-                                        className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer text-primary md:items-center hover:text-primary md:text-sm"
-                                    >
-                                        Cancelled
+                                    ) : item?.status.toLowerCase() === "pending" ? (
+                                        <button
+                                            onClick={() => handleCancelIndividualOrder(id, item.id)}
+                                            className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer md:items-center text-primary hover:text-primary md:text-sm"
+                                        >
+                                            Cancel Order
+                                            <CircleAlert className="w-4 h-4" />
+                                        </button>
+                                    ) : item?.status.toLowerCase() === "returned" ? (
+                                        <button
+                                            className="flex items-center justify-end w-full gap-2 text-xs font-medium text-yellow-600 cursor-pointer md:items-center hover:text-primary md:text-sm"
+                                        >
+                                            Returned
 
-                                    </button>
-                                ) : item?.status.toLowerCase() === "pending" ? (
-                                    <button
-                                        onClick={() => handleCancelIndividualOrder(id, item.id)}
-                                        className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer md:items-center text-primary hover:text-primary md:text-sm"
-                                    >
-                                        Cancel Order
-                                        <CircleAlert className="w-4 h-4" />
-                                    </button>
-                                ) : item?.status.toLowerCase() === "returned" ? (
-                                    <button
-                                        className="flex items-center justify-end w-full gap-2 text-xs font-medium text-yellow-600 cursor-pointer md:items-center hover:text-primary md:text-sm"
-                                    >
-                                        Returned
-
-                                    </button>
-                                ) : null
+                                        </button>
+                                    ) : null
                                 }
                             </div>
                         </div>
                     </div>
-                </div>
-    ))
-}
+                ))
+            }
 
-        </div >
+        </div>
     );
 };
 
