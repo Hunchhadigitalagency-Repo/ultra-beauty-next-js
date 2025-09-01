@@ -1,28 +1,29 @@
 'use client'
 
+import { toast } from "sonner";
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { useRouter } from "next/navigation";
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SelectTrigger } from '@radix-ui/react-select';
-import { cancelOrder } from '@/lib/api/order/order-apis';
 import SectionHeader from '@/components/common/header/section-header';
 import { PolicyData, CancellationReasons } from '@/constants/cancel-data';
+import { cancelIndividualOrder, cancelOrder } from '@/lib/api/order/order-apis';
 import { CancelFormValues, CancelOrderSchema } from '@/schemas/cancel-order/cancel_order';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-
-
 type CancelOrderFormProps = {
     orderId?: number;
+    productId?: number;
 };
 
+const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderId, productId }) => {
 
-const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderId }) => {
     const [consent, setConsent] = useState(false);
     const form = useForm<CancelFormValues>({
         resolver: zodResolver(CancelOrderSchema),
@@ -31,13 +32,32 @@ const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderI
             additional_info: ''
         }
     })
+
+    const router = useRouter();
     const reasonValue = form.watch("reason");
-    const onSubmit = (data: CancelFormValues) => {
-        if (orderId && orderId > 0) {
-            cancelOrder(orderId.toString(), data.reason, data.additional_info ?? '');
+    const onSubmit = async (data: CancelFormValues) => {
+        if (productId) {
+            const response = await cancelIndividualOrder(productId.toString(), data.reason, data.additional_info ?? '')
+            if (response.status === 201) {
+                toast.success('Order Cancelled Successfully!');
+                router.push('/');
+            }
+            else {
+                toast.error('Error while cancelling order!');
+            }
+        } else if (orderId && orderId > 0) {
+            const response = await cancelOrder(orderId.toString(), data.reason, data.additional_info ?? '');
+            if (response.status === 201) {
+                toast.success('Order Cancelled Successfully!');
+                router.push('/');
+            }
+            else {
+                toast.error('Error while cancelling order!');
+            }
         }
         form.reset();
     }
+
     return (
         <section className='w-full h-full'>
             <SectionHeader

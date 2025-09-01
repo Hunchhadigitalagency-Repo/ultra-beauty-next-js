@@ -7,11 +7,18 @@ import CancelOrderForm from '../cancel-order-form';
 import SectionHeader from '@/components/common/header/section-header';
 import useFetchData from '@/hooks/use-fetch';
 import { CreateOrderResponse } from '@/types/orders';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 const CancelOrder: React.FunctionComponent = () => {
+
     const { id } = useParams();
+    const searchParams = useSearchParams();
+    const productId = searchParams.get("product");
     const { data, loading, error } = useFetchData<CreateOrderResponse>(`order/${id}`, true)
+
+    const product = productId && data ? {
+        ...data, order_details: data.order_details.filter(item => item.id === Number(productId))
+    } : data;
 
     return (
 
@@ -25,10 +32,12 @@ const CancelOrder: React.FunctionComponent = () => {
             {
                 loading ? <div>Loading...</div> : error ? <p>Something went wrong</p> :
                     <OrderActionCard
-                        product={data}
+                        product={product}
                     />
             }
-            <CancelOrderForm orderId={id as number | undefined} />
+            <CancelOrderForm
+                productId={productId ? Number(productId) : undefined}
+                orderId={id ? Number(id) : undefined} />
         </div>
     )
 }
