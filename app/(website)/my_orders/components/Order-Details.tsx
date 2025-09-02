@@ -41,7 +41,6 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
             {orderDetails.map((item, index) => (
                 <div className="relative flex flex-row items-start gap-2 p-2 bg-white md:gap-4 md:p-4 top-2" key={index}>
                     {/* Product Image */}
-
                     <div className="relative flex-shrink-0 w-24 h-24 overflow-hidden rounded-lg md:w-32 md:h-28">
                         <Image
                             src={item.product.image}

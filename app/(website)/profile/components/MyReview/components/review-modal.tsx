@@ -53,9 +53,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             {isModalOpen && (
                 <GenericModal
                     title="Rate and Review purchased Product"
-                    description="Review the product"
                     titleClassName='text-sm md:text-base xl:text-xl font-playfair font-semibold text-primary font-bold'
-                    descriptionClassName='text-xs md:text-xs xl:text-xs'
                     setIsOptionClick={() => {
                         setIsModalOpen(false);
                         form.reset();
@@ -66,7 +64,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                             id="review-form"
                             onSubmit={form.handleSubmit(handleSaveReview)}
                         >
-                            <div className="flex gap-5">
+                            <div className="flex gap-5 p-2 border rounded-md">
                                 <div className="flex items-center justify-center">
                                     <div className="relative w-20 h-30 md:w-30 md:h-full shrink-0">
                                         <Image
