@@ -8,7 +8,8 @@ const initialState: CartSelectionState = {
     cartItem: [],
     shippingDetails: null,
     voucherData: null,
-    orderId: null
+    orderId: null,
+    shippingFee: ''
 };
 
 const cartSlice = createSlice({
@@ -79,6 +80,9 @@ const cartSlice = createSlice({
             state.shippingDetails = null;
             state.voucherData = null;
         },
+        setShippingFee: (state, action: PayloadAction<string>) => {
+            state.shippingFee = action.payload
+        },
         increaseCartCount: (state) => {
             state.cartCount = state.cartCount + 1;
         },
@@ -115,7 +119,8 @@ export const {
     decreaseCartCount,
     clearCartCount,
     decreaseCartCountBy,
-    setCartCount
+    setCartCount,
+    setShippingFee
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

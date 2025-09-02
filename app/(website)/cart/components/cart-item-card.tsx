@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { CartItemCardProps } from "@/types/cart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { updateCart } from "@/lib/api/cart/cart-apis";
+import { calculateDiscountedPrice } from "@/lib/cart-utils";
 import PriceRow from "@/components/common/product/price-row";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { clearVoucherData, toggleCartItem, updateCartItemQuantity } from "@/redux/features/cart-slice";
 import QuantityRow from "@/components/common/product/quantity-row";
-import { calculateDiscountedPrice } from "@/lib/cart-utils";
+import { clearVoucherData, toggleCartItem, updateCartItemQuantity } from "@/redux/features/cart-slice";
 
 export default function CartItemCard({ item, onRemove, refetch }: CartItemCardProps) {
 
@@ -92,12 +92,6 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
               fill
               className="object-cover"
             />
-            {
-              item.product.discount_percentage &&
-              <div className="absolute bottom-1 right-1 bg-secondary text-white text-[10px] md:text-xs px-1 md:px-2 py-1 rounded-full">
-                {parseFloat(item.product.discount_percentage)}% Off
-              </div>
-            }
           </div>
         </div>
 
@@ -113,7 +107,7 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
           </div>
 
           <div className="">
-            <h3 className="mb-1 text-base font-semibold font-playfair text-gray-900 lg:text-2xl">
+            <h3 className="mb-1 text-base font-semibold text-gray-900 font-playfair lg:text-2xl">
               {item.product.name}
             </h3>
             <p dangerouslySetInnerHTML={{ __html: item.product.general_description }} className="text-sm leading-snug text-gray-600 line-clamp-2">
