@@ -115,7 +115,7 @@ const Payment: React.FunctionComponent = () => {
         description="Payment for your products"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[0.3fr_0.7fr] gap-10 lg:gap-x-25">
+      <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_0.3fr] gap-10 lg:gap-x-25">
         <OrderSummary
           shippingDetails={shippingDetails}
           shippingFee={shippingFee}
@@ -131,37 +131,39 @@ const Payment: React.FunctionComponent = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 sm:gap-5 md:gap-10">
-            {PAYMENT_GATEWAYS.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setActivePaymentMethod(item.value)}
-                className={`
+            {
+              PAYMENT_GATEWAYS.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActivePaymentMethod(item.value)}
+                  className={`
                     w-full aspect-square cursor-pointer flex flex-col gap-2 md:gap-4
                     justify-center items-center border-[1px] rounded-sm 
                     ${activePaymentMethod === item.value
-                    ? "border-primary"
-                    : "border-[#7C7C7C]"
-                  }
+                      ? "border-primary"
+                      : "border-[#7C7C7C]"
+                    }
                 `}
-              >
-                <div className="relative w-20 h-20">
-                  <Image
-                    src={item.image}
-                    fill
-                    alt={item.name}
-                    className="object-cover h-0"
-                  />
-                </div>
-                <p
-                  className={`
+                >
+                  <div className="relative w-20 h-20">
+                    <Image
+                      src={item.image}
+                      fill
+                      alt={item.name}
+                      className="object-cover h-0"
+                    />
+                  </div>
+                  <p
+                    className={`
                   text-center text-xs sm:text-sm md:text-base font-medium
                   ${activePaymentMethod === item.value && "text-primary"}
                   `}
-                >
-                  {item.name}
-                </p>
-              </button>
-            ))}
+                  >
+                    {item.name}
+                  </p>
+                </button>
+              ))
+            }
           </div>
           <div className='flex gap-4 '><input type="checkbox" className='w-5 h-5' /> <span> <p>Save information for future purchases</p></span></div>
           <div className="border-[1px] border-[#7C7C7C] bg-[#FAFAFA] p-3 md:p-7 rounded-sm flex flex-col gap-2 md:gap-4 order-3 lg:order-none ">

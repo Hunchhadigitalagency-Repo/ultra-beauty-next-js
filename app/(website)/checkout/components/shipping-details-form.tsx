@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+import {
   Form,
   FormControl,
   FormField,
@@ -20,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PROVINCES } from "@/constants/province-city-data";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addShippingDetails } from "@/redux/features/cart-slice";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -57,6 +66,11 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
 
   const router = useRouter();
   const watchedValues = useWatch({ control: form.control });
+  const selectedProvince = watchedValues.province
+  const provinceData = PROVINCES.find(
+    (p) => p.province === selectedProvince
+  );
+
 
   useEffect(() => {
     onChange(watchedValues as ShippingFormValues)
@@ -76,7 +90,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-6">
           {/* First Name and Last Name */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
             <FormField
               control={form.control}
               name="firstName"
@@ -118,7 +132,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
           </div>
 
           {/* Phone Number and Alternative Phone Number */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
             <FormField
               control={form.control}
               name="phoneNumber"
@@ -160,7 +174,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
           </div>
 
           {/* Province and City */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
             <FormField
               control={form.control}
               name="province"
@@ -169,13 +183,20 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   <FormLabel className="text-sm font-medium text-gray-700">
                     Province
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the phone number"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Your Province" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PROVINCES.map((province, index) => (
+                        <SelectItem key={index} value={province.province}>
+                          {province.province}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -188,13 +209,20 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   <FormLabel className="text-sm font-medium text-gray-700">
                     City
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter the alternative phone number"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!selectedProvince}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Your Nearest City" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {provinceData?.cities?.map((city, index) => (
+                        <SelectItem key={index} value={city}>
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -202,7 +230,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
           </div>
 
           {/* Landmark and Building Address */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
             <FormField
               control={form.control}
               name="landmark"
@@ -363,7 +391,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
             <Button
               disabled={!form.formState.isValid}
               type="submit"
-              className="bg-primary text-white px-8 py-2 rounded-md"
+              className="px-8 py-2 text-white rounded-md bg-primary"
             >
               Continue and Pay
             </Button>
