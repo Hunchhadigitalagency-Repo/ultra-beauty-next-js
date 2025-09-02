@@ -122,7 +122,6 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                     </div>
                 ))
             }
-
         </div>
     );
 };

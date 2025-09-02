@@ -64,7 +64,8 @@ export interface CartSelectionState {
   cartItem: CartItem[];
   shippingDetails: ShippingFormValues | null;
   voucherData: VoucherItem | null,
-  orderId: number | null
+  orderId: number | null,
+  shippingFee: string
 }
 
 
