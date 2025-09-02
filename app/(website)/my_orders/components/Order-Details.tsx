@@ -4,7 +4,6 @@ import DOMPurify from "dompurify";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
-import { useState } from "react";
 
 interface OrderProductProps {
     id?: number;
@@ -16,8 +15,8 @@ interface OrderProductProps {
 const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ orderDetails, id }) => {
 
     const router = useRouter();
-    const [selectedProduct, setSelectedProduct] = useState<OrderDetail | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [selectedProduct, setSelectedProduct] = useState<OrderDetail | null>(null);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCancelIndividualOrder = (id: number | undefined, productId: number) => {
         router.push(`/cancel-order/${id}?product=${productId}`);
@@ -27,10 +26,10 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
         router.push('/return-order')
     };
 
-    const handleOpenModal = (product: OrderDetail) => {
-        setSelectedProduct(product);
-        setIsModalOpen(true);
-    };
+    // const handleOpenModal = (product: OrderDetail) => {
+    //     setSelectedProduct(product);
+    //     setIsModalOpen(true);
+    // };
 
 
     return (
