@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CartResultType } from "@/types/cart";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ShippingForm from "./shipping-details-form";
 import CheckoutProductCard from "./checkout-product-card";
 import React, { useEffect, useMemo, useState } from "react";
 import CheckoutProductHeader from "./checkout-product-header";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import OrderSummary from "../../cart/components/order-summary";
 import { applyVoucher, getCartItemsByIds } from "@/lib/api/cart/cart-apis";
 import { setVoucherData } from "@/redux/features/cart-slice";
@@ -49,7 +49,7 @@ const CheckoutDetails: React.FunctionComponent = () => {
     <section className="space-y-4 ">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
         {/* Cart Items */}
-        <div className="lg:col-span-5 order-2 space-y-6">
+        <div className="order-1 space-y-6 lg:col-span-5">
           <ShippingForm
             onChange={setFormDetails}
           />
@@ -81,7 +81,7 @@ const CheckoutDetails: React.FunctionComponent = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="order-1 space-y-6 lg:col-span-2">
+        <div className="order-2 space-y-6 lg:col-span-2">
           <OrderSummary
             shippingDetails={formDetails}
             applyVoucher

@@ -56,7 +56,7 @@ const Profile: React.FunctionComponent = () => {
             ))
           }
         </aside>
-        <div className="flex-1">
+        <div className="flex-1 lg:max-w-[55vw] xl:max-w-[100vw]">
           {PROFILE_TABS[activeTabIndex].component}
         </div>
       </section>

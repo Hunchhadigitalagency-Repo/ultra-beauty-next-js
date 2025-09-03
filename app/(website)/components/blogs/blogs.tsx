@@ -9,7 +9,7 @@ import SectionHeader from "@/components/common/header/section-header";
 
 const Blogs: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<BlogsList>(
-    `cms/blogs/?page=1&page_size=3`, true
+    `cms-blogs/?page=1&page_size=3`, true
   );
 
   console.log("Blog response from backend hai tw", data);

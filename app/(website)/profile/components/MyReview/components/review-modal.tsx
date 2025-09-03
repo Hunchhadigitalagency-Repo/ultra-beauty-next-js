@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { toast } from 'sonner';
+import DOMPurify from 'dompurify';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { ReviewModalProps } from '@/types/profile';
@@ -52,9 +53,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             {isModalOpen && (
                 <GenericModal
                     title="Rate and Review purchased Product"
-                    description="Review the product"
                     titleClassName='text-sm md:text-base xl:text-xl font-playfair font-semibold text-primary font-bold'
-                    descriptionClassName='text-xs md:text-xs xl:text-xs'
                     setIsOptionClick={() => {
                         setIsModalOpen(false);
                         form.reset();
@@ -65,9 +64,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                             id="review-form"
                             onSubmit={form.handleSubmit(handleSaveReview)}
                         >
-                            <div className="flex gap-5">
-                                <div className="flex justify-center items-center">
-                                    <div className="w-20 h-30 md:w-30 md:h-full relative shrink-0">
+                            <div className="flex gap-5 p-2 border rounded-md">
+                                <div className="flex items-center justify-center">
+                                    <div className="relative w-20 h-30 md:w-30 md:h-full shrink-0">
                                         <Image
                                             fill
                                             src={image}
@@ -77,11 +76,13 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     </div>
                                 </div>
 
-                                <div className="flex-1 flex flex-col gap-2">
-                                    <p className="font-semibold break-words text-sm md:text-base  font-playfair ">
+                                <div className="flex flex-col flex-1 gap-2">
+                                    <p className="text-sm font-semibold break-words md:text-base font-playfair ">
                                         {title}
                                     </p>
-                                    <p className='text-xs '>{description}</p>
+                                    <p
+                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }}
+                                        className='text-xs line-clamp-2 ' />
 
                                     <FormField
                                         control={form.control}
@@ -123,7 +124,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 />
                             </div>
 
-                            <div className="w-full  pt-4 pb-2 gap-4">
+                            <div className="w-full gap-4 pt-4 pb-2">
                                 <Button
                                     form="review-form"
                                     variant="default"

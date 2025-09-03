@@ -3,7 +3,6 @@ import WishlistedProducts from "./components/wishlisted-products";
 import HeroCarousel from "@/components/common/carousel/hero-carousel";
 import RecommendedProducts from "../../../components/common/product/recommended-products";
 
-
 const WishlistPage = () => {
 
   return (
@@ -11,7 +10,6 @@ const WishlistPage = () => {
       <WishlistedProducts />
       <RecommendedProducts />
       <HeroCarousel />
-
     </main>
   );
 };

@@ -16,7 +16,7 @@ const BlogsList = () => {
   // Dynamically create the search URL
   const searchUrl = useMemo(() => {
     const encoded = encodeURIComponent(searchValue.trim());
-    return encoded ? `/cms/blogs/?search=${encoded}` : "/cms/blogs/";
+    return encoded ? `/cms-blogs/?search=${encoded}` : "/cms-blogs/";
   }, [searchValue]);
 
   // Custom infinite fetch hook

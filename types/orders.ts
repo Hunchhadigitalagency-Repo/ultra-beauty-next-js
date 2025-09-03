@@ -183,6 +183,7 @@ export interface OrderDetail {
   total_price: string
   name: string
   detail_description: string
+  status: string
 }
 
 export interface Product {

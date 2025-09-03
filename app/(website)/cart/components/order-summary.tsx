@@ -44,35 +44,37 @@ export default function OrderSummary({
 
 
   return (
-    <div className="bg-secondary rounded-lg p-4 space-y-4">
-      {isCheckout && (
-        <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
-          <div className="flex items-center w-full gap-2">
-            <div className="flex items-center justify-center p-2 rounded-full bg-secondary">
-              <MapPin className="w-4 h-4 text-white" />
+    <div className="order-2 p-4 space-y-4 rounded-lg bg-secondary">
+      {
+        isCheckout && (
+          <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
+            <div className="flex items-center w-full gap-2">
+              <div className="flex items-center justify-center p-2 rounded-full bg-secondary">
+                <MapPin className="w-4 h-4 text-white" />
+              </div>
+              <h3 className="text-base font-medium text-foreground">Shipping Details</h3>
             </div>
-            <h3 className="text-base font-medium text-foreground">Shipping Details</h3>
-          </div>
-          <div className="flex items-start gap-2">
+            <div className="flex items-start gap-2">
 
 
-            <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
-              <span>
-                {firstName}{lastName}
-              </span>
-              <span>
-                {phoneNumber}{alternativePhoneNumber && `| ${alternativePhoneNumber}`}
-              </span>
-              <span>
-                {address}
-              </span>
-              <span>
-                {address}{city}
-              </span>
-            </p>
+              <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
+                <span>
+                  {firstName}{lastName}
+                </span>
+                <span>
+                  {phoneNumber}{alternativePhoneNumber && `| ${alternativePhoneNumber}`}
+                </span>
+                <span>
+                  {address}
+                </span>
+                <span>
+                  {address}{city}
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <div className="space-y-2">
         <h3 className="text-base font-medium text-foreground">Order Summary</h3>
@@ -134,11 +136,13 @@ export default function OrderSummary({
           <span className="text-base text-custom-black">Total</span>
           <span className="text-lg text-foreground">{formatPrice(Total)}</span>
         </div>
-        {isCheckout && (
-          <p className="mt-1 text-sm text-right text-accent-foreground">
-            All Tax included
-          </p>
-        )}
+        {
+          isCheckout && (
+            <p className="mt-1 text-sm text-right text-accent-foreground">
+              All Tax included
+            </p>
+          )
+        }
       </div>
 
       <Button
@@ -149,7 +153,8 @@ export default function OrderSummary({
         <Info className="w-5 h-5" />
       </Button>
 
-      {!isCheckout &&
+      {
+        !isCheckout &&
         <Button
           disabled={!cartItem.length}
           className="w-full font-medium text-white bg-primary"
@@ -159,18 +164,20 @@ export default function OrderSummary({
         </Button>
       }
 
-      {cartItem.length === 0 && (
-        <div className="flex items-center justify-end">
-          <Button
-            variant="ghost"
-            className="text-sm hover:text-secondary"
-            onClick={() => router.push("/shop")}
-          >
-            CONTINUE SHOPPING
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
-      )}
+      {
+        cartItem.length === 0 && (
+          <div className="flex items-center justify-end">
+            <Button
+              variant="ghost"
+              className="text-sm hover:text-secondary"
+              onClick={() => router.push("/shop")}
+            >
+              CONTINUE SHOPPING
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        )
+      }
 
       {
         isRewardsModalOpen && (
