@@ -16,6 +16,7 @@ import {
 } from "@/types/profile";
 
 const MyProfile: React.FunctionComponent = () => {
+
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showShippingModal, setShowShippingModal] = useState(false);
   const [showShippingDetailsModal, setShowShippingDetailsModal] = useState(false);
@@ -165,7 +166,7 @@ const MyProfile: React.FunctionComponent = () => {
         />
 
         {/* Pagination */}
-        {orderData && (
+        {orderData && orderData.total_pages > 1 && (
           <div className="flex justify-end gap-2 mt-4 items-center">
             <button
               disabled={currentpage === 1}

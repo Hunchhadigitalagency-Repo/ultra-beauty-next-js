@@ -9,7 +9,6 @@ export interface OrderTableProps {
   data: OrderResponse[] | undefined;
 }
 
-
 const OrderTable: React.FC<OrderTableProps> = ({ data, isLoading, isError }) => {
 
   return (

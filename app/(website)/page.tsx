@@ -29,7 +29,7 @@ export default function HomePage() {
       <SkinCare />
       <BeautyVideoSection />
       <MakeUp />
-      <PromotionalCarousel className="padding" />
+      <PromotionalCarousel />
       <GlowKitSection />
       <MermaidBanner />
       <Featured />
