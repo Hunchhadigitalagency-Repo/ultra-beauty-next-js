@@ -1,14 +1,12 @@
 import Image from 'next/image';
+import DOMPurify from 'dompurify';
 import React, { useState } from 'react';
 import ReviewModal from './review-modal';
 import { ReviewCardProps } from '@/types/profile';
-import DOMPurify from 'dompurify';
 
-
-const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description, name, slug }) => {
+const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, description, name, slug, onReviewSave }) => {
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
-
 
     return (
         <div className='card flex justify-between items-center gap-4 lg:px-5'>
@@ -41,6 +39,7 @@ const ReviewCard: React.FunctionComponent<ReviewCardProps> = ({ image, descripti
                 image={image}
                 description={description}
                 slug={slug}
+                onReviewSave={onReviewSave}
             />
         </div>
     )

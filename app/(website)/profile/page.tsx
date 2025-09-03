@@ -39,13 +39,13 @@ const Profile: React.FunctionComponent = () => {
         </div>
       </section>
       <section className="flex flex-col gap-12 lg:flex-row">
-        <aside className="grid grid-cols-2 gap-2 rounded-lg sm:grid-cols-4 lg:block lg:grid-cols-1 lg:bg-secondary lg:p-5 min-w-60 h-fit">
+        <aside className="rounded-lg hidden lg:block lg:grid-cols-1 lg:bg-secondary lg:p-5 min-w-60 h-fit">
           {
             PROFILE_TABS.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTabIndex(index)}
-                className={`flex items-center justify-center gap-4 whitespace-nowrap lg:justify-start rounded-md not-only:bg-secondary px-5 py-2 font-medium text-sm md:text-base cursor-pointer ${index === activeTabIndex && "text-primary"
+                className={`flex items-center justify-center gap-4 whitespace-nowrap lg:gap-5 lg:justify-start rounded-md not-only:bg-secondary px-5 py-2 font-medium text-sm md:text-base cursor-pointer ${index === activeTabIndex && "text-primary"
                   }`}
               >
                 <span className={`p-1 hidden lg:block rounded-sm ${index === activeTabIndex && 'bg-primary'}`}>

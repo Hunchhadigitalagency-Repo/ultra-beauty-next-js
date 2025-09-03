@@ -1,20 +1,22 @@
 "use client";
-import React from "react";
+
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { CiHeart } from "react-icons/ci";
+import { Heart } from "lucide-react";
+import { Result } from "@/types/product";
 import { useDispatch } from "react-redux";
 import WishlistCard from "./wishlist-card";
 import useFetchData from "@/hooks/use-fetch";
+import React, { useEffect, useState } from "react";
 import { WishListResponse } from "@/types/wishlist";
 import useCheckToken from "@/hooks/use-check-token";
 import { calculateDiscountedPrice } from "@/lib/cart-utils";
+import { useToggleWishlist } from "@/utils/wishList-utility";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
 import SectionHeader from "@/components/common/header/section-header";
 import WishlistCardSkeleton from "@/components/ui/wishlist-scribble-loader";
 import { deleteAllWishlist, deleteWishlist } from "@/lib/api/wishlist/wishlist-apis";
-import { Result } from "@/types/product";
 
 interface FlashProductResponse extends Result {
   id: number
@@ -22,19 +24,18 @@ interface FlashProductResponse extends Result {
 
 const WishlistedProducts = () => {
 
+  const toggleWishlist = useToggleWishlist();
   const { isAuthenticated, loading: authLoading } = useCheckToken();
-
-
+  const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
   const { data, loading, refetch } = useFetchData<WishListResponse>("/wishlists/", true);
-
   const { data: flashSaleProducts, loading: isLoading, error } = useFetchData<FlashProductResponse[]>("random-flash-sale-products/")
 
+  useEffect(() => {
+    refetch();
+  }, [wishlistUpdates, refetch]);
 
   const wishListData = data?.results[0]?.products
   const dispatch = useDispatch();
-
-  console.log(flashSaleProducts, "flash sale products");
-
   const deleteWishlistClient = async (slug: string) => {
     try {
       await deleteWishlist(slug);
@@ -68,8 +69,21 @@ const WishlistedProducts = () => {
     dispatch(setWishlistCount(0))
   }
 
+  const handleWishListClick = async (slug: string | undefined, isWishlisted: boolean | undefined) => {
+    if (!slug) return;
+    setWishlistUpdates((prev) => ({
+      ...prev,
+      [slug]: !isWishlisted,
+    }));
+
+    toggleWishlist(slug,
+      isWishlisted,
+      isAuthenticated)
+  };
+
   return (
     <section className="grid grid-cols-1 lg:grid-cols-[65%_28%] xl:grid-cols-[75%_22%] padding  gap-5 lg:gap-20">
+      {/* Wishlisted Products */}
       <div >
         <div className="flex justify-between w-full">
           <SectionHeader
@@ -86,7 +100,6 @@ const WishlistedProducts = () => {
               </button>
             )
           }
-
         </div>
 
         <div className="flex flex-col gap-4">
@@ -123,6 +136,8 @@ const WishlistedProducts = () => {
           }
         </div>
       </div>
+
+      {/* Flash Sale Products */}
       <div className="w-full p-2 font-medium md:p-4 lg:p-4">
         <h1 className="text-2xl uppercase">
           on sale
@@ -153,8 +168,11 @@ const WishlistedProducts = () => {
                       </div>
                     )
                   }
-                  <div className="absolute w-8 h-8 top-4 right-3 bg-[#EEEEEE] rounded-full text-black flex justify-center items-center md:w-10 md:h-10 md:top-8 md:right-8 lg:top-3 lg:right-1 lg:w-6 lg:h-6 xl:top-3 xl:right-3 xl:w-7 xl:h-7">
-                    <CiHeart className="w-7 h-7 md:w-8 md:h-8 lg:w-5 lg:h-5" />
+                  <div className="absolute w-8 h-8 top-4 right-3 bg-[#EEEEEE] rounded-full text-black flex justify-center items-center md:w-10 md:h-10 md:top-8 md:right-8 lg:top-3 lg:right-1 lg:w-6 lg:h-6 xl:top-3 xl:right-3 xl:w-7 xl:h-7" onClick={() => handleWishListClick(product.slug_name, wishlistUpdates[product.slug_name])}>
+                    <Heart
+                      fill={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "transparent"}
+                      stroke={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "black"}
+                      className="w-7 h-7 md:w-8 md:h-8 lg:w-5 lg:h-5" />
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 px-4 py-2">
