@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { updateOrder } from '@/lib/api/order/order-apis';
 import React, { useEffect, useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { clearCart, decreaseCartCountBy, setOrderId } from '@/redux/features/cart-slice';
+import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/redux/features/cart-slice';
 
 const Success: React.FunctionComponent = () => {
 
@@ -42,6 +42,7 @@ const Success: React.FunctionComponent = () => {
                         dispatch(setOrderId(null));
                         dispatch(decreaseCartCountBy(cartItem.length));
                         dispatch(clearCart());
+                        dispatch(setShippingFee(''))
                     }
                 }
             } catch (error) {

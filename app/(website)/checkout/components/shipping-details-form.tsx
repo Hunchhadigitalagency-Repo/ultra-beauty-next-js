@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   ShippingFormValues,
   shippingSchema,
@@ -30,8 +30,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PROVINCES } from "@/constants/province-city-data";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addShippingDetails } from "@/redux/features/cart-slice";
+import { addShippingDetails, setShippingFee } from "@/redux/features/cart-slice";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { postCity } from "@/lib/api/order/order-apis";
 
 
 
@@ -43,7 +44,14 @@ interface ShippinFormProps {
 export default function ShippingForm({ onChange }: ShippinFormProps) {
 
   const dispatch = useAppDispatch();
-  const { shippingDetails } = useAppSelector(state => state.cart);
+  const { shippingDetails, cartItem } = useAppSelector(state => state.cart);
+
+  const [selectedProvince, setSelectedProvince] = useState<string | undefined>(
+    shippingDetails?.province || undefined
+  );
+  const [selectedCity, setSelectedCity] = useState<string | undefined>(
+    shippingDetails?.city || undefined
+  );
 
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
@@ -66,15 +74,28 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
 
   const router = useRouter();
   const watchedValues = useWatch({ control: form.control });
-  const selectedProvince = watchedValues.province
-  const provinceData = PROVINCES.find(
-    (p) => p.province === selectedProvince
-  );
+  const cities = selectedProvince
+    ? PROVINCES.find((p) => p.province === selectedProvince)?.cities || []
+    : [];
+
+  const cartIds = cartItem.map(item => item.id);
 
 
   useEffect(() => {
     onChange(watchedValues as ShippingFormValues)
   }, [watchedValues, onChange])
+
+  const handleCityChange = async (value: string, onChange: (val: string) => void) => {
+    onChange(value);
+    setSelectedCity(value);
+
+    try {
+      const response = await postCity(cartIds, value);
+      dispatch(setShippingFee(String(response.data.rate)));
+    } catch (error) {
+      console.error("Failed to post city:", error);
+    }
+  }
 
   function onSubmit(values: ShippingFormValues) {
     dispatch(addShippingDetails(values));
@@ -183,7 +204,14 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   <FormLabel className="text-sm font-medium text-gray-700">
                     Province
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    value={selectedProvince}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setSelectedProvince(value);
+                      setSelectedCity(undefined)
+                    }}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select Your Province" />
@@ -209,14 +237,18 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   <FormLabel className="text-sm font-medium text-gray-700">
                     City
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!selectedProvince}>
+                  <Select
+                    value={selectedCity}
+                    onValueChange={(value) => handleCityChange(value, field.onChange)}
+                    disabled={!selectedProvince}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select Your Nearest City" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {provinceData?.cities?.map((city, index) => (
+                      {cities?.map((city, index) => (
                         <SelectItem key={index} value={city}>
                           {city}
                         </SelectItem>

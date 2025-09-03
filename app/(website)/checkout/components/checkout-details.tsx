@@ -90,7 +90,7 @@ const CheckoutDetails: React.FunctionComponent = () => {
             voucherCode={voucher}
             onVoucherCodeChange={setVoucher}
             onApplyVoucher={handleApplyVoucher}
-            isCheckout={false}
+            isCheckout={true}
           />
         </div>
       </div>

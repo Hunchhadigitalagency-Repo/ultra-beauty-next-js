@@ -13,7 +13,6 @@ import CircularProgressBar from "@/components/common/circular-progress-bar/circu
 
 export default function OrderSummary({
   totalItems,
-  shippingFee,
   voucherCode,
   shippingDetails,
   onVoucherCodeChange,
@@ -25,7 +24,7 @@ export default function OrderSummary({
 
   const router = useRouter();
   const progress = [50];
-  const { voucherData, cartItem } = useAppSelector(state => state.cart);
+  const { voucherData, cartItem, shippingFee } = useAppSelector(state => state.cart);
   const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
   const { firstName, lastName, address, phoneNumber, alternativePhoneNumber, city } = shippingDetails || {};
 
@@ -40,7 +39,7 @@ export default function OrderSummary({
 
   // Voucher Discount and Total Calculation
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const Total = subTotal + shippingFee + taxAmount - voucherDiscount;
+  const Total = subTotal + Number(shippingFee) + taxAmount - voucherDiscount;
 
 
   return (
@@ -49,7 +48,7 @@ export default function OrderSummary({
         isCheckout && (
           <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
             <div className="flex items-center w-full gap-2">
-              <div className="flex items-center justify-center p-2 rounded-full bg-secondary">
+              <div className="flex items-center justify-center p-2 rounded-full bg-primary">
                 <MapPin className="w-4 h-4 text-white" />
               </div>
               <h3 className="text-base font-medium text-foreground">Shipping Details</h3>
@@ -96,10 +95,14 @@ export default function OrderSummary({
               </div>
             )
           }
-          <div className="flex justify-between">
-            <span>Shipping fee</span>
-            <span className="text-foreground">{formatPrice(shippingFee)}</span>
-          </div>
+          {
+            isCheckout && (
+              <div className="flex justify-between">
+                <span>Shipping fee</span>
+                <span className="text-foreground">{formatPrice(Number(shippingFee))}</span>
+              </div>
+            )
+          }
         </div>
       </div>
 

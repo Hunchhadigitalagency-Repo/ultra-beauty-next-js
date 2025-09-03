@@ -6,6 +6,10 @@ import { CreateOrderResponse, ShippingInfo } from "@/types/orders";
 
 type ShippingRequest = Omit<ShippingInfo, 'id' | 'order_id'>;
 
+type ShippingFeeResponse = {
+    rate: number
+}
+
 interface AddOrderRequest {
     carts_id: number[],
     shipping_info: ShippingRequest | null,
@@ -94,6 +98,16 @@ export const returnOrder = async (
     }
     const response = await api.post("return-items/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response
+}
+
+export const postCity = async (id: number[], destination: string | undefined) => {
+    const cart_items = id;
+    const delivery_location = destination;
+    const response = await apiBase.post<ShippingFeeResponse>('get-shipping-price/', {
+        cart_items,
+        delivery_location
     });
     return response
 }

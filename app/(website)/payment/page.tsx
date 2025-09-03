@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import SectionHeader from '@/components/common/header/section-header';
 import { generateEsewaPayload } from '@/lib/api/payment/payment-apis';
 import OrderSummary from '@/app/(website)/cart/components/order-summary';
-import { clearCart, decreaseCartCountBy, setOrderId } from '@/redux/features/cart-slice';
+import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/redux/features/cart-slice';
 
 
 const PAYMENT_GATEWAYS = [
@@ -73,6 +73,7 @@ const Payment: React.FunctionComponent = () => {
       router.push('/profile');
       dispatch(decreaseCartCountBy(cartItem.length));
       dispatch(clearCart());
+      dispatch(setShippingFee('ß'))
     } else if (activePaymentMethod === 'esewa') {
 
       try {
