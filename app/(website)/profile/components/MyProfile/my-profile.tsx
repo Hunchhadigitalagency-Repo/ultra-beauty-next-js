@@ -78,38 +78,53 @@ const MyProfile: React.FunctionComponent = () => {
               Change
             </button>
           </div>
-          {loading ? (
-            <ProfileInformationLoader />
-          ) : error ? (
-            <div className="border-t p-4 flex justify-center items-center h-35 text-red-500">
-              Something Went Wrong While Fetching Profile ...
-            </div>
-          ) : (
-            <div className="border-t p-4 flex gap-4">
-              <div className="relative w-20 h-20">
-                {imgSource && (
-                  <Image
-                    src={typeof imgSource === "string" ? imgSource : ""}
-                    alt="Profile"
-                    fill
-                    className="object-cover rounded-full"
-                  />
-                )}
+          {
+            loading ? (
+              <ProfileInformationLoader />
+            ) : error ? (
+              <div className="border-t p-4 flex justify-center items-center h-35 text-red-500">
+                Something Went Wrong While Fetching Profile ...
               </div>
-              <div className="flex flex-col gap-1.5">
-                <p className="text-lg font-semibold text-primary">
-                  {data?.first_name + " " + data?.last_name}
-                </p>
-                <p className="text-sm font-medium">{data?.email}</p>
-                <p className="text-sm font-medium">
-                  Phone: {data?.phone_number || "N/A"}
-                </p>
-                <p className="text-sm font-medium text-[#5D5D5D]">
-                  Address: {data?.address || "N/A"}
-                </p>
+            ) : (
+              <div className="border-t p-4 flex gap-4">
+                <div className="relative w-20 h-20">
+                  {
+                    imgSource && (
+                      <Image
+                        src={typeof imgSource === "string" ? imgSource : ""}
+                        alt="Profile"
+                        fill
+                        className="object-cover rounded-full"
+                      />
+                    )
+                  }
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  {
+                    data?.first_name && data?.last_name && <p className="text-lg font-semibold text-primary">
+                      {data?.first_name + " " + data?.last_name}
+                    </p>
+                  }
+                  {
+                    data?.email && <p className="text-sm font-medium">{data?.email}</p>
+                  }
+                  {
+                    data?.phone_number && (
+                      <p className="text-sm font-medium">
+                        Phone: {data?.phone_number}
+                      </p>
+                    )
+                  }
+                  {
+                    data?.address && (
+                      <p className="text-sm font-medium text-[#5D5D5D]">
+                        Address: {data?.address}
+                      </p>
+                    )
+                  }
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Shipping Details */}
@@ -144,14 +159,31 @@ const MyProfile: React.FunctionComponent = () => {
             </div>
           ) : (
             <div className="border-t p-4 flex flex-col gap-1.5">
-              <p className="text-lg font-semibold text-primary">
-                {data?.first_name + " " + data?.last_name}
-              </p>
-              <p className="text-sm font-medium">{data?.email}</p>
-              <p className="text-sm font-medium">{data?.phone_number || "N/A"}</p>
-              <p className="text-sm font-medium">{data?.address || "N/A"}</p>
+              {
+                data?.first_name && data?.last_name && <p className="text-lg font-semibold text-primary">
+                  {data?.first_name + " " + data?.last_name}
+                </p>
+              }
+              {
+                data?.email && <p className="text-sm font-medium">{data?.email}</p>
+              }
+              {
+                data?.phone_number && (
+                  <p className="text-sm font-medium">
+                    Phone: {data?.phone_number}
+                  </p>
+                )
+              }
+              {
+                data?.address && (
+                  <p className="text-sm font-medium">
+                    Address: {data?.address}
+                  </p>
+                )
+              }
             </div>
-          )}
+          )
+          }
         </div>
       </div>
 
