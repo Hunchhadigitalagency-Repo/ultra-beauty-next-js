@@ -32,7 +32,7 @@ const OrderActionCard: React.FunctionComponent<ActionCardProps> = ({ product }) 
                                 </h3>
                                 <p dangerouslySetInnerHTML={{
                                     __html: DOMPurify.sanitize(order.product.general_description),
-                                }} className="text-xs leading-snug truncate font-poppins md:text-sm text-foreground">
+                                }} className="text-xs leading-snug truncate font-poppins md:text-sm text-foreground line-clamp-2">
                                 </p>
                             </div>
                             {/* Info Row */}

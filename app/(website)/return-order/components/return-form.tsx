@@ -25,24 +25,53 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import SectionHeader from '@/components/common/header/section-header';
 import MultiImageUploader, { FileWithMetadata } from '@/components/common/ImageUploader/multi-image-uploader';
+import { Input } from '@/components/ui/input';
+import { returnOrder } from '@/lib/api/order/order-apis';
 
-const ReturnForm: React.FunctionComponent = () => {
+const returnReasons = [
+    { value: 'damaged', label: 'Damaged Item' },
+    { value: 'wrong_item', label: 'Wrong Item Sent' },
+    { value: 'not_as_described', label: 'Item Not as Described' },
+    { value: 'changed_mind', label: 'Changed Mind' },
+    { value: 'other', label: 'Other' },
+];
+
+
+
+interface ReturnFormProps {
+    order_id: number
+    order_detail_id: number
+    quantity: number | undefined
+
+}
+const ReturnForm: React.FunctionComponent<ReturnFormProps> = ({ order_id, order_detail_id, quantity }) => {
 
     const form = useForm<ReturnFormValues>({
         resolver: zodResolver(ReturnFormSchema),
         defaultValues: {
             reason: '',
-            notes: '',
-            attachments: []
+            additional_info: '',
+            quantity: 1,
+            attachment: []
         },
     });
 
     const reasonValue = form.watch("reason");
 
     const onSubmit = (data: ReturnFormValues) => {
-        console.log(data);
-        form.reset();
+        if (data) {
+            returnOrder(
+                order_id,
+                order_detail_id,
+                data.quantity,
+                data.additional_info,
+                data.reason,
+                data.attachment as File[] | undefined
+            )
+        }
+        form.reset()
     }
+
 
     return (
         <Form {...form}>
@@ -54,38 +83,68 @@ const ReturnForm: React.FunctionComponent = () => {
                     descriptionClassName='text-xs sm:text-sm md:text-sm'
                 />
                 {/* Reason */}
-                <FormField
-                    control={form.control}
-                    name="reason"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-sm font-medium text-custom-black">
-                                Select a reason
-                            </FormLabel>
-                            <FormControl>
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger className="text-xs bg-white">
-                                        <SelectValue placeholder="Please select the reason for Return" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem value="apple">Apple</SelectItem>
-                                            <SelectItem value="banana">Banana</SelectItem>
-                                            <SelectItem value="blueberry">Blueberry</SelectItem>
-                                            <SelectItem value="grapes">Grapes</SelectItem>
-                                            <SelectItem value="pineapple">Pineapple</SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex gap-4">
+                    {/* Reason */}
+                    <FormField
+                        control={form.control}
+                        name="reason"
+                        render={({ field }) => (
+                            <FormItem className="flex-1">
+                                <FormLabel className="text-sm font-medium text-custom-black">
+                                    Select a reason
+                                </FormLabel>
+                                <FormControl>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <SelectTrigger className="text-xs bg-white">
+                                            <SelectValue placeholder="Please select the reason for Return" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {returnReasons.map((reason) => (
+                                                    <SelectItem
+                                                        key={reason.value}
+                                                        value={reason.value}
+                                                        className="text-xs"
+                                                    >
+                                                        {reason.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    {/* Quantity */}
+                    <FormField
+                        control={form.control}
+                        name="quantity"
+                        render={({ field }) => (
+                            <FormItem className="w-32">
+                                <FormLabel className="text-sm font-medium text-custom-black">
+                                    Quantity
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        min={1}
+                                        max={quantity}
+                                        {...field}
+                                        onChange={(e) => field.onChange(Number(e.target.value))}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 {/* Notes */}
                 <FormField
                     control={form.control}
-                    name="notes"
+                    name="additional_info"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-sm font-medium text-custom-black">
@@ -105,7 +164,7 @@ const ReturnForm: React.FunctionComponent = () => {
                 {/* Attachments */}
                 <FormField
                     control={form.control}
-                    name="attachments"
+                    name="attachment"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className="text-sm font-medium text-custom-black">

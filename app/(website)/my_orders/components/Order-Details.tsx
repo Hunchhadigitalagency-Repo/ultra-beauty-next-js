@@ -21,9 +21,9 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
         router.push(`/cancel-order/${id}?product=${productId}`);
     };
 
-    const handleReturnOrder = () => {
-        router.push(`/return-order/${id}`)
-    };
+    const handleIndividualReturnOrder = (id: number | undefined, productId: number) => {
+        router.push(`/return-order/${id}?product=${productId}`);
+    }
 
     return (
         <div>
@@ -77,8 +77,8 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                                         Write Review
                                     </button>
                                     <button
-                                        onClick={handleReturnOrder}
-                                        className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
+                                        onClick={() => handleIndividualReturnOrder(id, item.id)}
+                                        className="bg-primary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
                                     >
                                         Return Order
                                     </button>

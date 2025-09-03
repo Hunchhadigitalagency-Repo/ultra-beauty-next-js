@@ -27,7 +27,7 @@ const OrderPayment: React.FunctionComponent<OrderPaymentProps> = ({ paymentdetai
                         {paymentdetails?.shipping_info.phone_no}
                     </h1>
                 </div>
-                <div className="px-7 py-5 w-ful h-64 md:h-96 bg-white rounded-md">
+                <div className="px-7 py-5 w-ful h-auto md:h-auto bg-white rounded-md">
                     <div className='flex flex-col gap-1 md:gap-3'>
                         <h1 className="font-poppins font-medium text-primary text-sm md:text-xl">Total Summary</h1>
                         <div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
