@@ -1,10 +1,10 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Heart, Eye } from "lucide-react";
 import PriceRow from "../product/price-row";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import RatingStars from "../product/rating-stars";
 import { ProductCardProps } from "@/types/product";
 
@@ -19,6 +19,7 @@ const ProductCard = ({
   discountTag,
   onToggleWishlist = () => { },
   isWishlisted,
+  quantity
 }: ProductCardProps) => {
 
   const router = useRouter();
@@ -96,12 +97,14 @@ const ProductCard = ({
         </div>
 
         {/* Add To Bag Button */}
-        <Link href={`/shop/product/${slug}`} className="flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium text-white bg-primary sm:text-sm md:text-base">
+        <Button onClick={() => router.push(`/shop/product/${slug}`)}
+          disabled={quantity === null}
+          className={`flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium text-foreground ${quantity === null ? "bg-[#FAFAFA] text-foreground]" : "bg-secondary sm:text-sm md:text-base"}`}>
           <Eye className="w-4 h-4" />
           View Product
-        </Link>
+        </Button>
       </div>
-    </section>
+    </section >
   );
 };
 

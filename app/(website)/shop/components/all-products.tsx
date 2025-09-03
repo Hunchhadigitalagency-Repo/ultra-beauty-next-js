@@ -3,7 +3,6 @@ import { Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
-// import { useDispatch } from "react-redux";
 import { Result } from "@/types/product";
 import MobileFilter from "./mobile-filter";
 import { useAppSelector } from "@/redux/hooks";
@@ -20,6 +19,7 @@ const AllProducts = () => {
   // const dispatch = useDispatch();
   const { isAuthenticated } = useCheckToken();
   const [showFilter, setShowFilter] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const { selectedCategories } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
@@ -30,7 +30,12 @@ const AllProducts = () => {
     ? `?category=${selectedCategories.join(',')}`
     : '';
 
-  const path = `public-products${categoryQuery}`;
+
+  const path = `public-products${categoryQuery}${searchValue ? `?search=${searchValue}` : ''}`;
+
+  const handleSearchValue = (value: string) => {
+    setSearchValue(value);
+  };
 
   const {
     data: products,
@@ -51,17 +56,17 @@ const AllProducts = () => {
       isAuthenticated)
   };
 
-
   const toggleFilter = () => {
     setShowFilter(!showFilter);
   };
 
   return (
+
     <section className="relative flex flex-col gap-8 padding">
       <div className="flex flex-row items-center justify-between gap-4">
         <SectionHeader title={`All Products (${210})`} description="" />
         <div className="hidden lg:flex lg:gap-5">
-          <SearchBox placeholder="Search Products" />
+          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
           <ProductSort />
         </div>
         <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
@@ -92,6 +97,7 @@ const AllProducts = () => {
                   rating={product.average_rating}
                   isWishlisted={wishlistUpdates[product.slug_name] ?? product.my_wishlist}
                   onToggleWishlist={handleToggleWishlist}
+                  quantity={product.quantity}
                 />
               ))}
             </div>
