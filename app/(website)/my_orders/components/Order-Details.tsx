@@ -26,9 +26,9 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
         router.push(`/cancel-order/${id}?product=${productId}`);
     };
 
-    const handleReturnOrder = () => {
-        router.push('/return-order')
-    };
+    const handleIndividualReturnOrder = (id: number | undefined, productId: number) => {
+        router.push(`/return-order/${id}?product=${productId}`);
+    }
 
     const handleOpenModal = (product: OrderDetail) => {
         setSelectedProduct(product);
@@ -54,8 +54,8 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                         <div className="space-y-2">
                             {/* Boxes */}
                             <div className="flex flex-wrap gap-3 md:gap-9">
-                                <div className="border-[1px] border-gray-500 px-1 lg:min-w-70 py-1  md:font-semibold font-poppins text-xs md:text-sm">
-                                    Date: {new Date(item.product.created_at).toLocaleString()}
+                                <div className="border-[1px] border-gray-500 px-1 lg:min-w-30 py-1  md:font-semibold font-poppins text-xs md:text-sm">
+                                    Date: {new Date(item.product.created_at).toLocaleDateString()}
                                 </div>
                                 <div
                                     className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30  md:font-semibold font-poppins text-xs md:text-sm">
@@ -88,8 +88,8 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                                         Write Review
                                     </button>
                                     <button
-                                        onClick={handleReturnOrder}
-                                        className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
+                                        onClick={() => handleIndividualReturnOrder(id, item.id)}
+                                        className="bg-primary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap"
                                     >
                                         Return Order
                                     </button>

@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import ReturnForm from './components/return-form';
 import SectionHeader from '@/components/common/header/section-header';
 // import OrderActionCard from '@/components/common/cards/order-action-card';
 
@@ -29,7 +28,7 @@ const ReturnOrder: React.FunctionComponent = () => {
                     descrption: "Wrinkle-reducing cream"
                 }}
             /> */}
-            <ReturnForm />
+            {/* <ReturnForm /> */}
         </section>
     )
 }

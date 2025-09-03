@@ -124,6 +124,7 @@ export interface IShippingInfo {
 
 // Order-details-0------------------------------------------------------------------------------------------
 export interface CreateOrderResponse {
+
   id: number
   user: User
   payment_method: string
@@ -138,6 +139,7 @@ export interface CreateOrderResponse {
   total_amount: string
   shipping_info: ShippingInfo
   order_details: OrderDetail[]
+
 }
 
 export interface User {
