@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+import { ReviewsResponse } from "./reviews";
 
 export interface IFeature {
   label: string;
@@ -137,6 +138,7 @@ export interface Result {
   subcategory: any
   inventory: any
   my_wishlist: boolean
+  reviews: ReviewsResponse[]
   average_rating: number
   total_reviews: number
   name: string
