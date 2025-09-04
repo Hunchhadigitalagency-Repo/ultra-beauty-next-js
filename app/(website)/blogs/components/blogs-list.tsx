@@ -7,11 +7,13 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SearchBox from "@/components/common/filter/search-box";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-import { useInfiniteFetchNoToken } from "@/hooks/use-infinite-fetch-no-token";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
+import { useAppSelector } from "@/redux/hooks";
 
 const BlogsList = () => {
 
   const [searchValue, setSearchValue] = useState("");
+  const { isLoggedIn } = useAppSelector(state => state.authentication)
 
   // Dynamically create the search URL
   const searchUrl = useMemo(() => {
@@ -24,7 +26,7 @@ const BlogsList = () => {
     data: blogs,
     hasMore,
     fetchNext,
-  } = useInfiniteFetchNoToken<IBlog>(searchUrl, 9); // Fetch 9 at a time
+  } = useInfiniteFetch<IBlog>(searchUrl, "9", undefined, undefined, isLoggedIn); // Fetch 9 at a time
 
   // Set search value when search box input changes
   const getValue = (value: string) => {

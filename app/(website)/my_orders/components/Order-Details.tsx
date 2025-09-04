@@ -11,7 +11,6 @@ import ReviewModal from "../../profile/components/MyReview/components/review-mod
 interface OrderProductProps {
     id?: number;
     orderDetails: OrderDetail[];
-    // orderDate: string | undefined;
     orderStatus: OrderStatus | undefined;
     slug?: string
 }
@@ -81,7 +80,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
 
                         {/* Review Return */}
                         <div className="flex justify-end w-full md:items-center md:gap-3 xl:justify-between">
-                            {orderStatus?.name.toLowerCase() === "delivered" ? (
+                            {item.status.toLowerCase() === "delivered" ? (
                                 <div className="flex items-center justify-end w-full gap-5 md:items-start md:flex-row xl:flex-row xl:justify-end">
                                     <button onClick={() => handleOpenModal(item)}
                                         className="bg-secondary border cursor-pointer border-primary rounded-none hover:bg-primary hover:text-white text-black px-1 py-1 md:px-1 md:py-1 xl:px-2 xl:py-2 text-[12px] md:text-sm whitespace-nowrap">
@@ -94,14 +93,14 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                                         Return Order
                                     </button>
                                 </div>
-                            ) : orderStatus?.name.toLowerCase() === "cancelled" ? (
+                            ) : item.status.toLowerCase() === "cancelled" ? (
                                 <button
                                     className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer text-primary md:items-center hover:text-primary md:text-sm"
                                 >
                                     Cancelled
 
                                 </button>
-                            ) : orderStatus?.name.toLowerCase() === "pending" ? (
+                            ) : item.status.toLowerCase() === "pending" ? (
                                 <button
                                     onClick={() => handleCancelIndividualOrder(id, item.id)}
                                     className="flex items-center justify-end w-full gap-2 text-xs font-medium cursor-pointer md:items-center text-primary hover:text-primary md:text-sm"
@@ -109,9 +108,9 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                                     Cancel Order
                                     <CircleAlert className="w-4 h-4" />
                                 </button>
-                            ) : orderStatus?.name.toLowerCase() === "returned" ? (
+                            ) : item.status.toLowerCase() === "returned" ? (
                                 <button
-                                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-yellow-600 cursor-pointer md:items-center hover:text-primary md:text-sm"
+                                    className="flex items-center justify-end w-full gap-2 text-xs font-medium text-gray-600 cursor-pointer md:items-center md:text-sm"
                                 >
                                     Returned
 

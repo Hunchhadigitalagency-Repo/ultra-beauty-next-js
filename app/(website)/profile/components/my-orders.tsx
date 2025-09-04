@@ -12,7 +12,8 @@ const MyOrders: React.FunctionComponent = () => {
         <div className="flex flex-col gap-3">
             <h1 className="text-primary font-medium text-xl">My Orders</h1>
             <OrderTable isLoading={orderLoading} isError={orderError} data={filtered_Order_Data} />
-        </div>)
+        </div>
+    )
 }
 
 export default MyOrders

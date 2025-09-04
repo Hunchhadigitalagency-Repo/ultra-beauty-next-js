@@ -67,7 +67,13 @@ export function useInfiniteFetch<T>(
       const response = await API.get(nextUrl);
       const payload = response.data;
       if (Array.isArray(payload.results)) {
-        setData((prev) => [...prev, ...payload.results]);
+        setData((prev) => {
+          const newItems = payload.results.filter(
+            (item: any) => !prev.some((p: any) => p.slug_name === item.slug_name)
+          );
+          return [...prev, ...newItems];
+        });
+
       }
       setNextUrl(payload.links?.next ?? null);
       setCount(payload?.count ?? 0);
@@ -88,8 +94,13 @@ export function useInfiniteFetch<T>(
   useEffect(() => {
     setData([]);
     setCount(0);
-    initialLoadRef.current = true;
-    setNextUrl(buildUrl(path));
+    const newUrl = buildUrl(path);
+    setNextUrl(newUrl);
+
+    if (newUrl) {
+      initialLoadRef.current = false;
+      fetchNext();
+    }
   }, [path, buildUrl, refetch]);
 
   return {

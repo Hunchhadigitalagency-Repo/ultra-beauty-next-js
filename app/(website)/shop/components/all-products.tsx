@@ -7,6 +7,7 @@ import { Result } from "@/types/product";
 import MobileFilter from "./mobile-filter";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useToggleWishlist } from "@/utils/wishList-utility";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
@@ -16,22 +17,26 @@ import { ScribbleProductCard } from "@/components/ui/product-scribble";
 
 const AllProducts = () => {
 
-  // const dispatch = useDispatch();
+  const toggleWishlist = useToggleWishlist();
   const { isAuthenticated } = useCheckToken();
+  const queryParams = new URLSearchParams();
+
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const { selectedCategories } = useAppSelector(state => state.category);
-  const { isLoggedIn } = useAppSelector((state) => state.authentication);
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  const toggleWishlist = useToggleWishlist();
+  const { selectedCategories } = useAppSelector(state => state.category);
+  const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
-  const categoryQuery = selectedCategories.length > 0
-    ? `?category=${selectedCategories.join(',')}`
-    : '';
+  if (selectedCategories.length > 0) {
+    queryParams.append("category", selectedCategories.join(","));
+  }
 
+  if (searchValue) {
+    queryParams.append("search", searchValue);
+  }
 
-  const path = `public-products${categoryQuery}${searchValue ? `?search=${searchValue}` : ''}`;
+  const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -40,7 +45,9 @@ const AllProducts = () => {
   const {
     data: products,
     loading,
-  } = useInfiniteFetch<Result>(path, undefined, undefined, undefined, isLoggedIn);
+    hasMore,
+    fetchNext,
+  } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
 
 
   const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {
@@ -74,19 +81,28 @@ const AllProducts = () => {
       <div className="flex flex-row gap-16">
         <FilterSection />
         <div className="flex-1">
-          {loading || products?.length === 0 ? (
-            <section>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <InfiniteScroll
+            dataLength={products.length}
+            next={fetchNext}
+            hasMore={hasMore}
+            scrollThreshold={0.5}
+            loader={
+              <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {[...Array(3)].map((_, index) => (
                   <ScribbleProductCard key={index} />
                 ))}
               </div>
-            </section>
-          ) : (
+            }
+            endMessage={
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                You’ve reached the end!
+              </p>
+            }
+          >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
               {products?.map((product, index) => (
                 <ProductCard
-                  key={`${Math.random}${index}`}
+                  key={index}
                   slug={product.slug_name}
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
@@ -100,8 +116,9 @@ const AllProducts = () => {
                   quantity={product.quantity}
                 />
               ))}
+
             </div>
-          )}
+          </InfiniteScroll>
         </div>
       </div>
       {showFilter && <MobileFilter onclose={toggleFilter} />}
