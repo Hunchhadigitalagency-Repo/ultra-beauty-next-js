@@ -1,52 +1,63 @@
 'use client';
-// import DOMPurify from 'dompurify';
-import React from 'react';
-// import useFetchData from '@/hooks/use-fetch';
-// import { SingleProductResponse } from '@/types/product';
-import SingleProductAccordion from './single-product-accordion';
+import DOMPurify from 'dompurify';
+import { AlertCircle } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import useFetchData from '@/hooks/use-fetch';
+import { SingleProductResponse } from '@/types/product';
+import React, { useEffect, useRef, useState } from 'react';
+import SectionHeader from '@/components/common/header/section-header';
+
 
 const DetailDecription: React.FunctionComponent = () => {
-    // const [expanded, setExpanded] = useState(false);
-    // const slug = params?.slug as string;
-    // const { data } = useFetchData<SingleProductResponse>(`/public-products/${slug}`);
+    const [expandedText, setExpandedText] = useState(false);
+    const params = useParams();
+    const slug = params?.slug as string;
+
+    const { data, error, loading } = useFetchData<SingleProductResponse>(`/public-products/${slug}`);
+    const [showButton, setShowButton] = useState(false);
+    const textRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!textRef.current) return;
+        setShowButton(textRef?.current.scrollHeight > textRef?.current.clientHeight);
+    }, [data?.detail_description]);
 
     return (
-        <section className='w-full'>
-            {/* {
-                data?.detail_description && (
-                    <div className="flex flex-col gap-5 text-sm leading-relaxed text-foreground">
-                        <SectionHeader
-                            title="More Description"
-                            titleClassName='font-semibold'
-                        />
+        <section className='w-full padding'>
+            {data?.detail_description && (
+                <div className="flex flex-col gap-5 text-sm leading-relaxed text-foreground">
+                    <SectionHeader
+                        title="More Description"
+                        titleClassName='font-semibold'
+                    />
+                    {loading ? (
+                        <p>
+                            Loading data...
+                        </p>
+                    ) : error ? (
+                        <>
+                            <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
+                            <p className="font-medium text-gray-700">Oops! Something went wrong.</p>
+                        </>
+                    ) : (
                         <div
-                            className={`${expanded ? "" : "line-clamp-10"} text-base`}
+                            ref={textRef}
+                            className={` text-base ${expandedText ? "" : "line-clamp-5"}`}
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.detail_description) }}
                         />
+                    )}
 
-                        {
-                            data?.detail_description && (
-                                <div
-                                    onClick={() => setExpanded(!expanded)}
-                                    className="text-base font-medium cursor-pointer text-secondary hover:text-primary hover:underline"
-                                >
-                                    {expanded ? "Read Less" : "Read More"}
-                                </div>
-                            )
-                        }
-                    </div>
-                )
-            } */}
-            <div className='detail-description flex flex-col gap-4'>
-                <SingleProductAccordion
-                    title="How To Use"
-                    description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum animi reiciendis laboriosam repellendus accusamus non quo harum vero fugit, dolor explicabo delectus unde commodi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate saepe iure ex rem, nobis nulla asperiores odit quos ab suscipit reprehenderit quasi doloribus cum, ipsam temporibus a eos dolorem tempore aliquam, fugit ea repellendus? Voluptatem voluptate magni iure ipsam, saepe temporibus aut nulla. Illum tenetur ut, quos necessitatibus minus optio!"
-                />
-                <SingleProductAccordion
-                    title="Ingredients"
-                    description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum animi reiciendis laboriosam repellendus accusamus non quo harum vero fugit, dolor explicabo delectus unde commodi? Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate saepe iure ex rem, nobis nulla asperiores odit quos ab suscipit reprehenderit quasi doloribus cum, ipsam temporibus a eos dolorem tempore aliquam, fugit ea repellendus? Voluptatem voluptate magni iure ipsam, saepe temporibus aut nulla. Illum tenetur ut, quos necessitatibus minus optio!"
-                />
-            </div>
+                    {showButton && (
+                        <div
+                            onClick={() => setExpandedText(!expandedText)}
+                            className="text-base font-medium cursor-pointer text-primary hover:text-primary hover:underline"
+                        >
+                            {expandedText ? "Show Less" : "Read More"}
+                        </div>
+                    )}
+                </div>
+
+            )}
         </section>
     )
 }

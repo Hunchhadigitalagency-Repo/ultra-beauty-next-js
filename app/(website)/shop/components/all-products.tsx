@@ -4,7 +4,6 @@ import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
-import MobileFilter from "./mobile-filter";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
 import { useToggleWishlist } from "@/utils/wishList-utility";
@@ -71,22 +70,25 @@ const AllProducts = () => {
         </div>
         <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
       </div>
-      <div className="flex flex-row gap-16">
-        <FilterSection />
-        <div className="flex-1">
+      <div className="flex flex-col lg:flex-row">
+        {/* Filter Section */}
+        <FilterSection showFilter={showFilter} onClose={toggleFilter} />
+
+        {/* Product grid */}
+        <div className="flex-1 w-full">
           {loading || products?.length === 0 ? (
             <section>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 w-full sm:grid-cols-2 lg:grid-cols-3">
                 {[...Array(3)].map((_, index) => (
                   <ScribbleProductCard key={index} />
                 ))}
               </div>
             </section>
           ) : (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 w-full md:grid-cols-2 xl:grid-cols-3">
               {products?.map((product, index) => (
                 <ProductCard
-                  key={`${Math.random}${index}`}
+                  key={`${product.slug_name}-${index}`}
                   slug={product.slug_name}
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
@@ -104,7 +106,7 @@ const AllProducts = () => {
           )}
         </div>
       </div>
-      {showFilter && <MobileFilter onclose={toggleFilter} />}
+
     </section>
   );
 };

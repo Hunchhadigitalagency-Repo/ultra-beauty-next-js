@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import RatingStars from '@/components/common/product/rating-stars';
 import { ReviewHistoryCardProps } from '@/types/profile';
+import RatingStars from '@/components/common/product/rating-stars';
 
 
 
@@ -16,6 +16,7 @@ const ReviewHistoryCard: React.FunctionComponent<ReviewHistoryCardProps> = ({ im
                             src={image}
                             alt='Product Image'
                             className='rounded-sm object-cover'
+
                         />
                     </div>
                 </div>
