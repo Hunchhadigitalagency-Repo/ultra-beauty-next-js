@@ -35,7 +35,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
     const handleSaveReview = async (data: ReviewFormValues) => {
         const { review, rating } = data;
-        onReviewSave?.();
 
         if (!slug) {
             toast.error("Slug is missing, cannot submit review.");
@@ -46,10 +45,11 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         toast.success(response.data.message || 'Review submitted successfully!');
         setIsModalOpen(false);
         form.reset();
+        onReviewSave?.();
     };
 
     return (
-        <>
+        <React.Fragment>
             {
                 isModalOpen && (
                     <GenericModal
@@ -131,7 +131,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         variant="default"
                                         type="submit"
                                         className='w-full'
-                                        onClick={onReviewSave}
+                                        onClick={() => onReviewSave}
                                     >
                                         Save
                                     </Button>
@@ -141,7 +141,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                     </GenericModal>
                 )
             }
-        </>
+        </React.Fragment>
     );
 };
 
