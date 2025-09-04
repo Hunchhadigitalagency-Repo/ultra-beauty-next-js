@@ -4,7 +4,6 @@ import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
-import MobileFilter from "./mobile-filter";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -79,7 +78,7 @@ const AllProducts = () => {
         <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
       </div>
       <div className="flex flex-row gap-16">
-        <FilterSection />
+        <FilterSection showFilter={showFilter} onClose={toggleFilter} />
         <div className="flex-1">
           <InfiniteScroll
             dataLength={products.length}
@@ -121,7 +120,7 @@ const AllProducts = () => {
           </InfiniteScroll>
         </div>
       </div>
-      {showFilter && <MobileFilter onclose={toggleFilter} />}
+
     </section>
   );
 };

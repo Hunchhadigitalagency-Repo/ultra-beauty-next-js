@@ -4,7 +4,6 @@ import { Heart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import DetailDecription from "./detail-description-section";
 import { ProductImagesSectionProps, TimeLeftProps } from "@/types/product";
 
 const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({ images, is_flash_sale, flashEndDate,
@@ -58,7 +57,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
               src={selectedImage}
               alt="Main product"
               fill
-              className="object-center rounded-lg"
+              className="object-fit rounded-lg"
             />
           )
         }
@@ -92,7 +91,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
                     src={img.file}
                     alt={`Product thumbnail ${img.id}`}
                     fill
-                    className="object-center border-2 border-transparent rounded-md cursor-pointer"
+                    className="object-cover border-2 border-transparent rounded-md cursor-pointer"
                   />
                 </div>
               ))
@@ -115,8 +114,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </div>
         ) : null
       }
-      {/* Detail Description */}
-      <DetailDecription />
     </div >
   );
 };
