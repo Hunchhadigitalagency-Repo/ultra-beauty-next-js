@@ -5,7 +5,6 @@ import Image from "next/image";
 import DOMPurify from "dompurify";
 import { IBlog } from "@/types/cms";
 import { useRouter } from "next/navigation";
-// import { Button } from "@/components/ui/button";
 import { Calendar, UserCircle2Icon } from "lucide-react";
 
 
@@ -67,7 +66,6 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
           </span>
         </div>
       </div>
-
       <p
         className="text-foreground font-normal text-sm text-ellipsis overflow-hidden line-clamp-2"
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description || "") }}
