@@ -1,46 +1,56 @@
-import { IDropdownFilterOption } from '@/types/dropdown'
+import { ICategoryDropdown } from '@/types/dropdown'
 import Link from 'next/link'
-import React from 'react'
+import React, { useRef, useCallback, MouseEventHandler } from 'react'
 
 interface MegaMenuProps {
-  dropdownProducts: IDropdownFilterOption[]
+  dropdownCategoriesData: ICategoryDropdown[] | null
   isDropDownVisible: boolean
-  hasSubcategories: boolean | undefined
   setDropdownVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const MegaMenu: React.FunctionComponent<MegaMenuProps> = ({
-  dropdownProducts,
   setDropdownVisible,
-  hasSubcategories
+  dropdownCategoriesData
 }) => {
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const handleMouseOut: MouseEventHandler = useCallback((event) => {
+    if (!dropdownRef.current?.contains(event.target as Node)) {
+      setDropdownVisible(false);
+    }
+  }, [dropdownRef, setDropdownVisible]);
+
   return (
-    <>
-      {hasSubcategories ? <div
-        onMouseLeave={() => setDropdownVisible(false)}
-        className="absolute left-0 right-0 z-50 bg-white shadow-md top-full"
-      >
-        <div className="mt-10 border-t-2 padding">
-          {/* Categories Grid */}
-          <div className="grid grid-rows-4 grid-flow-col auto-cols-[300px] gap-3 py-1 overflow-x-auto scrollbar-hide">
-            {dropdownProducts.map((dropdownProduct) => (
+    <div
+      className="absolute left-0 right-0 z-50 top-full"
+      ref={dropdownRef}
+      onMouseOut={handleMouseOut}
+    >
+      {/* Categories Grid */}
+      <div className="mt-2 bg-white border-t shadow-2xl padding shadow-bottom">
+        <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
+          <Link href="/shop"
+            className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-secondary'
+            onClick={() => setDropdownVisible(false)}>
+            <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
+          </Link>
+          {
+            dropdownCategoriesData?.map((dropdownCategory) => (
               <Link
-                key={dropdownProduct.id}
-                href={`/ ${dropdownProduct.name.toLowerCase()} `}
-                className="transition-all duration-200 rounded-lg group hover:border-primary/20"
+                key={dropdownCategory.id}
+                href={`/ ${dropdownCategory.name.toLowerCase()} `}
+                onClick={() => setDropdownVisible(false)}
+                className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-secondary'
               >
-                <div className="flex flex-col items-start">
-                  <h3 className="text-sm whitespace-nowrap font-poppins text-foreground hover:text-primary">
-                    {dropdownProduct.name}
-                  </h3>
-                </div>
+                <p className="text-sm whitespace-nowrap font-poppins">
+                  {dropdownCategory.name}
+                </p>
               </Link>
-            ))}
-          </div>
+            ))
+          }
         </div>
-      </div> : null}
-    </>
+      </div >
+    </div >
   )
 }
 

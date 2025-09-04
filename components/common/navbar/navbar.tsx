@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import MegaMenu from "./mega-menu";
 import MobileMenu from "./mobile-menu";
@@ -8,8 +9,8 @@ import { CartResponse } from "@/types/cart";
 import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
 import { WishListResponse } from "@/types/wishlist";
+import { useEffect, useRef, useState } from "react";
 import NotificationModal from "./notification-modal";
 import { ICategoryDropdown } from "@/types/dropdown";
 import { usePathname, useRouter } from "next/navigation";
@@ -35,23 +36,21 @@ export default function Navbar() {
   const hasFetched = useRef({ cart: false, wishlist: false });
   const [showNotification, setShowNotification] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<number | null>(null);
 
   const isActive = (pathname: string) => path === pathname;
 
-  const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   const cartCount = useAppSelector((state) => state.cart.cartCount);
+  const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
 
-  const { data } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
-
+  const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
   const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });
-
   const { data: cartData } = useFetchData<CartResponse>('carts', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });
+
 
   useEffect(() => {
     if (wishListData && !hasFetched.current.wishlist) {
@@ -66,29 +65,20 @@ export default function Navbar() {
     }
   }, [wishListData, cartData, dispatch]);
 
-  const handleCategoryEnter = (id: number | null) => {
-    setIsDropdownVisible(true);
-    setActiveCategory(id);
-  };
 
-  const handleCategoryClick = (id: number) => {
-    console.log(id)
-    router.push('/shop');
-    setIsDropdownVisible(false);
-  }
+
+  const handleCategoryEnter = () => {
+    setIsDropdownVisible(true);
+  };
 
   const handleCategoryLeave = () => {
     setIsDropdownVisible(false);
   };
 
-  const selectedCategory = data?.find(item => item.id === activeCategory);
-  const subCategoriesData = selectedCategory?.subcategories || [];
-  const hasSubcategories = selectedCategory && selectedCategory.subcategories.length >= 1 ? true : false;
-
-
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
-      onMouseLeave={handleCategoryLeave}>
+      onMouseLeave={handleCategoryLeave}
+    >
       <div className="py-2 padding-x">
 
         {/* Search Popup */}
@@ -97,8 +87,7 @@ export default function Navbar() {
         {/* Mega Menu */}
         {isDropdownVisible && <MegaMenu
           isDropDownVisible={isDropdownVisible}
-          hasSubcategories={hasSubcategories}
-          dropdownProducts={subCategoriesData}
+          dropdownCategoriesData={dropdownCategoryData}
           setDropdownVisible={setIsDropdownVisible} />}
 
         {/* Notification */}
@@ -118,64 +107,32 @@ export default function Navbar() {
             </span>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="items-center justify-center hidden w-full space-x-8 lg:flex">
-            <div className="flex items-center justify-center">
-              <div className="flex gap-8 static-nav md:text-sm">
-                <p className="nav-link">
-                  <Link href="/">
-                    Home
-                  </Link></p>
-                <p className="nav-link pr-7">
-                  <Link href="/shop">
-                    GlowShop
-                  </Link></p>
-              </div>
-
-              {/* navbar for fetched cateogries */}
-              <div className="max-w-[300px] text-sm  md:text-sm lg:max-w-[300px] xl:max-w-[480px]">
-                {data &&
-                  data?.length < 5 ? (
-                  <div className="flex gap-8">
-                    {data?.slice(0, 4).map((category) => (
-                      <button
-                        key={category.id}
-                        className="flex items-center w-auto gap-1 text-white cursor-pointer font-poppins whitespace-nowrap"
-                        onMouseEnter={() => handleCategoryEnter(category.id)}
-                        onClick={() => handleCategoryClick(category.id)}
-                      >
-                        {category.name}
-                        {category?.subcategories?.length > 0 && <ChevronDown
-                          className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
-                            ? "rotate-180"
-                            : ""
-                            }`}
-                        />}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
-                    {data?.map((category) => (
-                      <button
-                        key={category.id}
-                        className="flex items-center w-auto gap-1 text-black cursor-pointer font-poppins whitespace-nowrap snap-start"
-                        onMouseEnter={() => handleCategoryEnter(category.id)}
-                        onClick={() => handleCategoryClick(category.id)}
-                      >
-                        {category.name}
-                        {category?.subcategories?.length > 0 && <ChevronDown
-                          className={`w-4 h-4 transition-transform duration-200 ${activeCategory === category.id && isDropdownVisible
-                            ? "rotate-180"
-                            : ""
-                            }`}
-                        />}
-                      </button>
-                    ))}
-                  </div>
-                )
-                }
-              </div>
-            </div>
+          <nav className="items-center justify-center hidden w-full h-full lg:flex">
+            <ul className="lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-base">
+              <li>
+                <Link href="/">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <button className="flex items-center justify-center gap-1 cursor-pointer" onMouseEnter={handleCategoryEnter}>
+                  <p className="line-clamp-1">Shop by Category</p>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible
+                    ? "rotate-180"
+                    : ""
+                    }`} />
+                </button>
+              </li>
+              <li>
+                <Link href="/blogs">Blogs</Link>
+              </li>
+              <li>
+                <Link href="/about">About Us</Link>
+              </li>
+              <li>
+                <Link href="/contact">Contact Us</Link>
+              </li>
+            </ul>
           </nav>
           {/* Right side icons */}
           <div className="flex items-center gap-4 md:gap-1 xl:gap-4">
