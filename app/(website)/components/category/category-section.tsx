@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/carousel";
 
 import CategoryCard from "./category-card";
+import useFetchData from "@/hooks/use-fetch";
 import LinkText from "@/components/common/header/link-text";
 import SectionHeader from "@/components/common/header/section-header";
-import useFetchData from "@/hooks/use-fetch";
 
 interface Category {
   id: number;
@@ -25,10 +25,10 @@ interface CategoryResponse {
 }
 
 const CategorySection: React.FunctionComponent = () => {
+
   const { data, loading, error } = useFetchData<CategoryResponse[]>(
     `dropdown/category?is_not_empty=True`
   );
-  // console.log(data, "category response from backend hai");
 
   return (
     <section className="padding space-y-4">

@@ -13,11 +13,10 @@ const Footer: React.FC = () => {
   ];
 
   const ABOUT_LINKS = [
-    { name: "WHO WE ARE?", href: "/" },
+    { name: "WHO WE ARE?", href: "/about" },
     { name: "CUSTOMER REVIEW", href: "/" },
     { name: "CAREER", href: "/career" },
-    { name: "PR-PACKAGE", href: "/" },
-    { name: "EVENTS", href: "/" },
+    { name: "BLOGS", href: "/blogs" },
     { name: "TERMS & CONDITION", href: "/terms-and-condition" },
     { name: "PRIVACY & POLICY", href: "/privacy-policy" },
   ];
@@ -26,31 +25,15 @@ const Footer: React.FC = () => {
     { name: "WHERE TO BUY", href: "/" },
     { name: "SHIPPING AND PAYMENT", href: "/" },
     { name: "RETURN AND REFUND", href: "/" },
-    { name: "FAQ", href: "/" },
-    { name: "CUSTOMER SUPPORT", href: "/" },
+    { name: "FAQ", href: "/help" },
+    { name: "HELP AND SUPPORT", href: "/help" },
   ];
 
-  // const SocialIcon: React.FC<{
-  //   icon: React.ComponentType<any>;
-  //   href: string;
-  //   label: string
-  // }> = ({ icon: Icon, href, label }) => (
-  //   <a
-  //     href={href}
-  //     target="_blank"
-  //     rel="noopener noreferrer"
-  //     className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-amber-600 transition-all duration-300 hover:scale-110"
-  //     aria-label={label}
-  //   >
-  //     <Icon className="w-5 h-5 text-white" />
-  //   </a>
-  // );
-
   return (
-    <footer className="relative bg-[#161616] text-white padding">
+    <footer className="relative h-fit lg:h-[calc(100vh-64px)] bg-[#161616] text-white padding">
 
       {/* Footer Content */}
-      <div className="flex flex-col gap-6 pt-10">
+      <div className="flex flex-col pt-10">
         {/* News Letter */}
         <div className=' bg-inherit mb-10 gap-4 lg:gap-0 flex flex-col lg:flex-row lg:justify-between'>
           <div>
@@ -142,7 +125,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-
         {/* Desktop Layout */}
         <div className="hidden lg:grid lg:grid-cols-4">
           {/* SHOP Links - Desktop */}
@@ -161,7 +143,6 @@ const Footer: React.FC = () => {
               ))}
             </ul>
           </div>
-
           {/* ABOUT Links - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">ABOUT</h3>
@@ -178,7 +159,6 @@ const Footer: React.FC = () => {
               ))}
             </ul>
           </div>
-
           {/* HELP Links - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">HELP</h3>
@@ -195,7 +175,6 @@ const Footer: React.FC = () => {
               ))}
             </ul>
           </div>
-
           {/* Contact Us - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">Contact Us</h3>
@@ -217,7 +196,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-12 pt-8 pb-8 display-flex flex-col items-center space-y-4">
           <p className="text-white text-sm md:text-base">

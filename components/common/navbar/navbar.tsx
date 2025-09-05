@@ -44,6 +44,7 @@ export default function Navbar() {
   const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
 
   const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+
   const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });

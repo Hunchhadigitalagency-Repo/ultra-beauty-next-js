@@ -13,6 +13,7 @@ import {
 import useFetchData from "@/hooks/use-fetch";
 // import { Skeleton } from "@/components/ui/skeleton";
 import LoadingSpinner from "@/components/common/loader/loading-spinner";
+import { useParams, useSearchParams } from "next/navigation";
 
 
 
@@ -33,9 +34,10 @@ export interface Category {
 
 export default function HeroSection() {
 
-
+  const params = window.location;
+  const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop' : '/cms/banner-general/'
   const { data, error, loading } = useFetchData<HeroSectionResponse[]>(
-    "/cms/banner-general/"
+    path
   )
 
 
