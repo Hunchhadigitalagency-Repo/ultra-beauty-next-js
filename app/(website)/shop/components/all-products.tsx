@@ -43,8 +43,8 @@ const AllProducts = () => {
 
   const {
     data: products,
-    loading,
     hasMore,
+    count,
     fetchNext,
   } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
 
@@ -70,14 +70,14 @@ const AllProducts = () => {
 
     <section className="relative flex flex-col gap-8 padding">
       <div className="flex flex-row items-center justify-between gap-4">
-        <SectionHeader title={`All Products (${210})`} description="" />
+        <SectionHeader title={`All Products (${count})`} description="" />
         <div className="hidden lg:flex lg:gap-5">
           <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
           <ProductSort />
         </div>
         <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
       </div>
-      <div className="flex flex-row gap-16">
+      <div className="flex  lg:flex-row lg:gap-16">
         <FilterSection showFilter={showFilter} onClose={toggleFilter} />
         <div className="flex-1">
           <InfiniteScroll
@@ -98,7 +98,7 @@ const AllProducts = () => {
               </p>
             }
           >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
               {products?.map((product, index) => (
                 <ProductCard
                   key={index}
@@ -106,6 +106,7 @@ const AllProducts = () => {
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
+                  brand={product.brand.name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

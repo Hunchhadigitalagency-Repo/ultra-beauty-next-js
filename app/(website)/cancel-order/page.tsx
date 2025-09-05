@@ -4,13 +4,13 @@ import React from 'react';
 import CancelOrderForm from './cancel-order-form';
 import SectionHeader from '@/components/common/header/section-header';
 
-
-
 const CancelOrder: React.FunctionComponent = () => {
-    return (
 
-        <div className="padding space-y-8 bg-gray-100">
-            <SectionHeader titleClassName='font-playfair font-bold text-2xl' title="Cancel Order"
+    return (
+        <div className="padding space-y-8 bg-[#FAFAFA]">
+            <SectionHeader
+                titleClassName='font-playfair font-bold text-2xl'
+                title="Cancel Order"
                 descriptionClassName='font-poppins text-xs md:text-sm'
                 description="See the cancel order details" />
             <div className='px-5 py-2 text-sm md:text-base bg-secondary rounded-md'>

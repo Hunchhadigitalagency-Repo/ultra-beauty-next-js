@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import DOMPurify from "dompurify";
@@ -7,7 +6,6 @@ import { IBlog } from "@/types/cms";
 import { useRouter } from "next/navigation";
 // import { Button } from "@/components/ui/button";
 import { Calendar, UserCircle2Icon } from "lucide-react";
-
 
 const BlogCard: React.FunctionComponent<IBlog> = ({
   slug,
@@ -17,6 +15,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
   created_at,
   description,
 }) => {
+
   const formattedDate = created_at
     ? new Date(created_at).toLocaleDateString(undefined, {
       year: "numeric",
@@ -48,7 +47,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
         )}
       </div>
 
-      <h3 className="text-xl font-playfair font-semibold text-foreground">
+      <h3 className="text-xl line-clamp-1 font-playfair font-semibold text-foreground">
         {title}
       </h3>
 

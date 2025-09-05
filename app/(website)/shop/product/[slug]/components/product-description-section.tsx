@@ -1,24 +1,4 @@
 "use client";
-
-import
-React,
-{
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from "react";
-import {
-  Plus,
-  ShoppingCart,
-  SquareCheck
-} from "lucide-react";
-import {
-  FaInstagram,
-  FaTiktok,
-  FaXTwitter,
-  FaFacebookMessenger
-} from "react-icons/fa6";
 import Image from "next/image";
 import { toast } from "sonner";
 import esewa from "@/assets/esewa.png";
@@ -36,6 +16,24 @@ import RatingStars from "@/components/common/product/rating-stars";
 import QuantityRow from "@/components/common/product/quantity-row";
 import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
 import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
+import React,
+{
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
+import {
+  Plus,
+  ShoppingCart,
+  SquareCheck
+} from "lucide-react";
+import {
+  FaInstagram,
+  FaTiktok,
+  FaXTwitter,
+  FaFacebookMessenger
+} from "react-icons/fa6";
 
 
 
@@ -140,7 +138,8 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     <div className="flex flex-col justify-start w-full space-y-8 ">
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
-          <h1 className="mb-2 text-base font-medium text-gray-500 md:text-xl xl:text-md">
+          <h1 className="mb-2 text-xs font-poppins
+           font-medium text-gray-500 md:text-xl xl:text-md">
             {product.brand.name}
           </h1>
           <div className="flex items-center gap-5">
@@ -150,8 +149,10 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
             </span>
           </div>
         </div>
-        <div className="text-3xl font-medium capitalize line-clamp-2">{product.name}</div>
-        <div className="best-seller">
+        <h1 className="text-3xl font-playfair font-bold capitalize line-clamp-2">
+          {product.name}
+        </h1>
+        <div>
           {
             product.is_best_seller == false && (
               <Button className="mt-4 text-white rounded-sm bg-primary">
@@ -161,7 +162,11 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
           }
         </div>
       </div>
-      <SingleProductAccordion title="Details" description={product.general_description} />
+      {/* Details */}
+      <SingleProductAccordion
+        title="Details"
+        description={product.general_description} />
+
       {/* Variants */}
       {
         attributeOrder.map((attrName) => {
@@ -191,7 +196,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
           return (
             <div key={attrName} className="flex items-center gap-5 mb-4">
-              <h3 className="font-semibold">
+              <h3 className="font-medium font-poppins text-base lg:text-lg">
                 {
                   attrName.charAt(0).toUpperCase() + attrName.slice(1)
                 }
@@ -201,7 +206,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
                   options.map(opt => (
                     <button
                       key={opt}
-                      className={`px-5 py-1 border rounded-full cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
+                      className={`px-5 py-1 border rounded-md font-medium cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
                         }`}
                       onClick={() => {
                         if (opt !== null) handleSelect(attrName, opt);
@@ -224,26 +229,36 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       }
 
       {/* Product Price */}
-      <div className="flex items-center justify-between w-full mt-4">
-        {
-          discountedPrice !== null &&
-          <h1 className="text-base font-semibold md:text-base xl:text-xl">
-            NPR.{quantity === 1 ? discountedPrice : quantity * parseFloat(discountedPrice)}
-          </h1>
-        }
-        {
-          discountedPrice && (
-            <div className="flex items-center gap-10">
-              <p className="line-through text-[#7A7A7A] font-medium" >
-                NPR. {product.price.split(".")[0]}
-              </p>
-              <button className="px-2 py-1 text-xs font-medium text-white bg-green-400 rounded-full md:px-4 md:py-2 xl:text-sm font-poppins">
-                {product.discount_percentage.split(".")[0]}% OFF
-              </button>
-            </div>
-          )
-        }
+      <div className="flex items-center justify-between w-full pt-6">
+        <div className="flex flex-col">
+          {
+            discountedPrice !== null &&
+            <h1 className="text-base font-semibold md:text-base xl:text-xl">
+              NPR.{quantity === 1 ? discountedPrice : quantity * parseFloat(discountedPrice)}
+            </h1>
+          }
+          {
+            discountedPrice && (
+              <div className="flex  items-center gap-10">
+                <p className="line-through text-[#7A7A7A] font-medium" >
+                  NPR. {product.price.split(".")[0]}
+                </p>
+                <button className="px-2 py-0.5 text-xs font-medium text-white bg-primary rounded-full md:px-4 md:py-2 xl:text-sm font-poppins">
+                  {product.discount_percentage.split(".")[0]}% OFF
+                </button>
+              </div>
+            )
+          }
+        </div>
 
+        {quantity !== null && (
+          <Button
+            className={`w-28 ${quantity > 0 ? "bg-primary" : "bg-gray"
+              }`}
+          >
+            {quantity > 0 ? "Available" : "Not Available"}
+          </Button>
+        )}
         <QuantityRow
           value={quantity}
           onDecrease={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
