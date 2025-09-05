@@ -77,7 +77,7 @@ const AllProducts = () => {
         </div>
         <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
       </div>
-      <div className="flex  lg:flex-row lg:gap-16">
+      <div className="flex lg:flex-row lg:gap-16">
         <FilterSection showFilter={showFilter} onClose={toggleFilter} />
         <div className="flex-1">
           <InfiniteScroll
