@@ -32,7 +32,8 @@ const MegaMenu: React.FunctionComponent<MegaMenuProps> = ({
           <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
             <Link href="/shop"
               className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
-              onClick={() => setDropdownVisible(false)}>
+            // onClick={() => setDropdownVisible(false)}
+            >
               <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
             </Link>
             {
