@@ -43,7 +43,6 @@ const AllProducts = () => {
 
   const {
     data: products,
-    loading,
     hasMore,
     fetchNext,
   } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
