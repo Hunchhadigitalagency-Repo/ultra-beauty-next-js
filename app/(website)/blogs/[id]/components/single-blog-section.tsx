@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import SectionHeader from "@/components/common/header/section-header";
 import {
   ArrowRight,
-  Calendar,
+  CalendarDays,
   UserCircle2Icon
 } from "lucide-react";
 
@@ -17,7 +17,6 @@ import {
 const SingleBlogSection = () => {
 
   const id = useParams().id;
-
   const path = id ? `cms/blogs/${id}` : "";
 
   const { data: blog, loading, error } = useFetchData<IBlog>(path, true);
@@ -51,8 +50,10 @@ const SingleBlogSection = () => {
   });
 
   return (
-    <section className="w-full mx-auto space-y-8 padding">
-      <SectionHeader title="Blog" description="Watch inside stories" />
+    <section className="w-full  space-y-8 padding">
+      <SectionHeader
+        title="Blog"
+        description="Watch inside stories" />
       <div className="relative w-full h-[442px] rounded-lg overflow-hidden group shadow-lg">
         {blog.cover_image ? (
           <Image
@@ -69,10 +70,10 @@ const SingleBlogSection = () => {
           </div>
         )}
 
-        <div className="absolute bottom-6 right-6 ">
+        <div className="absolute bottom-6 right-6">
           <Button
             variant="default"
-            className="text-black rounded-full w-[250px] h-11 uppercase font-semibold tracking-wide shadow-md bg-white "
+            className="text-white rounded-full w-[250px] h-11 uppercase border border-white font-semibold tracking-wide shadow-md bg-primary "
             onClick={() => {
               window.location.href = "/shop";
             }}
@@ -100,16 +101,21 @@ const SingleBlogSection = () => {
             </div>
           )}
           <div className="flex items-center gap-2">
-            <Calendar className="w-5 h-5" />
-            <span>{new Date(blog.created_at).toLocaleDateString()}</span>
+            <CalendarDays className="w-6 h-6" />
+            <span>
+              {new Date(blog.created_at).toLocaleDateString()}
+            </span>
           </div>
         </div>
       </div>
       {/* Description */}
-      <article
-        className="prose text-gray-800 max-w-none prose-indigo"
-        dangerouslySetInnerHTML={{ __html: cleanHtml }}
-      />
+      <div>
+        <article
+          className='prose text-base text-[#333333] font-poppins max-w-none prose-indigo'
+          dangerouslySetInnerHTML={{ __html: cleanHtml }}
+        />
+      </div>
+
     </section>
   );
 };

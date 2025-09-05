@@ -11,24 +11,6 @@ const ReturnOrder: React.FunctionComponent = () => {
                 title='Return  Details'
                 description='See the Return order Details.'
             />
-            <div className='px-5 py-2 text-sm rounded-md md:text-base bg-secondary'>
-                Product
-            </div>
-            {/* <OrderActionCard
-                product={{
-                    date: "2025-07-29",
-                    quantity: 1,
-                    price: 250,
-                    size: "M",
-                    weight: "500g",
-                    color: "Beige",
-                    total: 250,
-                    title: "Sensanori Vitamin Cream",
-                    image: "/some-image.png",
-                    descrption: "Wrinkle-reducing cream"
-                }}
-            /> */}
-            {/* <ReturnForm /> */}
         </section>
     )
 }

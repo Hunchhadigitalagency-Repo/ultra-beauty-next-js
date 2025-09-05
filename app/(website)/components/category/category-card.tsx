@@ -7,8 +7,9 @@ interface CategoryCardProps {
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ title, image }) => {
+
     return (
-        <div className="flex flex-col items-center justify-center w-full gap-2">
+        <div className="flex flex-col items-center justify-center w-full gap-4">
             <div className="relative w-full overflow-hidden rounded-lg cursor-pointer h-36 md:h-52 lg:h-64 group">
                 <Image
                     src={image || "/placeholder.png"}

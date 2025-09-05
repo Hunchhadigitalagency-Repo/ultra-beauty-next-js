@@ -25,7 +25,7 @@ const DetailDecription: React.FunctionComponent = () => {
     return (
         <section className='w-full padding'>
             {data?.detail_description && (
-                <div className="flex flex-col gap-5 text-sm leading-relaxed text-foreground">
+                <div className="flex flex-col gap-3 text-sm leading-relaxed text-foreground">
                     <SectionHeader
                         title="More Description"
                         titleClassName='font-semibold'
@@ -42,7 +42,7 @@ const DetailDecription: React.FunctionComponent = () => {
                     ) : (
                         <div
                             ref={textRef}
-                            className={` text-base ${expandedText ? "" : "line-clamp-5"}`}
+                            className={`font-poppins text-base ${expandedText ? "" : "line-clamp-5"}`}
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.detail_description) }}
                         />
                     )}

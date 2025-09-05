@@ -10,10 +10,10 @@ import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { WishListResponse } from "@/types/wishlist";
-import { useEffect, useRef, useState } from "react";
 import NotificationModal from "./notification-modal";
 import { ICategoryDropdown } from "@/types/dropdown";
 import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
@@ -38,7 +38,6 @@ export default function Navbar() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const isActive = (pathname: string) => path === pathname;
-
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   const cartCount = useAppSelector((state) => state.cart.cartCount);
   const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
@@ -51,7 +50,6 @@ export default function Navbar() {
   const { data: cartData } = useFetchData<CartResponse>('carts', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });
-
 
   useEffect(() => {
     if (wishListData && !hasFetched.current.wishlist) {
@@ -66,19 +64,41 @@ export default function Navbar() {
     }
   }, [wishListData, cartData, dispatch]);
 
+  const shopByCategoryRef = useRef<HTMLLIElement>(null);
 
 
   const handleCategoryEnter = () => {
     setIsDropdownVisible(true);
-  };
+  }
 
   const handleCategoryLeave = () => {
     setIsDropdownVisible(false);
-  };
+  }
+
+  useEffect(() => {
+    const handleMouseClick = (event: MouseEvent) => {
+      if (
+        shopByCategoryRef.current &&
+        !shopByCategoryRef.current?.contains(event.target as Node)
+      ) {
+        console.log(shopByCategoryRef, "if bata navbar")
+        setIsDropdownVisible(false);
+      } else {
+        console.log(shopByCategoryRef, "else bata navbar")
+        setIsDropdownVisible(true);
+      }
+    };
+
+    document.addEventListener('mousedown', handleMouseClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseClick);
+    };
+  }, []);
+
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
-      onMouseLeave={handleCategoryLeave}
     >
       <div className="py-2 padding-x">
 
@@ -87,9 +107,9 @@ export default function Navbar() {
 
         {/* Mega Menu */}
         {isDropdownVisible && <MegaMenu
-          isDropDownVisible={isDropdownVisible}
           dropdownCategoriesData={dropdownCategoryData}
-          setDropdownVisible={setIsDropdownVisible} />}
+          setDropdownVisible={setIsDropdownVisible}
+        />}
 
         {/* Notification */}
         {showNotification && (
@@ -109,14 +129,16 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <ul className="lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-base">
+            <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li>
                 <Link href="/">
                   Home
                 </Link>
               </li>
-              <li>
-                <button className="flex items-center justify-center gap-1 cursor-pointer" onMouseEnter={handleCategoryEnter}>
+              <li className="h-full flex items-center" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
+                onMouseLeave={handleCategoryLeave}
+              >
+                <button className="flex items-center justify-center gap-1 cursor-pointer" >
                   <p className="line-clamp-1">Shop by Category</p>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible
                     ? "rotate-180"

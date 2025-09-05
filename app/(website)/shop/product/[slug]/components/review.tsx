@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import { ReviewsResponse } from "@/types/reviews";
+import SectionHeader from "@/components/common/header/section-header";
 import ReviewHistoryCard from "@/app/(website)/profile/components/MyReview/components/review-history-card";
 
 interface ReviewProps {
@@ -25,12 +26,12 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
 
 
     return (
-        <section className="space-y-5 padding">
+        <section className="padding">
+            <SectionHeader
+                title="Reviews"
+                titleClassName="font-semibold"
+            />
             <div>
-                <h1 className="text-lg font-bold">Reviews</h1>
-            </div>
-
-            <div className="space-y-3">
                 {displayedReviews.length > 0 ? (
                     displayedReviews.map((review) => (
                         <ReviewHistoryCard
@@ -41,7 +42,9 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
                             product={""} />
                     ))
                 ) : (
-                    <p>No reviews yet</p>
+                    <p className="font-poppins">
+                        No reviews yet
+                    </p>
                 )}
             </div>
 

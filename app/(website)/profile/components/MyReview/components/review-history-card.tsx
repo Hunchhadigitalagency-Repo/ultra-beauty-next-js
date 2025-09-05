@@ -4,8 +4,8 @@ import { ReviewHistoryCardProps } from '@/types/profile';
 import RatingStars from '@/components/common/product/rating-stars';
 
 
-
 const ReviewHistoryCard: React.FunctionComponent<ReviewHistoryCardProps> = ({ image, product, rating, review }) => {
+
     return (
         <div className='flex flex-col gap-3 lg:px-5'>
             <div className='flex gap-5'>

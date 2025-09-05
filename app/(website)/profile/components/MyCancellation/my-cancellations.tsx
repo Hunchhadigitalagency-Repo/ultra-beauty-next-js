@@ -1,17 +1,18 @@
-import React from 'react';
-import useFetchData from '@/hooks/use-fetch';
-import CustomTable from '@/components/common/table/custom-table';
-import { MyCancellationConstants } from '../Table/my-cancellations-constants';
-import { CancelOrderResponse } from '@/types/orders';
+import React from "react";
+import useFetchData from "@/hooks/use-fetch";
+import { CancelOrderResponse } from "@/types/orders";
+import CustomTable from "@/components/common/table/custom-table";
+import { MyCancellationConstants } from "../Table/my-cancellations-constants";
 
+const MyCancellations: React.FC = () => {
 
-const MyCancellations: React.FunctionComponent = () => {
-
-    const { data, loading, error } = useFetchData<CancelOrderResponse>('cancel-orders', true);
+    const { data, loading, error } = useFetchData<CancelOrderResponse>("cancel-orders", true);
 
     return (
-        <div className='flex flex-col gap-5'>
+        <div className="flex flex-col gap-5">
             <h1 className="text-primary font-medium text-xl">Cancelled Orders</h1>
+
+            {/* Table */}
             <CustomTable
                 cols={MyCancellationConstants()}
                 loading={loading}
@@ -20,7 +21,7 @@ const MyCancellations: React.FunctionComponent = () => {
                 height="h-auto"
             />
         </div>
-    )
-}
+    );
+};
 
-export default MyCancellations
+export default MyCancellations;

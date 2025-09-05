@@ -15,7 +15,7 @@ interface OrderProductProps {
     slug?: string
 }
 
-const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ orderDetails, orderStatus, id }) => {
+const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ orderDetails, id }) => {
 
     const router = useRouter();
     const [selectedProduct, setSelectedProduct] = useState<OrderDetail | null>(null);

@@ -113,6 +113,7 @@ export interface ProductCardProps {
   onToggleWishlist?: (slug: string | undefined, isWishlisted: boolean | undefined) => void;
   isWishlisted?: boolean;
   quantity?: number;
+  brand?: string;
 }
 
 export interface ProductResponse {
