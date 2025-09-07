@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import MegaMenu from "./mega-menu";
 import MobileMenu from "./mobile-menu";
 import SearchModal from "./search-modal";
 import { ChevronDown } from 'lucide-react';
@@ -65,7 +64,7 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   const shopByCategoryRef = useRef<HTMLLIElement>(null);
-
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleCategoryEnter = () => {
     setIsDropdownVisible(true);
@@ -75,24 +74,24 @@ export default function Navbar() {
     setIsDropdownVisible(false);
   }
 
+  const handleDropdownEnter = () => {
+    setIsDropdownVisible(true);
+  };
+  const handleDropdownLeave = () => {
+    setIsDropdownVisible(false);
+  };
+
   useEffect(() => {
-    const handleMouseClick = (event: MouseEvent) => {
-      if (
-        shopByCategoryRef.current &&
-        !shopByCategoryRef.current?.contains(event.target as Node)
-      ) {
-        console.log(shopByCategoryRef, "if bata navbar")
+    const handleClickOutside = (event: MouseEvent) => {
+      //if click is outside the li i.e shopBycategory
+      if (shopByCategoryRef.current && !shopByCategoryRef.current.contains(event.target as Node)) {
         setIsDropdownVisible(false);
-      } else {
-        console.log(shopByCategoryRef, "else bata navbar")
-        setIsDropdownVisible(true);
       }
     };
 
-    document.addEventListener('mousedown', handleMouseClick);
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleMouseClick);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -100,16 +99,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
     >
-      <div className="py-2 padding-x">
+      <div className="padding-x">
 
         {/* Search Popup */}
         {searchOpen && <SearchModal />}
-
-        {/* Mega Menu */}
-        {isDropdownVisible && <MegaMenu
-          dropdownCategoriesData={dropdownCategoryData}
-          setDropdownVisible={setIsDropdownVisible}
-        />}
 
         {/* Notification */}
         {showNotification && (
@@ -118,17 +111,17 @@ export default function Navbar() {
 
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
+          <Link href="/" className="flex items-center h-auto">
+            <div className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
               Ultra Beauty
               <br />
               <span className="text-sm font-poppins md:text-base">&</span>
               <br />
               Brand
-            </span>
+            </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="items-center justify-center hidden w-full h-full lg:flex">
+          <nav className=" items-center justify-center hidden w-full h-full lg:flex">
             <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li>
                 <Link href="/">
@@ -145,6 +138,39 @@ export default function Navbar() {
                     : ""
                     }`} />
                 </button>
+
+                {
+                  isDropdownVisible && <div
+                    className="absolute left-0 right-0 z-50 top-full transition-all duration-800 ease-in-out"
+                    ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
+                  >
+                    {/* Categories Grid */}
+                    <div className="bg-white border-t shadow-2xl padding shadow-bottom">
+                      <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
+                        <Link href="/shop"
+                          className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                          onClick={() => setIsDropdownVisible(false)}
+                        >
+                          <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
+                        </Link>
+                        {
+                          dropdownCategoryData?.map((individualDropdownCategory) => (
+                            <Link
+                              key={individualDropdownCategory.id}
+                              href={`/ ${individualDropdownCategory.name.toLowerCase()} `}
+                              className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                            >
+                              <p className="text-sm whitespace-nowrap font-poppins">
+                                {individualDropdownCategory.name}
+                              </p>
+                            </Link>
+                          ))
+                        }
+                      </div>
+                    </div >
+                  </div >
+                }
+
               </li>
               <li>
                 <Link href="/blogs">Blogs</Link>
