@@ -8,6 +8,7 @@ import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
 
 const Blogs: React.FunctionComponent = () => {
+
   const { data, loading, error } = useFetchData<BlogsList>(
     `cms-blogs/?page=1&page_size=3`, true
   );
@@ -36,7 +37,7 @@ const Blogs: React.FunctionComponent = () => {
           No Blogs found
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {data && data.results.length > 0 ? (
             data.results.map((blog, index) => {
               return <BlogCard key={index} {...blog} />;

@@ -82,7 +82,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
                     key={product.id}
                     className="pl-4 basis-1/2 lg:basis-1/4"
                   >
-                    <div className="flex h-full">
+                    <div className="flex w-full h-full">
                       <ProductCard
                         // id={product.id}
                         imageSrc={product.images?.[0]?.file}

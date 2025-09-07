@@ -26,7 +26,7 @@ const ReturnOrder: React.FunctionComponent = () => {
                 title='Return  Details'
                 description='Please fill up the form below'
             />
-            <div className='px-5 py-2 text-sm md:text-base bg-[#EEEEEE] rounded-md'>
+            <div className='px-5 py-2 text-sm md:text-base bg-secondary rounded-md'>
                 Product
             </div>
             {filteredOrderDetail && <OrderActionCard
@@ -39,9 +39,6 @@ const ReturnOrder: React.FunctionComponent = () => {
                     quantity={matchedDetail.quantity}
                 />
             )}
-
-
-
         </section>
     )
 }

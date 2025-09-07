@@ -75,6 +75,14 @@ export default function PromotionalCarousel() {
             We couldn’t load the coupons. Please try again.
           </p>
         </div>
+      ) : !data || data.length === 0 ? (
+        <div className="flex flex-col gap-2 justify-center items-center h-[300px]">
+          <AlertCircle className="w-10 h-10 mb-2 text-gray-400" />
+          <p className="font-medium text-gray-700">No coupons available!</p>
+          <p className="mt-1 text-sm text-gray-500">
+            Check back later for exciting promotions.
+          </p>
+        </div>
       ) : (
         <Carousel
           setApi={setApi}

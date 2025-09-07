@@ -1,4 +1,14 @@
 import React from 'react';
+import { toast } from 'sonner';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { returnOrder } from '@/lib/api/order/order-apis';
+import SectionHeader from '@/components/common/header/section-header';
+import MultiImageUploader, { FileWithMetadata } from '@/components/common/ImageUploader/multi-image-uploader';
 import {
     Form,
     FormControl,
@@ -19,14 +29,6 @@ import {
     ReturnFormSchema,
     ReturnFormValues
 } from '@/schemas/return/return-schema';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { zodResolver } from '@hookform/resolvers/zod';
-import SectionHeader from '@/components/common/header/section-header';
-import MultiImageUploader, { FileWithMetadata } from '@/components/common/ImageUploader/multi-image-uploader';
-import { Input } from '@/components/ui/input';
-import { returnOrder } from '@/lib/api/order/order-apis';
 
 const returnReasons = [
     { value: 'damaged', label: 'Damaged Item' },
@@ -35,8 +37,6 @@ const returnReasons = [
     { value: 'changed_mind', label: 'Changed Mind' },
     { value: 'other', label: 'Other' },
 ];
-
-
 
 interface ReturnFormProps {
     order_id: number
@@ -56,11 +56,12 @@ const ReturnForm: React.FunctionComponent<ReturnFormProps> = ({ order_id, order_
         },
     });
 
+    const router = useRouter();
     const reasonValue = form.watch("reason");
 
-    const onSubmit = (data: ReturnFormValues) => {
+    const onSubmit = async (data: ReturnFormValues) => {
         if (data) {
-            returnOrder(
+            const response = await returnOrder(
                 order_id,
                 order_detail_id,
                 data.quantity,
@@ -68,6 +69,13 @@ const ReturnForm: React.FunctionComponent<ReturnFormProps> = ({ order_id, order_
                 data.reason,
                 data.attachment as File[] | undefined
             )
+            if (response.status === 201) {
+                toast.success('Return Order Application Submitted  Successfully!');
+                router.push('/');
+            }
+            else {
+                toast.error('Error while returning order!');
+            }
         }
         form.reset()
     }

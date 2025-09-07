@@ -22,8 +22,9 @@ const CancelOrder: React.FunctionComponent = () => {
 
     return (
 
-        <div className="space-y-8 bg-gray-100 padding">
-            <SectionHeader titleClassName='font-playfair font-bold text-2xl' title="Cancel Order"
+        <div className="space-y-8 bg-[#FAFAFA] padding">
+            <SectionHeader titleClassName='font-playfair font-bold text-2xl'
+                title="Cancel Order"
                 descriptionClassName='font-poppins text-xs md:text-sm'
                 description="See the cancel order details" />
             <div className='px-5 py-2 text-sm rounded-md md:text-base bg-secondary'>

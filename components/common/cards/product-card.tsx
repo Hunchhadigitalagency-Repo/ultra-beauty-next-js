@@ -17,6 +17,7 @@ const ProductCard = ({
   price,
   rating,
   discountTag,
+  brand,
   onToggleWishlist = () => { },
   isWishlisted,
   quantity
@@ -35,7 +36,7 @@ const ProductCard = ({
   };
 
   return (
-    <section className="flex flex-col justify-between w-full gap-2 overflow-hidden bg-white rounded-lg md:gap-3 lg:gap-4">
+    <section className="flex flex-col justify-between w-full overflow-hidden bg-white rounded-lg md:gap-3 lg:gap-4">
       {/* Image Section */}
       <div
         onClick={() => router.push(`/shop/product/${slug}`)}
@@ -48,9 +49,9 @@ const ProductCard = ({
           className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
         />
         {isFlashSale && (
-          <div className="absolute bottom-3 left-3">
-            <span className="bg-primary text-white text-[10px] md:text-sm font-semibold px-2 md:px-3 py-1 rounded-full">
-              Flash Sale
+          <div className="absolute top-0 right-0">
+            <span className="bg-primary text-[#FFFFFF] font-poppins text-[10px] md:text-sm  px-3 md:px-4 py-1 rounded-full">
+              FLASH SALES
             </span>
           </div>
         )}
@@ -60,13 +61,21 @@ const ProductCard = ({
       <div className="flex flex-col flex-grow">
         <h3
           onClick={() => router.push(`/shop/product/${slug}`)}
-          className="text-base cursor-pointer md:text-lg line-clamp-2 font-regular text-[#505050]"
+          className="text-xs cursor-pointer md:text-lg line-clamp-1 font-poppins text-[#7A7A7A]"
+        >
+          {brand}
+        </h3>
+        <h3
+          onClick={() => router.push(`/shop/product/${slug}`)}
+          className="text-lg md:2xl font-playfair font-medium cursor-pointer md:text-lg line-clamp-2  text-[#333333]"
         >
           {title}
         </h3>
       </div>
 
-      <div className="flex flex-col gap-2 md:gap-3 lg:gap-4">
+
+
+      <div className="flex flex-col gap-2 md:gap-3 lg:gap-2">
         {/* Price row */}
         <PriceRow
           price={price}
@@ -99,7 +108,7 @@ const ProductCard = ({
         {/* Add To Bag Button */}
         <Button onClick={() => router.push(`/shop/product/${slug}`)}
           disabled={quantity === null}
-          className={`flex flex-row items-center justify-center w-full gap-2 py-2 text-xs font-medium text-foreground ${quantity === null ? "bg-[#FAFAFA] text-foreground]" : "bg-secondary sm:text-sm md:text-base"}`}>
+          className={`flex flex-row rounded-sm items-center  justify-center w-full gap-2 py-2 text-xs  font-medium text-foreground ${quantity === null ? "bg-[#FAFAFA] text-foreground]" : "bg-secondary sm:text-sm md:text-base"}`}>
           <Eye className="w-4 h-4" />
           View Product
         </Button>
