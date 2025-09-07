@@ -34,9 +34,8 @@ const CategorySection: React.FunctionComponent = () => {
     <section className="padding space-y-4">
       <div className="flex justify-between items-center gap-4">
         <SectionHeader
-          className="max-w-[200px] sm:max-w-full"
+          className="max-w-[60%] sm:max-w-full"
           title="The Category"
-          titleClassName="font-playfair"
           description="Find the list of category that you must have to glow"
         />
         <LinkText title="Glow Shop" href="/shop" />

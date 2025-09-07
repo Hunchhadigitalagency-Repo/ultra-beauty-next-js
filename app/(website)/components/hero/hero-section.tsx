@@ -61,19 +61,25 @@ export default function HeroSection() {
 
   return (
     <section className="relative h-60 md:h-[500px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
-      {loading ?
-        <LoadingSpinner /> : error ? (
+      {
+        loading ? (
+          <LoadingSpinner />
+        ) : error ? (
           <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center">
             <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-            <p className="text-gray-700 font-medium">Oops! Something went wrong.</p>
+            <p className="text-gray-700 font-medium">
+              Oops! Something went wrong.
+            </p>
             <p className="text-sm text-gray-500 mt-1">
               We couldn’t load the carousel items. Please try again.
             </p>
           </div>
         ) : data?.length === 0 ? (
-          <p className="text-sm text-center text-muted-foreground">
-            No Banners
-          </p>
+          <div className="w-full h-full flex justify-center items-center">
+            <p className="text-sm text-muted-foreground">
+              No Banners Found
+            </p>
+          </div>
         ) : (
           <Carousel
             setApi={setApi}
@@ -119,7 +125,8 @@ export default function HeroSection() {
                 />
               ))}
             </div>
-          </Carousel>)}
+          </Carousel>
+        )}
     </section>
   );
 }
