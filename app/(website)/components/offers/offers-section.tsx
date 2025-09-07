@@ -27,7 +27,7 @@ const OffersSection = () => {
         <section className="padding space-y-4">
             <div className="flex justify-between items-center gap-4">
                 <SectionHeader
-                    className="max-w-[200px] sm:max-w-full"
+                    className="max-w-[60%] sm:max-w-full"
                     title="The Offers"
                     titleClassName="font-playfair"
                     description="Best offers are once you buy them. Find all offer that we provide"

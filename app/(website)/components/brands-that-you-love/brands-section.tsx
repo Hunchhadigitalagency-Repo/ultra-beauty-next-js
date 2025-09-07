@@ -68,11 +68,10 @@ const BrandsSection: React.FunctionComponent = () => {
   }, [api, isHovered]);
 
   return (
-    <section className="padding space-y-9">
+    <section className="padding space-y-4">
       <div className="flex justify-between gap-4 ">
         <SectionHeader
           title="Featured Brands"
-          titleClassName="text-primary font-medium text-xl md:text-2xl xl:text3xl"
           description="Find the deals that are limited in offers"
         />
         <LinkText title="ALL BRANDS" href="/brands" />
@@ -81,15 +80,15 @@ const BrandsSection: React.FunctionComponent = () => {
       <div className="relative w-full">
         {loading ? (
           <p className="text-sm text-center text-muted-foreground">
-            Loading FAQs...
+            Loading Brands...
           </p>
         ) : error ? (
           <p className="text-sm font-medium text-center text-red-500">
-            Something Went Wrong While Fetching FAQs
+            Something Went Wrong While Fetching Brands
           </p>
         ) : data?.results.length === 0 ? (
           <p className="text-sm text-center text-muted-foreground">
-            No FAQs found
+            No Brands found
           </p>
         ) : (
           <Carousel setApi={setApi}

@@ -50,10 +50,8 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
     <section className="space-y-4 padding">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader
-          className="max-w-[200px] sm:max-w-full"
+          className="max-w-[60%] sm:max-w-full"
           title={headerTitle}
-          titleClassName="font-medium"
-          descriptionClassName='font-medium'
           description={headerDescription}
         />
         <LinkText title={`${buttonText ? buttonText : 'Shop More'}`} href={headerLink} />
@@ -62,15 +60,15 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
 
         {isLoading ? (
           <p className="text-sm text-center text-muted-foreground">
-            Loading FAQs...
+            Loading {headerTitle}...
           </p>
         ) : error ? (
           <p className="text-sm font-medium text-center text-red-500">
-            Something Went Wrong While Fetching FAQs
+            Something Went Wrong While Fetching {headerTitle}
           </p>
         ) : products?.length === 0 ? (
           <p className="text-sm text-center text-muted-foreground">
-            No FAQs found
+            No {headerTitle} found
           </p>
         ) : (
           <Carousel
