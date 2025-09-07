@@ -1,5 +1,4 @@
 "use client";
-
 import { X } from "lucide-react";
 import {
   clearSearchQuery,
@@ -14,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 interface SearchBoxProps extends React.ComponentProps<typeof Input> {
   className?: string;
   placeholder?: string;
+  searchBoxClassName?: string;
   iconClassName?: string;
   sendValue?: (value: string) => void;
 }
@@ -23,6 +23,7 @@ const SearchBox = ({
   className,
   placeholder = "Search",
   iconClassName,
+  searchBoxClassName,
   sendValue,
   ...props
 }: SearchBoxProps) => {
@@ -62,7 +63,7 @@ const SearchBox = ({
   }, [dispatch]);
 
   return (
-    <div className="lg:w-[400px]">
+    <div className={`lg:w-[400px]${searchBoxClassName}`}>
       <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
         Search
       </label>
@@ -71,7 +72,7 @@ const SearchBox = ({
           type="text"
           id="default-search"
           onChange={(e) => setSearchInput(e.target.value)}
-          className={`block w-full min-w-[220px] lg:w-[400px] p-4 h-10 text-sm text-textColor bg-white border focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#414042] rounded-sm ${className}  pr-8`}
+          className={`block w-full min-w-[220px] lg:w-[400px] ${searchBoxClassName} p-4 h-10 text-sm text-textColor bg-white border focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#EEEEEE] rounded-sm ${className}  pr-8`}
           placeholder={placeholder}
           value={searchInput}
           required

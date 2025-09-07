@@ -209,3 +209,11 @@ body {
   word-break: break-word;
   overflow-wrap: break-word;
 }
+
+/* For Chrome, Edge, Safari */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #FFEBED inset;
+  /* pink background */
+  -webkit-text-fill-color: #000;
+  /* text color */
+}
