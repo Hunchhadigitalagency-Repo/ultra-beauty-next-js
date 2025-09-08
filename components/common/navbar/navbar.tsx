@@ -99,7 +99,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
     >
-      <div className="padding-x">
+      <div className="py-2 padding-x">
 
         {/* Search Popup */}
         {searchOpen && <SearchModal />}
@@ -109,7 +109,7 @@ export default function Navbar() {
           <NotificationModal onClose={() => setShowNotification(false)} />
         )}
 
-        <div className="flex items-center justify-between h-16">
+        <div className="relative flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center h-auto">
             <div className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
@@ -121,14 +121,14 @@ export default function Navbar() {
             </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className=" items-center justify-center hidden w-full h-full lg:flex">
+          <nav className="items-center justify-center hidden w-full h-full lg:flex">
             <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li>
                 <Link href="/">
                   Home
                 </Link>
               </li>
-              <li className="h-full flex items-center" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
+              <li className="flex items-center h-full" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
                 onMouseLeave={handleCategoryLeave}
               >
                 <button className="flex items-center justify-center gap-1 cursor-pointer" >
@@ -139,36 +139,40 @@ export default function Navbar() {
                     }`} />
                 </button>
 
+                {/* Mega Menu */}
                 {
-                  isDropdownVisible && <div
-                    className="absolute left-0 right-0 z-50 top-full transition-all duration-800 ease-in-out"
-                    ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
-                  >
-                    {/* Categories Grid */}
-                    <div className="bg-white border-t shadow-2xl padding shadow-bottom">
-                      <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
-                        <Link href="/shop"
-                          className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
-                          onClick={() => setIsDropdownVisible(false)}
-                        >
-                          <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
-                        </Link>
-                        {
-                          dropdownCategoryData?.map((individualDropdownCategory) => (
-                            <Link
-                              key={individualDropdownCategory.id}
-                              href={`/ ${individualDropdownCategory.name.toLowerCase()} `}
-                              className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
-                            >
-                              <p className="text-sm whitespace-nowrap font-poppins">
-                                {individualDropdownCategory.name}
-                              </p>
-                            </Link>
-                          ))
-                        }
-                      </div>
+                  isDropdownVisible &&
+                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800">
+                    <div
+                      className="bg-white"
+                      ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
+                    >
+                      {/* Categories Grid */}
+                      <div className="border-t shadow-xl padding shadow-bottom">
+                        <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
+                          <Link href="/shop"
+                            className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                            onClick={() => setIsDropdownVisible(false)}
+                          >
+                            <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
+                          </Link>
+                          {
+                            dropdownCategoryData?.map((individualDropdownCategory) => (
+                              <Link
+                                key={individualDropdownCategory.id}
+                                href={`/ ${individualDropdownCategory.name.toLowerCase()} `}
+                                className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                              >
+                                <p className="text-sm whitespace-nowrap font-poppins">
+                                  {individualDropdownCategory.name}
+                                </p>
+                              </Link>
+                            ))
+                          }
+                        </div>
+                      </div >
                     </div >
-                  </div >
+                  </div>
                 }
 
               </li>
