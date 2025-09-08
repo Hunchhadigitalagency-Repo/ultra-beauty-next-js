@@ -6,7 +6,7 @@ import { MyCancellationConstants } from "../Table/my-cancellations-constants";
 
 const MyCancellations: React.FC = () => {
 
-    const { data, loading, error } = useFetchData<CancelOrderResponse>("cancel-orders", true);
+    const { data, loading, error } = useFetchData<CancelOrderResponse>("cancel-orders/", true);
 
     return (
         <div className="flex flex-col gap-5">

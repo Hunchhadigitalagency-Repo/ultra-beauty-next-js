@@ -43,6 +43,7 @@ const CustomTable = <T,>({
   enableBulkSelect = false,
   getItemId = (item: any) => item.id,
   striped = true,
+  error
 }: TableProps<T>): JSX.Element => {
 
   const dispatch = useAppDispatch();
@@ -127,72 +128,77 @@ const CustomTable = <T,>({
                   </div>
                 </td>
               </tr>
-            ) : data?.length === 0 ? (
-              <tr>
-                <td colSpan={totalCols}>
-                  <div className="h-[300px] w-full flex flex-col items-center justify-center p-6 text-center">
-                    <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-                    <p className="text-gray-700 font-medium">No Data Available !</p>
-                  </div>
+            ) : error ?
+              (<tr className="h-30">
+                <td colSpan={totalCols} className="text-center text-red">
+                  Error While Fetching Recent Orders
                 </td>
-              </tr>
-            ) : (
-              data?.map((item, rowIndex) => {
-                const itemId = getItemId(item);
-                const isSelected = selectedIds.includes(itemId);
+              </tr>) : data?.length === 0 ? (
+                <tr>
+                  <td colSpan={totalCols}>
+                    <div className="h-[300px] w-full flex flex-col items-center justify-center p-6 text-center">
+                      <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                      <p className="text-gray-700 font-medium">No Data Available !</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                data?.map((item, rowIndex) => {
+                  const itemId = getItemId(item);
+                  const isSelected = selectedIds.includes(itemId);
 
-                return (
-                  <tr
-                    key={rowIndex}
-                    onClick={() => {
-                      // Only trigger row click if not clicking on checkbox
-                      if (onRowClick) {
-                        onRowClick(item);
-                      }
-                    }}
-                    className={`
+                  return (
+                    <tr
+                      key={rowIndex}
+                      onClick={() => {
+                        // Only trigger row click if not clicking on checkbox
+                        if (onRowClick) {
+                          onRowClick(item);
+                        }
+                      }}
+                      className={`
                       ${onRowClick ? "cursor-pointer" : ""}
                       ${isSelected
-                        ? "bg-blue-50"
-                        : striped && rowIndex % 2 === 1
-                          ? "bg-white"
-                          : "bg-white"
-                      }
+                          ? "bg-blue-50"
+                          : striped && rowIndex % 2 === 1
+                            ? "bg-white"
+                            : "bg-white"
+                        }
                       hover:bg-[#FAFAFA] border-t border-gray-200 first:border-t-0 text-sm
                     `}
-                  >
-                    {enableBulkSelect && (
-                      <td className="px-4 py-3">
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) =>
-                            handleRowSelect(itemId, checked as boolean)
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          aria-label={`Select row ${rowIndex + 1}`}
-                        />
-                      </td>
-                    )}
-                    {hasSerialNo && (
-                      <td className="px-4 py-3">{rowIndex + 1}</td>
-                    )}
-                    {cols.map((col, colIndex) => (
-                      <td
-                        key={colIndex}
-                        className={`px-4 py-3 ${!hasSerialNo && colIndex === 0
-                          ? ""
-                          : colIndex === cols.length - 1
+                    >
+                      {enableBulkSelect && (
+                        <td className="px-4 py-3">
+                          <Checkbox
+                            checked={isSelected}
+                            onCheckedChange={(checked) =>
+                              handleRowSelect(itemId, checked as boolean)
+                            }
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label={`Select row ${rowIndex + 1}`}
+                          />
+                        </td>
+                      )}
+                      {hasSerialNo && (
+                        <td className="px-4 py-3">{rowIndex + 1}</td>
+                      )}
+                      {cols.map((col, colIndex) => (
+                        <td
+                          key={colIndex}
+                          className={`px-4 py-3 ${!hasSerialNo && colIndex === 0
                             ? ""
-                            : "min-w-[120px]"
-                          } ${colIndex === cols.length - 1 && "text-right"}`}
-                      >
-                        {col.render(item)}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })
-            )}
+                            : colIndex === cols.length - 1
+                              ? ""
+                              : "min-w-[120px]"
+                            } ${colIndex === cols.length - 1 && "text-right"}`}
+                        >
+                          {col.render(item)}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
+              )}
           </tbody>
         </table>
       </div>

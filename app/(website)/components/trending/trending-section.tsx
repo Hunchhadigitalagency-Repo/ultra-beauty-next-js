@@ -10,7 +10,7 @@ interface FeaturedProductResponse extends Result {
 const TrendingSection: React.FunctionComponent = () => {
 
   const { data, loading, error } =
-    useFetchData<FeaturedProductResponse[]>(`featuredproduct`, true);
+    useFetchData<FeaturedProductResponse[]>(`featuredproduct/`, true);
 
   return (
 

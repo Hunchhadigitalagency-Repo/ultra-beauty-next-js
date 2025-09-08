@@ -10,7 +10,7 @@ interface FeaturedProductResponse extends Result {
 
 const SkinCare = () => {
   const { data, loading, error } =
-    useFetchData<FeaturedProductResponse[]>(`featuredproduct`);
+    useFetchData<FeaturedProductResponse[]>(`featuredproduct/`);
   return (
     <ProductSection
       isLoading={loading}

@@ -30,13 +30,17 @@ const BrandsDescSection: React.FunctionComponent = () => {
       {/* brand level with description */}
 
       {loading ? (
-        <p className="text-sm text-center text-muted-foreground">
-          Loading Brands Banner....
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-gray'>
+            Loading ...
+          </p>
+        </div>
       ) : error ? (
-        <p className="text-sm font-medium text-center text-red-500">
-          Something Went Wrong While Fetching Brands Banner
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            Error While Fetching Featured Brands Banner
+          </p>
+        </div>
       ) : data?.results.length === 0 ? (
         <p className="text-sm text-center text-muted-foreground">
           No Brands Banner Found

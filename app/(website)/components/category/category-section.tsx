@@ -27,7 +27,7 @@ interface CategoryResponse {
 const CategorySection: React.FunctionComponent = () => {
 
   const { data, loading, error } = useFetchData<CategoryResponse[]>(
-    `dropdown/category?is_not_empty=True`
+    `dropdown/category?is_not_empty=True/`
   );
 
   return (
@@ -42,13 +42,17 @@ const CategorySection: React.FunctionComponent = () => {
       </div>
       <div className="relative">
         {loading ? (
-          <p className="text-center text-muted-foreground text-sm">
-            Loading Categories...
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-gray'>
+              Loading Categories...
+            </p>
+          </div>
         ) : error ? (
-          <p className="text-center text-red-500 text-sm font-medium">
-            Something Went Wrong While Fetching Categories
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-red'>
+              Error While Fetching Categories
+            </p>
+          </div>
         ) : data?.length === 0 ? (
           <p className="text-center text-muted-foreground text-sm">
             No Categories found

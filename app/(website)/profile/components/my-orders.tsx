@@ -5,7 +5,7 @@ import OrderTable from './Table/order-table';
 
 const MyOrders: React.FunctionComponent = () => {
 
-    const { data: orderData, error: orderError, loading: orderLoading } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders`, true);
+    const { data: orderData, error: orderError, loading: orderLoading } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/`, true);
     const filtered_Order_Data = orderData?.results?.filter(order => order.order_details.length > 0);
 
     return (
