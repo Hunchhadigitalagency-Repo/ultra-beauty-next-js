@@ -102,7 +102,7 @@ export default function Navbar() {
       <div className="padding-x">
 
         {/* Search Popup */}
-        {searchOpen && <SearchModal />}
+        {searchOpen && <SearchModal onClose={() => setSearchOpen(!searchOpen)} />}
 
         {/* Notification */}
         {showNotification && (

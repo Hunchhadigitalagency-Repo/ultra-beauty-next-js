@@ -1,77 +1,93 @@
-import React from 'react';
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious
-} from '@/components/ui/carousel';
-import PopularCard from './popular-card';
-import SearchBox from '../filter/search-box';
+"use client";
+import Image from "next/image";
+import React, { useState } from "react";
+import { Result } from "@/types/product";
+import { ArrowUpLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import SearchBox from "../filter/search-box";
+import { useAppSelector } from "@/redux/hooks";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 
-
-const CATEGORY_LIST = [
-    { title: "Skin Care", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Bridal Care", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Make Up", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Child Care", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-    { title: "Tools", image: "https://fastly.picsum.photos/id/42/3456/2304.jpg?hmac=dhQvd1Qp19zg26MEwYMnfz34eLnGv8meGk_lFNAJR3g" },
-]
-
-const SearchModal: React.FunctionComponent = () => {
-    return (
-        <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4">
-            <div className="w-full flex justify-center items-center gap-5">
-                <SearchBox placeholder="Find the Product of Your Choice" />
-                <button className="hidden lg:flex bg-primary text-white px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors cursor-pointer">
-                    <p className="text-base">Search</p>
-                </button>
-            </div>
-            {/* Suggestions Section */}
-            <div className="hidden lg:grid grid-cols-2 md:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 mt-4 padding-x">
-                <section className="flex flex-col gap-5">
-                    <h1 className="text-primary font-playfair font-bold text-3xl">Popular Search</h1>
-                    <ul className="text-base font-normal text-foreground flex flex-col gap-2">
-                        <li className="cursor-pointer hover:text-primary">Foundation & Compact</li>
-                        <li className="cursor-pointer hover:text-primary">MakeUp Serum</li>
-                        <li className="cursor-pointer hover:text-primary">Eyeliner</li>
-                        <li className="cursor-pointer hover:text-primary">Bridal Cosmetics</li>
-                        <li className="cursor-pointer hover:text-primary">Nail Polish</li>
-                        <li className="cursor-pointer hover:text-primary">Foundation & Compact</li>
-                        <li className="cursor-pointer hover:text-primary">Eye MakeUp & Mascara</li>
-                    </ul>
-                </section>
-                <section className="flex flex-col gap-5">
-                    <Carousel className="w-full relative" opts={{ align: 'start' }}>
-                        <div className='flex justify-between pb-4'>
-                            <h1 className="text-primary font-playfair font-bold text-3xl">Most Popular</h1>
-                        </div>
-
-                        {/* Buttons in the top-right corner */}
-                        <div className="absolute top-2 right-10 flex space-x-2 z-10">
-                            <CarouselPrevious className="hidden lg:flex bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
-                            <CarouselNext className="hidden lg:flex bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
-                        </div>
-
-                        <CarouselContent className="-ml-1 lg:-ml-4">
-                            {CATEGORY_LIST.map((category, index) => (
-                                <CarouselItem
-                                    key={index}
-                                    className="basis-[40%] pl-4  sm:basis-1/2 lg:basis-1/4"
-                                >
-                                    <PopularCard image={category.image} />
-                                </CarouselItem>
-                            ))}
-                        </CarouselContent>
-                    </Carousel>
-                </section>
-            </div>
-        </div>
-    )
+interface SearchModalprops {
+    onClose: () => void;
 }
 
-export default SearchModal
+const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => {
+
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState("");
+    const queryParams = new URLSearchParams();
+    const { selectedCategories } = useAppSelector(state => state.category);
+    const { isLoggedIn } = useAppSelector(state => state.authentication);
+
+    if (selectedCategories.length > 0) {
+        queryParams.append("category", selectedCategories.join(","));
+    }
+
+    if (searchTerm) {
+        queryParams.append("search", searchTerm);
+    }
+
+    const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+
+    const handleSearchValue = (value: string) => {
+        setSearchTerm(value);
+    };
+
+    const {
+        data: products,
+    } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
+
+    return (
+        <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4">
+            <div className="w-full flex flex-col gap-4 items-center">
+                {/* Search Box */}
+                <SearchBox
+                    placeholder="Find the Product of Your Choice"
+                    searchBoxClassName='w-96 md:w-[500px] xl:w-[800px]'
+                    sendValue={handleSearchValue}
+                />
+
+                {/* Search Results */}
+                <div className="w-96 md:w-[500px] xl:w-[800px] bg-white max-h-[400px] overflow-y-auto">
+                    {searchTerm.length > 0 && (
+                        products.length > 0 ? (
+                            <ul className="space-y-2">
+                                {products.map((item, index) => (
+                                    <li
+                                        key={index}
+
+                                        className="flex items-center justify-between py-3 px-2 focus:bg-pink-100 rounded-md hover:bg-white cursor-pointer hover:shadow-md focus:outline-none select-none"
+                                    >
+                                        <div className="flex items-center gap-1 md:gap-3">
+                                            <div className="relative w-12 h-12 md:w-16 md:h-16">
+                                                <Image
+                                                    src={item.images[0]?.file}
+                                                    alt={item.slug_name}
+                                                    fill
+                                                    className="rounded object-cover"
+                                                />
+                                            </div>
+                                            <h1 className="text-sm font-medium">{item.name}</h1>
+                                        </div>
+                                        <ArrowUpLeft onClick={() => {
+                                            router.push(`/shop/product/${item.slug_name}`);
+                                            onClose();
+                                        }}
+                                            className="w-4 h-4 md:w-5 md:h-5 hover:shadow-md" />
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500 text-sm">
+                                No results found
+                            </p>
+                        )
+                    )}
+                </div>
+            </div>
+        </div >
+    );
+};
+
+export default SearchModal;
