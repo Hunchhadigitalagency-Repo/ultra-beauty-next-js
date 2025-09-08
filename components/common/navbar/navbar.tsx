@@ -103,7 +103,7 @@ export default function Navbar() {
       <div className="py-2 padding-x">
 
         {/* Search Popup */}
-        {searchOpen && <SearchModal />}
+        {searchOpen && <SearchModal onClose={() => setSearchOpen(!searchOpen)} />}
 
         {/* Mega Menu */}
         {isDropdownVisible && <MegaMenu

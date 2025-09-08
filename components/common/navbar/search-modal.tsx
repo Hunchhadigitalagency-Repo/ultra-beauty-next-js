@@ -8,13 +8,18 @@ import SearchBox from "../filter/search-box";
 import { useAppSelector } from "@/redux/hooks";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 
-const SearchModal: React.FunctionComponent = () => {
+interface SearchModalprops {
+    onClose: () => void;
+}
+
+const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => {
 
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const queryParams = new URLSearchParams();
     const { selectedCategories } = useAppSelector(state => state.category);
-    const { isLoggedIn } = useAppSelector(state => state.authentication)
+    const { isLoggedIn } = useAppSelector(state => state.authentication);
+
     if (selectedCategories.length > 0) {
         queryParams.append("category", selectedCategories.join(","));
     }
@@ -51,9 +56,7 @@ const SearchModal: React.FunctionComponent = () => {
                                 {products.map((item, index) => (
                                     <li
                                         key={index}
-                                        onClick={() => {
-                                            router.push(`/shop/product/${item.slug_name}`);
-                                        }}
+
                                         className="flex items-center justify-between py-3 px-2 focus:bg-pink-100 rounded-md hover:bg-white cursor-pointer hover:shadow-md focus:outline-none select-none"
                                     >
                                         <div className="flex items-center gap-1 md:gap-3">
@@ -67,12 +70,18 @@ const SearchModal: React.FunctionComponent = () => {
                                             </div>
                                             <h1 className="text-sm font-medium">{item.name}</h1>
                                         </div>
-                                        <ArrowUpLeft className="w-4 h-4 md:w-5 md:h-5 hover:shadow-md" />
+                                        <ArrowUpLeft onClick={() => {
+                                            router.push(`/shop/product/${item.slug_name}`);
+                                            onClose();
+                                        }}
+                                            className="w-4 h-4 md:w-5 md:h-5 hover:shadow-md" />
                                     </li>
                                 ))}
                             </ul>
                         ) : (
-                            <p className="text-gray-500 text-sm">No results found</p>
+                            <p className="text-gray-500 text-sm">
+                                No results found
+                            </p>
                         )
                     )}
                 </div>
