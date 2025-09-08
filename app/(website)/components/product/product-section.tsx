@@ -59,17 +59,23 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
       <div>
 
         {isLoading ? (
-          <p className="text-sm text-center text-muted-foreground">
-            Loading {headerTitle}...
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-gray'>
+              Loading {headerTitle}...
+            </p>
+          </div>
         ) : error ? (
-          <p className="text-sm font-medium text-center text-red-500">
-            Something Went Wrong While Fetching {headerTitle}
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-red'>
+              Error While Fetching {headerTitle} Products
+            </p>
+          </div>
         ) : products?.length === 0 ? (
-          <p className="text-sm text-center text-muted-foreground">
-            No {headerTitle} found
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-red'>
+              No {headerTitle} found
+            </p>
+          </div>
         ) : (
           <Carousel
             className="w-full"

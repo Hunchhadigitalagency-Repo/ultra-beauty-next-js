@@ -16,7 +16,7 @@ export default function ShoppingCart() {
 
   const shippingFee = 150;
   const dispatch = useAppDispatch();
-  const { data, refetch, loading, error } = useFetchData<CartResponse>('carts', true);
+  const { data, refetch, loading, error } = useFetchData<CartResponse>('carts/', true);
   const CartItems = data?.results;
   const { cartItem, voucherData } = useAppSelector(state => state.cart);
   const totalQuantity = cartItem.length;
@@ -66,17 +66,23 @@ export default function ShoppingCart() {
         description="All the items are ready for checkout"
       />
       {loading ? (
-        <p className="text-sm text-center text-muted-foreground">
-          Loading Cart Items...
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-gray'>
+            Loading Cart Items...
+          </p>
+        </div>
       ) : error ? (
-        <p className="text-sm font-medium text-center text-red-500">
-          Something Went Wrong While Fetching Cart Items
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            Error While Fetching Cart Items
+          </p>
+        </div>
       ) : CartItems?.length === 0 ? (
-        <p className="text-sm text-center text-muted-foreground">
-          No Cart Items found
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-gray'>
+            No Cart Items found !
+          </p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
           {/* Cart Items */}

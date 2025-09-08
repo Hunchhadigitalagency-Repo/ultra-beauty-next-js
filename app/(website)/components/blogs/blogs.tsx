@@ -10,10 +10,8 @@ import SectionHeader from "@/components/common/header/section-header";
 const Blogs: React.FunctionComponent = () => {
 
   const { data, loading, error } = useFetchData<BlogsList>(
-    `cms-blogs/?page=1&page_size=3`, true
+    `cms-blogs/?page=1&page_size=3/`, true
   );
-
-  console.log("Blog response from backend hai tw", data);
 
   return (
     <section className="padding space-y-8">
@@ -29,13 +27,17 @@ const Blogs: React.FunctionComponent = () => {
       {loading ? (
         <BlogScrabbledLoader />
       ) : error ? (
-        <p className="text-center text-red-500 text-sm font-medium">
-          Something Went Wrong While Fetching Blogs
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            Error While Fetching Blogs
+          </p>
+        </div>
       ) : data?.results.length === 0 ? (
-        <p className="text-center text-muted-foreground text-sm">
-          No Blogs found
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            No Blogs Found !
+          </p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {data && data.results.length > 0 ? (
@@ -43,7 +45,11 @@ const Blogs: React.FunctionComponent = () => {
               return <BlogCard key={index} {...blog} />;
             })
           ) : (
-            <p className="text-red-400">No data found</p>
+            <div className='h-60 flex w-full justify-center items-center'>
+              <p className='text-red'>
+                No Data Found !
+              </p>
+            </div>
           )}
         </div>
       )}

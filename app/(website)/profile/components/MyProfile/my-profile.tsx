@@ -22,13 +22,13 @@ const MyProfile: React.FunctionComponent = () => {
   const [showShippingDetailsModal, setShowShippingDetailsModal] = useState(false);
   const [currentpage, setCurrentPage] = useState(1);
 
-  const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(`auth/profile`, true);
+  const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(`auth/profile/`, true);
 
   const {
     data: orderData,
     loading: isLoading,
     error: isError
-  } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/?page=${currentpage}`, true)
+  } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/?page=${currentpage}/`, true)
 
   const filtered_Order_Data = orderData?.results?.filter(
     (order) => order.order_details.length > 0

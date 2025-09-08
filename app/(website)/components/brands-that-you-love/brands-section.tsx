@@ -38,7 +38,7 @@ export interface Brand {
 }
 const BrandsSection: React.FunctionComponent = () => {
 
-  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands");
+  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands/");
   const brandDetails = data?.results
 
   const [api, setApi] = useState<CarouselApi>();
@@ -79,17 +79,23 @@ const BrandsSection: React.FunctionComponent = () => {
       {/* Brand Images section */}
       <div className="relative w-full">
         {loading ? (
-          <p className="text-sm text-center text-muted-foreground">
-            Loading Brands...
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-gray'>
+              Loading Featured Brands...
+            </p>
+          </div>
         ) : error ? (
-          <p className="text-sm font-medium text-center text-red-500">
-            Something Went Wrong While Fetching Brands
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-red'>
+              Error While Fetching Featured Brands
+            </p>
+          </div>
         ) : data?.results.length === 0 ? (
-          <p className="text-sm text-center text-muted-foreground">
-            No Brands found
-          </p>
+          <div className='h-60 flex w-full justify-center items-center'>
+            <p className='text-red'>
+              No Brands found
+            </p>
+          </div>
         ) : (
           <Carousel setApi={setApi}
             opts={{ align: "start", loop: true }}

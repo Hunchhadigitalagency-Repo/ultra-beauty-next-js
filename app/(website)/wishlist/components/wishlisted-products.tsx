@@ -56,10 +56,12 @@ const WishlistedProducts = () => {
 
   if (!isAuthenticated) {
     return (
-      <section className="padding ">
-        <p className="text-sm text-center text-red-500">
-          Please login first to view your wishlist.
-        </p>
+      <section className="padding">
+        <div className='h-60 flex w-full justify-center items-center'>
+          <span className='text-red'>
+            Please login first to view your wishlist.
+          </span>
+        </div>
       </section>
     );
   }

@@ -55,17 +55,23 @@ const Testimonial = () => {
                 description='Here are the review of customers.'
             />
             {loading ? (
-                <p className="text-sm text-center text-muted-foreground">
-                    Loading Testimonials...
-                </p>
+                <div className='h-60 flex w-full justify-center items-center'>
+                    <p className='text-gray'>
+                        Loading Testimonials ...
+                    </p>
+                </div>
             ) : error ? (
-                <p className="text-sm font-medium text-center text-red-500">
-                    Something Went Wrong While Fetching Testimonials
-                </p>
+                <div className='h-60 flex w-full justify-center items-center'>
+                    <p className='text-red'>
+                        Error While Fetching Testimonials
+                    </p>
+                </div>
             ) : data?.length === 0 ? (
-                <p className="text-sm text-center text-muted-foreground">
-                    No Testimonials found
-                </p>
+                <div className='h-60 flex w-full justify-center items-center'>
+                    <p className='text-red'>
+                        No Testimonials Found !
+                    </p>
+                </div>
             ) : (
                 <div className="relative w-full">
                     <Carousel setApi={setApi}
