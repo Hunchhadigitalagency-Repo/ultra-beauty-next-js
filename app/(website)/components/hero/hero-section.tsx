@@ -14,8 +14,6 @@ import useFetchData from "@/hooks/use-fetch";
 // import { Skeleton } from "@/components/ui/skeleton";
 import LoadingSpinner from "@/components/common/loader/loading-spinner";
 
-
-
 export interface HeroSectionResponse {
   id: number
   categories: Category[]
