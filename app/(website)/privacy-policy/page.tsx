@@ -13,7 +13,7 @@ export interface privacyPolicyResponse {
 
 const PrivacyPolicy: React.FunctionComponent = () => {
 
-    const { data } = useFetchData<privacyPolicyResponse>('privacy-policy')
+    const { data, loading, error } = useFetchData<privacyPolicyResponse>('privacy-policy')
 
     return (
         <section className='padding'>
@@ -25,13 +25,27 @@ const PrivacyPolicy: React.FunctionComponent = () => {
             <div className='grid grid-cols-1 gap-10 lg:grid-cols-[70%_30%] mt-5 items-start'>
                 {/* Content */}
                 <div className='w-full order-2 lg:order-1'>
-                    {data && (
-                        <div className="flex flex-col gap-4">
-                            <p
-                                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.description) }}
-                            />
-                        </div>
-                    )}
+                    {
+                        loading ? (
+                            <div className='h-60 flex w-full justify-center items-center'>
+                                <p className='text-gray'>
+                                    Loading ...
+                                </p>
+                            </div>
+                        ) : error ? (
+                            <div className='h-60 flex w-full justify-center items-center'>
+                                <p className='text-red'>
+                                    Error while Fetching Privacy and Policy !
+                                </p>
+                            </div>
+                        ) : data && (
+                            <div className="flex flex-col gap-4">
+                                <p
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data?.description) }}
+                                />
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </section>
