@@ -29,9 +29,21 @@ const JobsSection: React.FunctionComponent = () => {
 
     const [activeJobIndex, setActiveJobIndex] = useState<number>(0)
 
-    if (loading) return <p>Loading jobs...</p>;
-    if (error) return <p>Error loading jobs: {error?.message}</p>;
-    if (!data || !data.length) return <p>No jobs available.</p>;
+    if (loading) return <div className='h-60 flex w-full justify-center items-center'>
+        <p className='text-gray'>
+            Loading jobs...
+        </p>
+    </div>;
+    if (error) return <div className='h-60 flex w-full justify-center items-center'>
+        <p className='text-red'>
+            {error?.message}
+        </p>
+    </div>;
+    if (!data || !data.length) return <div className='h-60 flex w-full justify-center items-center'>
+        <p className='text-gray'>
+            No Jobs Available
+        </p>
+    </div>;
 
     return (
         <section className='grid grid-cols-1 lg:grid-cols-2 gap-8'>

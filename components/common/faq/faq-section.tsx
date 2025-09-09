@@ -29,17 +29,23 @@ export default function FAQSection() {
 
       {/* FAQ Accordion */}
       {loading ? (
-        <p className="text-sm text-center text-muted-foreground">
-          Loading FAQs...
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-gray'>
+            Loading FAQs...
+          </p>
+        </div>
       ) : error ? (
-        <p className="text-sm font-medium text-center text-red-500">
-          Something Went Wrong While Fetching FAQs
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            Something went wrong while Fetching FAQs
+          </p>
+        </div>
       ) : data?.length === 0 ? (
-        <p className="text-sm text-center text-muted-foreground">
-          No FAQs found
-        </p>
+        <div className='h-60 flex w-full justify-center items-center'>
+          <p className='text-red'>
+            Something went wrong while Fetching FAQs
+          </p>
+        </div>
       ) : (
         <Accordion type="single" collapsible className="flex flex-col gap-2 pt-5">
           {data?.map((faq) => (
