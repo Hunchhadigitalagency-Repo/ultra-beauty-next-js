@@ -1,6 +1,6 @@
 import React from 'react';
-import { MapPin, Phone, Mail } from 'lucide-react';
 import Newsletter from '../newsletter/newsletter';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const SHOP_LINKS = [
@@ -30,10 +30,10 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="relative h-fit lg:h-[calc(100vh-64px)] bg-[#161616] text-white padding">
+    <footer className="relative h-fit bg-[#161616] text-white padding">
 
       {/* Footer Content */}
-      <div className="flex flex-col pt-10">
+      <div className="flex flex-col pt-10 pb-10 sm:pb-8 md:pb-0">
         {/* News Letter */}
         <div className=' bg-inherit mb-10 gap-4 lg:gap-0 flex flex-col lg:flex-row lg:justify-between'>
           <div>
@@ -54,17 +54,19 @@ const Footer: React.FC = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-white">SHOP</h3>
                 <ul className="space-y-3">
-                  {SHOP_LINKS.map((link) => (
-                    <li key={link.name} className="flex items-center space-x-2">
-                      {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
-                      <a
-                        href={link.href}
-                        className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
+                  {
+                    SHOP_LINKS.map((link) => (
+                      <li key={link.name} className="flex items-center space-x-2">
+                        {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                        <a
+                          href={link.href}
+                          className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))
+                  }
                 </ul>
               </div>
             </div>
@@ -75,7 +77,27 @@ const Footer: React.FC = () => {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-white">About</h3>
                 <ul className="space-y-3">
-                  {ABOUT_LINKS.map((link) => (
+                  {
+                    ABOUT_LINKS.map((link) => (
+                      <li key={link.name} className="flex items-center space-x-2">
+                        {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                        <a
+                          href={link.href}
+                          className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">HELP</h3>
+              <ul className="space-y-3">
+                {
+                  HELP_LINKS.map((link) => (
                     <li key={link.name} className="flex items-center space-x-2">
                       {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
                       <a
@@ -85,24 +107,8 @@ const Footer: React.FC = () => {
                         {link.name}
                       </a>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">HELP</h3>
-              <ul className="space-y-3">
-                {HELP_LINKS.map((link) => (
-                  <li key={link.name} className="flex items-center space-x-2">
-                    {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
-                    <a
-                      href={link.href}
-                      className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
+                  ))
+                }
               </ul>
             </div>
             {/* Contact Us */}
@@ -131,48 +137,54 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-normal text-gray">SHOP</h3>
             <ul className="space-y-3">
-              {SHOP_LINKS.map((link) => (
-                <li key={link.name} className="flex items-center space-x-2">
-                  <a
-                    href={link.href}
-                    className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              {
+                SHOP_LINKS.map((link) => (
+                  <li key={link.name} className="flex items-center space-x-2">
+                    <a
+                      href={link.href}
+                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           {/* ABOUT Links - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">ABOUT</h3>
             <ul className="space-y-3">
-              {ABOUT_LINKS.map((link) => (
-                <li key={link.name} className="flex items-center space-x-2">
-                  <a
-                    href={link.href}
-                    className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              {
+                ABOUT_LINKS.map((link) => (
+                  <li key={link.name} className="flex items-center space-x-2">
+                    <a
+                      href={link.href}
+                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           {/* HELP Links - Desktop */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">HELP</h3>
             <ul className="space-y-3">
-              {HELP_LINKS.map((link) => (
-                <li key={link.name} className="flex items-center space-x-2">
-                  <a
-                    href={link.href}
-                    className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              {
+                HELP_LINKS.map((link) => (
+                  <li key={link.name} className="flex items-center space-x-2">
+                    <a
+                      href={link.href}
+                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))
+              }
             </ul>
           </div>
           {/* Contact Us - Desktop */}

@@ -1,7 +1,6 @@
 import Blogs from "./components/blogs/blogs";
 import MakeUp from "./components/make-up/make-up";
 import Featured from "./components/fetured/featured";
-import SkinCare from "./components/skin-care/skin-care";
 import HeroSection from "./components/hero/hero-section";
 import BeautyBanner from "./components/beauty-banner/page";
 import OffersSection from "./components/offers/offers-section";
@@ -14,6 +13,7 @@ import BrandAdsBanner from "./components/brand-ads-banner/brand-ads-banner";
 import GlowKitSection from "./components/featured-glow-kit/glow-kit-section";
 import BeautyVideoSection from "./components/beauty-video/beauty-video-section";
 import PromotionalCarousel from "@/components/common/carousel/promotional-carousel";
+import FeaturedProductCategories from "./components/featured-categories/featured-categories";
 
 
 
@@ -26,13 +26,13 @@ export default function HomePage() {
       <BeautyBanner />
       <TrendingSection />
       <BrandAdsBanner />
-      <SkinCare />
-      <BeautyVideoSection />
+      <FeaturedProductCategories />
       <MakeUp />
+      <BeautyVideoSection />
+      <Featured />
       <PromotionalCarousel />
       <GlowKitSection />
       <MermaidBanner />
-      <Featured />
       <BrandsCard />
       <PromoVideoSection />
       <Blogs />

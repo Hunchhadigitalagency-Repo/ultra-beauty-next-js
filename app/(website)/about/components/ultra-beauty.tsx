@@ -47,34 +47,36 @@ const UltraBeauty: React.FunctionComponent = () => {
           agents.
         </p>
 
-        <div className="w-full h-60 ">
+        <div className="w-full h-64 sm:h-60 ">
           <Carousel className="w-full " opts={{ align: 'start' }}>
-            <div className="absolute bottom-0 right-10 flex space-x-2 z-10">
+            <div className="absolute -bottom-7 right-10 flex space-x-2 z-10">
               <CarouselPrevious className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
               <CarouselNext className="flex lg:hidden bg-transparent border-0 hover:bg-transparent hover:text-foreground shadow-none" />
             </div>
             <CarouselContent className="-ml-1 lg:-ml-4 w-full">
-              {CATEGORY_LIST.map((category, index) => (
-                <CarouselItem
-                  key={index}
-                  className="basis-full sm:basis-1/2 lg:basis-1/2 pl-4  "
-                >
-                  <div className="w-full flex gap-4  mt-13">
-                    <div className="bg-secondary text-foreground  md:w-[86px] md:h-[86px] rounded-full flex justify-center items-center md:min-w-[86px] md:min-h-[86px] min-w-[60px] min-h-[60px] w-[60px] h-[60px]">
-                      <FaRegBell className="text-2xl" />
+              {
+                CATEGORY_LIST.map((category, index) => (
+                  <CarouselItem
+                    key={index}
+                    className="basis-full sm:basis-1/2 lg:basis-1/2 pl-4  "
+                  >
+                    <div className="w-full flex gap-4  mt-13">
+                      <div className="bg-secondary text-foreground  md:w-[86px] md:h-[86px] rounded-full flex justify-center items-center md:min-w-[86px] md:min-h-[86px] min-w-[60px] min-h-[60px] w-[60px] h-[60px]">
+                        <FaRegBell className="text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-playfair text-bold text-primary py-2 ">
+                          {category.title}
+                        </h3>
+                        <p className=" text-sm md:text-base md:tracking-tighter text-justify">
+                          {category.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-playfair text-bold text-primary py-2 ">
-                        {category.title}
-                      </h3>
-                      <p className=" text-sm md:text-base md:tracking-tighter text-justify">
-                        {category.description}
-                      </p>
-                    </div>
-                  </div>
 
-                </CarouselItem>
-              ))}
+                  </CarouselItem>
+                ))
+              }
             </CarouselContent>
           </Carousel>
         </div>
