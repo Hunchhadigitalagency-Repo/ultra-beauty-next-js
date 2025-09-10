@@ -19,7 +19,7 @@ const PrivacyPolicy: React.FunctionComponent = () => {
         <section className='padding'>
             <SectionHeader
                 title={data?.topic || "-"}
-                description='Privacy and ploicy are listed'
+                description='Privacy and policy are listed'
                 titleClassName='text-primary'
             />
             <div className='grid grid-cols-1 gap-10 lg:grid-cols-[70%_30%] mt-5 items-start'>
@@ -27,13 +27,13 @@ const PrivacyPolicy: React.FunctionComponent = () => {
                 <div className='w-full order-2 lg:order-1'>
                     {
                         loading ? (
-                            <div className='h-60 flex w-full justify-center items-center'>
+                            <div className='h-60 flex w-full justify-start items-center'>
                                 <p className='text-gray'>
                                     Loading ...
                                 </p>
                             </div>
                         ) : error ? (
-                            <div className='h-60 flex w-full justify-center items-center'>
+                            <div className='h-60 flex w-full justify-start items-center'>
                                 <p className='text-red'>
                                     Error while Fetching Privacy and Policy !
                                 </p>

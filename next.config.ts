@@ -44,9 +44,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
-       {
+      {
         protocol: "https",
         hostname: "static.vecteezy.com",
+      },
+      {
+        protocol: "http",
+        hostname: "developapi.ultrabeautybrands.com",
+      },
+      {
+        protocol: "https",
+        hostname: "developapi.ultrabeautybrands.com",
       },
     ],
   },
