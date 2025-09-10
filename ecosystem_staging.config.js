@@ -1,10 +1,10 @@
 module.exports = {
     apps: [
         {
-            name: 'basera-frontend-staging',
+            name: 'ultra-beauty-frontend-staging',
             script: 'npm',
             args: 'start',
-            cwd: '/mnt/volume_blr1_02/projects/basera-next-js-staging',
+            cwd: '/var/www/staging/ultra-beauty-next-js',
             instances: 1,
             exec_mode: 'fork',
             env: {
