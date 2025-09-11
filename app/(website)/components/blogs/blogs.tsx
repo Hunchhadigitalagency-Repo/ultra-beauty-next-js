@@ -3,6 +3,7 @@ import React from "react";
 import BlogCard from "./blog-card";
 import { BlogsList } from "@/types/cms";
 import useFetchData from "@/hooks/use-fetch";
+import { AlertCircle } from "lucide-react";
 import LinkText from "@/components/common/header/link-text";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
@@ -33,7 +34,8 @@ const Blogs: React.FunctionComponent = () => {
           </p>
         </div>
       ) : data?.results.length === 0 ? (
-        <div className='h-60 flex w-full justify-center items-center'>
+        <div className='h-60 flex flex-col w-full justify-center items-center'>
+          <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
           <p className='text-red'>
             No Blogs Found !
           </p>
@@ -45,7 +47,8 @@ const Blogs: React.FunctionComponent = () => {
               return <BlogCard key={index} {...blog} />;
             })
           ) : (
-            <div className='h-60 flex w-full justify-center items-center'>
+            <div className='h-60 flex flex-col w-full justify-center items-center'>
+              <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
               <p className='text-red'>
                 No Data Found !
               </p>

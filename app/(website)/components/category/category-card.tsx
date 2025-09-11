@@ -10,7 +10,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, image }) => {
 
     return (
         <div className="flex flex-col items-center justify-center w-full gap-4">
-            <div className="relative w-full overflow-hidden rounded-lg cursor-pointer h-36 md:h-52 lg:h-64 xl:h-48 group">
+            <div className="relative w-full overflow-hidden rounded-lg cursor-pointer h-36 md:h-48 group">
                 <Image
                     src={image || "/placeholder.png"}
                     alt={title || "Category image"}
@@ -18,7 +18,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, image }) => {
                     className="object-cover"
                 />
             </div>
-            <p className="text-sm font-medium text-center uppercase sm:text-base">
+            <p className="text-sm font-medium text-center uppercase md:text-base">
                 {title}
             </p>
         </div>

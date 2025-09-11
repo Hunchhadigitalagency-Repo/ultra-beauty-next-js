@@ -1,23 +1,22 @@
 "use client";
+
 import React from "react";
-import { Result } from "@/types/product";
 import useFetchData from "@/hooks/use-fetch";
+import { ProductResponse } from "@/types/product";
 import ProductSection from "../product/product-section";
 
-interface FeaturedProductResponse extends Result {
-  id: number;
-}
+
 const TrendingSection: React.FunctionComponent = () => {
 
-  const { data, loading, error } =
-    useFetchData<FeaturedProductResponse[]>(`featuredproduct/`, true);
+  const { data: MostLovedProducts, loading, error } =
+    useFetchData<ProductResponse>(`mostloved-product/`, true);
 
   return (
 
     <ProductSection
       isLoading={loading}
       error={error}
-      products={data}
+      products={MostLovedProducts?.results || []}
       headerTitle="Loved By EveryOne"
       headerDescription="Find the trending Products"
       headerLink="/shop"
