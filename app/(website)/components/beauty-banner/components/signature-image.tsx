@@ -5,8 +5,9 @@ import Eclipse from "@/assets/Eclipse1.png";
 import flowerImage from "@/assets/Flower.png";
 
 const SignatureImage: React.FunctionComponent = () => {
+
   return (
-    <div className="w-full md:w-1/3 mt-10 md:mt-0  justify-center  z-10 hidden lg:flex ">
+    <div className="w-full md:w-1/2 lg:w-1/2 mt-10 md:mt-0  justify-center  z-10 hidden lg:flex ">
       <div className="relative ">
         <div>
           <Image

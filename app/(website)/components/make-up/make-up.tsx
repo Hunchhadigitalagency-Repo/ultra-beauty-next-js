@@ -9,10 +9,10 @@ interface FeaturedProductResponse extends Result {
 }
 
 const MakeUp = () => {
+
   const { data, loading, error } =
     useFetchData<FeaturedProductResponse[]>(`featuredproduct/`);
 
-  console.log(data, "featured products from backend");
   return (
     <ProductSection
       isLoading={loading}
