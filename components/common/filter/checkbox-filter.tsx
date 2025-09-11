@@ -29,6 +29,7 @@ export function CheckboxFilter({
   selectedValues,
   onChange,
 }: CheckboxFilterProps) {
+
   return (
     <Accordion defaultValue={[id]} type="multiple">
       <AccordionItem value={id}>

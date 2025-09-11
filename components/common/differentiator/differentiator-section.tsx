@@ -1,15 +1,17 @@
 "use client";
-import ImageCarousel from "@/components/common/carousel/image-carousel";
-import SectionHeader from "@/components/common/header/section-header";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+
 import React from "react";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import SectionHeader from "@/components/common/header/section-header";
+import ImageCarousel from "@/components/common/carousel/image-carousel";
 
 interface DifferentiatorSectionProps {
   hasButton?: boolean;
 }
 
-const DifferentiatorSection = ({hasButton = true}: DifferentiatorSectionProps) => {
+const DifferentiatorSection = ({ hasButton = true }: DifferentiatorSectionProps) => {
+
   return (
     <section className="flex flex-col justify-between items-center">
       <h4 className="text-xl font-semibold text-foreground">
@@ -23,12 +25,14 @@ const DifferentiatorSection = ({hasButton = true}: DifferentiatorSectionProps) =
 
       <ImageCarousel />
 
-      {hasButton && <Button
-        onClick={() => {}}
-        className="text-black  rounded-full w-[250px] h-11 uppercase"
-      >
-        Shop Now <ArrowRight className="w-4 h-4" />
-      </Button>}
+      {
+        hasButton && <Button
+          onClick={() => { }}
+          className="text-black  rounded-full w-[250px] h-11 uppercase"
+        >
+          Shop Now <ArrowRight className="w-4 h-4" />
+        </Button>
+      }
     </section>
   );
 };

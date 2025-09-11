@@ -1,39 +1,78 @@
+"use client"
+
 import React from 'react';
-import BrandContent from './brand-content';
-
-interface BrandAdsBannerProps {
-    brandImage: string;
-    brandName: string;
-    brandDescription: string;
-    brandColor: string
-};
-
-const BRAND: BrandAdsBannerProps = {
-    brandImage: 'https://images.unsplash.com/photo-1594966642034-bbf0029a7488?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    brandName: 'COSMETIC',
-    brandDescription: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis saepe facere quaerat voluptas',
-    brandColor: '#FFF'
-};
+import { AlertCircle } from "lucide-react";
+import useFetchData from '@/hooks/use-fetch';
+import { BannerResponse } from '@/types/banner';
+import { Card, CardContent } from "@/components/ui/card"
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
 
 const BrandAdsBanner: React.FunctionComponent = () => {
+
+    const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Single%20Banner`)
+
     return (
         <div className='padding'>
-            {BRAND &&
-                <div
-                    className="relative w-full h-60 md:h-80 lg:h-[563px] rounded-md"
-                    style={{
-                        backgroundImage: `url(${BRAND.brandImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}>
-                    <div className='h-full padding flex items-center justify-center lg:justify-end'>
-                        <BrandContent
-                            brandName={BRAND.brandName}
-                            brandDescription={BRAND.brandDescription}
-                            brandColor={BRAND.brandColor}
-                        />
-                    </div>
-                </div>
+            {
+                loading ?
+                    (
+                        <div className='h-60 flex w-full justify-center items-center'>
+                            <p className='text-gray'>
+                                Loading Brand Ads Banner...
+                            </p>
+                        </div>
+                    ) :
+                    error ?
+                        (
+                            <div className='h-60 flex flex-col w-full justify-center items-center'>
+                                <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                                <p className='text-red'>
+                                    Error Fetching Brand Ads Banners !
+                                </p>
+                            </div>
+                        ) :
+                        data?.length === 0 ?
+                            (
+                                <div className='h-60 flex flex-col w-full justify-center items-center'>
+                                    <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                                    <p className='text-red'>
+                                        No Brand Ads Banners Found !
+                                    </p>
+                                </div>
+                            ) :
+                            (
+                                <Carousel className="w-full">
+                                    <CarouselContent className='h-full w-full'>
+                                        {
+                                            data?.map((banner) => (
+                                                <CarouselItem key={banner.id}>
+                                                    <Card className="rounded-md overflow-hidden">
+                                                        <CardContent className="p-0">
+                                                            <div
+                                                                className="w-full h-60 md:h-80 lg:h-[563px]"
+                                                                style={{
+                                                                    backgroundImage: `url(${banner.image})`,
+                                                                    backgroundSize: "cover",
+                                                                    backgroundPosition: "center",
+                                                                }}
+                                                            />
+                                                        </CardContent>
+                                                    </Card>
+                                                </CarouselItem>
+                                            ))
+                                        }
+                                    </CarouselContent>
+                                    <CarouselPrevious />
+                                    <CarouselNext />
+                                </Carousel>
+
+                            )
             }
         </div>
     );

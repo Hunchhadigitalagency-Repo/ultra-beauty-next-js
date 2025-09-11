@@ -1,4 +1,5 @@
 "use client";
+
 import { Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
@@ -18,7 +19,7 @@ const AllProducts = () => {
 
   const toggleWishlist = useToggleWishlist();
   const { isAuthenticated } = useCheckToken();
-  const queryParams = new URLSearchParams();
+  // const queryParams = new URLSearchParams();
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -27,15 +28,11 @@ const AllProducts = () => {
   const { selectedCategories } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
-  if (selectedCategories.length > 0) {
-    queryParams.append("category", selectedCategories.join(","));
-  }
+  const categoryQuery = selectedCategories.length > 0
+    ? `?category=${selectedCategories.join(',')}`
+    : '';
 
-  if (searchValue) {
-    queryParams.append("search", searchValue);
-  }
-
-  const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+  const path = `public-products${categoryQuery}${searchValue ? `?search=${searchValue}` : ''}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -46,7 +43,7 @@ const AllProducts = () => {
     hasMore,
     count,
     fetchNext,
-  } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
+  } = useInfiniteFetch<Result>(path || "", "", "", "", isLoggedIn);
 
 
   const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {

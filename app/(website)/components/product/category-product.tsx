@@ -50,9 +50,8 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({ featur
                 <SectionHeader
                     className="max-w-[60%] sm:max-w-full"
                     title={featuredCategory.name}
-                // description="hello"
                 />
-                <LinkText title="Glow Shop" href="/shop" />
+                <LinkText title="Glow Shop" href={`/shop/${featuredCategory.id}`} />
             </div>
             <div>
                 {
@@ -79,7 +78,7 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({ featur
                             <Carousel
                                 className="w-full"
                             >
-                                <CarouselContent className="-ml-4">
+                                <CarouselContent>
                                     {
                                         categoryWiseProducts?.map((categoryWiseProduct) => {
 

@@ -1,10 +1,14 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import useFetchData from '@/hooks/use-fetch';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
 import { RangeFilter } from '@/components/common/filter/range-filter';
 import { CheckboxFilter } from '@/components/common/filter/checkbox-filter';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory } from '@/redux/features/category-slice'
+
 
 type Subcategory = {
     id: number;
@@ -29,7 +33,24 @@ const DropDownFilter: React.FunctionComponent = () => {
     const { selectedCategories, selectedSubcategories } = useAppSelector(state => state.category);
     const dispatch = useAppDispatch()
 
+
     const { data: categories } = useFetchData<Category[]>('dropdown/category');
+
+
+    /* Get category id from url to check when there is dynamic value from route */
+    const params = useParams();
+    const categoryId = params?.id ? Number(params.id) : null;
+
+    useEffect(() => {
+        if (
+            categoryId !== null &&
+            categories?.some(category => category.id === categoryId)
+        ) {
+            dispatch(toggleCategory({ id: categoryId, checked: true }));
+        }
+    }, [categoryId, categories, dispatch]);
+
+
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,

@@ -1,12 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface GlowKitProps {
+interface FeaturedProductCardProps {
   image: string;
   title: string;
   desc: string;
 }
-const GlowKitCard: React.FC<GlowKitProps> = ({ image, title, desc }) => {
+
+const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title, desc }) => {
+
   return (
     <div className="flex flex-col gap-3 justify-center items-center w-full">
       <div className="relative w-full h-44 md:h-60 lg:h-80 xl:h-96 overflow-hidden rounded-md">
@@ -29,4 +31,4 @@ const GlowKitCard: React.FC<GlowKitProps> = ({ image, title, desc }) => {
   )
 }
 
-export default GlowKitCard
+export default FeaturedProductCard
