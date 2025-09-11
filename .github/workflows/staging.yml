@@ -126,7 +126,7 @@ jobs:
           mkdir -p logs
 
           # Install only production dependencies
-          npm ci --only=production
+          npm ci --omit=dev
 
           # Verify environment file exists
           if [ ! -f ".env" ]; then
