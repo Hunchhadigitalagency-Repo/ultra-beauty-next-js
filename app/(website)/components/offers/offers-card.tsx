@@ -8,7 +8,9 @@ interface OffersCardProps {
 
 const OffersCard: React.FunctionComponent<OffersCardProps> = ({ imageSrc, brand, productName }) => {
 
+
     return (
+        // <Link href={`/shop/product/${productName}`}>
         <div className="flex flex-col gap-3 justify-center items-center w-full mt-2">
             <div className="w-full h-36 md:h-52 lg:h-80 relative overflow-hidden rounded-sm group cursor-pointer">
                 <Image
@@ -27,6 +29,7 @@ const OffersCard: React.FunctionComponent<OffersCardProps> = ({ imageSrc, brand,
                 </h3>
             </div>
         </div>
+        // </Link>
     )
 }
 

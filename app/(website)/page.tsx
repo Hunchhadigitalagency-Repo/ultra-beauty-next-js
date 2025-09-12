@@ -3,7 +3,7 @@ import HeroSection from "./components/hero/hero-section";
 import BeautyBanner from "./components/beauty-banner/page";
 import OffersSection from "./components/offers/offers-section";
 import CategorySection from "./components/category/category-section";
-import PromoVideoSection from "./components/promo-video/promo-video";
+// import PromoVideoSection from "./components/promo-video/promo-video";
 import TrendingSection from "./components/trending/trending-section";
 import FeaturedSection from "./components/featured/featured-section";
 import MermaidBanner from "./components/mermaid-banner/mermaid-banner";
@@ -29,7 +29,7 @@ export default function HomePage() {
       <FeaturedSection />
       <MermaidBanner />
       <BrandsCard />
-      <PromoVideoSection />
+      {/* <PromoVideoSection /> */}
       <Blogs />
     </main>
   );

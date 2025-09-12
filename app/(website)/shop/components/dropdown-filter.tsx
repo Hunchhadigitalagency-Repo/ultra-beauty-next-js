@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import React from 'react';
 import useFetchData from '@/hooks/use-fetch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
@@ -35,22 +34,6 @@ const DropDownFilter: React.FunctionComponent = () => {
 
 
     const { data: categories } = useFetchData<Category[]>('dropdown/category');
-
-
-    /* Get category id from url to check when there is dynamic value from route */
-    const params = useParams();
-    const categoryId = params?.id ? Number(params.id) : null;
-
-    useEffect(() => {
-        if (
-            categoryId !== null &&
-            categories?.some(category => category.id === categoryId)
-        ) {
-            dispatch(toggleCategory({ id: categoryId, checked: true }));
-        }
-    }, [categoryId, categories, dispatch]);
-
-
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,
@@ -98,6 +81,7 @@ const DropDownFilter: React.FunctionComponent = () => {
                         options={categoryOptions}
                         selectedValues={selectedCategories}
                         onChange={handleCategoryChange}
+                        categories={categories}
                     />
 
                     {selectedCategories.length > 0 && (
@@ -107,6 +91,7 @@ const DropDownFilter: React.FunctionComponent = () => {
                             options={getSubcategoryOptions()}
                             selectedValues={selectedSubcategories}
                             onChange={handleSubcategoryChange}
+                            categories={categories}
                         />
                     )}
 
