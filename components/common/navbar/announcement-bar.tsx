@@ -1,8 +1,9 @@
 "use client";
-import { useAppSelector } from "@/redux/hooks";
+
 import Link from "next/link";
-import LogoutModal from "../modals/logout-modal";
 import { useState } from "react";
+import { useAppSelector } from "@/redux/hooks";
+import LogoutModal from "../modals/logout-modal";
 
 export default function AnnouncementBar() {
   const { isLoggedIn, profileDetails } = useAppSelector(
@@ -13,20 +14,20 @@ export default function AnnouncementBar() {
 
   return (
     <div className="bg-[#FAFAFA] text-black w-full px-8 padding-x h-12 flex items-center justify-between">
-      <div className="flex-1 flex items-center justify-between text-sm">
-        <div className="flex-1 text-center text-foreground lg:text-left text-sm">
-          <span>
+      <div className="flex items-center justify-between flex-1 text-sm">
+        <div className="relative overflow-hidden max-w-[300px] h-full flex justify-center items-center">
+          <span className="text-sm font-normal text-black slide-text">
             20% Off on New Brand Earth Mama! Shop Now
           </span>
         </div>
         {isLoggedIn ? (
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="items-center hidden space-x-4 lg:flex">
             <h6 className="text-sm text-black">
               Hello!
               {" " + profileDetails.first_name + " " + profileDetails.last_name}
             </h6>
 
-            <Link href="/help" className="hover:underline text-sm">
+            <Link href="/help" className="text-sm hover:underline">
               Help and Support
             </Link>
 
@@ -44,14 +45,14 @@ export default function AnnouncementBar() {
               />}
           </div>
         ) : (
-          <div className="hidden lg:flex items-center space-x-4">
-            <Link href="/login" className="hover:underline text-sm">
+          <div className="items-center hidden space-x-4 lg:flex">
+            <Link href="/login" className="text-sm hover:underline">
               Login
             </Link>
-            <Link href="/signup" className="hover:underline text-sm">
+            <Link href="/signup" className="text-sm hover:underline">
               Signup
             </Link>
-            <Link href="/help" className="hover:underline text-sm">
+            <Link href="/help" className="text-sm hover:underline">
               Help and Support
             </Link>
           </div>

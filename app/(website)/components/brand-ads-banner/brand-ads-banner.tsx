@@ -16,12 +16,11 @@ const BrandAdsBanner: React.FunctionComponent = () => {
 
     const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Single%20Banner`)
 
-    console.log(data, "banner brands")
     return (
         <div className='padding'>
             {
                 loading ?
-                    (<div className='h-60 flex w-full justify-center items-center'>
+                    (<div className='flex items-center justify-center w-full h-60'>
                         <p className='text-gray'>
                             Loading Brand Ads Banner...
                         </p>
@@ -30,8 +29,8 @@ const BrandAdsBanner: React.FunctionComponent = () => {
                     ) :
                     error ?
                         (
-                            <div className='h-60 flex flex-col w-full justify-center items-center'>
-                                <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                            <div className='flex flex-col items-center justify-center w-full h-60'>
+                                <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
                                 <p className='text-red'>
                                     Error Fetching Brand Ads Banners !
                                 </p>
@@ -39,8 +38,8 @@ const BrandAdsBanner: React.FunctionComponent = () => {
                         ) :
                         data?.length === 0 ?
                             (
-                                <div className='h-60 flex flex-col w-full justify-center items-center'>
-                                    <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                                <div className='flex flex-col items-center justify-center w-full h-60'>
+                                    <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
                                     <p className='text-red'>
                                         No Brand Ads Banners Found !
                                     </p>
@@ -53,7 +52,7 @@ const BrandAdsBanner: React.FunctionComponent = () => {
                                             data?.map((banner, index) => (
                                                 <CarouselItem
                                                     key={index}
-                                                    className='flex justify-center items-center'
+                                                    className='flex items-center justify-center'
                                                 >
                                                     <div
                                                         className="h-52 w-[325px] sm:w-full sm:h-60 md:h-80 lg:h-[563px] rounded-xl shadow-md"

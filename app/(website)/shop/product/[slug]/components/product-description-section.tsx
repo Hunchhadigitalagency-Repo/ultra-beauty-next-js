@@ -138,9 +138,8 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     <div className="flex flex-col justify-start w-full space-y-8 ">
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
-          <h1 className="mb-2 text-xs font-poppins
-           font-medium text-gray-500 md:text-xl xl:text-md">
-            {product.brand.name}
+          <h1 className="mb-2 text-xs font-medium text-gray-500 font-poppins md:text-xl xl:text-md">
+            {product.brand.brand_name}
           </h1>
           <div className="flex items-center gap-5">
             <RatingStars rating={product.average_rating} />
@@ -149,7 +148,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
             </span>
           </div>
         </div>
-        <h1 className="text-3xl font-playfair font-bold capitalize line-clamp-2">
+        <h1 className="text-3xl font-bold capitalize font-playfair line-clamp-2">
           {product.name}
         </h1>
         <div>
@@ -196,7 +195,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
           return (
             <div key={attrName} className="flex items-center gap-5 mb-4">
-              <h3 className="font-medium font-poppins text-base lg:text-lg">
+              <h3 className="text-base font-medium font-poppins lg:text-lg">
                 {
                   attrName.charAt(0).toUpperCase() + attrName.slice(1)
                 }
@@ -239,7 +238,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
           }
           {
             discountedPrice && (
-              <div className="flex  items-center gap-10">
+              <div className="flex items-center gap-10">
                 <p className="line-through text-[#7A7A7A] font-medium" >
                   NPR. {product.price.split(".")[0]}
                 </p>

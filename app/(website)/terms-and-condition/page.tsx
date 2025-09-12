@@ -14,7 +14,7 @@ interface TermsConditionResponse {
 
 const TermsAndConditions: React.FunctionComponent = () => {
 
-    const { data, loading, error } = useFetchData<TermsConditionResponse>('terms-conditions');
+    const { data, loading, error } = useFetchData<TermsConditionResponse>('terms-conditions/');
 
     return (
         <section className='padding'>
@@ -25,16 +25,16 @@ const TermsAndConditions: React.FunctionComponent = () => {
             />
             <div className='grid grid-cols-1 gap-10 lg:grid-cols-[70%_30%] mt-5 items-start'>
                 {/* Content */}
-                <div className='w-full order-2 lg:order-1'>
+                <div className='order-2 w-full lg:order-1'>
                     {
                         loading ? (
-                            <div className='h-60 flex w-full justify-center items-center'>
+                            <div className='flex items-center justify-center w-full h-60'>
                                 <p className='text-gray'>
                                     Loading ...
                                 </p>
                             </div>
                         ) : error ? (
-                            <div className='h-60 flex w-full justify-center items-center'>
+                            <div className='flex items-center justify-center w-full h-60'>
                                 <p className='text-red'>
                                     Error while Fetching Terms and Conditions !
                                 </p>
