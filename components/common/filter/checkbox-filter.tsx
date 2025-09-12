@@ -1,12 +1,18 @@
 "use client";
 
+import React, { useEffect } from 'react';
+import { useParams } from 'next/navigation';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useAppDispatch } from '@/redux/hooks';
 import { CheckboxFilterItem } from "./checkbox-filter-item";
+import { toggleCategory } from '@/redux/features/category-slice'
+import { Category } from '@/types/product';
 
 interface FilterOption {
   id: number;
@@ -20,6 +26,7 @@ interface CheckboxFilterProps {
   options: FilterOption[];
   selectedValues: number[];
   onChange: (value: number, checked: boolean) => void;
+  categories?: Category[] | null
 }
 
 export function CheckboxFilter({
@@ -28,7 +35,23 @@ export function CheckboxFilter({
   options,
   selectedValues,
   onChange,
+  categories
 }: CheckboxFilterProps) {
+
+
+  const dispatch = useAppDispatch()
+
+  /* Get category id from url to check when there is dynamic value from route */
+  const params = useParams();
+  const categoryId = params?.id ? Number(params.id) : null;
+
+  useEffect(() => {
+    if (
+      categoryId !== null && categories?.some(category => category.id === categoryId)
+    ) {
+      dispatch(toggleCategory({ id: categoryId, checked: true }));
+    }
+  }, [categoryId, categories, dispatch]);
 
   return (
     <Accordion defaultValue={[id]} type="multiple">
