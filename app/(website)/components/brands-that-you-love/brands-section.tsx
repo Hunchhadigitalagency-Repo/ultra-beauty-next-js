@@ -1,4 +1,5 @@
 "use client";
+
 import BrandsCard from "./brands-card";
 import useFetchData from "@/hooks/use-fetch";
 import React, { useEffect, useState } from "react";
@@ -38,8 +39,12 @@ export interface Brand {
 }
 const BrandsSection: React.FunctionComponent = () => {
 
-  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands/");
+  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands/?is_featured=true");
   const brandDetails = data?.results
+  const noOfBrands = Number(brandDetails?.length)
+
+
+  console.log(noOfBrands, "kati ota xa")
 
   const [api, setApi] = useState<CarouselApi>();
   const [, setCurrent] = useState(0);
@@ -68,7 +73,7 @@ const BrandsSection: React.FunctionComponent = () => {
   }, [api, isHovered]);
 
   return (
-    <section className="padding space-y-4">
+    <section className="space-y-4 padding">
       <div className="flex justify-between gap-4 ">
         <SectionHeader
           title="Featured Brands"
@@ -79,19 +84,19 @@ const BrandsSection: React.FunctionComponent = () => {
       {/* Brand Images section */}
       <div className="relative w-full">
         {loading ? (
-          <div className='h-60 flex w-full justify-center items-center'>
+          <div className='flex items-center justify-center w-full h-60'>
             <p className='text-gray'>
               Loading Featured Brands...
             </p>
           </div>
         ) : error ? (
-          <div className='h-60 flex w-full justify-center items-center'>
+          <div className='flex items-center justify-center w-full h-60'>
             <p className='text-red'>
               Error While Fetching Featured Brands
             </p>
           </div>
         ) : data?.results.length === 0 ? (
-          <div className='h-60 flex w-full justify-center items-center'>
+          <div className='flex items-center justify-center w-full h-60'>
             <p className='text-red'>
               No Brands found
             </p>
@@ -101,11 +106,11 @@ const BrandsSection: React.FunctionComponent = () => {
             opts={{ align: "start", loop: true }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="mt-1 -ml-4">
               {brandDetails?.map((brand, index) => (
                 <CarouselItem
                   key={index}
-                  className="basis-[45%]  pl-4 sm:basis-1/2 md:basis-[32%] lg:basis-1/4"
+                  className={`${noOfBrands && noOfBrands <= 6 ? `basis-1/2 sm:basis-[25%] md:basis-[33%] lg:basis-1/${noOfBrands}` : 'basis-1/2 sm:basis-[25%] md:basis-[33%] xl:basis-[25%]'}`}
                 >
                   <BrandsCard image={brand.brand_image} />
                 </CarouselItem>

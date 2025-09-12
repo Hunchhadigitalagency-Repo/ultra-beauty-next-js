@@ -123,7 +123,7 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
             <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
-              <li>
+              <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/">
                   Home
                 </Link>
@@ -131,8 +131,8 @@ export default function Navbar() {
               <li className="flex items-center h-full" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
                 onMouseLeave={handleCategoryLeave}
               >
-                <button className="flex items-center justify-center gap-1 cursor-pointer" >
-                  <p className="line-clamp-1">Shop by Category</p>
+                <button className="flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary" >
+                  <p className="transition-all duration-200 line-clamp-1 ">Shop by Category</p>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible
                     ? "rotate-180"
                     : ""
@@ -151,7 +151,7 @@ export default function Navbar() {
                       <div className="border-t shadow-xl padding shadow-bottom">
                         <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
                           <Link href="/shop"
-                            className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                            className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
                             onClick={() => setIsDropdownVisible(false)}
                           >
                             <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
@@ -160,8 +160,8 @@ export default function Navbar() {
                             dropdownCategoryData?.map((individualDropdownCategory) => (
                               <Link
                                 key={individualDropdownCategory.id}
-                                href={`/ ${individualDropdownCategory.name.toLowerCase()} `}
-                                className='flex items-center justify-center transition-all duration-200 border rounded-lg hover:bg-secondary hover:text-primary hover:border-primary'
+                                href={`/shop/${individualDropdownCategory.id} `}
+                                className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
                               >
                                 <p className="text-sm whitespace-nowrap font-poppins">
                                   {individualDropdownCategory.name}
@@ -176,13 +176,13 @@ export default function Navbar() {
                 }
 
               </li>
-              <li>
+              <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/blogs">Blogs</Link>
               </li>
-              <li>
+              <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/about">About Us</Link>
               </li>
-              <li>
+              <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/contact">Contact Us</Link>
               </li>
             </ul>

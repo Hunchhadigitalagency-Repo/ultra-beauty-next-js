@@ -90,7 +90,7 @@ const AllProducts = () => {
               </div>
             }
             endMessage={
-              <p className="text-center text-sm text-muted-foreground mt-4">
+              <p className="mt-4 text-sm text-center text-muted-foreground">
                 You’ve reached the end!
               </p>
             }
@@ -103,7 +103,7 @@ const AllProducts = () => {
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
-                  brand={product.brand.name}
+                  brand={product.brand.brand_name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

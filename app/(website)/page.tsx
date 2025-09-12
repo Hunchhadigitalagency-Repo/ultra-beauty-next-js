@@ -16,11 +16,12 @@ import FeaturedProductCategories from "./components/featured-categories/featured
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white space-y-4">
+    <main className="min-h-screen space-y-4 bg-white">
       <HeroSection />
       <CategorySection />
       <OffersSection />
       <BeautyBanner />
+      <BrandsCard />
       <TrendingSection />
       <BrandAdsBanner />
       <FeaturedProductCategories />
@@ -28,7 +29,6 @@ export default function HomePage() {
       <PromotionalCarousel />
       <FeaturedSection />
       <MermaidBanner />
-      <BrandsCard />
       {/* <PromoVideoSection /> */}
       <Blogs />
     </main>

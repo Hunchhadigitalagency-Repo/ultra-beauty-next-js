@@ -19,7 +19,7 @@ const FeaturedSection = () => {
   const { data: featuredProducts, loading, error } = useFetchData<FeaturedProductResponse[]>(`featuredproduct/`);
 
   return (
-    <section className="padding space-y-4">
+    <section className="space-y-4 padding">
       <div className="flex justify-between gap-4 ">
         <SectionHeader
           title="Featured Products"
@@ -32,23 +32,23 @@ const FeaturedSection = () => {
         {
           loading ?
             (
-              <div className='h-60 flex w-full justify-center items-center'>
+              <div className='flex items-center justify-center w-full h-60'>
                 <p className='text-gray'>
                   Loading Featured Product...
                 </p>
               </div>
             ) : error ?
               (
-                <div className='h-60 flex flex-col w-full justify-center items-center'>
-                  <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                <div className='flex flex-col items-center justify-center w-full h-60'>
+                  <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
                   <p className='text-red'>
                     Error Fetching Featured Products !
                   </p>
                 </div>
               ) : featuredProducts?.length === 0 ?
                 (
-                  <div className='h-60 flex flex-col w-full justify-center items-center'>
-                    <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
+                  <div className='flex flex-col items-center justify-center w-full h-60'>
+                    <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
                     <p className='text-red'>
                       No Featured Products Found !
                     </p>
@@ -64,7 +64,7 @@ const FeaturedSection = () => {
                             className="basis-[60%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3 ">
                             <FeaturedProductCard
                               image={featuredProduct?.images[0]?.file}
-                              title={featuredProduct?.brand?.name}
+                              title={featuredProduct?.brand?.brand_name}
                               desc={featuredProduct?.name}
                             />
                           </CarouselItem>

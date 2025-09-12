@@ -30,8 +30,8 @@ const CategorySection: React.FunctionComponent = () => {
   );
 
   return (
-    <section className="padding space-y-4">
-      <div className="flex justify-between items-center gap-4">
+    <section className="space-y-4 padding">
+      <div className="flex items-center justify-between gap-4">
         <SectionHeader
           className="max-w-[60%] sm:max-w-full"
           title="The Category"
@@ -42,19 +42,19 @@ const CategorySection: React.FunctionComponent = () => {
       <div className="relative">
         {
           loading ? (
-            <div className='h-60 flex w-full justify-center items-center'>
+            <div className='flex items-center justify-center w-full h-60'>
               <p className='text-gray'>
                 Loading Categories...
               </p>
             </div>
           ) : error ? (
-            <div className='h-60 flex w-full justify-center items-center'>
+            <div className='flex items-center justify-center w-full h-60'>
               <p className='text-red'>
                 Error While Fetching Categories
               </p>
             </div>
           ) : data?.length === 0 ? (
-            <p className="text-center text-muted-foreground text-sm">
+            <p className="text-sm text-center text-muted-foreground">
               No Categories found
             </p>
           ) : (
@@ -76,8 +76,8 @@ const CategorySection: React.FunctionComponent = () => {
               </CarouselContent>
 
               {/* Navigation Arrows */}
-              <CarouselPrevious className=" hidden lg:flex absolute -left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
-              <CarouselNext className="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
+              <CarouselPrevious className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
+              <CarouselNext className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
             </Carousel>
           )
         }

@@ -1,6 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import useFetchData from '@/hooks/use-fetch';
 import Newsletter from '../newsletter/newsletter';
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { SocialLinkResponse } from '@/types/social-contact';
 
 const Footer: React.FC = () => {
   const SHOP_LINKS = [
@@ -14,7 +18,6 @@ const Footer: React.FC = () => {
 
   const ABOUT_LINKS = [
     { name: "WHO WE ARE?", href: "/about" },
-    { name: "CUSTOMER REVIEW", href: "/" },
     { name: "CAREER", href: "/career" },
     { name: "BLOGS", href: "/blogs" },
     { name: "TERMS & CONDITION", href: "/terms-and-condition" },
@@ -22,12 +25,12 @@ const Footer: React.FC = () => {
   ];
 
   const HELP_LINKS = [
-    { name: "WHERE TO BUY", href: "/" },
-    { name: "SHIPPING AND PAYMENT", href: "/" },
-    { name: "RETURN AND REFUND", href: "/" },
     { name: "FAQ", href: "/help" },
     { name: "HELP AND SUPPORT", href: "/help" },
   ];
+
+
+  const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown');
 
   return (
     <footer className="relative h-fit bg-[#161616] text-white padding">
@@ -35,9 +38,9 @@ const Footer: React.FC = () => {
       {/* Footer Content */}
       <div className="flex flex-col pt-10 pb-10 sm:pb-8 md:pb-0">
         {/* News Letter */}
-        <div className=' bg-inherit mb-10 gap-4 lg:gap-0 flex flex-col lg:flex-row lg:justify-between'>
+        <div className='flex flex-col gap-4 mb-14 bg-inherit lg:gap-0 lg:flex-row lg:justify-between'>
           <div>
-            <h1 className='text-2xl md:text-xl lg:text-5xl font-semibold'>
+            <h1 className='text-2xl font-semibold md:text-xl lg:text-5xl'>
               Where Elegance Meets Everyday Beauty
             </h1>
           </div>
@@ -46,21 +49,21 @@ const Footer: React.FC = () => {
           </div>
         </div>
         {/* Mobile Layout */}
-        <div className="block lg:hidden space-y-8">
+        <div className="block space-y-8 lg:hidden">
           <div className="grid grid-cols-2 gap-6">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Useful Links */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">SHOP</h3>
+                <h3 className="text-lg font-semibold text-white">Shop</h3>
                 <ul className="space-y-3">
                   {
                     SHOP_LINKS.map((link) => (
                       <li key={link.name} className="flex items-center space-x-2">
-                        {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                        {/* <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-600"></span> */}
                         <a
                           href={link.href}
-                          className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                          className="text-sm text-gray-300 transition-colors duration-200 hover:text-amber-400"
                         >
                           {link.name}
                         </a>
@@ -80,10 +83,10 @@ const Footer: React.FC = () => {
                   {
                     ABOUT_LINKS.map((link) => (
                       <li key={link.name} className="flex items-center space-x-2">
-                        {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                        {/* <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-600"></span> */}
                         <a
                           href={link.href}
-                          className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                          className="text-sm text-gray-300 transition-colors duration-200 hover:text-amber-400"
                         >
                           {link.name}
                         </a>
@@ -99,10 +102,10 @@ const Footer: React.FC = () => {
                 {
                   HELP_LINKS.map((link) => (
                     <li key={link.name} className="flex items-center space-x-2">
-                      {/* <span className="w-2 h-2 bg-amber-600 rounded-full flex-shrink-0"></span> */}
+                      {/* <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-600"></span> */}
                       <a
                         href={link.href}
-                        className="text-gray-300 hover:text-amber-400 transition-colors duration-200 text-sm"
+                        className="text-sm text-gray-300 transition-colors duration-200 hover:text-amber-400"
                       >
                         {link.name}
                       </a>
@@ -116,16 +119,29 @@ const Footer: React.FC = () => {
               <h3 className="text-lg font-semibold text-white">Contact Us</h3>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <MapPin className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm">Kathmandu, Nepal</span>
+                  <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">Kathmandu, Nepal</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm">555555555</span>
+                  <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">555555555</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Mail className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm">bsera@links.com</span>
+                  <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">bsera@links.com</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  {
+                    socialLinks?.map((social, index) => {
+                      return (
+                        <Link href={social.url} key={index}>
+                          <div className='relative w-6 h-6'>
+                            <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
+                          </div>
+                        </Link>
+                      )
+                    })
+                  }
                 </div>
               </div>
             </div>
@@ -135,14 +151,14 @@ const Footer: React.FC = () => {
         <div className="hidden lg:grid lg:grid-cols-4">
           {/* SHOP Links - Desktop */}
           <div className="space-y-6">
-            <h3 className="text-lg font-normal text-gray">SHOP</h3>
+            <h3 className="text-lg font-semibold text-gray">SHOP</h3>
             <ul className="space-y-3">
               {
                 SHOP_LINKS.map((link) => (
                   <li key={link.name} className="flex items-center space-x-2">
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                      className="text-sm text-gray-300 transition-colors duration-200 hover:text-primary"
                     >
                       {link.name}
                     </a>
@@ -160,7 +176,7 @@ const Footer: React.FC = () => {
                   <li key={link.name} className="flex items-center space-x-2">
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                      className="text-sm text-gray-300 transition-colors duration-200 hover:text-primary"
                     >
                       {link.name}
                     </a>
@@ -178,7 +194,7 @@ const Footer: React.FC = () => {
                   <li key={link.name} className="flex items-center space-x-2">
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-primary transition-colors duration-200 text-sm"
+                      className="text-sm text-gray-300 transition-colors duration-200 hover:text-primary"
                     >
                       {link.name}
                     </a>
@@ -192,30 +208,44 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray">Contact Us</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <Mail className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm uppercase">Hello@UltraBeauty.com</span>
+                <Mail className="flex-shrink-0 w-4 h-4 text-primary" />
+                <span className="text-sm text-gray-300 uppercase">Hello@UltraBeauty.com</span>
               </div>
               <div className="flex items-center space-x-3">
-                <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm">BIRTAMOD - 4, JHAPA, KOSHI NEPAL</span>
+                <MapPin className="flex-shrink-0 w-4 h-4 text-primary" />
+                <span className="text-sm text-gray-300">BIRTAMOD - 4, JHAPA, KOSHI NEPAL</span>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-gray-300 text-sm">
+                <Phone className="flex-shrink-0 w-4 h-4 text-primary" />
+                <span className="text-sm text-gray-300">
                   +977-9824386694, 25254568
                 </span>
+              </div>
+              <div className="flex items-center gap-4">
+                {
+                  socialLinks?.map((social, index) => {
+                    return (
+                      <Link href={social.url} key={index}>
+                        <div className='relative w-6 h-6'>
+                          <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
+                        </div>
+                      </Link>
+                    )
+                  })
+                }
               </div>
             </div>
           </div>
         </div>
         {/* Copyright */}
-        <div className="border-t border-gray-700 mt-12 pt-8 pb-8 display-flex flex-col items-center space-y-4">
-          <p className="text-white text-sm md:text-base">
+        <div className="flex-col items-center pt-8 pb-8 space-y-4 border-t-2 border-gray-700 mt-14 display-flex">
+          <p className="text-sm text-white md:text-base">
             EMBRACE THE BEAUTY WITHIN. CAREFULLY CHOSEN PIECES MADE TO ENHANCE YOUR NATURAL GRACE AND DAILY ROUTINE.
           </p>
-          <p className="text-gray-400 text-xs">
-            ALL RIGHT RESERVED ULTRA BEAUTY & CARE
-            DESIGNED AND DEVELOPED BY HUNCHHA DIGITAL
+          <p className="text-xs text-gray-400">
+            ALL RIGHT RESERVED ULTRA BEAUTY & BRAND
+            DESIGNED AND DEVELOPED BY
+            <Link href="https://hunchhadigital.com/" className='hover:underline'> HUNCHHA DIGITAL</Link>
           </p>
         </div>
       </div>
