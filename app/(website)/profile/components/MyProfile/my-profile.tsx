@@ -28,7 +28,7 @@ const MyProfile: React.FunctionComponent = () => {
     data: orderData,
     loading: isLoading,
     error: isError
-  } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/?page=${currentpage}/`, true)
+  } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/?page=${currentpage}`, true)
 
   const filtered_Order_Data = orderData?.results?.filter(
     (order) => order.order_details.length > 0
