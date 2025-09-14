@@ -1,8 +1,6 @@
 "use client";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { loginFormSchema } from "@/schemas/auth/auth-schema";
+import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -11,16 +9,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { IoIosMail } from "react-icons/io";
-import { FcGoogle } from "react-icons/fc";
-import { SiFacebook } from "react-icons/si";
-import Link from "next/link";
+import { toast } from "sonner";
 import { useState } from "react";
+import { EUserTypes } from "@/types";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { IoIosMail } from "react-icons/io";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/redux/hooks";
-import { googleLogin, login } from "@/lib/api/auth/auth-api";
+import { Button } from "@/components/ui/button";
 import {
   setAccessToken,
   setIsLoggedIn,
@@ -28,10 +26,11 @@ import {
   setRefreshToken,
   setUserType,
 } from "@/redux/features/authentication-slice";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useGoogleLogin } from "@react-oauth/google";
-import { EUserTypes } from "@/types";
+import { googleLogin, login } from "@/lib/api/auth/auth-api";
+import { loginFormSchema } from "@/schemas/auth/auth-schema";
 import ButtonLoader from "@/components/common/loader/button-loader";
 
 type LoginFormValue = z.infer<typeof loginFormSchema>;
@@ -86,11 +85,12 @@ export default function UserLoginForm() {
   };
 
   const handleGoogleLogin = useGoogleLogin({
+    flow: "implicit",
     onSuccess: async (tokenResponse) => {
       try {
         setLoading(true);
         const res = await googleLogin({
-          access_token: tokenResponse.access_token,
+          access_token: tokenResponse.access_token
         });
 
         if (res.status === 200) {
@@ -124,7 +124,6 @@ export default function UserLoginForm() {
         description: "Could not authenticate with Google.",
       });
     },
-    flow: "implicit",
   });
 
   return (
@@ -249,13 +248,6 @@ export default function UserLoginForm() {
         >
           <FcGoogle className="w-8 h-8" />
           Continue With Google
-        </div>
-        <div
-          className="flex mt-4 border border-gray-300 rounded-full items-center justify-center gap-4 font-medium py-1 cursor-pointer"
-          onClick={() => handleGoogleLogin()}
-        >
-          <SiFacebook className="w-7 h-7 text-[#1877F2]" />
-          Continue With Facebook
         </div>
         <div className="flex gap-2 text-accent-foreground text-sm my-4">
           Don&apos;t Have an Account?

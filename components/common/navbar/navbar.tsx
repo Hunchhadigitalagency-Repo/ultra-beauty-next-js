@@ -142,13 +142,13 @@ export default function Navbar() {
                 {/* Mega Menu */}
                 {
                   isDropdownVisible &&
-                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800">
+                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800  h-[88vh]">
                     <div
-                      className="bg-white"
+                      className="bg-white h-full shadow-xl shadow-bottom"
                       ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
                     >
                       {/* Categories Grid */}
-                      <div className="border-t shadow-xl padding shadow-bottom">
+                      <div className="border-t padding">
                         <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
                           <Link href="/shop"
                             className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'

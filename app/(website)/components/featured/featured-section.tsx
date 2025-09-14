@@ -1,14 +1,20 @@
 "use client"
 
 import React from 'react';
+import Link from 'next/link';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import { Result } from '@/types/product';
 import { AlertCircle } from "lucide-react";
 import useFetchData from '@/hooks/use-fetch';
 import FeaturedProductCard from './featured-product-card';
 import LinkText from '@/components/common/header/link-text';
 import SectionHeader from '@/components/common/header/section-header';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-
 
 interface FeaturedProductResponse extends Result {
   id: number
@@ -56,21 +62,25 @@ const FeaturedSection = () => {
                 ) :
                 (
                   <Carousel>
-                    <CarouselContent className='-ml-2 md:-ml-4 lg:-ml-8'>
+                    <CarouselContent>
                       {
                         featuredProducts?.map((featuredProduct, index) => (
                           <CarouselItem
                             key={index}
                             className="basis-[60%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3 ">
-                            <FeaturedProductCard
-                              image={featuredProduct?.images[0]?.file}
-                              title={featuredProduct?.brand?.brand_name}
-                              desc={featuredProduct?.name}
-                            />
+                            <Link href={`/shop/product/${featuredProduct?.slug_name}`}>
+                              <FeaturedProductCard
+                                image={featuredProduct?.images[0]?.file}
+                                title={featuredProduct?.brand?.brand_name}
+                                desc={featuredProduct?.name}
+                              />
+                            </Link>
                           </CarouselItem>
                         ))
                       }
                     </CarouselContent>
+                    <CarouselPrevious className='ml-10' />
+                    <CarouselNext className='mr-10' />
                   </Carousel>
                 )
         }
