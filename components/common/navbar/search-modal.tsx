@@ -36,11 +36,11 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
 
     const {
         data: products,
-    } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
+    } = useInfiniteFetch<Result>(path || "", "", searchTerm.toString(), "", isLoggedIn);
 
     return (
-        <div className="absolute w-full z-50 top-full right-0 bg-white padding-y shadow-md mt-0 lg:mt-4">
-            <div className="w-full flex flex-col gap-4 items-center">
+        <div className="absolute right-0 z-50 w-full mt-0 bg-white shadow-md top-full padding-y lg:mt-4">
+            <div className="flex flex-col items-center w-full gap-4">
                 {/* Search Box */}
                 <SearchBox
                     placeholder="Find the Product of Your Choice"
@@ -57,7 +57,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                     <li
                                         key={index}
 
-                                        className="flex items-center justify-between py-3 px-2 focus:bg-pink-100 rounded-md hover:bg-white cursor-pointer hover:shadow-md focus:outline-none select-none"
+                                        className="flex items-center justify-between px-2 py-3 rounded-md cursor-pointer select-none focus:bg-pink-100 hover:bg-white hover:shadow-md focus:outline-none"
                                     >
                                         <div className="flex items-center gap-1 md:gap-3">
                                             <div className="relative w-12 h-12 md:w-16 md:h-16">
@@ -65,7 +65,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                                     src={item.images[0]?.file}
                                                     alt={item.slug_name}
                                                     fill
-                                                    className="rounded object-cover"
+                                                    className="object-cover rounded"
                                                 />
                                             </div>
                                             <h1 className="text-sm font-medium">{item.name}</h1>
@@ -79,7 +79,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                 ))}
                             </ul>
                         ) : (
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-sm text-gray-500">
                                 No results found
                             </p>
                         )

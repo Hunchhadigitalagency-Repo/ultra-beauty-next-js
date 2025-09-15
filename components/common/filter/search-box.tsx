@@ -48,13 +48,13 @@ const SearchBox = ({
   }, [debouncedValue, dispatch, sendValue]);
 
   const handleClear = () => {
-    dispatch(clearSearchQuery());
     setSearchInput("");
+
+    dispatch(clearSearchQuery());
     if (sendValue) {
       sendValue(""); // also lift cleared value
     }
   };
-
 
   useEffect(() => {
     return () => {
@@ -81,7 +81,7 @@ const SearchBox = ({
         {searchInput ? (
           <Button
             variant="ghost"
-            className="absolute inset-y-0 end-0 hover:bg-transparent hover:text-black pr-3"
+            className="absolute inset-y-0 pr-3 end-0 hover:bg-transparent hover:text-black"
             onClick={handleClear}
           >
             <X className={` ${iconClassName} h-4 w-4`} />

@@ -12,11 +12,11 @@ const MobileFootbar = () => {
         { icon: Home, label: "Home", path: "/" },
         { icon: ShoppingCart, label: "Shop", path: "/shop" },
         { icon: Bell, label: "Alerts", path: "/notifications" },
-        { icon: UserCircle, label: "Profile", path: "/account" },
+        { icon: UserCircle, label: "Profile", path: "/profile" },
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 w-full z-50 bg-primary md:hidden">
+        <nav className="fixed bottom-0 left-0 z-50 w-full bg-primary md:hidden">
             <div className="flex justify-around px-4 py-2">
                 {navItems.map((item) => {
                     const isActive = pathname === item.path;
