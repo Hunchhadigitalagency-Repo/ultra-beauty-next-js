@@ -95,7 +95,6 @@ export default function Navbar() {
     };
   }, []);
 
-
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
     >
@@ -142,9 +141,9 @@ export default function Navbar() {
                 {/* Mega Menu */}
                 {
                   isDropdownVisible &&
-                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800  h-[88vh]">
+                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800 h-[77vh] ">
                     <div
-                      className="bg-white h-full shadow-xl shadow-bottom"
+                      className="h-full overflow-hidden overflow-y-scroll bg-white shadow-xl shadow-bottom scrollbar-hide"
                       ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
                     >
                       {/* Categories Grid */}
@@ -237,7 +236,7 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:text-primary"
+                className="relative hidden md:flex md:items-center md:justify-center hover:text-primary"
                 onClick={() => router.push("/profile")}
               >
                 <CircleUser

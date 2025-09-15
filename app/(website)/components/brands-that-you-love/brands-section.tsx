@@ -43,9 +43,6 @@ const BrandsSection: React.FunctionComponent = () => {
   const brandDetails = data?.results
   const noOfBrands = Number(brandDetails?.length)
 
-
-  console.log(noOfBrands, "kati ota xa")
-
   const [api, setApi] = useState<CarouselApi>();
   const [, setCurrent] = useState(0);
   const [, setCount] = useState(0);
