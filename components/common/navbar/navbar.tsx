@@ -96,12 +96,9 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-secondary"
+    <header className="sticky top-0 z-50 border-b border-gray-200 "
     >
-      <div className="py-2 padding-x">
-
-        {/* Search Popup */}
-        {searchOpen && <SearchModal onClose={() => setSearchOpen(!searchOpen)} />}
+      <div className="py-2 padding-x bg-secondary">
 
         {/* Notification */}
         {showNotification && (
@@ -121,7 +118,7 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
+            <ul className=" relative h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/">
                   Home
@@ -184,6 +181,13 @@ export default function Navbar() {
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/contact">Contact Us</Link>
               </li>
+
+              {/* Search Bar */}
+              {searchOpen &&
+                <div className="absolute z-50 w-full transform -translate-x-1/2 left-1/2 top-2">
+                  <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
+                </div>
+              }
             </ul>
           </nav>
           {/* Right side icons */}
@@ -192,7 +196,7 @@ export default function Navbar() {
               variant="ghost"
               size="icon"
               onClick={() => setSearchOpen(!searchOpen)}
-              className="hover:text-primary md:text-sm"
+              className="hidden lg:block hover:text-primary md:text-sm"
             >
               <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
             </Button>
@@ -260,6 +264,12 @@ export default function Navbar() {
           </div>
         </div>
       </div >
+
+      <div className="relative h-[8vh] py-2 bg-white lg:hidden padding-x">
+        <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
+          <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
+        </div>
+      </div>
     </header >
   );
 }
