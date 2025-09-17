@@ -78,14 +78,14 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
           <X className="w-5 h-5" />
         </Button>
       </div>
-      <div className="flex flex-row items-start gap-4">
-        <div className="flex items-center gap-3 shrink-0">
+      <div className="flex flex-col items-start gap-4 sm:flex-row">
+        <div className="flex items-center w-[80vw] sm:w-auto sm:h-auto h-[50vw] gap-3 shrink-0">
           <Checkbox
             className="w-4 h-4 mt-1 bg-white border-gray-300 md:w-5 md:h-5 "
             checked={cartItem.some(cartItem => cartItem.id === item.id)}
             onCheckedChange={onCheckboxChange}
           />
-          <div className="relative w-[80px] h-[80px] md:w-[110px] md:h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+          <div className="relative w-full h-full sm:w-[80px] sm:h-[80px] md:w-[110px] md:h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
             <Image
               src={item.product.images[0].file || "/placeholder.svg"}
               alt={item.product.name}
@@ -106,7 +106,7 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
             }
           </div>
 
-          <div className="">
+          <div >
             <h3 className="mb-1 text-base font-semibold text-gray-900 font-playfair lg:text-2xl">
               {item.product.name}
             </h3>

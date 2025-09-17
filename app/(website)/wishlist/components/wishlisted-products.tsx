@@ -57,7 +57,7 @@ const WishlistedProducts = () => {
   if (!isAuthenticated) {
     return (
       <section className="padding">
-        <div className='h-60 flex w-full justify-center items-center'>
+        <div className='flex items-center justify-center w-full h-60'>
           <span className='text-red'>
             Please login first to view your wishlist.
           </span>
@@ -69,6 +69,7 @@ const WishlistedProducts = () => {
   const handleClearAllWishlist = () => {
     deleteAllWishlist().then(refetch)
     dispatch(setWishlistCount(0))
+    setWishlistUpdates({});
   }
 
   const handleWishListClick = async (slug: string | undefined, isWishlisted: boolean | undefined) => {
@@ -81,6 +82,7 @@ const WishlistedProducts = () => {
     toggleWishlist(slug,
       isWishlisted,
       isAuthenticated)
+
   };
 
   return (
@@ -96,7 +98,7 @@ const WishlistedProducts = () => {
             wishListData && wishListData.length > 0 && (
               <button
                 onClick={handleClearAllWishlist}
-                className="bg-[#EFEFEF] h-10 px-7 rounded-full cursor-pointer"
+                className="bg-[#EFEFEF] text-sm h-10  px-4 sm:text-sm sm:px-7 rounded-full cursor-pointer"
               >
                 Clear All Wishlist
               </button>
@@ -112,23 +114,20 @@ const WishlistedProducts = () => {
                 <WishlistCardSkeleton />
               </React.Fragment>
             ) : wishListData && wishListData.length > 0 ? (
-              wishListData?.map((product) => (
-                <Link
-                  key={product.slug_name}
-                  href={`/shop/product/${product.slug_name}`}>
-                  <WishlistCard
-                    image={product.image}
-                    name={product.name}
-                    description={product.general_description || ""}
-                    rating={product.average_rating}
-                    previousPrice={product.discount_percentage ? product.price : undefined}
-                    price={calculateDiscountedPrice(product.price, product.discount_percentage) || product.price}
-                    discountTag={product.discount_percentage || ""}
-                    slug={product.slug_name}
-                    deleteWishlist={deleteWishlistClient}
-                  />
-                </Link>
-
+              wishListData?.map((product, index) => (
+                <WishlistCard
+                  key={index}
+                  image={product.image}
+                  name={product.name}
+                  description={product.general_description || ""}
+                  rating={product.average_rating}
+                  previousPrice={product.discount_percentage ? product.price : undefined}
+                  price={calculateDiscountedPrice(product.price, product.discount_percentage) || product.price}
+                  discountTag={product.discount_percentage || ""}
+                  slug={product.slug_name}
+                  deleteWishlist={deleteWishlistClient}
+                  setWishlistUpdates={setWishlistUpdates}
+                />
               ))
             ) : (
               <p className="text-sm text-center pt-51 text-muted-foreground">
