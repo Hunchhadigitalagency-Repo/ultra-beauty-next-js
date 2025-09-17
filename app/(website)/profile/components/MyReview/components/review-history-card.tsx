@@ -11,13 +11,15 @@ const ReviewHistoryCard: React.FunctionComponent<ReviewHistoryCardProps> = ({ im
             <div className='flex gap-5'>
                 <div className=' flex justify-center items-center'>
                     <div className='w-14 h-14 md:w-20 md:h-20 relative shrink-0'>
-                        <Image
-                            layout='fill'
-                            src={image}
-                            alt='Product Image'
-                            className='rounded-sm object-cover'
+                        {
+                            image && <Image
+                                layout='fill'
+                                src={image}
+                                alt='Product Image'
+                                className='rounded-sm object-cover'
+                            />
+                        }
 
-                        />
                     </div>
                 </div>
                 <div className='flex-1 flex flex-col gap-2'>
