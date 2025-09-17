@@ -242,7 +242,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
                 <p className="line-through text-[#7A7A7A] font-medium" >
                   NPR. {product.price.split(".")[0]}
                 </p>
-                <button className="px-2 py-0.5 text-xs font-medium text-white bg-primary rounded-full md:px-4 md:py-2 xl:text-sm font-poppins">
+                <button className="px-1 py-0.5 text-xs font-medium text-white bg-primary rounded-full md:px-4 md:py-2 xl:text-sm font-poppins hidden sm:block">
                   {product.discount_percentage.split(".")[0]}% OFF
                 </button>
               </div>
@@ -252,7 +252,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
         {quantity !== null && (
           <Button
-            className={`w-28 ${quantity > 0 ? "bg-primary" : "bg-gray"
+            className={`hidden sm:block w-18 ${quantity > 0 ? "bg-primary" : "bg-gray"
               }`}
           >
             {quantity > 0 ? "Available" : "Not Available"}
@@ -299,10 +299,10 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               C.O.D
             </span>
           </div>
-          <Image src={globalIime.src} alt="IME" width={60} height={46} className="rounded-full " />
-          <Image src={mastercard.src} alt="masterCard" width={60} height={36} className="rounded-full " />
+          <Image src={globalIime.src} alt="IME" width={60} height={46} className="rounded-full hidden sm:block" />
+          <Image src={mastercard.src} alt="masterCard" width={60} height={36} className="rounded-full hidden sm:block " />
           <Image src={esewa.src} alt="eSewa" width={36} height={36} className="rounded-full" />
-          <Image src={khalti.src} alt="Khalti" width={36} height={36} className="rounded-full" />
+          <Image src={khalti.src} alt="Khalti" width={36} height={36} className="rounded-full " />
         </div>
       </div>
       {/*Bundle Product Section */}

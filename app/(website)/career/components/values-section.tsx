@@ -31,18 +31,18 @@ const VALUES = [
 
 const ValuesSection: React.FunctionComponent = () => {
     return (
-        <section className="p-5 md:p-10 bg-secondary flex flex-col gap-5">
+        <section className="p-2 sm:p-5 md:p-10 bg-secondary flex flex-col gap-5">
             <SectionHeader
                 title="Values That Shape Us"
                 description="What Drives Us"
                 titleClassName="text-primary"
             />
 
-            <div className="w-full grid grid-cols-2 gap-5 md:gap-8 lg:gap-10 xl:gap-16 md:grid-cols-2 lg:grid-cols-4">
+            <div className="w-full grid grid-cols-2 gap-2 md:gap-5 lg:gap-6 xl:gap-8 md:grid-cols-2 lg:grid-cols-4">
                 {VALUES.map(({ id, title, description, icon: Icon }) => (
                     <div
                         key={id}
-                        className="w-full bg-white rounded-sm p-5 xl:p-8 flex flex-col items-start gap-3"
+                        className="w-full bg-white rounded-sm p-5 xl:p-8 flex flex-col items-start gap-3 overflow-hidden "
                     >
                         <div className="bg-secondary p-4 rounded-md self-start">
                             <Icon className="w-6 h-6 text-primary" />
@@ -50,7 +50,7 @@ const ValuesSection: React.FunctionComponent = () => {
                         <SectionHeader
                             title={title}
                             description={description}
-                            titleClassName="text-primary text-lg xl:text-3xl"
+                            titleClassName="text-base text-primary sm:xl:text-3xl"
                         />
                     </div>
                 ))}
