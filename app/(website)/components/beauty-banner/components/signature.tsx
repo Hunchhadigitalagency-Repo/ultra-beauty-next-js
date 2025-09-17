@@ -2,6 +2,7 @@ import React from "react";
 import { FaRegStar } from 'react-icons/fa';
 import { BiCollection } from 'react-icons/bi';
 import { GiBottleVapors } from 'react-icons/gi';
+import Link from "next/link";
 
 const SignatureSection: React.FunctionComponent = () => {
   return (
@@ -64,9 +65,11 @@ const SignatureSection: React.FunctionComponent = () => {
         </li>
       </ul>
 
-      <button className="bg-primary text-white py-2 rounded-full text-sm md:text-base font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
-        SHOP NOW →
-      </button>
+      <Link href="/shop">
+        <button className="cursor-pointer bg-primary text-white py-2 rounded-full text-sm md:text-base font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
+          SHOP NOW →
+        </button>
+      </Link>
     </div>
   );
 };

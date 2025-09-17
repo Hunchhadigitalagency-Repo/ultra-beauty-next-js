@@ -118,7 +118,7 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <ul className=" relative h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
+            <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/">
                   Home
@@ -191,7 +191,7 @@ export default function Navbar() {
             </ul>
           </nav>
           {/* Right side icons */}
-          <div className="flex items-center  gap-1 md:gap-1 xl:gap-4">
+          <div className="flex items-center gap-1 md:gap-1 xl:gap-4">
             <Button
               variant="ghost"
               size="icon"
