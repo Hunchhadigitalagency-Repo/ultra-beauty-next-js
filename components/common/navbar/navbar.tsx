@@ -188,7 +188,7 @@ export default function Navbar() {
             </ul>
           </nav>
           {/* Right side icons */}
-          <div className="flex items-center gap-4 md:gap-1 xl:gap-4">
+          <div className="flex items-center  gap-1 md:gap-1 xl:gap-4">
             <Button
               variant="ghost"
               size="icon"
@@ -237,11 +237,11 @@ export default function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative hover:text-primary"
+                className="hidden md:flex  relative hover:text-primary "
                 onClick={() => router.push("/profile")}
               >
                 <CircleUser
-                  className={`size-5 md:size-4 xl:size-5 ${isActive("/profile") && "text-primary"
+                  className={` size-5 md:size-4 xl:size-5 ${isActive("/profile") && "text-primary"
                     }`}
                 />
               </Button>
