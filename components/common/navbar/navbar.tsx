@@ -117,7 +117,7 @@ export default function Navbar() {
             </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="items-center justify-center hidden w-full h-full lg:flex">
+          <nav className="relative items-center justify-center hidden w-full h-full lg:flex">
             <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/">
@@ -265,7 +265,7 @@ export default function Navbar() {
         </div>
       </div >
 
-      <div className="relative h-[8vh] py-2 bg-white lg:hidden padding-x">
+      <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">
         <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
           <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
         </div>

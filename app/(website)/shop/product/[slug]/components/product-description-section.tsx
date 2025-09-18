@@ -6,8 +6,6 @@ import khalti from "@/assets/khalti.png";
 import coin from "@/assets/coin-dollar.png";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import globalIime from "@/assets/globalIme.png";
-import mastercard from "@/assets/mastercard.png";
 import { addToCart } from "@/lib/api/cart/cart-apis";
 import { getOptions } from "@/utils/single-product-utility";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -34,8 +32,6 @@ import {
   FaXTwitter,
   FaFacebookMessenger
 } from "react-icons/fa6";
-
-
 
 
 const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product }) => {
@@ -228,7 +224,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       }
 
       {/* Product Price */}
-      <div className="flex items-center justify-between w-full pt-6">
+      <div className="flex flex-col items-start justify-between w-full gap-4 pt-2 pl-3 sm:flex-row sm:items-center sm:pl-0 sm:pt-6">
         <div className="flex flex-col">
           {
             discountedPrice !== null &&
@@ -242,7 +238,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
                 <p className="line-through text-[#7A7A7A] font-medium" >
                   NPR. {product.price.split(".")[0]}
                 </p>
-                <button className="px-1 py-0.5 text-xs font-medium text-white bg-primary rounded-full md:px-4 md:py-2 xl:text-sm font-poppins hidden sm:block">
+                <button className="px-2 py-1 text-xs font-medium text-white rounded-full xl:ml-8 bg-primary md:px-4 md:py-2 xl:text-sm font-poppins ">
                   {product.discount_percentage.split(".")[0]}% OFF
                 </button>
               </div>
@@ -250,19 +246,21 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
           }
         </div>
 
-        {quantity !== null && (
-          <Button
-            className={`hidden sm:block w-18 ${quantity > 0 ? "bg-primary" : "bg-gray"
-              }`}
-          >
-            {quantity > 0 ? "Available" : "Not Available"}
-          </Button>
-        )}
-        <QuantityRow
-          value={quantity}
-          onDecrease={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
-          onIncrease={() => setQuantity((prev) => (prev + 1))}
-        />
+        <div className="flex flex-row-reverse gap-8 sm:flex-row sm:gap-14 lg:gap-4 xl:gap-8 ">
+          {quantity !== null && (
+            <Button
+              className={` text-xs sm:text-sm w-17 sm:test-md xl:text-base sm:w-20 xl:w-24 ${quantity > 0 ? "bg-primary" : "bg-gray"
+                }`}
+            >
+              {quantity > 0 ? "Available" : "Not Available"}
+            </Button>
+          )}
+          <QuantityRow
+            value={quantity}
+            onDecrease={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+            onIncrease={() => setQuantity((prev) => (prev + 1))}
+          />
+        </div>
 
       </div>
       {/* ADD To Bag button */}
@@ -288,21 +286,25 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         </div>
       </div>
       {/* Payment Section */}
-      <div className="flex items-center justify-between bg-[#EEEEEE] px-4 rounded-sm">
+      <div className="flex items-center justify-between bg-[#EEEEEE] px-4 py-1 rounded-sm">
         <span className="text-sm font-medium text-foreground font-poppins">
           We Accept
         </span>
-        <div className="flex items-center gap-2 md:gap-7">
+        <div className="flex items-center gap-4 sm:gap-6 md:gap-7">
           <div className="flex flex-col items-center justify-center">
-            <Image src={coin.src} alt="COD" width={26} height={36} className="rounded-full " />
-            <span className="text-sm font-bold font-poppins">
+            <div className="relative w-6 h-6 sm:w-8 sm:h-8">
+              <Image src={coin.src} alt="COD" fill className="rounded-full " />
+            </div>
+            <span className="text-xs font-bold sm:text-sm font-poppins">
               C.O.D
             </span>
           </div>
-          <Image src={globalIime.src} alt="IME" width={60} height={46} className="rounded-full hidden sm:block" />
-          <Image src={mastercard.src} alt="masterCard" width={60} height={36} className="rounded-full hidden sm:block " />
-          <Image src={esewa.src} alt="eSewa" width={36} height={36} className="rounded-full" />
-          <Image src={khalti.src} alt="Khalti" width={36} height={36} className="rounded-full " />
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+            <Image src={esewa.src} alt="esewa" fill className="rounded-full " />
+          </div>
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+            <Image src={khalti.src} alt="Khalti" fill className="rounded-full " />
+          </div>
         </div>
       </div>
       {/*Bundle Product Section */}
