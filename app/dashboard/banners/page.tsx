@@ -1,14 +1,14 @@
 "use client";
+import React from "react";
+import { IBanner } from "@/types/banner";
+import { useAppDispatch } from "@/redux/hooks";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { BannerConstant } from "./components/banner-constant";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
-
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
-import { IBanner } from "@/types/banner";
-import { BannerConstant } from "./components/banner-constant";
+
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const BannerPage = () => {
     useInfiniteFetch<IBanner>("/cms/banners/");
 
   return (
-    <main className="space-y-4 bg-white p-4">
+    <main className="p-4 space-y-4 bg-white">
       <PageHeader
         type="Banners"
         totalItems={count}

@@ -30,7 +30,7 @@ export interface IBlog {
   recommended_products: any[];
 }
 
-export interface BlogsList{
+export interface BlogsList {
   links: links;
   count: number;
   total_pages: number;
@@ -56,6 +56,7 @@ export interface INotification {
   title: string;
   description: string;
   link: string;
+  is_active: boolean;
 }
 
 export interface IExpertRecommendation {
