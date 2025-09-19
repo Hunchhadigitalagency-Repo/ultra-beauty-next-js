@@ -25,6 +25,14 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
 import Image from "next/image";
 
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "Shop by Category", isDropdown: true },
+  { name: "Blogs", href: "/blogs" },
+  { name: "About Us", href: "/about" },
+  { name: "Contact Us", href: "/contact" },
+];
+
 export default function Navbar() {
 
   const router = useRouter();
@@ -119,40 +127,51 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <ul className="relative h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
-              <li className="transition-all duration-200 hover:text-primary">
-                <Link href="/">
-                  Home
-                </Link>
-              </li>
-              <li className="flex items-center h-full" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
-                onMouseLeave={handleCategoryLeave}
-              >
-                <button className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${isDropdownVisible ? "text-primary" : ""}`} >
-                  <p className="transition-all duration-200 line-clamp-1 ">Shop by Category</p>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible
-                    ? "rotate-180"
-                    : ""
-                    }`} />
-                </button>
-              </li>
-              <li className="transition-all duration-200 hover:text-primary">
-                <Link href="/blogs">Blogs</Link>
-              </li>
-              <li className="transition-all duration-200 hover:text-primary">
-                <Link href="/about">About Us</Link>
-              </li>
-              <li className="transition-all duration-200 hover:text-primary">
-                <Link href="/contact">Contact Us</Link>
-              </li>
-
+            <div className="relative h-full w-full">
+              {
+                !searchOpen &&
+                <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
+                  {navItems.map((item, index) => (
+                    <li
+                      key={index}
+                      className={`transition-all duration-200 hover:text-primary ${item.isDropdown ? "flex items-center h-full" : ""
+                        }`}
+                      ref={item.isDropdown ? shopByCategoryRef : undefined}
+                      onMouseEnter={item.isDropdown ? handleCategoryEnter : undefined}
+                      onMouseLeave={item.isDropdown ? handleCategoryLeave : undefined}
+                    >
+                      {item.isDropdown ? (
+                        <button
+                          className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${isDropdownVisible ? "text-primary" : ""
+                            }`}
+                        >
+                          <p className="transition-all duration-200 line-clamp-1 text-xs xl:text-sm">
+                            {item.name}
+                          </p>
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
+                              }`}
+                          />
+                        </button>
+                      ) : (
+                        <Link
+                          className="text-xs xl:text-sm"
+                          href={item.href!}
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              }
               {/* Search Bar */}
               {searchOpen &&
                 <div className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300">
                   <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
                 </div>
               }
-            </ul>
+            </div>
           </nav>
           {/* Right side icons */}
           <div className="flex items-center gap-1 md:gap-1 xl:gap-4">
