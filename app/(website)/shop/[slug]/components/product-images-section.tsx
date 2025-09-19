@@ -6,8 +6,14 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { ProductImagesSectionProps, TimeLeftProps } from "@/types/product";
 
-const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({ images, is_flash_sale, flashEndDate,
-  onToggleWishlist, isWishlisted, is_new }) => {
+const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({
+  images,
+  is_flash_sale,
+  flashEndDate,
+  onToggleWishlist,
+  isWishlisted,
+  is_new
+}) => {
 
   const [timeLeft, setTimeLeft] = useState<TimeLeftProps>({
     hours: 0,
@@ -75,7 +81,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </Badge>
         }
       </div>
-
       {
         images?.length > 1 && (
           <div className="grid grid-cols-4 gap-6 overflow-x-auto md:gap-6">
@@ -99,7 +104,6 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </div>
         )
       }
-
       {/* Flash Sale Badge */}
       {
         flashEndDate &&
