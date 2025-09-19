@@ -65,6 +65,7 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   const shopByCategoryRef = useRef<HTMLLIElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleCategoryEnter = () => {
     setIsDropdownVisible(true);
@@ -83,8 +84,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      //if click is outside the li i.e shopBycategory
-      if (shopByCategoryRef.current && !shopByCategoryRef.current.contains(event.target as Node)) {
+      if (shopByCategoryRef.current && !shopByCategoryRef.current.contains(event.target as Node) &&
+        dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownVisible(false);
       }
     };
@@ -147,7 +148,7 @@ export default function Navbar() {
 
               {/* Search Bar */}
               {searchOpen &&
-                <div className="absolute z-50 w-full transform -translate-x-1/2 left-1/2 top-2 transition-all duration-300">
+                <div className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300">
                   <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
                 </div>
               }
@@ -229,14 +230,20 @@ export default function Navbar() {
         {/* Mega Menu */}
         {
           isDropdownVisible &&
-          <div className="absolute left-0 right-0  z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800 " onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}>
+          <div
+            ref={dropdownRef}
+            className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800"
+            onMouseEnter={handleDropdownEnter}
+            onMouseLeave={handleDropdownLeave}
+          >
             <div
               className="h-full overflow-hidden overflow-y-scroll bg-white shadow-xl shadow-bottom scrollbar-hide"
             >
               {/* Categories Grid */}
               <div className="border-t padding">
                 <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
-                  <Link href="/shop"
+                  <Link
+                    href="/shop"
                     className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
                     onClick={() => setIsDropdownVisible(false)}
                   >
@@ -246,8 +253,9 @@ export default function Navbar() {
                     dropdownCategoryData?.map((individualDropdownCategory) => (
                       <Link
                         key={individualDropdownCategory.id}
-                        href={`/shop/${individualDropdownCategory.id} `}
+                        href={`/shop/${individualDropdownCategory.id}`}
                         className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
+                        onClick={() => setIsDropdownVisible(false)}
                       >
                         <p className="text-sm whitespace-nowrap font-poppins">
                           {individualDropdownCategory.name}
