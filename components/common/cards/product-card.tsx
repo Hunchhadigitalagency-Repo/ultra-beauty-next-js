@@ -39,7 +39,7 @@ const ProductCard = ({
     <section className="flex flex-col justify-between w-full overflow-hidden bg-white rounded-lg md:gap-3 lg:gap-4">
       {/* Image Section */}
       <div
-        onClick={() => router.push(`/shop/product/${slug}`)}
+        onClick={() => router.push(`/shop/${slug}`)}
         className="relative w-full h-40 mb-2 overflow-hidden rounded-lg cursor-pointer sm:h-60 md:h-72 lg:h-80 group"
       >
         <Image
@@ -60,13 +60,13 @@ const ProductCard = ({
       {/* Content */}
       <div className="flex flex-col flex-grow">
         <h3
-          onClick={() => router.push(`/shop/product/${slug}`)}
+          onClick={() => router.push(`/shop/${slug}`)}
           className="text-xs cursor-pointer md:text-lg line-clamp-1 font-poppins text-[#7A7A7A]"
         >
           {brand}
         </h3>
         <h3
-          onClick={() => router.push(`/shop/product/${slug}`)}
+          onClick={() => router.push(`/shop/${slug}`)}
           className="text-lg md:2xl font-playfair font-medium cursor-pointer md:text-lg line-clamp-2  text-[#333333]"
         >
           {title}
@@ -106,7 +106,7 @@ const ProductCard = ({
         </div>
 
         {/* Add To Bag Button */}
-        <Button onClick={() => router.push(`/shop/product/${slug}`)}
+        <Button onClick={() => router.push(`/shop/${slug}`)}
           disabled={quantity === null}
           className={`flex flex-row rounded-sm items-center  justify-center w-full gap-2 py-2 text-xs  font-medium text-foreground ${quantity === null ? "bg-[#FAFAFA] text-foreground]" : "bg-secondary sm:text-sm md:text-base"}`}>
           <Eye className="w-4 h-4" />
