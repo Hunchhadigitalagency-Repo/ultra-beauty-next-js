@@ -64,7 +64,6 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   const shopByCategoryRef = useRef<HTMLLIElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleCategoryEnter = () => {
     setIsDropdownVisible(true);
@@ -117,8 +116,8 @@ export default function Navbar() {
             </div>
           </Link>
           {/* Desktop Navigation */}
-          <nav className="relative items-center justify-center hidden w-full h-full lg:flex">
-            <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
+          <nav className="items-center justify-center hidden w-full h-full lg:flex">
+            <ul className="relative h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/">
                   Home
@@ -127,50 +126,13 @@ export default function Navbar() {
               <li className="flex items-center h-full" ref={shopByCategoryRef} onMouseEnter={handleCategoryEnter}
                 onMouseLeave={handleCategoryLeave}
               >
-                <button className="flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary" >
+                <button className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${isDropdownVisible ? "text-primary" : ""}`} >
                   <p className="transition-all duration-200 line-clamp-1 ">Shop by Category</p>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible
                     ? "rotate-180"
                     : ""
                     }`} />
                 </button>
-
-                {/* Mega Menu */}
-                {
-                  isDropdownVisible &&
-                  <div className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-full duration-800 h-[77vh] ">
-                    <div
-                      className="h-full overflow-hidden overflow-y-scroll bg-white shadow-xl shadow-bottom scrollbar-hide"
-                      ref={dropdownRef} onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}
-                    >
-                      {/* Categories Grid */}
-                      <div className="border-t padding">
-                        <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
-                          <Link href="/shop"
-                            className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
-                            onClick={() => setIsDropdownVisible(false)}
-                          >
-                            <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
-                          </Link>
-                          {
-                            dropdownCategoryData?.map((individualDropdownCategory) => (
-                              <Link
-                                key={individualDropdownCategory.id}
-                                href={`/shop/${individualDropdownCategory.id} `}
-                                className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
-                              >
-                                <p className="text-sm whitespace-nowrap font-poppins">
-                                  {individualDropdownCategory.name}
-                                </p>
-                              </Link>
-                            ))
-                          }
-                        </div>
-                      </div >
-                    </div >
-                  </div>
-                }
-
               </li>
               <li className="transition-all duration-200 hover:text-primary">
                 <Link href="/blogs">Blogs</Link>
@@ -184,7 +146,7 @@ export default function Navbar() {
 
               {/* Search Bar */}
               {searchOpen &&
-                <div className="absolute z-50 w-full transform -translate-x-1/2 left-1/2 top-2">
+                <div className="absolute z-50 w-full transform -translate-x-1/2 left-1/2 top-2 transition-all duration-300">
                   <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
                 </div>
               }
@@ -263,6 +225,40 @@ export default function Navbar() {
             <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
         </div>
+        {/* Mega Menu */}
+        {
+          isDropdownVisible &&
+          <div className="absolute left-0 right-0  z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800 " onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}>
+            <div
+              className="h-full overflow-hidden overflow-y-scroll bg-white shadow-xl shadow-bottom scrollbar-hide"
+            >
+              {/* Categories Grid */}
+              <div className="border-t padding">
+                <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
+                  <Link href="/shop"
+                    className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
+                    onClick={() => setIsDropdownVisible(false)}
+                  >
+                    <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
+                  </Link>
+                  {
+                    dropdownCategoryData?.map((individualDropdownCategory) => (
+                      <Link
+                        key={individualDropdownCategory.id}
+                        href={`/shop/${individualDropdownCategory.id} `}
+                        className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
+                      >
+                        <p className="text-sm whitespace-nowrap font-poppins">
+                          {individualDropdownCategory.name}
+                        </p>
+                      </Link>
+                    ))
+                  }
+                </div>
+              </div >
+            </div >
+          </div>
+        }
       </div >
 
       <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">

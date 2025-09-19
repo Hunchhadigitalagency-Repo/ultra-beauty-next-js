@@ -91,7 +91,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                             router.push(`/shop/product/${item.slug_name}`);
                                             onClose?.();
                                         }}
-                                            className="w-4 h-4 md:w-5 md:h-5 hover:shadow-md" />
+                                            className="w-4 h-4 md:w-5 md:h-5" />
                                     </li>
                                 ))}
                             </ul>
