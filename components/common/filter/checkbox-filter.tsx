@@ -61,7 +61,7 @@ export function CheckboxFilter({
         </AccordionTrigger>
         <AccordionContent className="">
           <div className="space-y-3 h-28 overflow-y-auto">
-            {options.map((option) => (
+            {options?.map((option) => (
               <CheckboxFilterItem
                 key={option.name}
                 id={`${id}-${option.name}`}

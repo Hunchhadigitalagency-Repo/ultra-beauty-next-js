@@ -1,11 +1,11 @@
 "use client"
 
+import React from "react";
+import { cn } from "@/lib/utils";
+import { DonutChartItem } from "@/types/dashboard";
 import DataCard from "@/components/common/cards/data-card";
 import { DonutChart } from "@/components/common/charts/donut-chart";
 import CustomDropdown from "@/components/common/filter/custom-dropdown";
-import { cn } from "@/lib/utils";
-import { DonutChartItem } from "@/types/dashboard";
-import React from "react";
 
 const data = [
   {
@@ -73,7 +73,7 @@ const SalesByCategoryChart = () => {
           getValue={(item) => item.value}
           getLabel={(item) => item.name}
           placeholder="Week"
-        
+
         />
       }
     >
