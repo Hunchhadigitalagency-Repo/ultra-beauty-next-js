@@ -1,5 +1,11 @@
 "use client";
-
+import {
+  Search,
+  ShoppingCart,
+  Bell,
+  Heart,
+  CircleUser,
+} from "lucide-react";
 import Link from "next/link";
 import MobileMenu from "./mobile-menu";
 import SearchModal from "./search-modal";
@@ -7,6 +13,7 @@ import { ChevronDown } from 'lucide-react';
 import { CartResponse } from "@/types/cart";
 import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
+import Logo from '@/assets/images/Artboard 2-02.svg'
 import { Button } from "@/components/ui/button";
 import { WishListResponse } from "@/types/wishlist";
 import NotificationModal from "./notification-modal";
@@ -16,13 +23,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
-import {
-  Search,
-  ShoppingCart,
-  Bell,
-  Heart,
-  CircleUser,
-} from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
 
@@ -106,13 +107,13 @@ export default function Navbar() {
 
         <div className="relative flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center h-auto">
-            <div className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
-              Ultra Beauty
-              <br />
-              <span className="text-sm font-poppins md:text-base">&</span>
-              <br />
-              Brand
+          <Link href="/" className=" flex items-center justify-center">
+            <div className=" relative w-40 lg:w-52 h-20">
+              <Image
+                src={Logo}
+                alt="logo"
+                fill
+              />
             </div>
           </Link>
           {/* Desktop Navigation */}

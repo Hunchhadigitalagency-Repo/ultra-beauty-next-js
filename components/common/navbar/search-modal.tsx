@@ -44,6 +44,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
         <div className="flex flex-col items-center w-full gap-2 ">
             {/* Search Box */}
             <SearchBox
+                searchBoxClassName="lg:w-full"
                 placeholder="Find the Product of Your Choice"
                 sendValue={handleSearchValue}
             />
