@@ -1,57 +1,33 @@
 "use client";
 
-import DataCard from "@/components/common/cards/data-card";
-import CustomTable from "@/components/common/table/custom-table";
 import React from "react";
 import { useAppDispatch } from "@/redux/hooks";
+import useFetchData from "@/hooks/use-fetch";
+import { PaginatedResponse } from "@/types/common";
+import { TopSellingProduct } from "@/types/dashboard";
+import DataCard from "@/components/common/cards/data-card";
 import { TopSellingConstants } from "./top-selling-constants";
+import CustomTable from "@/components/common/table/custom-table";
 
-export const tableData = [
-  {
-    order_id: "ORD123456",
-    image: "",
-    name: "Running Shoes",
-    price: "$59.99",
-    status: "Processing",
-    sold: "John Doe",
-    earnings: 2,
-    payment: "Paid",
-    order_date: "2025-06-13",
-  },
-  {
-    order_id: "ORD123457",
-    image: "",
-    name: "Wireless Headphones",
-    price: "$89.00",
-    status: "Shipped",
-    sold: "Jane Smith",
-    earnings: 1,
-    payment: "Pending",
-    order_date: "2025-06-12",
-  },
-  {
-    order_id: "ORD123458",
-    image: "",
-    name: "Gaming Laptop",
-    price: "$1200.00",
-    status: "Delivered",
-    sold: "Alice Johnson",
-    earnings: 1,
-    payment: "Paid",
-    order_date: "2025-06-11",
-  },
-];
+interface TopSellingProductResponse extends PaginatedResponse {
+  results: TopSellingProduct[]
+}
 
 const TopSellingSection = () => {
+
+  const { data: TopSellingProductResponseWithPagination, error, loading } = useFetchData<TopSellingProductResponse>(`top-sellings/?time_range=week`, true)
+  const TopSellingProduct = TopSellingProductResponseWithPagination?.results
+
   const dispatch = useAppDispatch();
 
   return (
     <DataCard title="Top Selling" filter={<span>Filter</span>}>
-      <CustomTable<any>
+      <CustomTable<TopSellingProduct>
         cols={TopSellingConstants(dispatch)}
-        data={tableData as any[]}
-        loading={false}
-        onRowClick={() => {}}
+        data={TopSellingProduct as TopSellingProduct[]}
+        loading={loading}
+        error={error}
+        onRowClick={() => { }}
         height="h-auto"
       />
     </DataCard>

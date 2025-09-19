@@ -3,33 +3,25 @@
 import React from 'react'
 // import useFetchData from '@/hooks/use-fetch';
 import { AlertCircle } from "lucide-react";
-import { INotification } from '@/types/cms';
 import { Skeleton } from '@/components/ui/skeleton';
-import NotificationCard from './components/notification-card'
+import useFetchData from '@/hooks/use-fetch';
+import Image from 'next/image';
+import australis from "@/assets/australis.png"
+
+export type NotificatoinResponses = NotificationResponse[]
+
+interface NotificationResponse {
+    id: number
+    image: any
+    title: string
+    description: string
+    link: string
+    is_active: boolean
+}
 
 const Notifications = () => {
+    const { data: notifications, loading, error } = useFetchData<NotificatoinResponses>("cms/notifications-dropdown/", true)
 
-    // const { data: notifications, loading, error } = useFetchData<INotification[]>(`cms/notifications-dropdown/`, true);
-
-    const notifications: INotification[] = [
-        {
-            id: 1,
-            link: "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg",
-            description: 'Your Item “Pregnancy Kit”  has been shipped to your current location.',
-            is_active: false,
-            title: 'Test'
-        },
-        {
-            id: 2,
-            link: "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg",
-            description: 'Your Item “Pregnancy Kit”  has been shipped to your current location.',
-            is_active: false,
-            title: 'Test'
-        },
-    ];
-
-    const loading = false;
-    const error = false;
     return (
         <main className='mt-4 mb-4 '>
             <section className='grid padding'>
@@ -70,16 +62,20 @@ const Notifications = () => {
                                 <p className="text-red-500">No Notifications Found!</p>
                             </div>
                         ) : (
-                            notifications?.map((notification) => (
-                                <NotificationCard
-                                    key={notification.id}
-                                    imgSrc={notification.link}
-                                    title={notification.title}
-                                    description={notification.description}
-                                    is_active={notification.is_active}
-                                />
+                            notifications?.map((item) => (
+                                <div key={item.id} className='gap-1 h-[110px] sm:gap-2 grid grid-cols-[26%_1fr] sm:grid-cols-[15%_1fr] md:grid-cols-[12%_1fr] lg:grid-cols-[8%_1fr] xl:grid-cols-[10%_1fr] 2xl:grid-cols-[7%_1fr] pt-3 pb-3'>
+                                    <div className='relative w-[70px] h-[80px] lg:h-[90px] rounded xl:h-[100px] xl:w-[90px] '>
+                                        <Image className='object-contain' src={item.image || australis} alt={item.title} fill />
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <p className={`text-sm sm:text-md md:text-base text-foreground ${item.is_active ? 'font-normal' : 'font-medium'}`}>
+                                            {item.description}
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+
                             ))
-                        )
                     }
 
                 </div>
