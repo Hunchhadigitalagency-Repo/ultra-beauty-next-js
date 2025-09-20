@@ -1,50 +1,35 @@
 "use client";
 
 import React from 'react';
+import {
+    toggleCategory,
+    toggleSubcategory,
+    clearSubcategoriesForCategory,
+    toggleBrands,
+    setPriceRange
+} from '@/redux/features/category-slice';
 import useFetchData from '@/hooks/use-fetch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
 import { RangeFilter } from '@/components/common/filter/range-filter';
 import { CheckboxFilter } from '@/components/common/filter/checkbox-filter';
-import { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory, toggleBrands } from '@/redux/features/category-slice'
-import { PaginatedResponse } from '@/types/common';
+import { BrandFilterResponse, Category, CheckboxOption } from '@/types/filter';
 
-interface BrandFilterResult {
-    id: number;
-    name: string;
-}
-interface BrandFilterResponse extends PaginatedResponse {
-    results: BrandFilterResult[]
-}
-type Subcategory = {
-    id: number;
-    name: string;
-    product_count?: number;
-};
-
-type Category = {
-    id: number;
-    name: string;
-    product_count?: number;
-    subcategories: Subcategory[];
-};
-
-type CheckboxOption = {
-    id: number;
-    name: string;
-    product_count?: number;
-};
 
 const DropDownFilter: React.FunctionComponent = () => {
 
     const dispatch = useAppDispatch();
 
-    const { selectedCategories, selectedSubcategories, selectedBrands } = useAppSelector(state => state.category);
+    const {
+        selectedCategories,
+        selectedSubcategories,
+        selectedBrands,
+        priceRange
+    } = useAppSelector(state => state.category);
 
     const { data: categories } = useFetchData<Category[]>('dropdown/category/');
 
     const { data: brands } = useFetchData<BrandFilterResponse>('brand-dropdown/?pagination=false');
-    console.log(brands)
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,
@@ -72,7 +57,7 @@ const DropDownFilter: React.FunctionComponent = () => {
         }
     };
 
-    const getSubcategoryOptions = (): CheckboxOption[] => {
+    const SubcategoryOptions = (): CheckboxOption[] => {
         if (!categories || selectedCategories.length === 0) return [];
 
         return categories
@@ -102,15 +87,17 @@ const DropDownFilter: React.FunctionComponent = () => {
                         onChange={handleCategoryChange}
                     />
 
-                    {selectedCategories.length > 0 && (
-                        <CheckboxFilter
-                            id="subcategory"
-                            title="Sub-Category"
-                            options={getSubcategoryOptions()}
-                            selectedValues={selectedSubcategories}
-                            onChange={handleSubcategoryChange}
-                        />
-                    )}
+                    {selectedCategories.length > 0 &&
+                        SubcategoryOptions().length > 0 &&
+                        (
+                            <CheckboxFilter
+                                id="subcategory"
+                                title="Sub-Category"
+                                options={SubcategoryOptions()}
+                                selectedValues={selectedSubcategories}
+                                onChange={handleSubcategoryChange}
+                            />
+                        )}
 
                     <CheckboxFilter
                         id='brands'
@@ -122,10 +109,10 @@ const DropDownFilter: React.FunctionComponent = () => {
 
                     <RangeFilter
                         title="Price Range"
-                        value={[0, 0]}
-                        onChange={(value) => console.log(value)}
-                        min={0}
-                        max={200}
+                        value={priceRange}
+                        onChange={(value) => dispatch(setPriceRange(value))}
+                        min={100}
+                        max={100000}
                     />
                 </AccordionItem>
             </Accordion>

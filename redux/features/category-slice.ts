@@ -4,12 +4,14 @@ interface InitialStateType {
     selectedCategories: number[];
     selectedSubcategories: number[];
     selectedBrands: number[];
+    priceRange: [number, number]
 }
 
 const initialState: InitialStateType = {
     selectedCategories: [],
     selectedSubcategories: [],
-    selectedBrands: []
+    selectedBrands: [],
+    priceRange: [100, 10000]
 };
 
 const categorySlice = createSlice({
@@ -40,6 +42,9 @@ const categorySlice = createSlice({
                 state.selectedBrands = state.selectedBrands.filter(v => v !== id)
             }
         },
+        setPriceRange: (state, action: PayloadAction<[number, number]>) => {
+            state.priceRange = action.payload;
+        },
         clearSubcategoriesForCategory: (state, action: PayloadAction<number[]>) => {
             state.selectedSubcategories = state.selectedSubcategories.filter(
                 subId => !action.payload.includes(subId)
@@ -54,7 +59,8 @@ export const {
     toggleSubcategory,
     toggleBrands,
     clearSubcategoriesForCategory,
-    resetFilters
+    resetFilters,
+    setPriceRange
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

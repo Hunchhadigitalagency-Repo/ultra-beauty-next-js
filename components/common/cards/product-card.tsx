@@ -36,7 +36,7 @@ const ProductCard = ({
   };
 
   return (
-    <section className="flex flex-col justify-between w-full overflow-hidden bg-white rounded-lg md:gap-3 lg:gap-4">
+    <section className="flex flex-col justify-between w-full overflow-hidden bg-white md:gap-3 lg:gap-4">
       {/* Image Section */}
       <div
         onClick={() => router.push(`/shop/${slug}`)}
@@ -108,7 +108,10 @@ const ProductCard = ({
         {/* Add To Bag Button */}
         <Button onClick={() => router.push(`/shop/${slug}`)}
           disabled={quantity === null}
-          className={`flex flex-row rounded-sm items-center  justify-center w-full gap-2 py-2 text-xs  font-medium text-foreground ${quantity === null ? "bg-[#FAFAFA] text-foreground]" : "bg-secondary sm:text-sm md:text-base"}`}>
+          className={`flex flex-row rounded-sms items-center justify-center 
+          w-full gap-2 py-2 text-xs sm:text-sm  font-medium text-foreground
+          ${quantity === null ? "bg-[#FAFAFA] text-[#7A7A7A]" : "bg-secondary"}
+          `}>
           <Eye className="w-4 h-4" />
           View Product
         </Button>

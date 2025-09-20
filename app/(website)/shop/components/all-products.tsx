@@ -26,7 +26,7 @@ const AllProducts = () => {
   const [searchValue, setSearchValue] = useState('');
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  const { selectedCategories, selectedBrands } = useAppSelector(state => state.category);
+  const { selectedCategories, selectedBrands, priceRange } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
   if (selectedCategories.length > 0) {
@@ -41,7 +41,12 @@ const AllProducts = () => {
     queryParams.set("brand", selectedBrands.join(','))
   }
 
-  const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+  if (priceRange[0] !== 100 || priceRange[1] !== 10000) {
+    queryParams.set('min_price', priceRange[0].toString())
+    queryParams.set('max_price', priceRange[1].toString())
+  }
+
+  const path = `public-products/${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
