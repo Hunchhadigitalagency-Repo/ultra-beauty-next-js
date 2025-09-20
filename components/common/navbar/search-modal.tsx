@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import React, { useCallback, useState } from "react";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 
+
 interface SearchModalprops {
     onClose?: () => void;
 }
@@ -39,9 +40,8 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
         data: products, loading
     } = useInfiniteFetch<Result>(path || "", "", searchTerm.toString(), "", isLoggedIn);
 
-
     return (
-        <div className="flex flex-col items-center w-full gap-2 ">
+        <div className="flex flex-col items-center w-full gap-2" >
             {/* Search Box */}
             <SearchBox
                 searchBoxClassName="lg:w-full"
@@ -89,7 +89,7 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                             <h1 className="text-sm font-medium">{item.name}</h1>
                                         </div>
                                         <ArrowUpLeft onClick={() => {
-                                            router.push(`/shop/product/${item.slug_name}`);
+                                            router.push(`/shop/${item.slug_name}`);
                                             onClose?.();
                                         }}
                                             className="w-4 h-4 md:w-5 md:h-5" />

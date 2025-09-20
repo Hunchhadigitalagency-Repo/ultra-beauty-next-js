@@ -11,6 +11,9 @@ import CategoryCard from "./category-card";
 import useFetchData from "@/hooks/use-fetch";
 import LinkText from "@/components/common/header/link-text";
 import SectionHeader from "@/components/common/header/section-header";
+import { toggleCategory } from "@/redux/features/category-slice";
+import { useAppDispatch } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: number;
@@ -28,6 +31,14 @@ const CategorySection: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<CategoryResponse[]>(
     `dropdown/category?is_not_empty=True/`
   );
+
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleCategoryCardClick = (categoryId: number) => {
+    dispatch(toggleCategory({ id: categoryId, checked: true }));
+    router.push(`/shop`)
+  };
 
   return (
     <section className="space-y-4 padding">
@@ -70,7 +81,9 @@ const CategorySection: React.FunctionComponent = () => {
                     key={index}
                     className=" basis-[40%] pl-4 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6 xl:gap-2"
                   >
-                    <CategoryCard title={category.name} image={category.icon} />
+                    <button onClick={() => handleCategoryCardClick(category.id)}>
+                      <CategoryCard title={category.name} image={category.icon} />
+                    </button>
                   </CarouselItem>
                 ))}
               </CarouselContent>

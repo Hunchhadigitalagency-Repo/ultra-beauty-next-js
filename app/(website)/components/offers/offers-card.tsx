@@ -11,7 +11,7 @@ interface OffersCardProps {
 const OffersCard: React.FunctionComponent<OffersCardProps> = ({ imageSrc, brand, productName, slugName }) => {
 
     return (
-        <Link href={`/shop/product/${slugName}`}>
+        <Link href={`/shop/${slugName}`}>
             <div className="flex flex-col items-center justify-center w-full gap-3 mt-2">
                 <div className="relative w-full overflow-hidden rounded-sm cursor-pointer h-36 md:h-52 lg:h-80 group">
                     <Image

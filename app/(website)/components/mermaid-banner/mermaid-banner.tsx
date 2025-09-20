@@ -25,7 +25,7 @@ const MermaidBanner: React.FunctionComponent = () => {
               <div className='h-60 flex flex-col w-full justify-center items-center'>
                 <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
                 <p className='text-red'>
-                  Error Fetching Banners !
+                  Error Fetching Mermaid Banners !
                 </p>
               </div>
             ) : data?.length === 0 ?
