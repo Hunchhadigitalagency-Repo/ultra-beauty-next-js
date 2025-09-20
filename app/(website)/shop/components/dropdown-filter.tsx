@@ -6,9 +6,16 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
 import { RangeFilter } from '@/components/common/filter/range-filter';
 import { CheckboxFilter } from '@/components/common/filter/checkbox-filter';
-import { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory } from '@/redux/features/category-slice'
+import { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory, toggleBrands } from '@/redux/features/category-slice'
+import { PaginatedResponse } from '@/types/common';
 
-
+interface BrandFilterResult {
+    id: number;
+    name: string;
+}
+interface BrandFilterResponse extends PaginatedResponse {
+    results: BrandFilterResult[]
+}
 type Subcategory = {
     id: number;
     name: string;
@@ -18,29 +25,41 @@ type Subcategory = {
 type Category = {
     id: number;
     name: string;
+    product_count?: number;
     subcategories: Subcategory[];
 };
 
 type CheckboxOption = {
     id: number;
     name: string;
-    product_count: number;
+    product_count?: number;
 };
 
 const DropDownFilter: React.FunctionComponent = () => {
 
-    const { selectedCategories, selectedSubcategories } = useAppSelector(state => state.category);
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
+    const { selectedCategories, selectedSubcategories, selectedBrands } = useAppSelector(state => state.category);
 
-    const { data: categories } = useFetchData<Category[]>('dropdown/category');
+    const { data: categories } = useFetchData<Category[]>('dropdown/category/');
+
+    const { data: brands } = useFetchData<BrandFilterResponse>('brand-dropdown/?pagination=false');
+    console.log(brands)
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,
         name: item.name,
-        product_count: item.subcategories.length
+        product_count: item.product_count
     })) || [];
 
+    const brandOptions: CheckboxOption[] = brands?.results.map(item => ({
+        id: item.id,
+        name: item.name
+    })) || [];
+
+    const handleBrandsChange = (value: number, checked: boolean) => {
+        dispatch(toggleBrands({ id: value, checked }));
+    }
 
     const handleCategoryChange = (value: number, checked: boolean) => {
         dispatch(toggleCategory({ id: value, checked }));
@@ -81,7 +100,6 @@ const DropDownFilter: React.FunctionComponent = () => {
                         options={categoryOptions}
                         selectedValues={selectedCategories}
                         onChange={handleCategoryChange}
-                        categories={categories}
                     />
 
                     {selectedCategories.length > 0 && (
@@ -91,9 +109,16 @@ const DropDownFilter: React.FunctionComponent = () => {
                             options={getSubcategoryOptions()}
                             selectedValues={selectedSubcategories}
                             onChange={handleSubcategoryChange}
-                            categories={categories}
                         />
                     )}
+
+                    <CheckboxFilter
+                        id='brands'
+                        title='Brands'
+                        options={brandOptions}
+                        selectedValues={selectedBrands}
+                        onChange={handleBrandsChange}
+                    />
 
                     <RangeFilter
                         title="Price Range"

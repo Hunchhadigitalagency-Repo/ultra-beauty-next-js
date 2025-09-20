@@ -68,7 +68,7 @@ const FeaturedSection = () => {
                           <CarouselItem
                             key={index}
                             className="basis-[60%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3 ">
-                            <Link href={`/shop/product/${featuredProduct?.slug_name}`}>
+                            <Link href={`/shop/${featuredProduct?.slug_name}`}>
                               <FeaturedProductCard
                                 image={featuredProduct?.images[0]?.file}
                                 title={featuredProduct?.brand?.brand_name}

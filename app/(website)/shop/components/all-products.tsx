@@ -7,8 +7,8 @@ import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useToggleWishlist } from "@/utils/wishList-utility";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
@@ -19,20 +19,29 @@ const AllProducts = () => {
 
   const toggleWishlist = useToggleWishlist();
   const { isAuthenticated } = useCheckToken();
-  // const queryParams = new URLSearchParams();
+
+  const queryParams = new URLSearchParams();
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  const { selectedCategories } = useAppSelector(state => state.category);
+  const { selectedCategories, selectedBrands } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
-  const categoryQuery = selectedCategories.length > 0
-    ? `?category=${selectedCategories.join(',')}`
-    : '';
+  if (selectedCategories.length > 0) {
+    queryParams.set("category", selectedCategories.join(","));
+  }
 
-  const path = `public-products${categoryQuery}${searchValue ? `?search=${searchValue}` : ''}`;
+  if (searchValue) {
+    queryParams.set("search", searchValue);
+  }
+
+  if (selectedBrands.length > 0) {
+    queryParams.set("brand", selectedBrands.join(','))
+  }
+
+  const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -72,7 +81,10 @@ const AllProducts = () => {
           <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
           <ProductSort />
         </div>
-        <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
+        <Menu
+          onClick={toggleFilter}
+          className="w-5 h-5 text-foreground lg:hidden"
+        />
       </div>
       <div className="flex lg:flex-row lg:gap-16">
         <FilterSection showFilter={showFilter} onClose={toggleFilter} />
