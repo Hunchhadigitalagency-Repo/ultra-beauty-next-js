@@ -1,19 +1,4 @@
 "use client";
-import Image from "next/image";
-import { toast } from "sonner";
-import esewa from "@/assets/esewa.png";
-import khalti from "@/assets/khalti.png";
-import coin from "@/assets/coin-dollar.png";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { addToCart } from "@/lib/api/cart/cart-apis";
-import { getOptions } from "@/utils/single-product-utility";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import SingleProductAccordion from "./single-product-accordion";
-import RatingStars from "@/components/common/product/rating-stars";
-import QuantityRow from "@/components/common/product/quantity-row";
-import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
-import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
 import React,
 {
   useCallback,
@@ -26,23 +11,36 @@ import {
   ShoppingCart,
   SquareCheck
 } from "lucide-react";
-import {
-  FaInstagram,
-  FaTiktok,
-  FaXTwitter,
-  FaFacebookMessenger
-} from "react-icons/fa6";
+import Link from "next/link";
+import Image from "next/image";
+import { toast } from "sonner";
+import esewa from "@/assets/esewa.png";
+import khalti from "@/assets/khalti.png";
+import coin from "@/assets/coin-dollar.png";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { addToCart } from "@/lib/api/cart/cart-apis";
+import { socialLinks } from "@/constants/social-links";
+import { getOptions } from "@/utils/single-product-utility";
+import PriceRow from "@/components/common/product/price-row";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import SingleProductAccordion from "./single-product-accordion";
+import RatingStars from "@/components/common/product/rating-stars";
+import QuantityRow from "@/components/common/product/quantity-row";
+import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/product";
+import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
 
 
 const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product }) => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const [quantity, setQuantity] = useState(1);
-  // const [expanded, setExpanded] = useState(false);
   const [errors, setErrors] = useState<ErrorState>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttribute[]>([]);
+
   const { isLoggedIn, profileDetails } = useAppSelector((state) => state.authentication);
   const userId = profileDetails.id || null;
 
@@ -134,8 +132,8 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     <div className="flex flex-col justify-start w-full space-y-8 ">
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
-          <h1 className="mb-2 text-xs font-medium text-gray-500 font-poppins md:text-xl xl:text-md">
-            {product.brand.brand_name}
+          <h1 className="mb-2 text-sm font-medium text-[#7A7A7A] font-poppins">
+            {product.brand.brand_name || 'No Brand'}
           </h1>
           <div className="flex items-center gap-5">
             <RatingStars rating={product.average_rating} />
@@ -214,7 +212,9 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               </div>
               {
                 errors[attrName] && (
-                  <p className="mt-1 text-sm text-red-600">{errors[attrName]}</p>
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors[attrName]}
+                  </p>
                 )
               }
             </div>
@@ -222,29 +222,15 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         }
         )
       }
-
       {/* Product Price */}
       <div className="flex flex-col items-start justify-between w-full gap-4 pt-2 pl-3 sm:flex-row sm:items-center sm:pl-0 sm:pt-6">
-        <div className="flex flex-col">
-          {
-            discountedPrice !== null &&
-            <h1 className="text-base font-semibold md:text-base xl:text-xl">
-              NPR.{quantity === 1 ? discountedPrice : quantity * parseFloat(discountedPrice)}
-            </h1>
-          }
-          {
-            discountedPrice && (
-              <div className="flex items-center gap-10">
-                <p className="line-through text-[#7A7A7A] font-medium" >
-                  NPR. {product.price.split(".")[0]}
-                </p>
-                <button className="px-2 py-1 text-xs font-medium text-white rounded-full xl:ml-8 bg-primary md:px-4 md:py-2 xl:text-sm font-poppins ">
-                  {product.discount_percentage.split(".")[0]}% OFF
-                </button>
-              </div>
-            )
-          }
-        </div>
+        <PriceRow
+          price={discountedPrice ?? ''}
+          previousPrice={product.price}
+          discountTag={product.discount_percentage}
+          priceClassname="gap-5"
+          discountClassName="bg-primary text-white"
+        />
 
         <div className="flex flex-row-reverse gap-8 sm:flex-row sm:gap-14 lg:gap-4 xl:gap-8 ">
           {quantity !== null && (
@@ -278,21 +264,22 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
             SHARE:
           </span>
           <div className="flex gap-8 ">
-            <FaFacebookMessenger className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
-            <FaInstagram className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
-            <FaXTwitter className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
-            <FaTiktok className="w-5 h-5 md:h-7 md:w-7 text-[#5D5D5D]" />
+            {socialLinks.map(({ icon: Icon, href }, idx) => (
+              <Link key={idx} href={href} target="_blank" rel="noopener noreferrer">
+                <Icon className="w-5 h-5 md:h-6 md:w-6 text-[#5D5D5D] hover:text-primary transition-colors" />
+              </Link>
+            ))}
           </div>
         </div>
       </div>
       {/* Payment Section */}
-      <div className="flex items-center justify-between bg-[#EEEEEE] px-4 py-1 rounded-sm">
+      <div className="flex items-center justify-between bg-secondary px-4 py-1 rounded-sm">
         <span className="text-sm font-medium text-foreground font-poppins">
           We Accept
         </span>
-        <div className="flex items-center gap-4 sm:gap-6 md:gap-7">
+        <div className="flex justify-center items-center gap-4 sm:gap-6 md:gap-7">
           <div className="flex flex-col items-center justify-center">
-            <div className="relative w-6 h-6 sm:w-8 sm:h-8">
+            <div className="relative w-6 h-6">
               <Image src={coin.src} alt="COD" fill className="rounded-full " />
             </div>
             <span className="text-xs font-bold sm:text-sm font-poppins">
