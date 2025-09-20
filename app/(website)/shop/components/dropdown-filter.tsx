@@ -1,46 +1,50 @@
 "use client";
 
 import React from 'react';
+import {
+    toggleCategory,
+    toggleSubcategory,
+    clearSubcategoriesForCategory,
+    toggleBrands,
+    setPriceRange
+} from '@/redux/features/category-slice';
 import useFetchData from '@/hooks/use-fetch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
 import { RangeFilter } from '@/components/common/filter/range-filter';
 import { CheckboxFilter } from '@/components/common/filter/checkbox-filter';
-import { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory } from '@/redux/features/category-slice'
+import { BrandFilterResponse, Category, CheckboxOption } from '@/types/filter';
 
-
-type Subcategory = {
-    id: number;
-    name: string;
-    product_count?: number;
-};
-
-type Category = {
-    id: number;
-    name: string;
-    subcategories: Subcategory[];
-};
-
-type CheckboxOption = {
-    id: number;
-    name: string;
-    product_count: number;
-};
 
 const DropDownFilter: React.FunctionComponent = () => {
 
-    const { selectedCategories, selectedSubcategories } = useAppSelector(state => state.category);
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
+    const {
+        selectedCategories,
+        selectedSubcategories,
+        selectedBrands,
+        priceRange
+    } = useAppSelector(state => state.category);
 
-    const { data: categories } = useFetchData<Category[]>('dropdown/category');
+    const { data: categories } = useFetchData<Category[]>('dropdown/category/');
+
+    const { data: brands } = useFetchData<BrandFilterResponse>('brand-dropdown/?pagination=false');
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,
         name: item.name,
-        product_count: item.subcategories.length
+        product_count: item.product_count
     })) || [];
 
+    const brandOptions: CheckboxOption[] = brands?.results.map(item => ({
+        id: item.id,
+        name: item.name
+    })) || [];
+
+    const handleBrandsChange = (value: number, checked: boolean) => {
+        dispatch(toggleBrands({ id: value, checked }));
+    }
 
     const handleCategoryChange = (value: number, checked: boolean) => {
         dispatch(toggleCategory({ id: value, checked }));
@@ -53,7 +57,7 @@ const DropDownFilter: React.FunctionComponent = () => {
         }
     };
 
-    const getSubcategoryOptions = (): CheckboxOption[] => {
+    const SubcategoryOptions = (): CheckboxOption[] => {
         if (!categories || selectedCategories.length === 0) return [];
 
         return categories
@@ -81,26 +85,34 @@ const DropDownFilter: React.FunctionComponent = () => {
                         options={categoryOptions}
                         selectedValues={selectedCategories}
                         onChange={handleCategoryChange}
-                        categories={categories}
                     />
 
-                    {selectedCategories.length > 0 && (
-                        <CheckboxFilter
-                            id="subcategory"
-                            title="Sub-Category"
-                            options={getSubcategoryOptions()}
-                            selectedValues={selectedSubcategories}
-                            onChange={handleSubcategoryChange}
-                            categories={categories}
-                        />
-                    )}
+                    {selectedCategories.length > 0 &&
+                        SubcategoryOptions().length > 0 &&
+                        (
+                            <CheckboxFilter
+                                id="subcategory"
+                                title="Sub-Category"
+                                options={SubcategoryOptions()}
+                                selectedValues={selectedSubcategories}
+                                onChange={handleSubcategoryChange}
+                            />
+                        )}
+
+                    <CheckboxFilter
+                        id='brands'
+                        title='Brands'
+                        options={brandOptions}
+                        selectedValues={selectedBrands}
+                        onChange={handleBrandsChange}
+                    />
 
                     <RangeFilter
                         title="Price Range"
-                        value={[0, 0]}
-                        onChange={(value) => console.log(value)}
-                        min={0}
-                        max={200}
+                        value={priceRange}
+                        onChange={(value) => dispatch(setPriceRange(value))}
+                        min={100}
+                        max={100000}
                     />
                 </AccordionItem>
             </Accordion>

@@ -5,6 +5,10 @@ import useFetchData from '@/hooks/use-fetch';
 import Newsletter from '../newsletter/newsletter';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { SocialLinkResponse } from '@/types/social-contact';
+import { ICategoryDropdown } from '@/types/dropdown';
+import { useRouter } from 'next/navigation';
+import { toggleCategory } from '@/redux/features/category-slice';
+import { useAppDispatch } from '@/redux/hooks';
 
 const Footer: React.FC = () => {
   const SHOP_LINKS = [
@@ -31,6 +35,17 @@ const Footer: React.FC = () => {
 
 
   const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown');
+  const { data: categories } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+
+  const categoriesData = categories?.slice(0, 5);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleCategoryClick = (categoryId: number) => {
+    dispatch(toggleCategory({ id: categoryId, checked: true }));
+    router.push(`/shop`)
+  }
 
   return (
     <footer className="relative h-fit bg-[#161616] text-white padding">
@@ -154,15 +169,10 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray">SHOP</h3>
             <ul className="space-y-3">
               {
-                SHOP_LINKS.map((link) => (
-                  <li key={link.name} className="flex items-center space-x-2">
-                    <a
-                      href={link.href}
-                      className="text-sm text-gray-300 transition-colors duration-200 hover:text-primary"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
+                categoriesData?.map((category) => (
+                  <button key={category.name} className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary" onClick={() => handleCategoryClick(category.id)}>
+                    {category.name}
+                  </button>
                 ))
               }
             </ul>

@@ -8,7 +8,7 @@ import { BannerResponse } from '@/types/banner';
 
 const MermaidBanner: React.FunctionComponent = () => {
 
-  const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Mesh%20Banner`)
+  const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners-dropdown/?position=Mesh%20Banner`)
 
   return (
     <div className='padding grid grid-cols-2 w-full gap-4 lg:gap-8 '>
@@ -25,7 +25,7 @@ const MermaidBanner: React.FunctionComponent = () => {
               <div className='h-60 flex flex-col w-full justify-center items-center'>
                 <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
                 <p className='text-red'>
-                  Error Fetching Banners !
+                  Error Fetching Mermaid Banners !
                 </p>
               </div>
             ) : data?.length === 0 ?
@@ -43,8 +43,7 @@ const MermaidBanner: React.FunctionComponent = () => {
                     <Image
                       fill
                       src={banner.image}
-                      alt={banner.product_slug}
-
+                      alt={banner.product_slug || 'image'}
                       className="object-cover rounded-2xl "
                     />
                   </div>

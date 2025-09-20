@@ -16,19 +16,19 @@ export const NewOrdersConstants = (dispatch: AppDispatch): Col<NewOrderResponse>
     // {
     //   title: "PRODUCT NAME",
     //   render: (order: NewOrderResponse) => (
-    // <div className="flex items-center gap-3">
-    //   <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-    //     <Image
-    //       src={order. || "/placeholder.svg?height=40&width=40"}
-    //       alt={data.name}
-    //       width={40}
-    //       height={40}
-    //       className="object-cover"
-    //     />
-    //   </div>
-    //   <span className="font-medium text-gray-800">{order.name}</span>
-    // </div>
-    // <p>Backend bata data aako chaina</p>
+    //     <div className="flex items-center gap-3">
+    //       <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
+    //         <Image
+    //           src={order. || "/placeholder.svg?height=40&width=40"}
+    //           alt={data.name}
+    //           width={40}
+    //           height={40}
+    //           className="object-cover"
+    //         />
+    //       </div>
+    //       <span className="font-medium text-gray-800">{order.name}</span>
+    //     </div>
+    //     <p>Backend bata data aako chaina</p>
     //   ),
     // },
     {
@@ -48,7 +48,6 @@ export const NewOrdersConstants = (dispatch: AppDispatch): Col<NewOrderResponse>
     },
     // {
     //   title: "QUANTITY",
-
     //   render: (order: NewOrderResponse) => <p>Backend bata data aako chaina</p>,
     // },
     {

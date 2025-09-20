@@ -24,6 +24,7 @@ import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
 import Image from "next/image";
+import { toggleCategory } from "@/redux/features/category-slice";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -55,7 +56,7 @@ export default function Navbar() {
   const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });
-  const { data: cartData } = useFetchData<CartResponse>('carts', false, {
+  const { data: cartData } = useFetchData<CartResponse>('carts/', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
   });
 
@@ -104,8 +105,33 @@ export default function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const headerRef = useRef<HTMLHeadingElement>(null);
+
+  const handleSearchLeave = () => {
+    setSearchOpen(false);
+  }
+
+  const handleCategoryClick = (categoryId: number) => {
+    setIsDropdownVisible(false)
+    dispatch(toggleCategory({ id: categoryId, checked: true }));
+    router.push(`/shop`)
+  }
+
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 "
+    <header className="sticky top-0 z-50 border-b border-gray-200 " ref={headerRef} onMouseLeave={handleSearchLeave}
     >
       <div className="py-2 padding-x bg-secondary">
 
@@ -270,16 +296,15 @@ export default function Navbar() {
                   </Link>
                   {
                     dropdownCategoryData?.map((individualDropdownCategory) => (
-                      <Link
+                      <button
                         key={individualDropdownCategory.id}
-                        href={`/shop/${individualDropdownCategory.id}`}
                         className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
-                        onClick={() => setIsDropdownVisible(false)}
+                        onClick={() => handleCategoryClick(individualDropdownCategory.id)}
                       >
                         <p className="text-sm whitespace-nowrap font-poppins">
                           {individualDropdownCategory.name}
                         </p>
-                      </Link>
+                      </button>
                     ))
                   }
                 </div>
