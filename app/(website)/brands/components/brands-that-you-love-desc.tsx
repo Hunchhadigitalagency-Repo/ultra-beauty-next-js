@@ -3,9 +3,9 @@ import React from 'react';
 import Image from 'next/image';
 import useFetchData from '@/hooks/use-fetch';
 import { MdFormatQuote } from "react-icons/md";
+import { BrandResponse } from '@/types/product';
 import SearchBox from '@/components/common/filter/search-box';
 import SectionHeader from '@/components/common/header/section-header';
-import { BrandResponse } from '@/types/product';
 
 const BrandsDescSection: React.FunctionComponent = () => {
 
@@ -30,13 +30,13 @@ const BrandsDescSection: React.FunctionComponent = () => {
       {/* brand level with description */}
 
       {loading ? (
-        <div className='h-60 flex w-full justify-center items-center'>
+        <div className='flex items-center justify-center w-full h-60'>
           <p className='text-gray'>
             Loading ...
           </p>
         </div>
       ) : error ? (
-        <div className='h-60 flex w-full justify-center items-center'>
+        <div className='flex items-center justify-center w-full h-60'>
           <p className='text-red'>
             Error While Fetching Featured Brands Banner
           </p>
@@ -50,14 +50,14 @@ const BrandsDescSection: React.FunctionComponent = () => {
           {brandDetails?.map((brand, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 sm:grid-cols-[35%_65%] lg:grid-cols-[30%_70%] gap-4 sm:gap-7 items-start rounded-md"
+              className="grid grid-cols-1 sm:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 sm:gap-7 items-start rounded-md"
             >
               {/* Image Block */}
               <div className="flex items-center justify-center w-full gap-3 p-2 border border-[#B3B3B3] rounded-md">
                 <div className="relative w-full rounded-none h-28 md:h-32">
                   <Image
                     src={brand?.brand_image}
-                    alt={`${brand?.name} logo`}
+                    alt={`${brand?.brand_name} logo`}
                     layout="fill"
                     className='object-cover'
                   />
@@ -67,7 +67,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
               <div className="w-full space-y-1">
                 <MdFormatQuote className="w-6 h-6 text-primary sm:w-10 sm:h-10 md:w-14 md:h-14" />
                 <h3 className="text-lg font-bold sm:text-xl md:text-2xl text-primary">
-                  {brand?.name}
+                  {brand?.brand_name}
                 </h3>
                 <p className="text-xs leading-relaxed text-justify sm:text-sm text-foreground font-poppins">
                   {brand?.description}

@@ -14,19 +14,14 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel';
 
-interface ProductResponse extends Result {
-  id: number
-}
-
 interface ProductSectionProps {
   headerTitle: string;
   headerDescription: string;
   buttonText?: string;
   headerLink: string;
-  products: ProductResponse[] | null;
+  products: Result[] | [];
   isLoading?: boolean;
   error?: Error | null;
-
 }
 
 const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTitle, headerDescription, headerLink, products, buttonText, isLoading, error }) => {
@@ -82,15 +77,13 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
           >
             <CarouselContent className="-ml-4">
               {products?.map((product) => {
-                console.log('product', product)
                 return (
                   <CarouselItem
-                    key={product.id}
+                    key={product.name}
                     className="pl-4 basis-1/2 lg:basis-1/4"
                   >
                     <div className="flex w-full h-full">
                       <ProductCard
-                        // id={product.id}
                         imageSrc={product.images?.[0]?.file}
                         alt={product.name}
                         title={product.name}

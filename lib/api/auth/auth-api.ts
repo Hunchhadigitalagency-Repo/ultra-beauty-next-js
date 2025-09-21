@@ -1,4 +1,3 @@
-import apiBase from "@/services/api-base-instance";
 import {
   googleLoginFormSchema,
   loginFormSchema,
@@ -7,6 +6,7 @@ import {
 
 import { z } from "zod";
 import api from "@/services/api-instance";
+import apiBase from "@/services/api-base-instance";
 
 type LoginFormValue = z.infer<typeof loginFormSchema>;
 

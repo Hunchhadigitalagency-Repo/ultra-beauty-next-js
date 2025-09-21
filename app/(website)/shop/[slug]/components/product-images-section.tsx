@@ -6,8 +6,14 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { ProductImagesSectionProps, TimeLeftProps } from "@/types/product";
 
-const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({ images, is_flash_sale, flashEndDate,
-  onToggleWishlist, isWishlisted, is_new }) => {
+const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> = ({
+  images,
+  is_flash_sale,
+  flashEndDate,
+  onToggleWishlist,
+  isWishlisted,
+  is_new
+}) => {
 
   const [timeLeft, setTimeLeft] = useState<TimeLeftProps>({
     hours: 0,
@@ -48,7 +54,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
   }, [flashEndDate]);
 
   return (
-    <div className="w-full h-full space-y-8">
+    <div className="h-full w-[90vw] sm:w-full space-y-8">
       {/* Main Image (responsive height) */}
       <div className="relative rounded-lg h-96 bg-[#f1f1f1] md:h-[600px]">
         {
@@ -57,7 +63,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
               src={selectedImage}
               alt="Main product"
               fill
-              className="object-fit rounded-lg"
+              className="object-contain rounded-lg"
             />
           )
         }
@@ -75,15 +81,14 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </Badge>
         }
       </div>
-
       {
         images?.length > 1 && (
-          <div className="grid grid-cols-4 gap-1 overflow-x-auto md:gap-6">
+          <div className="grid grid-cols-4 gap-6 overflow-x-auto md:gap-6">
             {
               images.map((img) => (
                 <div
                   key={img.id}
-                  className={`flex-shrink-0 w-[85px] sm:w-[80px] md:w-full relative h-[100px] sm:h-[120px] md:h-[150px]
+                  className={`flex-shrink-0 w-[75px] h-[75px] sm:w-[80px] md:w-full relative  sm:h-[120px] md:h-[150px]
               ${selectedImage === img.file ? "border-2 border-primary rounded-md" : "border border-none"}`}
                   onClick={() => setSelectedImage(img.file)}
                 >
@@ -99,15 +104,14 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </div>
         )
       }
-
       {/* Flash Sale Badge */}
       {
         flashEndDate &&
           is_flash_sale &&
           new Date(flashEndDate).getDate() > new Date().getDate()
           && new Date(flashEndDate).getTime() > Date.now() ? (
-          <div className="flex justify-between px-3 py-3 text-white bg-blue-400 rounded w-96 md:w-full">
-            <p className="pl-2 font-semibold font-poppins">Flash Sales</p>
+          <div className="w-[90vw] flex justify-between px-3 py-3 text-white bg-blue-400 rounded sm:w-96 md:w-full">
+            <p className="sm:pl-2 font-semibold font-poppins">Flash Sales</p>
             <p className="text-base font-sfpro">
               Ends in {pad(timeLeft.hours)}:{pad(timeLeft.minutes)}:{pad(timeLeft.seconds)} Hrs
             </p>

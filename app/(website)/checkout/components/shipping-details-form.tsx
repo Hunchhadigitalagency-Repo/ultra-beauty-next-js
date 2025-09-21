@@ -122,7 +122,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter Voucher Code"
+                      placeholder="Enter First Name"
                       className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       {...field}
                     />
@@ -141,7 +141,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter the Email Address"
+                      placeholder="Enter Last Name"
                       className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       {...field}
                     />
@@ -273,7 +273,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter the phone number"
+                      placeholder="e.g. Near City Mall"
                       className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       {...field}
                     />
@@ -292,7 +292,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter the alternative phone number"
+                      placeholder="e.g. Sunrise Tower, 5th floor"
                       className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                       {...field}
                     />

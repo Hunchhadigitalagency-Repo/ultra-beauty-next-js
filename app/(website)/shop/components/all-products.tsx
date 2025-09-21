@@ -1,4 +1,5 @@
 "use client";
+
 import { Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
@@ -6,8 +7,8 @@ import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useToggleWishlist } from "@/utils/wishList-utility";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
@@ -18,24 +19,34 @@ const AllProducts = () => {
 
   const toggleWishlist = useToggleWishlist();
   const { isAuthenticated } = useCheckToken();
+
   const queryParams = new URLSearchParams();
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  const { selectedCategories } = useAppSelector(state => state.category);
+  const { selectedCategories, selectedBrands, priceRange } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
   if (selectedCategories.length > 0) {
-    queryParams.append("category", selectedCategories.join(","));
+    queryParams.set("category", selectedCategories.join(","));
   }
 
   if (searchValue) {
-    queryParams.append("search", searchValue);
+    queryParams.set("search", searchValue);
   }
 
-  const path = `public-products${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
+  if (selectedBrands.length > 0) {
+    queryParams.set("brand", selectedBrands.join(','))
+  }
+
+  if (priceRange[0] !== 100 || priceRange[1] !== 10000) {
+    queryParams.set('min_price', priceRange[0].toString())
+    queryParams.set('max_price', priceRange[1].toString())
+  }
+
+  const path = `public-products/${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -46,7 +57,7 @@ const AllProducts = () => {
     hasMore,
     count,
     fetchNext,
-  } = useInfiniteFetch<Result>(path || "", "16", "", "", isLoggedIn);
+  } = useInfiniteFetch<Result>(path || "", "", "", "", isLoggedIn);
 
 
   const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {
@@ -75,7 +86,10 @@ const AllProducts = () => {
           <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
           <ProductSort />
         </div>
-        <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
+        <Menu
+          onClick={toggleFilter}
+          className="w-5 h-5 text-foreground lg:hidden"
+        />
       </div>
       <div className="flex lg:flex-row lg:gap-16">
         <FilterSection showFilter={showFilter} onClose={toggleFilter} />
@@ -93,7 +107,7 @@ const AllProducts = () => {
               </div>
             }
             endMessage={
-              <p className="text-center text-sm text-muted-foreground mt-4">
+              <p className="mt-4 text-sm text-center text-muted-foreground">
                 You’ve reached the end!
               </p>
             }
@@ -106,7 +120,7 @@ const AllProducts = () => {
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
-                  brand={product.brand.name}
+                  brand={product.brand.brand_name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

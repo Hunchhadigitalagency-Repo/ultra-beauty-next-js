@@ -116,14 +116,8 @@ const Payment: React.FunctionComponent = () => {
         description="Payment for your products"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_0.3fr] gap-10 lg:gap-x-25">
-        <OrderSummary
-          shippingDetails={shippingDetails}
-          shippingFee={shippingFee}
-          totalItems={cartItem.length}
-          applyVoucher={false}
-          isCheckout
-        />
+      <div className="grid grid-cols-1  lg:grid-cols-[0.7fr_0.3fr] gap-10 ">
+
         <div className="flex flex-col order-1 gap-3 md:gap-5 lg:order-none ">
           <div className="bg-[#FAFAFA] rounded-sm">
             <p className="px-5 py-3 text-sm font-medium md:text-base">
@@ -131,14 +125,14 @@ const Payment: React.FunctionComponent = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 sm:gap-5 md:gap-10">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 sm:gap-5 lg:gap-3 md:gap-4 ">
             {
               PAYMENT_GATEWAYS.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => setActivePaymentMethod(item.value)}
                   className={`
-                    w-full aspect-square cursor-pointer flex flex-col gap-2 md:gap-4
+                     w-full aspect-square cursor-pointer flex flex-col gap-2 md:gap-4 
                     justify-center items-center border-[1px] rounded-sm 
                     ${activePaymentMethod === item.value
                       ? "border-primary"
@@ -156,7 +150,7 @@ const Payment: React.FunctionComponent = () => {
                   </div>
                   <p
                     className={`
-                  text-center text-xs sm:text-sm md:text-base font-medium
+                  text-center text-xs sm:text-sm md:text-base font-medium lg:px-4
                   ${activePaymentMethod === item.value && "text-primary"}
                   `}
                   >
@@ -185,6 +179,13 @@ const Payment: React.FunctionComponent = () => {
             </Button>
           </div>
         </div>
+        <OrderSummary
+          shippingDetails={shippingDetails}
+          shippingFee={shippingFee}
+          totalItems={cartItem.length}
+          applyVoucher={false}
+          isCheckout
+        />
       </div>
     </section>
   )

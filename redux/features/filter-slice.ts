@@ -5,7 +5,7 @@ interface ICriteria {
   categories?: number[];
   colors?: string[];
   priceRange?: [number, number];
-  status?:string;
+  status?: string;
   grand_total?: number;
   customer_name?: string;
   email?: string;

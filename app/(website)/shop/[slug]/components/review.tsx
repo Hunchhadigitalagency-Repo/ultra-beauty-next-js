@@ -36,7 +36,7 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
                     displayedReviews.map((review) => (
                         <ReviewHistoryCard
                             key={review.id}
-                            image={review.picture || profile.profile_picture}
+                            image={review.picture || profile?.profile_picture}
                             rating={review.rating}
                             review={review.review}
                             product={""} />

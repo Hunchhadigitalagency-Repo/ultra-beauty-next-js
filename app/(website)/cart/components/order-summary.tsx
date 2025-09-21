@@ -58,10 +58,10 @@ export default function OrderSummary({
 
               <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
                 <span>
-                  {firstName}{lastName}
+                  {firstName} {lastName}
                 </span>
                 <span>
-                  {phoneNumber}{alternativePhoneNumber && `| ${alternativePhoneNumber}`}
+                  {phoneNumber}{alternativePhoneNumber && ` | ${alternativePhoneNumber}`}
                 </span>
                 <span>
                   {address}

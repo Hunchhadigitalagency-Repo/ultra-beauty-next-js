@@ -6,6 +6,7 @@ interface SectionHeaderProps {
   titleClassName?: string;
   descriptionClassName?: string;
 }
+
 const SectionHeader = ({
   title,
   description,
@@ -13,13 +14,15 @@ const SectionHeader = ({
   titleClassName,
   descriptionClassName,
 }: SectionHeaderProps) => {
+
   return (
     <div className={`flex flex-col gap-1 sm:gap-2 md:gap-3 ${className}`}>
       <h2 className={`text-2xl xl:text-3xl font-bold text-foreground font-playfair ${titleClassName}`}>
         {title}
       </h2>
-      <p className={`text-foreground font-normal text-xs sm:text-sm md:text-base ${descriptionClassName}`}>{description}</p>
+      <p className={`text-foreground font-normal text-xs leading-4 sm:text-sm md:text-base ${descriptionClassName}`}>{description}</p>
     </div>
   );
 };
+
 export default SectionHeader;

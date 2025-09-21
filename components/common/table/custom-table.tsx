@@ -36,7 +36,7 @@ const CustomTable = <T,>({
   cols,
   data,
   onRowClick,
-  loading = false,
+  loading,
   height = "h-[60vh]",
   firstHeaderWidth,
   hasSerialNo = false,

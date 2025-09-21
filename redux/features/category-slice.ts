@@ -3,11 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface InitialStateType {
     selectedCategories: number[];
     selectedSubcategories: number[];
+    selectedBrands: number[];
+    priceRange: [number, number]
 }
 
 const initialState: InitialStateType = {
     selectedCategories: [],
     selectedSubcategories: [],
+    selectedBrands: [],
+    priceRange: [100, 10000]
 };
 
 const categorySlice = createSlice({
@@ -30,6 +34,17 @@ const categorySlice = createSlice({
                 state.selectedSubcategories = state.selectedSubcategories.filter(v => v !== id);
             }
         },
+        toggleBrands: (state, action: PayloadAction<{ id: number, checked: boolean }>) => {
+            const { id, checked } = action.payload;
+            if (checked) {
+                state.selectedBrands.push(id);
+            } else {
+                state.selectedBrands = state.selectedBrands.filter(v => v !== id)
+            }
+        },
+        setPriceRange: (state, action: PayloadAction<[number, number]>) => {
+            state.priceRange = action.payload;
+        },
         clearSubcategoriesForCategory: (state, action: PayloadAction<number[]>) => {
             state.selectedSubcategories = state.selectedSubcategories.filter(
                 subId => !action.payload.includes(subId)
@@ -39,5 +54,13 @@ const categorySlice = createSlice({
     }
 });
 
-export const { toggleCategory, toggleSubcategory, clearSubcategoriesForCategory, resetFilters } = categorySlice.actions;
+export const {
+    toggleCategory,
+    toggleSubcategory,
+    toggleBrands,
+    clearSubcategoriesForCategory,
+    resetFilters,
+    setPriceRange
+} = categorySlice.actions;
+
 export default categorySlice.reducer;
