@@ -33,7 +33,7 @@ export function CheckboxFilter({
   return (
     <Accordion defaultValue={[id]} type="multiple">
       <AccordionItem value={id}>
-        <AccordionTrigger className="text-sm font-poppins font-medium text-foreground py-3">
+        <AccordionTrigger className="text-sm sm:text-base font-poppins font-medium text-foreground py-3">
           {title}
         </AccordionTrigger>
         <AccordionContent className="">

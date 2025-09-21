@@ -40,7 +40,7 @@ const WishlistCard = ({
     <div className="z-20 grid w-full gap-2 p-2 mt-5 border rounded-md sm:p-4 lg:p-3 sm:gap-4 grid-row-1 hover:shadow-md">
       <div className="grid grid-cols-[20%_75%] sm:grid-cols-[15%_82%] md:grid-cols-[20%_78%] lg:grid-cols-[25%_72%] xl:grid-cols-[15%_83%] 2xl:gap-6 2xl:grid-cols-[10%_88%] gap-4">
         {/* Image */}
-        <Link href={`shop/product/${slug}`} className="w-full h-full">
+        <Link href={`shop/${slug}`} className="w-full h-full">
           <div className="relative justify-center w-15 h-15 sm:w-18 sm:h-18 place-self-center sm:align-self-center md:w-32 md:h-32">
             <Image
               src={image}
