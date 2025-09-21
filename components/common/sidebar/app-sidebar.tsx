@@ -22,9 +22,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <h1 className="text-center text-3xl font-semibold text-primary">
-          BASERA
-        </h1>
+        <div className="text-base font-medium leading-none text-center whitespace-nowrap md:text-xl font-playfair text-primary">
+          Ultra Beauty
+          <br />
+          <span className="text-sm font-poppins md:text-base">&</span>
+          <br />
+          Brand
+        </div>
       </SidebarHeader>
 
       <SidebarContent>
@@ -47,11 +51,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         >
                           {item.icon && (
                             <div
-                              className={`p-1  ${
-                                isActive
-                                  ? "text-white bg-primary flex items-center justify-center"
-                                  : ""
-                              } `}
+                              className={`p-1  ${isActive
+                                ? "text-white bg-primary flex items-center justify-center"
+                                : ""
+                                } `}
                             >
                               <item.icon className="size-4" />
                             </div>

@@ -8,7 +8,7 @@ const BeautyBanner: React.FunctionComponent = () => {
 
   return (
     <div className="relative bg-[#FAFAFA] padding-x pt-4 sm:pt-6 lg:pt-8">
-      <div className="flex flex-col md:flex-row justify-between ">
+      <div className="flex flex-col md:flex-row justify-between">
         <SignatureSection />
         <SignatureImage />
       </div>

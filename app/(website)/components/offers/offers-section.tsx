@@ -20,8 +20,8 @@ const OffersSection = () => {
     const { data: saleProducts, loading, error } = useFetchData<ProductResponse>(`products-on-sale/`)
 
     return (
-        <section className="padding space-y-4">
-            <div className="flex justify-between items-center gap-4">
+        <section className="space-y-4 padding">
+            <div className="flex items-center justify-between gap-4">
                 <SectionHeader
                     className="max-w-[60%] sm:max-w-full"
                     title="The Offers"
@@ -37,20 +37,20 @@ const OffersSection = () => {
                     <CarouselContent className="-ml-4">
                         {
                             loading ? (
-                                <div className='h-60 flex w-full justify-center items-center'>
+                                <div className='flex items-center justify-center w-full h-60'>
                                     <p className='text-gray'>
                                         Loading Offer Section...
                                     </p>
                                 </div>
                             ) : error ? (
-                                <div className='h-60 flex w-full justify-center items-center'>
+                                <div className='flex items-center justify-center w-full h-60'>
                                     <p className='text-red'>
                                         Error While Fetching Offer Section
                                     </p>
                                 </div>
                             ) : (
                                 saleProducts?.results?.length === 0 ? (
-                                    <div className='h-60 flex w-full justify-center items-center'>
+                                    <div className='flex items-center justify-center w-full h-60'>
                                         <p className='text-red'>
                                             No Offers Found !
                                         </p>
@@ -63,8 +63,9 @@ const OffersSection = () => {
                                                 className="pl-4 basis-[45%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                                                 <OffersCard
                                                     imageSrc={saleproduct?.images[0]?.file}
-                                                    brand={saleproduct?.brand.name}
+                                                    brand={saleproduct?.brand.brand_name}
                                                     productName={saleproduct?.name}
+                                                    slugName={saleproduct?.slug_name}
                                                 />
                                             </CarouselItem>
                                         ))
@@ -74,8 +75,8 @@ const OffersSection = () => {
                     </CarouselContent>
 
                     {/* Navigation Arrows */}
-                    <CarouselPrevious className=" hidden lg:flex absolute -left-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
-                    <CarouselNext className="hidden lg:flex absolute -right-2 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-gray-600 border-gray-200" />
+                    <CarouselPrevious className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200  lg:flex -left-2 top-1/2 hover:bg-gray-50" />
+                    <CarouselNext className="absolute hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
                 </Carousel>
             </div>
         </section>

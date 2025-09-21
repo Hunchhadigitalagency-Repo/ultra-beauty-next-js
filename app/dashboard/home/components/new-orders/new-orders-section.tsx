@@ -1,61 +1,35 @@
 "use client";
 
-import DataCard from "@/components/common/cards/data-card";
-import CustomTable from "@/components/common/table/custom-table";
 import React from "react";
-import { NewOrdersConstants } from "./new-orders-constants";
+import useFetchData from "@/hooks/use-fetch";
 import { useAppDispatch } from "@/redux/hooks";
-
-export const tableData = [
-  {
-    order_id: "ORD123456",
-    image: "",
-    name: "Running Shoes",
-    price: "$59.99",
-    status: "Processing",
-    sold: "John Doe",
-    earnings: 2,
-    payment: "Paid",
-    order_date: "2025-06-13",
-  },
-  {
-    order_id: "ORD123457",
-    image: "",
-    name: "Wireless Headphones",
-    price: "$89.00",
-    status: "Shipped",
-    sold: "Jane Smith",
-    earnings: 1,
-    payment: "Pending",
-    order_date: "2025-06-12",
-  },
-  {
-    order_id: "ORD123458",
-    image: "",
-    name: "Gaming Laptop",
-    price: "$1200.00",
-    status: "Delivered",
-    sold: "Alice Johnson",
-    earnings: 1,
-    payment: "Paid",
-    order_date: "2025-06-11",
-  },
-];
+import { PaginatedResponse } from "@/types/common";
+import { NewOrderResponse } from "@/types/dashboard";
+import DataCard from "@/components/common/cards/data-card";
+import { NewOrdersConstants } from "./new-orders-constants";
+import CustomTable from "@/components/common/table/custom-table";
 
 const NewOrdersSection = () => {
+  interface NewOrderResponseWithPagination extends PaginatedResponse {
+    results: NewOrderResponse[]
+  }
+
   const dispatch = useAppDispatch();
+  const { data: NewOrderResponseWithPagination, error, loading } = useFetchData<NewOrderResponseWithPagination>('new-orders/', true)
+  const NewOrdersData = NewOrderResponseWithPagination?.results
 
   return (
     <DataCard
       title="New Orders"
-      count={tableData.length}
+      count={NewOrdersData?.length}
       filter={<span>Filter</span>}
     >
-      <CustomTable<any>
+      <CustomTable<NewOrderResponse>
         cols={NewOrdersConstants(dispatch)}
-        data={tableData as any[]}
-        loading={false}
-        onRowClick={() => {}}
+        data={NewOrdersData as NewOrderResponse[]}
+        loading={loading}
+        error={error}
+        onRowClick={() => { }}
         height="h-auto"
       />
     </DataCard>

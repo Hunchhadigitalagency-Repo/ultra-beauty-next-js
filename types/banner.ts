@@ -12,3 +12,11 @@ export interface IBanner {
   sub_category?: string;
   is_active: boolean;
 }
+
+export interface BannerResponse {
+  id: number
+  image: string
+  product_slug: string
+  is_active: boolean
+  position: string
+}

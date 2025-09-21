@@ -91,17 +91,20 @@ export function useInfiniteFetch<T>(
     }
   }, [fetchNext]);
 
+  // reset data when path changes
   useEffect(() => {
     setData([]);
     setCount(0);
-    const newUrl = buildUrl(path);
-    setNextUrl(newUrl);
+    setNextUrl(buildUrl(path)); // just set URL, don't fetch yet
+  }, [path, buildUrl, refetch]);
 
-    if (newUrl) {
-      initialLoadRef.current = false;
+  // run fetch when nextUrl changes
+  useEffect(() => {
+    if (nextUrl) {
       fetchNext();
     }
-  }, [path, buildUrl, refetch]);
+  }, [nextUrl, fetchNext]);
+
 
   return {
     data,

@@ -1,18 +1,17 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import DOMPurify from "dompurify";
 import { IBlog } from "@/types/cms";
 import { useRouter } from "next/navigation";
 import { Calendar, UserCircle2Icon } from "lucide-react";
 
 const BlogCard: React.FunctionComponent<IBlog> = ({
   slug,
+  sub_title,
   title,
   author,
   cover_image,
-  created_at,
-  description,
+  created_at
 }) => {
 
   const formattedDate = created_at
@@ -33,42 +32,41 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
             src={cover_image}
             alt={title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw,
                    (max-width: 1200px) 50vw,
                    33vw"
             priority={false}
           />
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+          <div className="flex items-center justify-center w-full h-full text-gray-500 bg-gray-200">
             No Image
           </div>
         )}
       </div>
 
-      <h3 className="text-xl line-clamp-1 font-playfair font-semibold text-foreground">
+      <h3 className="text-xl font-semibold line-clamp-1 font-playfair text-foreground">
         {title}
       </h3>
 
-      <div className="flex items-center gap-4 justify-between">
-        <div className="text-accent-foreground flex items-center gap-2">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-accent-foreground">
           <UserCircle2Icon className="w-4 h-4" />
-          <span className="font-medium text-sm">
+          <span className="text-sm font-medium">
             {author?.username || "Unknown Author"}
           </span>
         </div>
 
-        <div className="text-accent-foreground flex items-center gap-2">
+        <div className="flex items-center gap-2 text-accent-foreground">
           <Calendar className="w-4 h-4" />
-          <span className="font-medium text-sm">
+          <span className="text-sm font-medium">
             {formattedDate}
           </span>
         </div>
       </div>
-      <p
-        className="text-foreground font-normal text-sm text-ellipsis overflow-hidden line-clamp-2"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description || "") }}
-      />
+      <p className="overflow-hidden text-sm font-normal text-foreground text-ellipsis line-clamp-2">
+        {sub_title}
+      </p>
     </section>
   );
 };

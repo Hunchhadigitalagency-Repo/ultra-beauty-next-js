@@ -1,5 +1,5 @@
 "use client";
-
+import React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -11,7 +11,7 @@ import { CheckboxFilterItem } from "./checkbox-filter-item";
 interface FilterOption {
   id: number;
   name: string;
-  product_count: number;
+  product_count?: number;
 }
 
 interface CheckboxFilterProps {
@@ -29,6 +29,7 @@ export function CheckboxFilter({
   selectedValues,
   onChange,
 }: CheckboxFilterProps) {
+
   return (
     <Accordion defaultValue={[id]} type="multiple">
       <AccordionItem value={id}>
@@ -36,8 +37,8 @@ export function CheckboxFilter({
           {title}
         </AccordionTrigger>
         <AccordionContent className="">
-          <div className="space-y-3 h-28 overflow-y-auto">
-            {options.map((option) => (
+          <div className="space-y-3 max-h-28 overflow-y-auto scrollbar-hide">
+            {options?.map((option) => (
               <CheckboxFilterItem
                 key={option.name}
                 id={`${id}-${option.name}`}

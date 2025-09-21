@@ -20,7 +20,7 @@ const useCheckToken = () => {
         token: accessToken,
       });
       if (response.status === 200) {
-        setIsAuthenticated(true); 
+        setIsAuthenticated(true);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
@@ -33,16 +33,16 @@ const useCheckToken = () => {
             setAuthToken(refreshResponse.data.access);
             setIsAuthenticated(true);
           } else {
-            setIsAuthenticated(false); 
+            setIsAuthenticated(false);
           }
         } catch (refreshError) {
-          setIsAuthenticated(false); 
+          setIsAuthenticated(false);
         }
       } else {
         setIsAuthenticated(false);
       }
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [accessToken, refreshToken, dispatch]);
 
