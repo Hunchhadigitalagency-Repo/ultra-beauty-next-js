@@ -41,7 +41,7 @@ const Profile: React.FunctionComponent = () => {
       <section className="flex flex-col gap-12 lg:flex-row">
         <aside className="rounded-lg hidden lg:block lg:grid-cols-1 lg:bg-secondary lg:p-5 min-w-60 h-fit">
           {
-            PROFILE_TABS.map((tab, index) => (
+            PROFILE_TABS?.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTabIndex(index)}

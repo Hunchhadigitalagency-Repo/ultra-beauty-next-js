@@ -26,7 +26,7 @@ import { IPaginatedDropdown, IPaginatedDropdownData } from "@/types/dropdown";
 
 interface PaginatedSelectProps {
   value?: string;
-  onValueChange: (value: string) => void;
+  onValueChange: (value: string, slug_name?: string) => void;
   placeholder?: string;
   fetchData: (page: number, search?: string) => Promise<IPaginatedDropdown>;
   className?: string;
@@ -143,7 +143,7 @@ export function PaginatedSelect({
   // Load initial data when component opens
   useEffect(() => {
     if (open && !initialLoad) {
- 
+
       setInitialLoad(true);
       loadData(1, "", false);
     }

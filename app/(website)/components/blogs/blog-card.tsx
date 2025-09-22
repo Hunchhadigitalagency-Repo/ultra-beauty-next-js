@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { IBlog } from "@/types/cms";
+import { IBlog } from "@/types/blogs";
 import { useRouter } from "next/navigation";
 import { Calendar, UserCircle2Icon } from "lucide-react";
 
@@ -53,7 +53,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
         <div className="flex items-center gap-2 text-accent-foreground">
           <UserCircle2Icon className="w-4 h-4" />
           <span className="text-sm font-medium">
-            {author?.username || "Unknown Author"}
+            {author || "Unknown Author"}
           </span>
         </div>
 

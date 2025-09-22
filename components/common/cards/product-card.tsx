@@ -49,7 +49,7 @@ const ProductCard = ({
           className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
         />
         {isFlashSale && (
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-2 right-2">
             <span className="bg-primary text-[#FFFFFF] font-poppins text-[10px] md:text-sm  px-3 md:px-4 py-1 rounded-full">
               FLASH SALES
             </span>
@@ -72,9 +72,6 @@ const ProductCard = ({
           {title}
         </h3>
       </div>
-
-
-
       <div className="flex flex-col gap-2 md:gap-3 lg:gap-2">
         {/* Price row */}
         <PriceRow
@@ -93,7 +90,8 @@ const ProductCard = ({
           <button
             onClick={handleWishlist}
             disabled={isLoading}
-            className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors ${isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
+            className={`p-1 md:p-2 rounded-full bg-[#FAFAFA] transition-colors 
+              ${isWishlisted ? "text-red" : "text-gray-400 hover:text-red-500"
               } cursor-pointer`}
             aria-label="Toggle Wishlist"
           >

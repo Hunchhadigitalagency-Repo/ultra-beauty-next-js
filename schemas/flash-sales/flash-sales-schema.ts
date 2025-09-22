@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { paginatedSelectSchema } from "../menu/products/product-schema";
 
 export const flashSalesSchema = z
   .object({
@@ -12,7 +13,7 @@ export const flashSalesSchema = z
     end_date: z.string().min(1, {
       message: "End Date is required",
     }),
-    recommended_products: z.array(z.string()).optional(),
+    products: z.array(paginatedSelectSchema).optional(),
     is_active: z.boolean(),
   })
   .refine((data) => new Date(data.end_date) >= new Date(data.start_date), {

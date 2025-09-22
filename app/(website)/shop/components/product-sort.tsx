@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React from "react";
 import {
     Select,
     SelectContent,
@@ -10,22 +10,22 @@ import {
     SelectValue
 } from "@/components/ui/select";
 
-const ProductSort: React.FunctionComponent = () => {
+interface ProductSortProps {
+    selectedValue: string;
+    onChange: (value: string) => void;
+}
 
-    const [selectedValue, setSelectedValue] = useState("apple");
+const ProductSort: React.FunctionComponent<ProductSortProps> = ({ selectedValue, onChange }) => {
 
     return (
-        <Select value={selectedValue} onValueChange={setSelectedValue}>
+        <Select value={selectedValue} onValueChange={onChange}>
             <SelectTrigger className="w-[150px]">
-                <SelectValue />
+                <SelectValue placeholder="Sort By" />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                    <SelectItem value="name_a_to_z">A to Z</SelectItem>
+                    <SelectItem value="name_z_to_a">Z to A</SelectItem>
                 </SelectGroup>
             </SelectContent>
         </Select>

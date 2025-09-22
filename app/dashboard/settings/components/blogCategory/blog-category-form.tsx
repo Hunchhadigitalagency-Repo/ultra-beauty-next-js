@@ -28,6 +28,7 @@ import {
 import { IBlogCategory } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -38,18 +39,18 @@ interface BlogCategoryFormProps {
 
 const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
   const dispatch = useAppDispatch();
-
+  const [err, setErr] = useState()
   const form = useForm<BlogCategoryValues>({
     resolver: zodResolver(blogCategorySchema),
     defaultValues: initialData
       ? {
-          blogCategory: initialData.name,
-          is_active: initialData.is_active ?? false,
-        }
+        blogCategory: initialData.name,
+        is_active: initialData.is_active ?? false,
+      }
       : {
-          blogCategory: "",
-          is_active: false,
-        },
+        blogCategory: "",
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: BlogCategoryValues) => {
@@ -61,20 +62,21 @@ const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
       if (initialData) {
         const response = await updateBlogCategory(initialData.id, formData);
         if (response.status === 200) {
-          toast("Blog Category updated successfully");
+          toast.success("Blog Category updated successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.BLOG_CATEGORY));
         }
       } else {
         const response = await createBlogCategory(formData);
         if (response.status === 201) {
-          toast("Blog Category created successfully");
+          toast.success("Blog Category created successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.BLOG_CATEGORY));
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       handleError(error, toast);
+      setErr(error?.response?.data?.name[0])
     }
   };
 
@@ -110,6 +112,7 @@ const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
                       />
                     </FormControl>
                     <FormMessage />
+                    {err && <span className="text-red text-[15px]">{err}</span>}
                   </FormItem>
                 )}
               />

@@ -19,3 +19,14 @@ export const getHeaderTitle = (pathname: string) => {
 };
 
 
+
+export const getTransectionAmount = (data: any[], total_amount: number) => {
+
+  const cash_flow = data?.reduce((acc, value) => {
+    return acc + parseFloat(value.amount || "0");
+  }, 0);
+
+  const payableAmount = total_amount - cash_flow;
+
+  return payableAmount.toFixed(2);
+};

@@ -1,30 +1,37 @@
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ETypes } from "@/types/table";
-import TransactionForm from "@/app/dashboard/transactions/components/transaction-form";
+import TransactionForm from "@/app/dashboard/invoices/[slug]/components/record-transaction-form";
 
 interface AddModalProps {
   type: string;
   text: string;
   className?: string;
+  invoice_id?: number;
 }
 
-const AddModal: React.FC<AddModalProps> = ({ type, text, className }) => {
+const AddModal: React.FC<AddModalProps> = ({ type, text, invoice_id, className }) => {
   const formComponentMap: Record<string, React.ReactNode> = {
-    [ETypes.TRANSACTIONS]: <TransactionForm initialData={null} />,
+    [ETypes.INVOICES]: <TransactionForm initialData={null} invoice={invoice_id?.toString()} />,
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className={`h-[38px] flex items-center gap-1 hover:bg-transparent border border-transparent hover:border-customBlack hover:text-black px-4 ${className}`}
+          className={` flex items-center gap-1 hover:bg-yellow-600 border border-transparent hover:border-customBlack hover:text-white px-4 ${className}`}
         >
           <span className="text-sm font-light capitalize">{text}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:w-[484px] rounded-t-lg rounded-b-none py-4 px-5 flex flex-col justify-between gap-3">
+      <DialogContent className="sm:w-[484px]  py-4 px-5 flex flex-col justify-between gap-3 bg-white">
+        <DialogTitle className="hidden">Add Modal</DialogTitle>
         {formComponentMap[type] || <p>Form type not supported</p>}
       </DialogContent>
     </Dialog>

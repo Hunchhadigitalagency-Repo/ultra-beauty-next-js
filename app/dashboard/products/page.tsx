@@ -5,9 +5,7 @@ import type React from "react";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
 import { useAppSelector } from "@/redux/hooks";
-
 import SearchBox from "@/components/common/filter/search-box";
 import ProductFilters from "./components/product-filters";
 import ProductTabs from "./components/product-tabs";
@@ -15,6 +13,8 @@ import { useRouter } from "next/navigation";
 import BulkActions from "@/components/common/table/bulk-actions";
 import MobileProductFilters from "./components/mobile-product-filters";
 import { ETypes } from "@/types/table";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
 
 const ProductsPage = () => {
   const selectedIds = useAppSelector((state) => state.table.selectedIds);
@@ -33,7 +33,7 @@ const ProductsPage = () => {
             <MobileProductFilters />
           </div>
           <div className="flex items-center gap-3">
-            <BulkActions data={selectedIds} type={ETypes.PRODUCTS} />
+            {selectedIds.length > 0 && <BulkActions type={ETypes.PRODUCTS} data={[]} />}
 
             <Button
               className="text-white flex items-center gap-2"
@@ -50,4 +50,4 @@ const ProductsPage = () => {
   );
 };
 
-export default ProductsPage;
+export default withPermissions(ProductsPage, [Permissions.CAN_READ_PRODUCTS]);

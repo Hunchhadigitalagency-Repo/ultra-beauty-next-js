@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
 
 import DashboardHeader from "@/components/common/header/dashboard-header";
 import withAuth from "@/hoc/withAuth";
+import { EUserTypes } from "@/types";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -14,10 +15,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <SidebarInset>
         <DashboardHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 ">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 p-4 bg-red-100/50 ">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
 };
 
-export default withAuth(DashboardLayout);
+export default withAuth(DashboardLayout, [
+  EUserTypes.ADMIN,
+  EUserTypes.SUPER_ADMIN,
+]);

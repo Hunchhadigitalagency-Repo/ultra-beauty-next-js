@@ -1,15 +1,22 @@
+"use client";
+
 import React from "react";
 import LinkText from "@/components/common/header/link-text";
-// import BlogCard from "@/app/(website)/components/blogs/blog-card";
+import BlogCard from "@/app/(website)/components/blogs/blog-card";
 import SectionHeader from "@/components/common/header/section-header";
+import useFetchData from "@/hooks/use-fetch";
+import { IBlog, RecommendedBlog } from "@/types/cms";
+import { useParams } from "next/navigation";
+import BlogsCardSkeleton from "./blogs-card-skeleton";
+import BlogsCardErrorUI from "./blogs-card-error-UI";
 
 const ReadMoreBlogs: React.FunctionComponent = () => {
 
-  // const blogAuther = {
-  //   id: 1,
-  //   username: "Auther",
-  // };
-  // const defaultCategory = { id: 10, name: "General", is_active: true };
+  const id = useParams().id;
+  const path = id ? `cms/blogs/${id}` : "";
+  const { data, loading, error } = useFetchData<IBlog>(path, true);
+
+  const recommended_blogs = data?.recommended_blogs as RecommendedBlog[];
 
   return (
     <section className="space-y-6 padding">
@@ -20,42 +27,39 @@ const ReadMoreBlogs: React.FunctionComponent = () => {
         />
         <LinkText title="See All" href="/blogs" />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        {/* <BlogCard
-          id={1}
-          title="Blog 1"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus."
-          author={blogAuther}
-          created_at="2023-01-01"
-          cover_image="https://img.freepik.com/free-vector/blogging-word-concept_23-2147840840.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740"
-          sub_title="This is subtitle 1"
-          category={defaultCategory}
-        />
-
-        <BlogCard
-          id={2}
-          title="Blog 2"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus."
-          author={blogAuther}
-          created_at="2023-02-02"
-          cover_image="https://img.freepik.com/free-vector/blogging-word-concept_23-2147840840.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740"
-          sub_title="This is subtitle 2"
-          category={defaultCategory}
-        />
-
-        <BlogCard
-          id={3}
-          title="Blog 3"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus."
-          author={blogAuther}
-          created_at="2023-03-03"
-          cover_image="https://img.freepik.com/free-vector/blogging-word-concept_23-2147840840.jpg?ga=GA1.1.428175351.1750225494&semt=ais_hybrid&w=740"
-          sub_title="This is subtitle 3"
-          category={defaultCategory}
-        /> */}
-      </div>
+      {
+        loading ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {
+              Array.from({ length: 3 }).map((_, i) => (
+                <BlogsCardSkeleton key={i} />
+              ))
+            }
+          </div>
+        ) : error ? (
+          <BlogsCardErrorUI />
+        ) : recommended_blogs?.length === 0 ?
+          (
+            <div className='w-full flex justify-center items-center h-60'>
+              <p className='text-gray-400'>No Blogs Found</p>
+            </div>)
+          : (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+              recommended_blogs?.map((recommendedBlog: RecommendedBlog) =>
+              (<BlogCard
+                key={recommendedBlog.id}
+                slug={recommendedBlog?.slug}
+                title={recommendedBlog?.title}
+                cover_image={recommendedBlog?.cover_image}
+                sub_title={recommendedBlog?.sub_title}
+                author={recommendedBlog?.author.username}
+                created_at={recommendedBlog?.created_at.split("T")[0]}
+              />)
+              )
+            }
+          </div>
+          )
+      }
     </section>
   );
 };

@@ -31,7 +31,7 @@ export interface Category {
 export default function HeroSection() {
 
   const params = window.location;
-  const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop/' : '/cms/banner-general/'
+  const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop' : '/cms/banner-general'
   const { data, error, loading } = useFetchData<HeroSectionResponse[]>(
     path
   )

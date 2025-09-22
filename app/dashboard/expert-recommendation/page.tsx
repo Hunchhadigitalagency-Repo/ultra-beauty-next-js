@@ -3,25 +3,32 @@
 import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
 import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { IExpertRecommendation } from "@/types/cms";
 import { ExpertRecommendationConstant } from "./components/expert-recommendation-constant";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
 
 const ExpertRecommendationPage = () => {
   const dispatch = useAppDispatch();
 
   const scrollId = "infinite-scroll-container";
-  const { data, loading, hasMore, fetchNext, count } =
-    useInfiniteFetch<IExpertRecommendation>("/cms/expert-recommendations/");
+  const { searchQuery } = useAppSelector((state) => state.filter);
+  const { data, loading, hasMore, fetchNext, totalCount } =
+    useInfiniteFetch<IExpertRecommendation>(
+      "/cms/expert-recommendations/",
+      "search",
+      searchQuery
+    );
 
   return (
     <main className="space-y-4 bg-white p-4">
       <PageHeader
         type="Expert Recommendation"
-        totalItems={count}
+        totalItems={totalCount}
         searchPlaceholder="Search recommendation"
         path="/dashboard/expert-recommendation/add-expert-recommendation"
         buttonText="Create Expert Recommendations"
@@ -48,4 +55,6 @@ const ExpertRecommendationPage = () => {
   );
 };
 
-export default ExpertRecommendationPage;
+export default withPermissions(ExpertRecommendationPage, [
+  Permissions.CAN_READ_EXPERT_RECOMMENDATIONS,
+]);

@@ -66,14 +66,14 @@ const SocialForm = ({ initialData }: SocialFromProps) => {
       if (initialData) {
         const response = await updateSocialLink(initialData.id, formData);
         if (response.status === 200) {
-          toast("Social Link updated successfully");
+          toast.success("Social Link updated successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.SOCIAL_LINKS));
         }
       } else {
         const response = await createSocialLink(formData);
         if (response.status === 201) {
-          toast("Social Link created successfully");
+          toast.success("Social Link created successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.SOCIAL_LINKS));
         }

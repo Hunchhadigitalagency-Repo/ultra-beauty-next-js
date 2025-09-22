@@ -3,7 +3,6 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
 
-import { useAppDispatch } from "@/redux/hooks";
 import { NewReviewConstants } from "./new-review-constants";
 
 export const tableData = [
@@ -43,8 +42,6 @@ export const tableData = [
 ];
 
 const NewReviewSection = () => {
-  const dispatch = useAppDispatch();
-
   return (
     <DataCard
       title="New Review"
@@ -52,7 +49,7 @@ const NewReviewSection = () => {
       filter={<span>Filter</span>}
     >
       <CustomTable<any>
-        cols={NewReviewConstants(dispatch)}
+        cols={NewReviewConstants()}
         data={tableData as any[]}
         loading={false}
         onRowClick={() => {}}

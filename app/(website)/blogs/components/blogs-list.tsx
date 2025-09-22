@@ -55,8 +55,8 @@ const BlogsList = () => {
         >
           {/* Blog cards grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((blog, index) => (
-              <BlogCard key={index} {...blog} />
+            {blogs?.map((blog, index) => (
+              <BlogCard key={index} slug={blog.slug} sub_title={blog.sub_title} title={blog.title} author={blog.author.username} cover_image={blog.cover_image} created_at={blog.created_at} />
             ))}
           </div>
         </InfiniteScroll>

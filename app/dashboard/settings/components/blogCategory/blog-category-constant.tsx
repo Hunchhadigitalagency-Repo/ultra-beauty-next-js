@@ -9,9 +9,9 @@ import TableStatusSwitch from "@/components/common/table-status-switch/table-sta
 import { setSelectedData } from "@/redux/features/authentication-slice";
 
 export const BlogCategoryConstant = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
+  onUpdate: (data: IBlogCategory) => void // New parameter
 ): Col<IBlogCategory>[] => {
-  console.log(dispatch);
   return [
     {
       title: "BLOG CATEGORY NAME",
@@ -20,7 +20,11 @@ export const BlogCategoryConstant = (
     {
       title: "STATUS",
       render: (data: IBlogCategory) => (
-        <TableStatusSwitch type={ETypes.BLOG_CATEGORY} rowData={data} />
+        <TableStatusSwitch
+          type={ETypes.BLOG_CATEGORY}
+          rowData={data}
+          onUpdate={onUpdate} // Pass the updater function
+        />
       ),
     },
     {

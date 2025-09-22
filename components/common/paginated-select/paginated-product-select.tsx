@@ -19,8 +19,8 @@ import { Search, Filter, Loader2, ChevronsUpDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface PaginatedProductSelectProps {
-  selectedValues?: string[];
-  onSelectionChange: (values: string[]) => void;
+  selectedValues?: IPaginatedDropdownData[];
+  onSelectionChange: (values: IPaginatedDropdownData[]) => void;
   placeholder?: string;
   fetchData: (
     page: number,
@@ -32,7 +32,7 @@ interface PaginatedProductSelectProps {
   title?: string;
 }
 
-export function PaginatedProductSelect({
+export default function PaginatedProductSelect({
   selectedValues = [],
   onSelectionChange,
   placeholder = "Search Products",
@@ -50,14 +50,13 @@ export function PaginatedProductSelect({
   const [initialLoad, setInitialLoad] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<IPaginatedDropdownData[]>(
-    []
-  );
 
-  const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
-  
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const loadData = useCallback(
     async (page: number, search = "", filter = "", append = false) => {
+      console.log('loading the data');
+
       setLoading(true);
       try {
         const response = await fetchData(page, search, filter);
@@ -87,6 +86,8 @@ export function PaginatedProductSelect({
   // Handle search with debouncing
   const handleSearch = useCallback(
     (search: string) => {
+      // console.log('thjis is search', search);
+
       setSearchTerm(search);
       if (searchTimeoutRef.current) {
         clearTimeout(searchTimeoutRef.current);
@@ -141,22 +142,44 @@ export function PaginatedProductSelect({
     }
   }, [open]);
 
-  // Handle individual item selection
-  const handleItemSelect = (itemId: string) => {
-    const newSelection = selectedValues.includes(itemId)
-      ? selectedValues.filter((id) => id !== itemId)
-      : [...selectedValues, itemId];
-
-    onSelectionChange(newSelection);
+  // Handle individual item selection (now using full objects)
+  const handleItemSelect = (item: IPaginatedDropdownData) => {
+    const exists = selectedValues?.some((s) => s.id === item.id);
+    if (exists) {
+      // remove
+      onSelectionChange(selectedValues.filter((s) => s.id !== item.id));
+    } else {
+      // add
+      onSelectionChange([...selectedValues, item]);
+    }
   };
 
-  // Handle select all
+  // Handle select all (for visible page items)
+  const areAllVisibleSelected =
+    data.length > 0 &&
+    data.every((d) => selectedValues.some((s) => s.id === d.id));
+
+  const visibleSelectedCount = data.filter((d) =>
+    selectedValues.some((s) => s.id === d.id)
+  ).length;
+
+  const isIndeterminate =
+    visibleSelectedCount > 0 && visibleSelectedCount < data.length;
+
   const handleSelectAll = () => {
-    if (selectedValues.length === data.length && data.length > 0) {
-      onSelectionChange([]);
+    if (data.length === 0) return;
+
+    if (areAllVisibleSelected) {
+      const newSelection = selectedValues.filter(
+        (s) => !data.some((d) => d.id === s.id)
+      );
+      onSelectionChange(newSelection);
     } else {
-      const allIds = data.map((item) => item.id.toString());
-      onSelectionChange(allIds);
+      const merged = [
+        ...selectedValues.filter((s) => !data.some((d) => d.id === s.id)),
+        ...data,
+      ];
+      onSelectionChange(merged);
     }
   };
 
@@ -169,46 +192,8 @@ export function PaginatedProductSelect({
     loadData(1, searchTerm, filterId, false);
   };
 
-  const isAllSelected =
-    data.length > 0 && selectedValues.length === data.length;
-  const isIndeterminate =
-    selectedValues.length > 0 && selectedValues.length < data.length;
-
   const selectedFilterLabel =
     filterOptions.find((f) => f.id === selectedFilter)?.name || "Filter";
-
-  // Update selected items when selection or data changes
-  useEffect(() => {
-    if (selectedValues.length > 0) {
-      const items = data.filter((item) =>
-        selectedValues.includes(item.id.toString())
-      );
-      setSelectedItems(items);
-    } else {
-      setSelectedItems([]);
-    }
-  }, [selectedValues, data]);
-
-  const fetchSelectedItems = useCallback(async () => {
-    if (selectedValues.length > 0) {
-      try {
-        const response = await fetchData(1, "", selectedFilter);
-        const allItems = response.results;
-        const items = allItems.filter((item) =>
-          selectedValues.includes(item.id.toString())
-        );
-        setSelectedItems(items);
-      } catch (error) {
-        console.error("Error fetching selected items:", error);
-      }
-    }
-  }, [selectedValues, selectedFilter, fetchData]);
-
-  useEffect(() => {
-    if (selectedValues.length > 0 && selectedItems.length === 0) {
-      fetchSelectedItems();
-    }
-  }, [selectedValues, selectedItems.length, fetchSelectedItems]);
 
   return (
     <div className={cn("w-full ", className)}>
@@ -219,28 +204,55 @@ export function PaginatedProductSelect({
             className="w-full justify-start text-left font-normal bg-white border-gray-200 hover:bg-gray-50 h-9 py-2"
           >
             <div className="flex flex-col items-start w-full">
-              {selectedItems.length > 0 ? (
+              {selectedValues.length > 0 ? (
                 <div className="flex flex-wrap gap-1 w-full">
-                  {selectedItems.slice(0, 3).map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center space-x-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-md text-xs"
-                    >
-                      <Avatar className="w-4 h-4">
-                        <AvatarImage src={item.image || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-orange-200 text-orange-800 text-[10px]">
-                          {item.name?.charAt(0)?.toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="truncate max-w-[80px]">{item.name}</span>
-                    </div>
-                  ))}
-                  {selectedItems.length > 3 && (
-                    <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs">
-                      +{selectedItems.length - 3} more
-                    </div>
-                  )}
+                  {/* Mobile → show only 2 */}
+                  <div className="flex flex-wrap gap-1 w-full sm:hidden">
+                    {selectedValues.slice(0, 2).map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center space-x-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-md text-xs"
+                      >
+                        <Avatar className="w-4 h-4">
+                          <AvatarImage src={item.image || "/placeholder.svg"} />
+                          <AvatarFallback className="bg-orange-200 text-orange-800 text-[10px]">
+                            {item.name?.charAt(0)?.toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="truncate max-w-[80px]">{item.name}</span>
+                      </div>
+                    ))}
+                    {selectedValues.length > 2 && (
+                      <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs">
+                        +{selectedValues.length - 2} more
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Larger screens → show 3 */}
+                  <div className="hidden sm:flex flex-wrap gap-1 w-full">
+                    {selectedValues.slice(0, 3).map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center space-x-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-md text-xs"
+                      >
+                        <Avatar className="w-4 h-4">
+                          <AvatarImage src={item.image || "/placeholder.svg"} />
+                          <AvatarFallback className="bg-orange-200 text-orange-800 text-[10px]">
+                            {item.name?.charAt(0)?.toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="truncate max-w-[80px]">{item.name}</span>
+                      </div>
+                    ))}
+                    {selectedValues.length > 3 && (
+                      <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs">
+                        +{selectedValues.length - 3} more
+                      </div>
+                    )}
+                  </div>
                 </div>
+
               ) : (
                 <span className="text-sm font-normal text-muted-foreground ">
                   {title}
@@ -305,14 +317,14 @@ export function PaginatedProductSelect({
                   <div className="relative">
                     <input
                       type="checkbox"
-                      checked={isAllSelected}
+                      checked={areAllVisibleSelected}
                       ref={(el) => {
                         if (el) {
                           el.indeterminate = isIndeterminate;
                         }
                       }}
                       onChange={handleSelectAll}
-                      className="w-4 h-4 text-orange-500 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 accent-orange-500"
+                      className="w-4 h-4 text-red-500 bg-white border-gray-300 rounded focus:ring-red-500 focus:ring-2 accent-red-500"
                     />
                   </div>
                   <span className="text-sm font-medium text-gray-900">
@@ -321,7 +333,7 @@ export function PaginatedProductSelect({
                 </div>
 
                 <div className="flex items-center justify-center bg-[#EBEBEB] text-foreground rounded-sm size-8">
-                  <span className="text-xs">({selectedItems.length})</span>
+                  <span className="text-xs">({selectedValues.length})</span>
                 </div>
               </div>
             </div>
@@ -337,13 +349,13 @@ export function PaginatedProductSelect({
                   <div
                     key={item.id}
                     className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-md cursor-pointer"
-                    onClick={() => handleItemSelect(item.id.toString())}
+                    onClick={() => handleItemSelect(item)}
                   >
                     <input
                       type="checkbox"
-                      checked={selectedValues.includes(item.id.toString())}
-                      onChange={() => handleItemSelect(item.id.toString())}
-                      className="w-4 h-4 text-orange-500 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 accent-orange-500"
+                      checked={selectedValues.some((s) => s.id === item.id)}
+                      onChange={() => handleItemSelect(item)}
+                      className="w-4 h-4 text-red-600 bg-white border-gray-300 rounded focus:ring-red-600 focus:ring-2 accent-red-600"
                     />
                     <Avatar className="w-15 h-15 !rounded-lg">
                       <AvatarImage

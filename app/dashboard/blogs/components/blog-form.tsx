@@ -3,7 +3,6 @@
 import HeaderBackCard from "@/components/common/cards/header-back-card";
 import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
 import TagInput from "@/components/common/form/tag-input";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
 import RichTextEditor from "@/components/common/text-editor/text-editor";
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,7 @@ import { Switch } from "@/components/ui/switch";
 import { createBlog, updateBlog } from "@/lib/api/cms/blogs-api";
 import {
   getBlogCategories,
+  getProductsDropdown,
   getUsersDropdown,
 } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
@@ -29,37 +29,64 @@ import { useAppDispatch } from "@/redux/hooks";
 import { BlogFormValues, blogSchema } from "@/schemas/cms/blogs-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { IBlog } from "@/types/cms";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+import useFetchData from "@/hooks/use-fetch";
 
 interface BlogFormProps {
-  initialData: any | null;
+  initialData: IBlog | null;
 }
 
 const BlogForm = ({ initialData }: BlogFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const title = initialData ? "Edit Blog" : "Add Blog";
+  const isEditMode = Boolean(initialData);
+  const title = isEditMode ? "Edit Blog" : "Add Blog";
+  const blogUrl = isEditMode ? `/cms/blogs/${initialData?.slug}` : "";
+  const { data: blogData, loading: isLoading } = useFetchData<IBlog>(blogUrl);
+
+  const emptyDefaults = {
+    title: "",
+    sub_title: "",
+    author: "",
+    category: "",
+    tags: "",
+    cover_image: "",
+    description: "",
+    recommended_products: [],
+    is_active: false,
+    send_as_newsletter: false,
+  };
 
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(blogSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          title: "",
-          sub_title: "",
-          author: "",
-          category: "",
-          tags: "",
-          cover_image: "",
-          description: "",
-          recommended_products: [],
-          is_active: false,
-          send_as_newsletter: false,
-        },
+    defaultValues: emptyDefaults,
   });
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = blogData || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          title: dataToUse.title || "",
+          sub_title: dataToUse.sub_title || "",
+          author: dataToUse.author?.id?.toString() || "",
+          category: dataToUse.category?.id?.toString() || "",
+          tags: dataToUse.tags || "",
+          cover_image: dataToUse.cover_image || "",
+          description: dataToUse.description || "",
+          recommended_products: dataToUse.recommended_products || [],
+          is_active: dataToUse.is_active || false,
+          send_as_newsletter: dataToUse.send_as_newsletter || false,
+        });
+      }
+    }
+  }, [isEditMode, blogData, initialData, form]);
 
   const onSubmit = async (data: BlogFormValues) => {
     try {
@@ -69,35 +96,51 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
       formData.append("author", data.author);
       formData.append("category", data?.category || "");
       formData.append("tags", data.tags);
+
       if (data.cover_image instanceof File) {
         formData.append("cover_image", data.cover_image);
       }
 
+      if (data.recommended_products) {
+        data.recommended_products.forEach((product) => {
+          formData.append("recommended_products", product?.id.toString());
+        });
+      }
+
       formData.append("description", data.description);
       formData.append("is_active", data?.is_active?.toString());
-      formData.append(
-        "send_as_newsletter",
-        data?.send_as_newsletter?.toString()
-      );
-      if (initialData) {
-        const response = await updateBlog(initialData.id, formData);
+      formData.append("send_as_newsletter", data?.send_as_newsletter?.toString());
+
+      if (isEditMode && initialData?.slug) {
+        const response = await updateBlog(initialData.slug, formData);
         if (response.status === 200) {
-          toast("Blog updated successfully");
+          toast.success("Blog updated successfully");
+          dispatch(toggleRefetchTableData());
+          router.push("/dashboard/blogs");
+        }
+      } else if (!isEditMode) {
+        const response = await createBlog(formData);
+        if (response.status === 201) {
+          toast.success("Blog created successfully");
           dispatch(toggleRefetchTableData());
           router.push("/dashboard/blogs");
         }
       } else {
-        const response = await createBlog(formData);
-        if (response.status === 201) {
-          toast("Blog created successfully");
-          dispatch(toggleRefetchTableData());
-          router.push("/dashboard/blogs");
-        }
+        toast.error("Cannot update blog: missing slug");
+        return;
       }
     } catch (error) {
       handleError(error, toast);
     }
   };
+
+  if (isEditMode && isLoading && !blogData) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <p>Loading blog data...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -117,7 +160,11 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>TITLE</FormLabel>
+                    <FormLabel>TITLE
+                      {/* <p className="text-sm text-gray-500 mt-1">
+                        ({field.value?.length || 0} out of 100 )
+                      </p> */}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter the title" {...field} />
                     </FormControl>
@@ -131,7 +178,11 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                 name="sub_title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SUB-TITLE</FormLabel>
+                    <FormLabel>SUB-TITLE
+                      {/* <p className="text-sm text-gray-500 mt-1">
+                        ({field.value?.length || 0} out of 200 )
+                      </p> */}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter the title" {...field} />
                     </FormControl>
@@ -186,7 +237,12 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                   name="tags"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>TAGS </FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Tags</FormLabel>
+                        <p className="text-xs text-gray-500">
+                          NOTE: Use comma ( , ) to add new tags
+                        </p>
+                      </div>
                       <FormControl>
                         <TagInput
                           value={field.value}
@@ -194,7 +250,6 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                           placeholder="Enter tags separated by commas or enter"
                         />
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   )}
@@ -232,6 +287,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                         value={field.value}
                         onChange={field.onChange}
                         placeholder="Enter the Description"
+                        heightClass="!max-h-[250px] h-[250px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -239,25 +295,27 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="recommended_products"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>RECOMMENDED PRODUCTS</FormLabel>
-                    <FormControl>
-                      <PaginatedProductSelect
-                        selectedValues={field.value}
-                        onSelectionChange={field.onChange}
-                        title="Select Products"
-                        fetchData={getUsersDropdown}
-                        className="w-full"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="mt-8 md:mt-3">
+                <FormField
+                  control={form.control}
+                  name="recommended_products"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>RECOMMENDED PRODUCTS</FormLabel>
+                      <FormControl>
+                        <PaginatedProductSelect
+                          selectedValues={field.value}
+                          onSelectionChange={field.onChange}
+                          title="Select Products"
+                          fetchData={getProductsDropdown}
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <div className="flex items-center gap-4">
                 <FormField

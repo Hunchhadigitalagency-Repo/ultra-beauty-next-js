@@ -94,3 +94,16 @@ export const resetPasswordSchema = z
     path: ["confirm_new_password"],
     message: "Passwords do not match.",
   });
+
+
+
+export const changePasswordSchema = z.object({
+  oldPassword: z.string().min(6, "Old password is required"),
+  newPassword: z.string().min(6, "New password must be at least 6 characters"),
+  confirmPassword: z.string().min(6, "Please confirm your password"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
+export type ChangePasswordValues = z.infer<typeof changePasswordSchema>;

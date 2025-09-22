@@ -8,7 +8,7 @@ import { ICategory } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const CategoryConstant = (dispatch: AppDispatch): Col<ICategory>[] => {
+export const CategoryConstant = (dispatch: AppDispatch, onUpdate: (item: ICategory) => void): Col<ICategory>[] => {
   return [
     {
       title: "CATEGORY NAME",
@@ -17,7 +17,7 @@ export const CategoryConstant = (dispatch: AppDispatch): Col<ICategory>[] => {
     {
       title: "STATUS",
       render: (data: ICategory) => (
-        <TableStatusSwitch type={ETypes.CATEGORY} rowData={data} />
+        <TableStatusSwitch type={ETypes.CATEGORY} rowData={data} onUpdate={onUpdate} />
       ),
     },
     {

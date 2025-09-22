@@ -1,15 +1,11 @@
 import React from "react";
 
-import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 
 import { Col } from "@/types/table";
 import StatusCard from "@/components/common/cards/outline-status-card";
 
-export const NewReviewConstants = (dispatch: AppDispatch): Col<any>[] => {
-
-  console.log(dispatch);
-
+export const NewReviewConstants = (): Col<any>[] => {
   return [
     {
       title: "ORDER ID",

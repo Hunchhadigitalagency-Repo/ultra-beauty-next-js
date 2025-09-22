@@ -6,7 +6,7 @@ import { Col, ETypes } from "@/types/table";
 import { ISms } from "@/types/cms";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const SmsConstants = (dispatch: AppDispatch): Col<ISms>[] => {
+export const SmsConstants = (dispatch: AppDispatch, ): Col<ISms>[] => {
   return [
     {
       title: "TITLE",

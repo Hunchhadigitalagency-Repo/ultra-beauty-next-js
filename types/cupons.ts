@@ -15,4 +15,5 @@ export interface ICoupon {
   image?: string;
   expiry_date?: string;
   is_active: boolean;
+  non_reusable: boolean;
 }

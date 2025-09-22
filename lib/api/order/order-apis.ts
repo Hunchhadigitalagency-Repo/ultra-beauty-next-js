@@ -1,14 +1,10 @@
+import apiBase from "@/services/api-base-instance";
 import { Coupon } from "@/types/cart";
+import {IShippingInfo } from "@/types/orders";
 import { store } from "@/redux/store";
 import api from "@/services/api-instance";
-import apiBase from "@/services/api-base-instance";
-import { CreateOrderResponse, ShippingInfo } from "@/types/orders";
 
-type ShippingRequest = Omit<ShippingInfo, 'id' | 'order_id'>;
-
-type ShippingFeeResponse = {
-    rate: number
-}
+type ShippingRequest = Omit<IShippingInfo, 'id' | 'order_id'>;
 
 interface AddOrderRequest {
     carts_id: number[],
@@ -17,7 +13,7 @@ interface AddOrderRequest {
     coupon?: Coupon | null
 }
 export const addOrders = async ({ carts_id, payment_method, shipping_info, coupon }: AddOrderRequest) => {
-    const response = await api.post<CreateOrderResponse>("/order/", {
+    const response = await api.post("/order/", {
         carts_id,
         shipping_info,
         payment_method,
@@ -44,6 +40,16 @@ export const updateOrder = async (
         },
     });
     return response;
+};
+
+export const updateOrderStatus = async (
+  orderId: number,
+  status: number | string
+) => {
+  const response = await api.patch(`/order/${orderId}/`, {
+    order_status: status,
+  });
+  return response;
 };
 
 export const cancelOrder = async (
@@ -99,8 +105,11 @@ export const returnOrder = async (
     const response = await api.post("return-items/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
-
     return response
+}
+
+type ShippingFeeResponse = {
+    rate: number
 }
 
 export const postCity = async (id: number[], destination: string | undefined) => {
@@ -111,4 +120,11 @@ export const postCity = async (id: number[], destination: string | undefined) =>
         delivery_location
     });
     return response
+}
+
+
+
+export const addOrderByAdmin = async (payload : any) => {
+  const response = await api.post('/order/create/by-admin/', payload)
+  return response;
 }

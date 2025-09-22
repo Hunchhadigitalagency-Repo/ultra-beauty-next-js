@@ -4,9 +4,9 @@ import { z } from "zod";
 
 export const rolesSchema = z.object({
   role_name: z.string().min(1, { message: "Role name is required." }),
-  activate: z.boolean(),
+  is_active: z.boolean(),
   users: z.array(z.string()).min(1, { message: "User is required." }),
-   entities: z.object(
+  entities: z.object(
     getAllEntities(permissionsData).reduce((acc, entity) => {
       acc[entity.data] = z.object(
         entity.permissions.reduce((permissionAcc, permission) => {

@@ -12,18 +12,22 @@ type HomeState = {
   refetch: boolean;
   userType: EUserTypes | null;
   isLoggedIn: boolean;
+  selectedString: any;
+  userPermissions: any;
 };
 
-const initialState = {
+const initialState: HomeState = {
   accessToken: "",
   refreshToken: "",
   selectedData: {} as any,
   email: "",
   profileDetails: {} as IProfileDetails,
+  selectedString: "",
   refetch: false,
   userType: null,
   isLoggedIn: false,
-} as HomeState;
+  userPermissions: [],
+};
 
 export const authentication = createSlice({
   name: "authentication",
@@ -38,7 +42,9 @@ export const authentication = createSlice({
     setSelectedData: (state, action: PayloadAction<any>) => {
       state.selectedData = action.payload;
     },
-
+    setselectedString: (state, action) => {
+      state.selectedString = action.payload;
+    },
     setEmail: (state, action) => {
       state.email = action.payload;
     },
@@ -51,12 +57,15 @@ export const authentication = createSlice({
     setUserType: (state, action) => {
       state.userType = action.payload;
     },
+    setUserPermissions: (state, action) => {
+      state.userPermissions = action.payload;
+    },
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
     resetAuthentication: () => {
-      return initialState
-    }
+      return initialState;
+    },
   },
 });
 
@@ -69,6 +78,8 @@ export const {
   toggleRefetch,
   setUserType,
   setIsLoggedIn,
-  resetAuthentication
+  resetAuthentication,
+  setselectedString,
+  setUserPermissions,
 } = authentication.actions;
 export default authentication.reducer;

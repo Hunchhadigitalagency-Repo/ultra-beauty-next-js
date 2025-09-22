@@ -1,6 +1,7 @@
 "use client";
 
 import HeaderBackCard from "@/components/common/cards/header-back-card";
+import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,29 +47,39 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
     resolver: zodResolver(subCategorySchema),
     defaultValues: initialData
       ? {
-          category: initialData.category_name,
-          name: initialData.name,
-          is_active: initialData.is_active ?? false,
-        }
+        category: initialData.category_id?.toString(),
+        name: initialData.name,
+        image: initialData.image,
+        is_used_to_build_system: initialData.is_used_to_build_system ?? false,
+        is_active: initialData.is_active ?? false,
+      }
       : {
-          category: "",
-          name: "",
-          is_active: false,
-        },
+        category: "",
+        name: "",
+        image: "",
+        is_used_to_build_system: false,
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: SubCategoryValues) => {
+    const formData = new FormData;
+
+    formData.append("category", data.category)
+    formData.append("name", data.name)
+    formData.append("is_active", data.is_active.toString())
+    formData.append("is_used_to_build_system", data.is_used_to_build_system.toString())
+    formData.append('image', data.image)
     try {
       if (initialData) {
-        const response = await updateSubCategory(initialData.id, data);
+        const response = await updateSubCategory(initialData.id, formData);
         if (response.status === 200) {
           toast.success("Sub Category updated successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.SUB_CATEGORY));
         }
       } else {
-        console.log(data);
-        const response = await createSubCategory(data);
+        const response = await createSubCategory(formData);
         if (response.status === 201) {
           toast.success("Sub Category created successfully");
           dispatch(toggleRefetchTableData());
@@ -107,7 +118,11 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                       <PaginatedSelect
                         value={field.value}
                         onValueChange={field.onChange}
-                        placeholder="Select Category"
+                        placeholder={
+                          initialData?.category_name
+                            ? initialData.category_name
+                            : "Select Category"
+                        }
                         fetchData={getCategoriesDropdown}
                         className="w-full"
                       />
@@ -134,30 +149,74 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
-                name="is_active"
+                name="image"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
+                  <FormItem className="space-y-1">
+                    <FormLabel className=" text-muted-foreground">
+                      IMAGE
+                    </FormLabel>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="is_active"
-                        className="cursor-pointer"
+                      <SingleImageUploader
+                        value={field.value}
+                        onRemove={() => field.onChange(undefined)}
+                        onChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel
-                      htmlFor="is_active"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
+              <div className="flex gap-10">
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_active"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="is_active"
+                        className="text-muted-foreground"
+                      >
+                        ACTIVATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="is_used_to_build_system"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_active"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="is_active"
+                        className="text-muted-foreground"
+                      >
+                        BUILD YOUR SYSTEM
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </form>
           </Form>
         </CardContent>
