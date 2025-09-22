@@ -1,100 +1,106 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import DataCard from "@/components/common/cards/data-card";
+import api from "@/services/api-instance";
 
-const DummyData = () => {
-  const timeSlots = [
-    "6 AM - 8 AM",
-    "8 AM - 10 AM",
-    "10 AM - 12 PM",
-    "12 PM - 2 PM",
-    "2 PM - 4 PM",
-    "4 PM - 6 PM",
-    "6 PM - 8 PM",
-    "8 PM - 10 PM",
-  ];
+interface VisitData {
+  [day: string]: {
+    [timeSlot: string]: number;
+  };
+}
 
-  const days = ["SUN", "MON", "TUE", "WED", "THURS", "FRI", "SAT"];
+const timeSlots = [
+  "00:00-04:00",
+  "04:00-08:00",
+  "08:00-12:00",
+  "12:00-16:00",
+  "16:00-20:00",
+  "20:00-24:00",
+];
 
-  const data: { [key: string]: { [key: string]: number } } = {};
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
-  timeSlots.forEach((timeSlot) => {
-    data[timeSlot] = {};
-    days.forEach((day) => {
-      data[timeSlot][day] = Math.floor(Math.random() * 1500);
-    });
-  });
+const getColorIntensity = (visits: number, maxVisits: number) => {
+  if (maxVisits === 0) return "bg-red-50";
+  const ratio = visits / maxVisits;
 
-  return { timeSlots, days, data };
-};
-
-const getColorIntensity = (visits: number) => {
-  if (visits < 200) return "bg-[#66A2C8]";
-  if (visits < 1000) return "bg-[#66A2C8]";
-  if (visits === 1000) return "bg-[#8BBEDE]";
-  return "bg-[#1477B4]";
-};
-
-const Legend = () => {
-  const legendItems = [
-    { color: "bg-[#66A2C8]", label: "<200" },
-    { color: "bg-[#66A2C8]", label: "<1000" },
-    { color: "bg-[#8BBEDE]", label: "=1000" },
-    { color: "bg-[#1477B4]", label: ">1000" },
-  ];
-
-  return (
-    <div className="flex items-center gap-4">
-      {legendItems.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <div className={`w-4 h-4 rounded ${item.color}`}></div>
-          <span className="text-sm text-gray-600">{item.label}</span>
-        </div>
-      ))}
-    </div>
-  );
+  if (ratio === 0) return "bg-red-100";
+  if (ratio < 0.25) return "bg-red-200";
+  if (ratio < 0.5) return "bg-red-300";
+  if (ratio < 0.75) return "bg-red-500";
+  return "bg-red-700";
 };
 
 export default function VisitedByTime() {
-  const { timeSlots, days, data } = DummyData();
+  const [data, setData] = useState<VisitData>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/track-visit/");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching visit data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!data || Object.keys(data).length === 0) return <p>Loading...</p>;
+  const allVisits = Object.values(data).flatMap((day) => Object.values(day));
+  const maxVisits = Math.max(...allVisits, 0);
 
   return (
-    <DataCard title="Visited by Time" filter={<Legend />}>
-      <div className="overflow-x-auto">
-        <div>
+    <DataCard title="Visited by Time">
+      <div className="h-auto flex flex-col">
+        <div className="flex-1 overflow-y-auto">
           {timeSlots.map((timeSlot) => (
-            <div key={timeSlot} className="grid grid-cols-9 space-y-1.5">
-              <div className=" col-span-2 flex items-center text-xs text-gray-600 pr-2 font-medium">
+            <div key={timeSlot} className="flex items-center py-1">
+              {/* Time slot label - fixed width */}
+              <div className="w-24 flex-shrink-0 text-xs font-medium text-gray-600 pr-2">
                 {timeSlot}
               </div>
 
-              {days.map((day) => {
-                const visits = data[timeSlot][day];
-                const colorClass = getColorIntensity(visits);
+              {/* Heatmap cells - matching header grid */}
+              <div className="flex-1 grid grid-cols-7 gap-1">
+                {days.map((day) => {
+                  const visits = data[day]?.[timeSlot] || 0;
+                  const colorClass = getColorIntensity(visits, maxVisits);
 
-                return (
-                  <div
-                    key={`${timeSlot}-${day}`}
-                    className={`
-                      aspect-square rounded-sm ${colorClass} 
-                      hover:opacity-80 transition-opacity cursor-pointer h-6 w-10 
-                    `}
-                  ></div>
-                );
-              })}
+                  return (
+                    <div
+                      key={`${day}-${timeSlot}`}
+                      className={`h-8 w-3/4 rounded-sm ${colorClass} hover:opacity-80 transition-opacity cursor-pointer`}
+                      title={`${day} ${timeSlot}: ${visits} visits`}
+                    ></div>
+                  );
+                })}
+              </div>
             </div>
           ))}
-          <div className="grid grid-cols-9 gap-2">
-            <div></div>
-            <div></div>
-            {days.map((day) => (
-              <div
-                key={day}
-                className=" text-sm font-medium text-gray-600 py-2"
-              >
-                {day}
-              </div>
-            ))}
+          <div className="flex bg-white sticky top-0 z-10">
+            <div className="w-20 flex-shrink-0"></div>
+            {/* Day headers */}
+            <div className="flex-1 grid grid-cols-7 gap-1">
+              {days.map((day) => (
+                <div
+                  key={day}
+                  className="text-xs sm:text-sm font-medium text-gray-600 text-center py-2"
+                >
+                  {day.slice(0, 3)}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

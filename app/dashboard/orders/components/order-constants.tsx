@@ -1,97 +1,75 @@
-
-
 import React from "react";
 
-import { AppDispatch } from "@/redux/store";
-import Image from "next/image";
-import TableActions from "@/components/common/table/table-actions";
-import { setSelectedData } from "@/redux/features/authentication-slice";
-import { Col, ETypes } from "@/types/table";
+import { Col } from "@/types/table";
 
-import BackgroundStatusCard from "@/components/common/cards/background-status-card";
+import { IOrders } from "@/types/orders";
+import OrderStatusDropdown from "./order-status-dropdown";
 
-
-export const OrderConstants = (dispatch: AppDispatch): Col<any>[] => {
+export const OrderConstants = (): Col<IOrders>[] => {
   return [
     {
       title: "ORDER DETAILS",
-
-      render: (data: any) => (
-        <div className="flex items-center gap-3">
-          <div className="w-17 h-17 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-            <Image
-              src={data.image || "/placeholder.svg?height=40&width=40"}
-              alt={data.name}
-              width={68}
-              height={68}
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col">
-            <BackgroundStatusCard status={data.status} />
+      render: (data: IOrders) => {
+        return (
+          <div className="flex flex-col gap-2">
             <span className="font-medium text-foreground text-sm">
-              {data.order_id}
+              Order ID: {data?.id}
             </span>
-            <span className="text-xs text-foreground">{data.order_date}</span>
+            <span className="text-xs text-foreground">
+              {new Intl.DateTimeFormat("en-US", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              }).format(new Date(data?.order_created))}
+            </span>
           </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       title: "PAYMENT DETAIL",
 
-      render: (data: any) => (
+      render: (data: IOrders) => (
         <div className="flex flex-col">
-          <span className="text-foreground font-medium text-sm">
-            {data.payment_detail}
+          <span className="text-foreground text-sm font-semibold">
+            Nrs. {data?.total_amount}
           </span>
           <span className="text-foreground text-xs">
-            Payment Mode: {data.payment_mode}
+            Payment Mode: {data?.payment_method}
           </span>
-          <span className="text-xs text-foreground">Coupon: {data.coupon}</span>
+          <span className="text-foreground text-xs">
+            Payment Status: {data?.payment_status}
+          </span>
         </div>
       ),
     },
     {
       title: "USER INFO",
 
-      render: (data: any) => (
-        <div className="flex flex-col">
-          <span className="text-foreground font-medium text-sm">
-            {data.name}
-          </span>
-          <span className="text-foreground text-xs">{data.email}</span>
-          <span className="text-xs text-foreground">{data.address}</span>
-        </div>
-      ),
+      render: (data: IOrders) => (
+          <div className="flex flex-col">
+            <span className="text-foreground font-medium text-sm">
+              {data?.shipping_info?.first_name} {data?.shipping_info?.last_name}
+            </span>
+            <span className="text-xs text-foreground">{data?.shipping_info?.phone_no}</span>
+          </div>
+        )
     },
     {
-      title: "DELIVERY INFO",
+      title: "ORDER STATUS",
 
-      render: (data: any) => (
-        <div className="flex flex-col">
-          <span className="text-foreground font-medium text-sm">
-            {data.delivery_address}
-          </span>
-          <span className="text-foreground text-xs">{data.address}</span>
-        </div>
-      ),
-    },
-
-    {
-      title: "Action",
-      render: (data: any) => (
+      render: (data: IOrders) => (
         <div
-          className="flex gap-2 w-full justify-end"
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setSelectedData(data));
           }}
         >
-          <TableActions
-            data={data}
-            type={ETypes.ORDERS}
-            name={data?.name as string}
+          <OrderStatusDropdown
+            orderId={data?.id}
+            currentStatus={data?.order_status}
           />
         </div>
       ),

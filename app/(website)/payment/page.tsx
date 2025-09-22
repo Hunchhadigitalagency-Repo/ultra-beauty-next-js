@@ -26,8 +26,10 @@ const PAYMENT_GATEWAYS = [
 const Payment: React.FunctionComponent = () => {
 
   const shippingFee = 150
+
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null);
   const { cartItem, shippingDetails, voucherData } = useAppSelector(state => state.cart);
   const carts_id = cartItem.map(item => item.id);
@@ -41,8 +43,6 @@ const Payment: React.FunctionComponent = () => {
 
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
   const Total = subTotal + shippingFee + taxAmount - voucherDiscount;
-
-
 
   const handleConfirmOrder = async () => {
     const res = await addOrders({
@@ -119,7 +119,7 @@ const Payment: React.FunctionComponent = () => {
       <div className="grid grid-cols-1  lg:grid-cols-[0.7fr_0.3fr] gap-10 ">
 
         <div className="flex flex-col order-1 gap-3 md:gap-5 lg:order-none ">
-          <div className="bg-[#FAFAFA] rounded-sm">
+          <div className="bg-secondary rounded-sm">
             <p className="px-5 py-3 text-sm font-medium md:text-base">
               Select payment Methods
             </p>
@@ -179,13 +179,15 @@ const Payment: React.FunctionComponent = () => {
             </Button>
           </div>
         </div>
-        <OrderSummary
-          shippingDetails={shippingDetails}
-          shippingFee={shippingFee}
-          totalItems={cartItem.length}
-          applyVoucher={false}
-          isCheckout
-        />
+        <div>
+          <OrderSummary
+            shippingDetails={shippingDetails}
+            shippingFee={shippingFee}
+            totalItems={cartItem.length}
+            applyVoucher={false}
+            isCheckout
+          />
+        </div>
       </div>
     </section>
   )

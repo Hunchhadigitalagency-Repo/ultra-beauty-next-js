@@ -23,7 +23,7 @@ export const sidebarData = {
         },
         {
           title: "Sales",
-          url: "/dashboard/",
+          url: "/dashboard/sales",
           icon: LayoutDashboardIcon,
         },
         {
@@ -39,7 +39,7 @@ export const sidebarData = {
 
         {
           title: "Inventory",
-          url: "/dashboard",
+          url: "/dashboard/inventory",
           icon: LayoutDashboardIcon,
         },
         {
@@ -65,7 +65,7 @@ export const sidebarData = {
         },
         {
           title: "Contacts",
-          url: "#",
+          url: "/dashboard/contacts",
           icon: LayoutDashboardIcon,
         },
         {

@@ -20,3 +20,4 @@ export enum EUserTypes {
   USER = "user",
   SUPER_ADMIN = "superadmin",
 }
+

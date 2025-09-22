@@ -4,9 +4,10 @@ import TableActions from "@/components/common/table/table-actions";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import { Col, ETypes } from "@/types/table";
 import { INavigationInfo } from "@/types/navigation-info";
+import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const NavigationInfoConstants = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
 ): Col<INavigationInfo>[] => {
   return [
     {
@@ -18,6 +19,12 @@ export const NavigationInfoConstants = (
       title: "DISCOUNT",
       render: (data: INavigationInfo) => (
         <span>{data.discount_percentage}</span>
+      ),
+    },
+    {
+      title: "STATUS",
+      render: (data: INavigationInfo) => (
+        <TableStatusSwitch type={ETypes.NAVIGATION_INFO} rowData={data} />
       ),
     },
 

@@ -28,6 +28,7 @@ export interface ICategory {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  is_featured: boolean;
 }
 
 export interface IBlogCategory {
@@ -41,7 +42,10 @@ export interface IBlogCategory {
 export interface ISubCategory {
   id: number;
   category_name: string;
+  category_id?: string;
   name: string;
+  image: string;
+  is_used_to_build_system: boolean;
   is_active: boolean;
 }
 
@@ -78,12 +82,18 @@ export interface IApi {
 
 export interface IAdmin {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
   address: string;
   email: string;
   password: string;
-  image_url: string;
-  is_activated: boolean;
+  confirm_password: string;
+  profile: {
+    profile_picture: string;
+    bio: string;
+    user_type: string;
+    address: string;
+  };
 }
 
 export interface ITaxes {
@@ -98,9 +108,9 @@ export interface ISeo {
   meta_title: string;
   meta_keyword: string[];
   meta_description: string;
-  primary_color: string;
-  text_color: string;
-  is_activated: boolean;
+  primary_color?: string;
+  text_color?: string;
+  is_activated?: boolean;
 }
 
 export interface IBill {
@@ -110,7 +120,12 @@ export interface IBill {
   name: string;
   address: string;
   pan_number: string;
-  tax_id: string;
+  tax: {
+    id: number;
+    tax_name: string;
+    tax_percentage: string;
+    is_active: boolean;
+  };
   is_active: boolean;
 }
 
@@ -144,20 +159,30 @@ export interface IOrderStatus {
   is_active: boolean;
 }
 
+// export interface IPreference {
+//   id: number;
+//   theme_name: string;
+//   colors: {
+//     primary: string;
+//     secondary: string;
+//     ternary: string;
+//     forth: string;
+//     textPrimary: string;
+//     textSecondary: string;
+//     textMuted: string;
+//     textParagraph: string;
+//   };
+//   is_activated: boolean;
+// }
+
 export interface IPreference {
   id: number;
   theme_name: string;
   colors: {
-    primary: string;
-    secondary: string;
-    ternary: string;
-    forth: string;
-    textPrimary: string;
-    textSecondary: string;
-    textMuted: string;
-    textParagraph: string;
-  };
-  is_activated: boolean;
+    color_name: string;
+    color_value: string;
+  }[];
+  is_active: boolean;
 }
 
 export interface ISection {
@@ -175,4 +200,28 @@ export interface IInventory {
     latitude: number;
     longitude: number;
   };
+}
+
+export interface IHelpAndSupport {
+  id: number;
+  icon: string;
+  name: string;
+  description: string;
+  steps: string;
+  is_active: boolean;
+}
+
+export interface IPrivacyPolicy {
+  id: number;
+  topic: string;
+  description: string;
+  effective_date: string;
+  is_active: boolean;
+}
+
+export interface ITermsAndCondition {
+  id: number;
+  topic: string;
+  description: string;
+  is_active: boolean;
 }

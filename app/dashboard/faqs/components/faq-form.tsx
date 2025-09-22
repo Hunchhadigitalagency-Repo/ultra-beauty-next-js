@@ -23,10 +23,20 @@ import { FaqFormValues, faqSchema } from "@/schemas/cms/faq-schema";
 
 import { IFaq } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
+import useFetchData from "@/hooks/use-fetch";
 
 interface FaqFormProps {
   initialData: IFaq | null;
@@ -37,29 +47,55 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
   const router = useRouter();
 
   const title = initialData ? "Edit FAQ's" : "Add FAQ's";
+  const isEditMode = Boolean(initialData);
+  const faqUrl = isEditMode ? `/cms/faqs/${initialData?.slug}` : "";
 
+  const { data: faqs } = useFetchData<IFaq>(faqUrl)
+
+  const emptyDefaults = {
+    question: "",
+    answer: "",
+    page: "",
+    is_active: false,
+  }
   const form = useForm<FaqFormValues>({
     resolver: zodResolver(faqSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          question: "",
-          answer: "",
-          is_active: false,
-        },
+    defaultValues: emptyDefaults
   });
 
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = faqs || initialData
+      console.log(dataToUse);
+
+      if (dataToUse) {
+        form.reset({
+          question: dataToUse.question,
+          answer: dataToUse.answer,
+          type: dataToUse.type,
+          is_active: dataToUse?.is_active,
+          product: dataToUse?.product,
+        })
+      }
+    }
+  }, [initialData, isEditMode, faqs, form])
   const onSubmit = async (data: FaqFormValues) => {
+    const payload = {
+      ...data,
+      product: data.product?.map((item) => item.id.toString()) || [],
+    };
+
     try {
       if (initialData) {
-        const response = await updateFaq(initialData.id, data);
+        const response = await updateFaq(Number(initialData.slug), payload as any);
         if (response.status === 200) {
           toast("FAQ's updated successfully");
           dispatch(toggleRefetchTableData());
           router.push("/dashboard/faqs");
         }
       } else {
-        const response = await createFaq(data);
+        const response = await createFaq(payload as any);
         if (response.status === 201) {
           toast("FAQ's created successfully");
           dispatch(toggleRefetchTableData());
@@ -71,6 +107,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
     }
   };
 
+  const faqs_type = form.watch('type')
   return (
     <>
       <Card className="border-none shadow-none rounded-sm p-0">
@@ -112,6 +149,67 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => {
+                  console.log('this is tha', field.value);
+
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-muted-foreground">
+                        Faqs Type
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || ""}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="cursor-pointer">
+                            <SelectValue placeholder="Select page" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="general">
+                            General
+                          </SelectItem>
+                          <SelectItem value="product">
+                            Product
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              {
+                faqs_type?.toLowerCase() === 'product' && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="product"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>SELECT PRODUCTS</FormLabel>
+
+                          <FormControl>
+                            <PaginatedProductSelect
+                              selectedValues={field.value || []}
+                              onSelectionChange={field.onChange}
+                              title="Select Products"
+                              fetchData={getProductsDropdown}
+                              className="w-full "
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )
+              }
               <FormField
                 control={form.control}
                 name="is_active"

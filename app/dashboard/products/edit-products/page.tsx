@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import ProductForm from "../add-products/components/product-form";
 import { useAppSelector } from "@/redux/hooks";
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { paginatedSelectSchema } from "../menu/products/product-schema";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -7,7 +8,7 @@ export const couponSchema = z.object({
   coupon_name: z.string().min(1, { message: "Coupon name is required." }),
   coupon_code: z.string().min(1, { message: "Coupon code is required." }),
   discount_percentage: z.number(),
-  products: z.array(z.string()).optional(),
+  products: z.array(paginatedSelectSchema).optional(),
   category: z.string().optional(),
   sub_category: z.string().optional(),
   commission_percentage: z.number().optional(),
@@ -26,6 +27,7 @@ export const couponSchema = z.object({
     .optional(),
   expiry_date: z.string().optional(),
   is_active: z.boolean(),
+  non_reusable: z.boolean(),
 });
 
 export type CouponFormValue = z.infer<typeof couponSchema>;

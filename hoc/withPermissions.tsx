@@ -3,6 +3,7 @@
 import type { ComponentType } from "react";
 import LoadingSpinner from "@/components/common/loader/loading-spinner";
 import { hasAllPermissions, isSuperAdmin } from "@/lib/roles-permissions-utils";
+import { useAppSelector } from "@/redux/hooks";
 
 export function withPermissions<P extends object>(
   Component: ComponentType<P>,
@@ -12,9 +13,9 @@ export function withPermissions<P extends object>(
     const loading = false;
     const permissions: any = [];
 
-    const userType = "admin";
+    const { userType } = useAppSelector((state) => state.authentication);
 
-    const superAdmin = isSuperAdmin(userType);
+    const superAdmin = userType && isSuperAdmin(userType);
     const allowed = superAdmin || hasAllPermissions(permissions, requiredPermissions);
 
     if (!loading && !allowed) {

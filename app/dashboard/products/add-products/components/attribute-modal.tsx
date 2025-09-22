@@ -1,35 +1,54 @@
-"use client"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import useFetchDropdown from "@/hooks/use-fetch-dropdown"
-import type { IAttribute } from "@/types/Settings"
-import { FormCombobox } from "@/components/common/form/form-combobox"
+"use client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import useFetchDropdown from "@/hooks/use-fetch-dropdown";
+import type { IAttribute } from "@/types/Settings";
+import { FormCombobox } from "@/components/common/form/form-combobox";
 
 const attributeSchema = z.object({
   name: z.string().min(1, "Please select an attribute name"),
   value: z.string().min(1, "Please select an attribute value"),
-})
+});
 
-type AttributeFormData = z.infer<typeof attributeSchema>
+type AttributeFormData = z.infer<typeof attributeSchema>;
 
 interface AttributeModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (data: {
-    attribute: string
-    attribute_variant: string
-    attribute_name: string
-    variant_name: string
-  }) => void
+  isOpen: boolean;
+  onClose: () => void;
+  onSave?: (data: {
+    attribute: string;
+    attribute_variant: string;
+    attribute_name: string;
+    variant_name: string;
+  }) => void;
 }
-
 const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
-  const { data: attributes } = useFetchDropdown<IAttribute>("/attribute/?pagination=false")
+  const { data: attributes } = useFetchDropdown<IAttribute>(
+    "/attribute/?pagination=false"
+  );
 
   const form = useForm<AttributeFormData>({
     resolver: zodResolver(attributeSchema),
@@ -37,29 +56,44 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
       name: "",
       value: "",
     },
-  })
+  });
 
-  const onSubmit = (data: AttributeFormData) => {
-    const selectedAttribute = attributes?.find((attr) => attr.id.toString() === data.name)
-    const selectedVariation = selectedAttribute?.variations.find((variation) => variation.id.toString() === data.value)
+  const onSubmit = (data: AttributeFormData, event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    const selectedAttribute = attributes?.find(
+      (attr) => attr.id.toString() === data.name
+    );
+    const selectedVariation = selectedAttribute?.variations.find(
+      (variation) => variation.id.toString() === data.value
+    );
 
     if (selectedAttribute && selectedVariation) {
-      onSave({
+      onSave?.({
         attribute: data.name,
         attribute_variant: data.value,
         attribute_name: selectedAttribute.name,
         variant_name: selectedVariation.name,
-      })
+      });
     }
 
-    form.reset()
-    onClose()
-  }
+    form.reset();
+    onClose();
+  };
 
   const handleClose = () => {
-    form.reset()
-    onClose()
-  }
+    form.reset();
+    onClose();
+  };
+
+  const handleFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    form.handleSubmit((data) => onSubmit(data, event))(event);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -68,12 +102,12 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
           <DialogTitle>Attribute Management</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleFormSubmit} className="space-y-4">
             <FormCombobox
               form={form}
               name="name"
               label="Attribute Name"
-              placeholder="Select Attribute Name"
+              placeholder="Select an attribute"
               searchPlaceholder="Search Attribute Name..."
               options={
                 attributes?.map((attribute) => ({
@@ -86,9 +120,11 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
               control={form.control}
               name="value"
               render={({ field }) => {
-                const selectedAttribute = form.watch("name")
+                const selectedAttribute = form.watch("name");
                 const variations =
-                  attributes?.find((attribute) => attribute.id.toString() === selectedAttribute)?.variations || []
+                  attributes?.find(
+                    (attribute) => attribute.id.toString() === selectedAttribute
+                  )?.variations || [];
                 return (
                   <FormItem>
                     <FormLabel className="">
@@ -102,7 +138,10 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
                     >
                       <FormControl>
                         <SelectTrigger className="">
-                          <SelectValue defaultValue={field.value?.toString()} placeholder="Select Attribute Value" />
+                          <SelectValue
+                            defaultValue={field.value?.toString()}
+                            placeholder="Select Attribute Value"
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -115,7 +154,7 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
                               >
                                 {option.name}
                               </SelectItem>
-                            )
+                            );
                           })
                         ) : (
                           <p className="text-sm px-4">No variations Found</p>
@@ -124,17 +163,21 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
                     </Select>
                     <FormMessage />
                   </FormItem>
-                )
+                );
               }}
             />
-            <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600">
-              Save
-            </Button>
+            <div className="flex justify-end w-full ">
+              <Button
+                type="submit"
+                className="w-auto px-10 bg-black rounded-3xl hover:bg-gray-500"
+              >
+                Save
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
-
-export default AttributeModal
+  );
+};
+export default AttributeModal;

@@ -1,5 +1,6 @@
 import { StaticImageData } from "next/image";
 import { ReviewsResponse } from "./reviews";
+import { IPaginatedDropdownData } from "./dropdown";
 
 export interface IFeature {
   label: string;
@@ -68,7 +69,6 @@ export interface IProduct {
   package: any[] | null;
   my_wishlist: boolean;
 }
-
 export interface CategoryFilter {
   id: number;
   name: string;
@@ -87,12 +87,15 @@ export interface PriceRangeFilter {
   max_price: number;
 }
 
+interface InventoryFilter extends CategoryFilter { }
+interface BrandFilter extends CategoryFilter { }
 export interface IProductFilter {
   categories: CategoryFilter[];
   subcategories: SubcategoryFilter[];
-  inventories: any[]; // Replace `any` with actual inventory type if known
+  inventories: InventoryFilter[];
+  brands: BrandFilter[];
   price_range: PriceRangeFilter;
-  attributes: any[]; // Replace `any` with actual attribute type if known
+  // Replace `any` with actual attribute type if known
 }
 
 
@@ -269,4 +272,127 @@ export interface TimeLeftProps {
   hours: number,
   minutes: number,
   seconds: number
+}
+
+export interface TopSelling {
+  product_name: string;
+  price: number;
+  available_stock: number;
+  image_url: string;
+  total_quantity_sold: number;
+  total_earning: number;
+}
+
+export interface IVariantAttribute {
+  id: number;
+  attribute: { id: number; name: string };
+  attribute_variant: { id: number; name: string };
+  updated_at: string;
+}
+
+interface IProductVariant {
+  id: number;
+  item_name: string;
+  item_price: string;
+  item_quantity: number;
+  item_image: string | null;
+  sku: string;
+  product_variants: IVariantAttribute[];
+  created_at: string;
+  updated_at: string;
+}
+
+interface ProductImage {
+  id: number;
+  file: string;
+  file_type: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface IProductDropdown {
+  id: number;
+  name: string;
+}
+export interface IDashboardProduct {
+  id: number;
+  name: string;
+  sku: string;
+  quantity: number;
+  general_description: string;
+  detail_description: string;
+  price: string;
+  discount_percentage: string;
+  flash_end_date: Date;
+  flash_sale_discount: string | null;
+  is_flash_sale: boolean;
+  slug_name: string;
+  is_published: boolean;
+  is_Featured: boolean;
+  is_new: boolean;
+  is_must_sold: boolean;
+  is_tax_applicable: boolean;
+  is_best_seller: boolean;
+  tutorial: string | null;
+  youtube_link: string;
+  created_at: string;
+  updated_at: string;
+  average_rating: number;
+  total_reviews: number;
+  my_wishlist: boolean;
+  package: IPaginatedDropdownData[];
+  variants: IProductVariant[];
+  images: ProductImage[];
+  category: IProductDropdown;
+  subcategory: IProductDropdown | null;
+  brand: IProductDropdown;
+  tax_applied: {
+    id: string;
+    name: string;
+    tax_percentage: number;
+  } | null;
+  inventory: IProductDropdown;
+  same_as_parent_name: boolean;
+  attribute_price: boolean;
+  attribute_discount: boolean;
+  attribute_image: boolean;
+  sold_unit: number;
+}
+
+interface ProductVariantDetails {
+  item_name: string;
+  item_price: string;
+  item_quantity: string;
+  sku: string;
+  item_image: string | null;
+  product_variants: ProductVariant[];
+}
+
+interface ProductDetails {
+  id: number;
+  name: string;
+  slug_name: string;
+  image: string | null;
+  sku: string;
+  category: {
+    name: string;
+    id: number;
+  };
+}
+export interface InventoryProducts {
+  id: number;
+  product: ProductDetails;
+  product_variant: ProductVariantDetails;
+  quantity: number;
+  action: string;
+  attachment: string | null;
+  created_at: string;
+  last_updated: string;
+  action_by: {
+    first_name: string;
+    last_name: string;
+    profile: {
+      user_type: string;
+    };
+  };
 }

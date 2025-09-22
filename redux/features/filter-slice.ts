@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ICriteria {
-  brands?: string[];
+  brands?: number[];
   categories?: number[];
   colors?: string[];
   priceRange?: [number, number];
@@ -9,10 +9,14 @@ interface ICriteria {
   grand_total?: number;
   customer_name?: string;
   email?: string;
-  date_range?: string;
+  start_date?: string;
+  end_date?: string;
+  order_id?: string;
+  order_status?: string;
   attributes?: number[];
   subcategories?: number[];
-
+  inventories?: number[];
+  action_type?: string;
 }
 
 type HomeState = {

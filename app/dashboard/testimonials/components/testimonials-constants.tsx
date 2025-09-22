@@ -10,7 +10,7 @@ import RatingStars from "@/components/common/product/rating-stars";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const TestimonialsConstants = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
 ): Col<ITestimonial>[] => {
   return [
     {
@@ -23,7 +23,7 @@ export const TestimonialsConstants = (
               alt={data.name}
               width={40}
               height={40}
-              className="object-cover"
+              className="object-cover w-full h-full"
             />
           </div>
           <span className="text-xs text-foreground">{data.name}</span>

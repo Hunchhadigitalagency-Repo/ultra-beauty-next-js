@@ -1,15 +1,15 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { TaxConstant } from "./tax-constant";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import { ITaxes } from "@/types/Settings";
 import InfiniteScroll from "react-infinite-scroll-component";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import SearchBox from "@/components/common/filter/search-box";
+import { ESettings } from "@/types/table";
 
 const TaxTab = () => {
   const dispatch = useAppDispatch();
@@ -18,9 +18,24 @@ const TaxTab = () => {
 
   const { searchQuery } = useAppSelector((state) => state.filter);
 
-  const { data, loading, hasMore, fetchNext } =
-    useInfiniteFetch<ITaxes>("/taxes", "search", searchQuery);
+  const { data, loading, hasMore, fetchNext } = useInfiniteFetch<ITaxes>(
+    "/taxes",
+    "search",
+    searchQuery
+  );
+ const [Taxes, setTaxes] = useState<ITaxes[]>([]);
 
+  useEffect(() => {
+    setTaxes(data);
+  }, [data]);
+
+  const handleItemUpdate = (updatedItem: ITaxes) => {
+    setTaxes((prevData) =>
+      prevData.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
+      )
+    );
+  };
   return (
     <DataCard
       title="Taxes"
@@ -29,7 +44,7 @@ const TaxTab = () => {
           <SearchBox />
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Tax"))}
+            onClick={() => dispatch(setActiveSetting(ESettings.ADD_TAX))}
           >
             Add Tax
           </Button>
@@ -41,12 +56,12 @@ const TaxTab = () => {
           dataLength={data?.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={TaxConstant(dispatch)}
-            data={data as ITaxes[]}
+            cols={TaxConstant(dispatch,handleItemUpdate)}
+            data={Taxes as ITaxes[]}
             loading={loading && data.length === 0}
             onRowClick={() => {}}
             height="max-h-[calc(100vh-20px)]"

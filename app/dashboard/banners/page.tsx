@@ -1,28 +1,32 @@
 "use client";
-import React from "react";
-import { IBanner } from "@/types/banner";
-import { useAppDispatch } from "@/redux/hooks";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { BannerConstant } from "./components/banner-constant";
-import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
+import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
+import { IBanner, IDashboardBanner } from "@/types/banner";
+import { BannerConstant } from "./components/banner-constant";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
 
+  const { searchQuery } = useAppSelector((state) => state.filter);
+
   const scrollId = "infinite-scroll-container";
-  const { data, loading, hasMore, fetchNext, count } =
-    useInfiniteFetch<IBanner>("/cms/banners/");
+  const { data, loading, hasMore, fetchNext, totalCount } =
+    useInfiniteFetch<IBanner>("/cms/banners/", "search", searchQuery);
 
   return (
-    <main className="p-4 space-y-4 bg-white">
+    <main className="space-y-4 bg-white p-4">
       <PageHeader
         type="Banners"
-        totalItems={count}
-        searchPlaceholder="Search by banner name"
+        totalItems={totalCount}
+        searchPlaceholder="Search by banner type"
         path="/dashboard/banners/add-banner"
         buttonText="Add Banners"
       />
@@ -36,7 +40,7 @@ const BannerPage = () => {
         >
           <CustomTable
             cols={BannerConstant(dispatch)}
-            data={data as IBanner[]}
+            data={data as IDashboardBanner[]}
             loading={loading && data.length === 0}
             onRowClick={() => { }}
             height="h-auto"
@@ -47,4 +51,4 @@ const BannerPage = () => {
   );
 };
 
-export default BannerPage;
+export default withPermissions(BannerPage, [Permissions.CAN_READ_BANNERS]);

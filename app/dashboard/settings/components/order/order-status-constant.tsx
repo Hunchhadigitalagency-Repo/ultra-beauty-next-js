@@ -6,7 +6,7 @@ import { IOrderStatus } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const OrderStatusConstant = (dispatch: AppDispatch): Col<any>[] => {
+export const OrderStatusConstant = (dispatch: AppDispatch, onUpdate: (item: IOrderStatus) => void): Col<any>[] => {
   return [
     {
       title: "ORDER NAME",
@@ -19,19 +19,28 @@ export const OrderStatusConstant = (dispatch: AppDispatch): Col<any>[] => {
     {
       title: "STATUS",
       render: (data: IOrderStatus) => (
-        <TableStatusSwitch type={ETypes.ORDERS} rowData={data} />
+        <TableStatusSwitch type={ETypes.ORDERS} rowData={data} onUpdate={onUpdate}/>
       ),
     },
     {
-      title: "PRIMARY COLOR",
-      render: (data: any) => (
-        <span style={{ color: data.primary_color }}>{data.primary_color}</span>
+      title: "COLOR",
+      render: (data: IOrderStatus) => (
+        <div
+          style={{ backgroundColor: data.primary_color }}
+          className="flex items-center justify-center rounded-full py-1.5"
+        >
+          <p className=" text-xs" style={{ color: data.text_color }}>
+            {data.name}
+          </p>
+        </div>
       ),
     },
     {
-      title: "TEXT COLOR",
-      render: (data: any) => (
-        <span style={{ color: data.text_color }}>{data.text_color}</span>
+      title: "POSITION",
+      render: (data: IOrderStatus) => (
+        <div className="flex items-center gap-2">
+          <span>{data.position}</span>
+        </div>
       ),
     },
     {

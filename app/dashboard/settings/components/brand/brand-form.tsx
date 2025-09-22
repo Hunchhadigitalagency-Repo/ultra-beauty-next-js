@@ -38,15 +38,15 @@ const BrandForm = ({ initialData }: BrandFromProps) => {
     resolver: zodResolver(brandSchema),
     defaultValues: initialData
       ? {
-          brandName: initialData.brand_name,
-          brandImage: initialData.brand_image,
-          activate: initialData.is_active ?? false,
-        }
+        brandName: initialData.brand_name,
+        brandImage: initialData.brand_image,
+        activate: initialData.is_active ?? false,
+      }
       : {
-          brandName: "",
-          brandImage: "",
-          activate: false,
-        },
+        brandName: "",
+        brandImage: "",
+        activate: false,
+      },
   });
 
   const onSubmit = async (data: BrandValues) => {
@@ -131,6 +131,9 @@ const BrandForm = ({ initialData }: BrandFromProps) => {
                         size="small"
                       />
                     </FormControl>
+                    <span className="text-xs text-gray-400 mt-1 block">
+                      NOTE: Please upload 500 x 500 px size
+                    </span>
                     <FormMessage />
                   </FormItem>
                 )}

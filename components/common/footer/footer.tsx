@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
   ];
 
 
-  const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown');
+  const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown/');
   const { data: categories } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
 
   const categoriesData = categories?.slice(0, 5);

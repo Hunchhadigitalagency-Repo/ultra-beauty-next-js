@@ -1,25 +1,34 @@
 "use client";
 import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
+import React, {  } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { IFaq } from "@/types/cms";
 import { FaqsConstants } from "./components/faq-constants";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
 
 const FaqsPage = () => {
   const dispatch = useAppDispatch();
 
+  const { searchQuery } = useAppSelector((state) => state.filter);
+
   const scrollId = "infinite-scroll-container";
-  const { data, loading, hasMore, fetchNext, count } =
-    useInfiniteFetch<IFaq>("/cms/faqs/");
+  const { data, loading, hasMore, fetchNext, totalCount } = useInfiniteFetch<IFaq>(
+    "/cms/faqs/",
+    "search",
+    searchQuery
+  );
+
+
   return (
     <main className="space-y-4 bg-white p-4">
       <PageHeader
         type="FAQ's"
-        totalItems={count}
+        totalItems={totalCount}
         searchPlaceholder="Search by Question"
         path="/dashboard/faqs/add-faqs"
         buttonText="Create FAQ"
@@ -46,4 +55,4 @@ const FaqsPage = () => {
   );
 };
 
-export default FaqsPage;
+export default withPermissions(FaqsPage, [Permissions.CAN_READ_FAQS]);

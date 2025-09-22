@@ -9,40 +9,41 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { CheckboxFilter } from "@/components/common/filter/checkbox-filter";
 import { RangeFilter } from "@/components/common/filter/range-filter";
 import { useEffect, useState } from "react";
-import api from "@/services/api-instance";
 import { IProductFilter } from "@/types/product";
-
-export const filterConfig = {
-  priceRange: {
-    min: 10,
-    max: 10000,
-    step: 10,
-    defaultValue: [10, 10000],
-  },
-};
+import api from "@/services/api-instance";
 
 export default function ProductFilters() {
   const [filterData, setFilterData] = useState<IProductFilter>({
     categories: [],
     subcategories: [],
     inventories: [],
+    brands: [],
     price_range: {
       min_price: 100,
       max_price: 100000,
     },
-    attributes: [],
   });
 
+  const { selectedString } = useAppSelector(state => state.authentication)
   useEffect(() => {
     const getFilterData = async () => {
-      const response = await api.get("/product-filters-dropdown/");
+      const response = await api.get(`/product-filters-dropdown/?type=${selectedString}`);
       if (response.status === 200) {
-        setFilterData(response.data);
+        const data = response.data;
+
+        setFilterData({
+          categories: [...data.categories, { id: 0, name: "None" },],
+          subcategories: [...data.subcategories, { id: 0, name: "None" },],
+          inventories: [...data.inventories, { id: 0, name: "None" },],
+          brands: [...data.brands, { id: 0, name: "None" },],
+          price_range: data.price_range,
+        });
       }
     };
 
     getFilterData();
-  }, []);
+  }, [selectedString]);
+
 
   const dispatch = useAppDispatch();
   const criteria = useAppSelector((state) => state.filter.criteria);
@@ -61,20 +62,6 @@ export default function ProductFilters() {
     );
   };
 
-  // const handleBrandChange = (brandName: string, checked: boolean) => {
-  //   const currentBrands = criteria.brands || [];
-  //   const updatedBrands = checked
-  //     ? [...currentBrands, brandName]
-  //     : currentBrands.filter((brand) => brand !== brandName);
-
-  //   dispatch(
-  //     setCriteria({
-  //       ...criteria,
-  //       brands: updatedBrands,
-  //     })
-  //   );
-  // };
-
   const handleSubCategoryChange = (subcategoryId: number, checked: boolean) => {
     const currentSubcategories = criteria.subcategories || [];
     const updatedSubcategories = checked
@@ -89,19 +76,33 @@ export default function ProductFilters() {
     );
   };
 
-  // const handleColorChange = (colorName: string, checked: boolean) => {
-  //   const currentColors = criteria.colors || [];
-  //   const updatedColors = checked
-  //     ? [...currentColors, colorName]
-  //     : currentColors.filter((color) => color !== colorName);
+  const handleInventoryChange = (inventoryId: number, checked: boolean) => {
+    const currentInventories = criteria.inventories || [];
+    const updatedInventories = checked
+      ? [...currentInventories, inventoryId]
+      : currentInventories.filter((inv) => inv !== inventoryId);
 
-  //   dispatch(
-  //     setCriteria({
-  //       ...criteria,
-  //       colors: updatedColors,
-  //     })
-  //   );
-  // };
+    dispatch(
+      setCriteria({
+        ...criteria,
+        inventories: updatedInventories,
+      })
+    );
+  };
+
+  const handleBrandChange = (brandId: number, checked: boolean) => {
+    const currentBrands = criteria.brands || [];
+    const updatedBrands = checked
+      ? [...currentBrands, brandId]
+      : currentBrands.filter((brand) => brand !== brandId);
+
+    dispatch(
+      setCriteria({
+        ...criteria,
+        brands: updatedBrands,
+      })
+    );
+  };
 
   const handlePriceChange = (value: number[]) => {
     dispatch(
@@ -135,9 +136,31 @@ export default function ProductFilters() {
       <div className="h-[calc(100vh-20px)] lg:h-[calc(100vh-145px)] overflow-y-auto">
         <Accordion
           type="multiple"
-          defaultValue={["category", "subcategory", "price", "attribute"]}
-          className="w-full px-4 pb-2"
+          defaultValue={[
+            "category",
+            "subcategory",
+            "brand",
+            "inventory",
+            "price",
+          ]}
+          className="w-full px-4 pb-2 scrollbar-hide"
         >
+
+          <RangeFilter
+            title="Price"
+            value={
+              criteria.priceRange || [
+                filterData.price_range.min_price,
+                filterData.price_range.max_price,
+              ]
+            }
+            min={filterData.price_range.min_price}
+            max={filterData.price_range.max_price}
+            step={10}
+            formatValue={formatPrice}
+            onChange={handlePriceChange}
+          />
+
           <CheckboxFilter
             id="category"
             title="Category"
@@ -150,31 +173,31 @@ export default function ProductFilters() {
             title="Subcategory"
             options={
               criteria?.categories !== undefined &&
-              criteria?.categories?.length > 0
+                criteria?.categories?.length > 0
                 ? filterData.subcategories.filter((item) =>
-                    criteria.categories?.includes(item.category_id)
-                  )
+                  criteria.categories?.includes(item.category_id)
+                )
                 : filterData.subcategories
             }
             selectedValues={criteria.subcategories || []}
             onChange={handleSubCategoryChange}
           />
-          <RangeFilter
-            title="Price"
-            value={criteria.priceRange || [10, 10000]}
-            min={filterConfig.priceRange.min}
-            max={filterConfig.priceRange.max}
-            step={filterConfig.priceRange.step}
-            formatValue={formatPrice}
-            onChange={handlePriceChange}
+
+          <CheckboxFilter
+            id="brand"
+            title="Brand"
+            options={filterData.brands}
+            selectedValues={criteria.brands || []}
+            onChange={handleBrandChange}
           />
           <CheckboxFilter
-            id="attribute"
-            title="Attributes"
-            options={filterData.attributes}
-            selectedValues={criteria.attributes || []}
-            onChange={handleCategoryChange}
+            id="inventory"
+            title="Inventory"
+            options={filterData.inventories}
+            selectedValues={criteria.inventories || []}
+            onChange={handleInventoryChange}
           />
+
         </Accordion>
       </div>
     </div>

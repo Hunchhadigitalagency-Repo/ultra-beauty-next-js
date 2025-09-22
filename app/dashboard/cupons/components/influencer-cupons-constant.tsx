@@ -14,7 +14,7 @@ export const InfluencerCouponConstant = (
     {
       title: "COUPON NAME",
       render: (data: ICoupon) => (
-        <span className="text-xs text-foreground">{data.name}</span>
+        <span className="text-sm text-foreground">{data.name}</span>
       ),
     },
 

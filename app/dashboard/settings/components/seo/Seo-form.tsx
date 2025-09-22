@@ -19,31 +19,37 @@ import { useState } from "react";
 import { handleError } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { createSeo } from "@/lib/api/settings/seo-api";
+import { ISeo } from "@/types/Settings";
 
-const SeoForm = () => {
+interface SeoFormProps {
+  initialData: ISeo | null;
+}
+
+const SeoForm = ({ initialData }: SeoFormProps) => {
   const form = useForm<SeoValues>({
     resolver: zodResolver(seoSchema),
-    defaultValues: {
-      metaKeyword: [],
-      metaTitle: "",
-      metaDescription: "",
-      // primaryColor: "",
-      // textColor: "",
-      // activate: false,
-    },
+    defaultValues: initialData
+      ? {
+          metaKeyword: initialData?.meta_keyword || [],
+          metaTitle: initialData.meta_title,
+          metaDescription: initialData.meta_description,
+        }
+      : {
+          metaKeyword: [],
+          metaTitle: "",
+          metaDescription: "",
+        },
   });
 
   const onSubmit = async (data: SeoValues) => {
     try {
       const formData = new FormData();
-      data.metaKeyword.forEach((keyword) => {
-        formData.append("meta_keyword", JSON.stringify(keyword));
-      });
+      formData.append("meta_keyword", JSON.stringify(data.metaKeyword));
       formData.append("meta_title", data.metaTitle);
       formData.append("meta_description", data.metaDescription);
 
       const response = await createSeo(formData);
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast.success("SEO updated successfully");
       }
     } catch (error) {
@@ -83,7 +89,7 @@ const SeoForm = () => {
 
     return (
       <div className="flex flex-wrap items-center gap-2 border px-3 py-2 rounded-md min-h-[48px]">
-        {value.map((tag) => (
+        {value?.map((tag) => (
           <span
             key={tag}
             className="flex items-center gap-1 border px-2 py-1 rounded-full text-sm bg-muted text-muted-foreground"
@@ -116,7 +122,6 @@ const SeoForm = () => {
           <div className="flex w-full justify-between pb-6">
             <h1 className="font-semibold text-xl">Update SEO</h1>
           </div>
-
           <Form {...form}>
             <form
               id="setting-seo-form"

@@ -9,7 +9,7 @@ import { IPartnerCompany } from "@/types/cms";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const PartnerCompanyConstants = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
 ): Col<IPartnerCompany>[] => {
   return [
     {

@@ -5,9 +5,9 @@ import TableActions from "@/components/common/table/table-actions";
 import Image from "next/image";
 import { ISocial } from "@/types/Settings";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
+import { setSelectedData } from "@/redux/features/authentication-slice";
 
-export const SocialConstant = (dispatch: AppDispatch): Col<ISocial>[] => {
-  console.log(dispatch);
+export const SocialConstant = (dispatch: AppDispatch, onUpdate: (item: ISocial) => void): Col<ISocial>[] => {
   return [
     {
       title: "SOCIAL NAME",
@@ -31,13 +31,25 @@ export const SocialConstant = (dispatch: AppDispatch): Col<ISocial>[] => {
     {
       title: "STATUS",
       render: (data: ISocial) => (
-        <TableStatusSwitch type={ETypes.SOCIAL_LINKS} rowData={data} />
+        <TableStatusSwitch type={ETypes.SOCIAL_LINKS} rowData={data} onUpdate={onUpdate}/>
       ),
     },
     {
       title: "ACTION",
       render: (data: ISocial) => (
-        <TableActions data={data} type={ETypes.SOCIAL_LINKS} name={data.name} />
+        <div
+          className="flex gap-2 w-full justify-end"
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(setSelectedData(data));
+          }}
+        >
+          <TableActions
+            data={data}
+            type={ETypes.SOCIAL_LINKS}
+            name={data.name}
+          />
+        </div>
       ),
     },
   ];

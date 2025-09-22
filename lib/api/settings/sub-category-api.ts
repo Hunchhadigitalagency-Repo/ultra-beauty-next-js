@@ -1,14 +1,13 @@
-import { SubCategoryValues } from "@/schemas/settings/category-schema";
 import api from "@/services/api-instance";
 
-export const createSubCategory = async (data: SubCategoryValues) => {
+export const createSubCategory = async (data: FormData) => {
   const response = await api.post("/subcategories/", data);
   return response;
 };
 
 export const updateSubCategory = async (
   id: number,
-  data: Partial<SubCategoryValues>
+  data: FormData
 ) => {
   const response = await api.patch(`/subcategories/${id}/`, data);
   return response;

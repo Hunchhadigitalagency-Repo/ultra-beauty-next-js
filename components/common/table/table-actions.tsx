@@ -18,6 +18,7 @@ interface TableActionProps<T extends { id: number }> {
   data: T;
   type: string;
   name: string;
+  action?: string;
 }
 
 const TableActions = <T extends { id: number }>({

@@ -1,7 +1,7 @@
 "use client";
 
 import HeaderBackCard from "@/components/common/cards/header-back-card";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { getUsersDropdown } from "@/lib/api/dropdown/dropdown-api";
+import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
 import { toggleRefetchTableData } from "@/redux/features/table-slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { IFlashSales } from "@/types/flash-sales";
@@ -32,6 +32,8 @@ import {
   createFlashSales,
   updateFlashSales,
 } from "@/lib/api/sales/flash-sales-api";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+import useFetchData from "@/hooks/use-fetch";
 
 interface FlashSalesFormProps {
   initialData: IFlashSales | null;
@@ -41,27 +43,75 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const isEditMode = Boolean(initialData)
   const title = initialData ? "Edit Flash Sales" : "Add Flash Sales";
+  const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
+  const { data: navigationInfo, } = useFetchData<IFlashSales>(blogUrl);
+
+  const emptyDefaults = {
+    name: "",
+    discount_percentage: "",
+    start_date: "",
+    end_date: "",
+    products: [],
+    is_active: false,
+  };
 
   const form = useForm<FlashSalesFormValues>({
     resolver: zodResolver(flashSalesSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          name: "",
-          discount_percentage: "",
-          start_date: "",
-          end_date: "",
-          recommended_products: [],
-          is_active: false,
-        },
+    defaultValues: emptyDefaults
+    // ? {
+    //   name: initialData.sales,
+    //   discount_percentage: initialData.discount_percentage.toString(),
+    //   start_date: new Date(initialData.start_date)
+    //     .toISOString()
+    //     .slice(0, 16),
+    //   end_date: new Date(initialData.end_date).toISOString().slice(0, 16),
+    //   products: initialData.products || [],
+    //   is_active: initialData.is_active,
+    // }
+    // : {
+    //   name: "",
+    //   discount_percentage: "",
+    //   start_date: "",
+    //   end_date: "",
+    //   products: [],
+    //   is_active: false,
+    // },
   });
 
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = navigationInfo || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          name: dataToUse.sales,
+          discount_percentage: dataToUse.discount_percentage?.toString() || "",
+          start_date: dataToUse.start_date
+            ? new Date(dataToUse.start_date).toISOString().slice(0, 16)
+            : "",
+          end_date: dataToUse.end_date
+            ? new Date(dataToUse.end_date).toISOString().slice(0, 16)
+            : "",
+          products: dataToUse.products || [],
+          is_active: dataToUse.is_active ?? false,
+        });
+      }
+    }
+  }, [isEditMode, navigationInfo, initialData, form]);
+
+
   const onSubmit = async (data: FlashSalesFormValues) => {
+    // console.log('ti\hisiis', data);
+
     try {
       const formData = new FormData();
       formData.append("sales", data.name);
       formData.append("discount_percentage", data.discount_percentage);
+      data?.products?.forEach((product) => {
+        formData.append("products[]", product?.id.toString());
+      });
       formData.append("start_date", data.start_date);
       formData.append("end_date", data?.end_date);
       formData.append("is_active", data?.is_active?.toString());
@@ -69,14 +119,14 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
       if (initialData) {
         const response = await updateFlashSales(initialData.id, formData);
         if (response.status === 200) {
-          toast("Flash sales updated successfully");
+          toast.success("Flash sales updated successfully");
           dispatch(toggleRefetchTableData());
           router.push("/dashboard/flash-sales");
         }
       } else {
         const response = await createFlashSales(formData);
         if (response.status === 201) {
-          toast("Flash sales created successfully");
+          toast.success("Flash sales created successfully");
           dispatch(toggleRefetchTableData());
           router.push("/dashboard/flash-sales");
         }
@@ -194,19 +244,20 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
                   )}
                 />
               </div>
+
               <FormField
                 control={form.control}
-                name="recommended_products"
+                name="products"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="m-0 p-0 col-span-2 sm:col-span-1 pb-4">
                     <FormLabel>RECOMMENDED PRODUCTS</FormLabel>
                     <FormControl>
                       <PaginatedProductSelect
                         selectedValues={field.value}
                         onSelectionChange={field.onChange}
                         title="Select Products"
-                        fetchData={getUsersDropdown}
-                        className="w-full"
+                        fetchData={getProductsDropdown}
+                        className="w-full "
                       />
                     </FormControl>
                     <FormMessage />

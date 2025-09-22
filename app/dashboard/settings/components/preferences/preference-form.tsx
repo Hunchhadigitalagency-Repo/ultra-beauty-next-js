@@ -14,6 +14,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
+  createPreferences,
+  updatePreferences,
+} from "@/lib/api/settings/preferences-api";
+import { handleError } from "@/lib/error-handler";
+import { setActiveSetting } from "@/redux/features/setting-slice";
+import { toggleRefetchTableData } from "@/redux/features/table-slice";
+import { useAppDispatch } from "@/redux/hooks";
+import {
   preferenceSchema,
   PreferenceValues,
 } from "@/schemas/settings/preference-schema";
@@ -21,6 +29,7 @@ import { IPreference } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface PreferenceFormProps {
   initialData: IPreference | null;
@@ -38,41 +47,76 @@ const colorKeys = [
 ] as const;
 
 const PreferenceForm = ({ initialData }: PreferenceFormProps) => {
+  const dispatch = useAppDispatch();
   const form = useForm<PreferenceValues>({
     resolver: zodResolver(preferenceSchema),
     defaultValues: initialData
       ? {
-          themeName: initialData?.theme_name ?? "",
-          activate: initialData?.is_activated ?? false,
-          colors: {
-            primary: initialData?.colors?.primary ?? "",
-            secondary: initialData?.colors?.secondary ?? "",
-            ternary: initialData?.colors?.ternary ?? "",
-            forth: initialData?.colors?.forth ?? "",
-            textPrimary: initialData?.colors?.textPrimary ?? "",
-            textSecondary: initialData?.colors?.textSecondary ?? "",
-            textMuted: initialData?.colors?.textMuted ?? "",
-            textParagraph: initialData?.colors?.textParagraph ?? "",
-          },
-        }
+        themeName: initialData?.theme_name ?? "",
+        activate: initialData?.is_active,
+        colors: colorKeys.reduce((acc, { color }) => {
+          const colorObj = initialData?.colors?.find(
+            (c) => c.color_name === color
+          );
+          acc[color] = colorObj?.color_value ?? "";
+          return acc;
+        }, {} as PreferenceValues["colors"]),
+      }
       : {
-          themeName: "",
-          colors: {
-            primary: "",
-            secondary: "",
-            ternary: "",
-            forth: "",
-            textPrimary: "",
-            textSecondary: "",
-            textMuted: "",
-            textParagraph: "",
-          },
-          activate: false,
+        themeName: "",
+        activate: false,
+        colors: {
+          primary: "",
+          secondary: "",
+          ternary: "",
+          forth: "",
+          textPrimary: "",
+          textSecondary: "",
+          textMuted: "",
+          textParagraph: "",
         },
+      },
   });
 
-  const onSubmit = (data: PreferenceValues) => {
-    console.log("Submitted data:", data);
+  const onSubmit = async (data: PreferenceValues) => {
+
+    try {
+      let transformedColors;
+
+      if (data.colors && Object.keys(data.colors).length > 0) {
+        transformedColors = Object.entries(data.colors).map(
+          ([color_name, color_value]) => ({
+            color_name,
+            color_value,
+          })
+        );
+      }
+
+      const payload = {
+        theme_name: data.themeName,
+        is_active: data.activate,
+        colors: transformedColors || [],
+      };
+
+      if (initialData) {
+        const response = await updatePreferences(initialData.id, payload);
+        if (response.status === 200) {
+          toast.success("Preferences updated successfully");
+          dispatch(toggleRefetchTableData());
+          dispatch(setActiveSetting(ESettings.PREFERENCES));
+        }
+      } else {
+        const response = await createPreferences(payload);
+        if (response.status === 201) {
+          toast.success("Preferences created successfully");
+          dispatch(toggleRefetchTableData());
+          dispatch(setActiveSetting(ESettings.PREFERENCES));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      handleError(error, toast);
+    }
   };
 
   return (

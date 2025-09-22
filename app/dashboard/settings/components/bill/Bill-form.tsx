@@ -1,7 +1,6 @@
 "use client";
 
 import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
-import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,8 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { getTaxesDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { updateBill } from "@/lib/api/settings/bill-api";
 import { handleError } from "@/lib/error-handler";
 import { setActiveSetting } from "@/redux/features/setting-slice";
@@ -37,23 +34,23 @@ const BillForm = ({ initialData }: BillFromProps) => {
     resolver: zodResolver(billSchema),
     defaultValues: initialData
       ? {
-          billName: initialData.bill_name,
-          companyName: initialData.name,
-          companyAddress: initialData.address,
-          companyLogo: initialData.logo,
-          panNumber: initialData.pan_number,
-          taxType: initialData.tax_id?.toString(),
-          activate: initialData.is_active ?? false,
-        }
+        billName: initialData?.bill_name,
+        companyName: initialData?.name,
+        companyAddress: initialData?.address,
+        companyLogo: initialData?.logo,
+        panNumber: initialData?.pan_number,
+        // taxType: initialData?.tax?.id?.toString(),
+        activate: initialData?.is_active ?? false,
+      }
       : {
-          billName: "",
-          companyName: "",
-          companyAddress: "",
-          companyLogo: "",
-          panNumber: "",
-          taxType: "",
-          activate: false,
-        },
+        billName: "",
+        companyName: "",
+        companyAddress: "",
+        companyLogo: "",
+        panNumber: "",
+        // taxType: "",
+        activate: false,
+      },
   });
 
   const onSubmit = async (data: BillValues) => {
@@ -63,7 +60,6 @@ const BillForm = ({ initialData }: BillFromProps) => {
       formData.append("name", data.companyName);
       formData.append("address", data.companyAddress);
       formData.append("pan_number", data.panNumber);
-      formData.append("tax_id", data.taxType);
       formData.append("is_active", data?.activate?.toString());
 
       if (data.companyLogo instanceof File) {
@@ -90,7 +86,7 @@ const BillForm = ({ initialData }: BillFromProps) => {
           <Form {...form}>
             <form
               id="setting-bill-form"
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit              )}
               className="space-y-6"
             >
               <FormField
@@ -188,7 +184,7 @@ const BillForm = ({ initialData }: BillFromProps) => {
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="taxType"
                 render={({ field }) => (
@@ -199,7 +195,11 @@ const BillForm = ({ initialData }: BillFromProps) => {
                       <PaginatedSelect
                         value={field.value}
                         onValueChange={field.onChange}
-                        placeholder="Select Category"
+                        placeholder={
+                          initialData
+                            ? initialData?.tax?.tax_name
+                            : "Select Category"
+                        }
                         fetchData={getTaxesDropdown}
                         className="w-full"
                       />
@@ -207,31 +207,8 @@ const BillForm = ({ initialData }: BillFromProps) => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
-              <FormField
-                control={form.control}
-                name="activate"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </form>
           </Form>
         </CardContent>
