@@ -30,6 +30,8 @@ const SalesByCategoryChart = () => {
 
   const { data: rawData } = useFetchData<any>(`/order-category/?time_range=${filter}`, true);
 
+  console.log(rawData, "rawData from ");
+
   const chartData: DonutChartItem[] = useMemo(() => {
     return (
       rawData?.category_order_counts?.map((item: any, index: number) => ({

@@ -24,6 +24,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
+import { toggleCategory } from "@/redux/features/category-slice";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -103,6 +104,12 @@ export default function Navbar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleCategoryCardClick = (categoryId: number) => {
+    setIsDropdownVisible(false)
+    dispatch(toggleCategory({ id: categoryId, checked: true }));
+    router.push(`/shop`)
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 "
@@ -270,16 +277,15 @@ export default function Navbar() {
                   </Link>
                   {
                     dropdownCategoryData?.map((individualDropdownCategory) => (
-                      <Link
+                      <button
                         key={individualDropdownCategory.id}
-                        href={`/shop/${individualDropdownCategory.id}`}
-                        className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
-                        onClick={() => setIsDropdownVisible(false)}
+                        className='cursor-pointer flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
+                        onClick={() => handleCategoryCardClick(individualDropdownCategory.id)}
                       >
                         <p className="text-sm whitespace-nowrap font-poppins">
                           {individualDropdownCategory.name}
                         </p>
-                      </Link>
+                      </button>
                     ))
                   }
                 </div>

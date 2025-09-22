@@ -15,7 +15,7 @@ const SingleOrderPage = () => {
 
   console.log(params.slug);
   const { data: order, loading: loading } = useFetchData<IOrders>(
-    `/order/${params.slug}/`
+    `/order/${params.slug}/`, true
   );
 
   if (loading) {

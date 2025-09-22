@@ -285,18 +285,25 @@ export interface CancelOrderResponse extends PaginatedResponse {
 
 //dashboard
 
+export interface Status {
+  id: number
+  name: string
+  is_active: boolean
+  is_type_success: boolean
+  is_type_failed: boolean
+  position: number
+  primary_color: string
+  text_color: string
+}
 export interface INewOrder {
-  order_id: number;
-  total_amount: string;
-  status: {
-    id: number;
-    name: string;
-    primary_color: string;
-    text_color: string;
-  };
-  customer: string;
-  payment_method: string;
-  order_date: string;
+  order_id: number
+  total_amount: string
+  status: Status
+  customer: string
+  payment_method: string
+  order_date: string
+  product_name: string
+  quantity: number
 }
 
 export interface INeworders extends INewOrder { }

@@ -20,7 +20,7 @@ const SingleInvoiceDetailsPage = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
   const { data, loading: isLoading } = useFetchData<Invoice>(
-    `/invoices/${params.slug}/`
+    `/invoices/${params.slug}/`, true
   );
 
   useEffect(() => {

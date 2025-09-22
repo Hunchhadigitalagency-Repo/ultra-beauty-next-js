@@ -10,28 +10,38 @@ export const NewOrdersConstants = (): Col<INewOrder>[] => {
       render: (data: INewOrder) => <span className="px-2">{data.order_id}</span>,
     },
     {
-      title: "TOTAL AMOUNT",
-      render: (data: INewOrder) => <span className="px-2">{data.total_amount}</span>,
+      title: "PRODUCT NAME",
+      render: (data: INewOrder) => (
+        <span className="px-2">{data.product_name}</span>
+      ),
+    },
+    {
+      title: "PRICE",
+      render: (data: INewOrder) => <span>{Number(data.total_amount) === 0 ? "NaN" : "Nrs." + data.total_amount}</span>
     },
     {
       title: "STATUS",
       render: (data: INewOrder) => (
         <div className="px-2">
-          <span
+          <button
             style={{
-              backgroundColor: data?.status.primary_color,
-              color: data?.status.text_color,
+              backgroundColor: data.status.primary_color,
+              color: data.status.text_color,
             }}
-            className="text-xs px-3 py-2  rounded-full capitalize flex items-center justify-center gap-1 w-3/4 "
+            className="w-[100px] rounded-sm py-1 px-2 text-center"
           >
-            {data.status?.name}
-          </span>
+            <p className="text-white">{data.status.name}</p>
+          </button>
         </div>
       ),
     },
     {
       title: "CUSTOMER",
       render: (data: INewOrder) => <span className="px-2">{data.customer}</span>,
+    },
+    {
+      title: "QUANTITY",
+      render: (data: INewOrder) => <span className="px-2">{data.quantity}</span>,
     },
     {
       title: "PAYMENT",

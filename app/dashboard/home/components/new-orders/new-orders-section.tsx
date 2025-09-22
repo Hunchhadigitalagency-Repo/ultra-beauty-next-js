@@ -13,7 +13,7 @@ export interface Results {
 }
 const NewOrdersSection = () => {
   const router = useRouter();
-  const { data: newOrders } = useFetchData<Results>("/new-orders/", true);
+  const { data: newOrders, loading, error } = useFetchData<Results>("/new-orders/", true);
 
   const newOrder = newOrders?.results || [];
   return (
@@ -25,7 +25,8 @@ const NewOrdersSection = () => {
         <CustomTable<INeworders>
           cols={NewOrdersConstants()}
           data={newOrder as INeworders[]}
-          loading={false}
+          loading={loading}
+          error={error}
           onRowClick={(item) => router.push(`/dashboard/orders/single/${item.order_id}`)}
           height="h-auto"
         />
