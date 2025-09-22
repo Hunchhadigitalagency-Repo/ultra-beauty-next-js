@@ -24,14 +24,14 @@ const StatsCard = ({
             ? "text-green"
             : indicator === "decreasing"
                 ? "text-red"
-                : "text-orange-500";
+                : "text-orange";
 
     const indicatorLabel =
         indicator === "growing"
             ? "Increased"
             : indicator === "decreasing"
                 ? "Decreased"
-                : "No Change";
+                : "No Change"
 
     return (
         <section

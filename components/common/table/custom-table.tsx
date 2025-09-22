@@ -66,8 +66,8 @@ const CustomTable = <T,>({
   };
 
   const isAllSelected =
-    data.length > 0 &&
-    selectedIds?.length === data.length &&
+    data?.length > 0 &&
+    selectedIds?.length === data?.length &&
     data.every((item) => selectedIds.includes(getItemId(item)));
 
   const isIndeterminate =
@@ -125,7 +125,7 @@ const CustomTable = <T,>({
                   </div>
                 </td>
               </tr>
-            ) : data.length === 0 ? (
+            ) : data?.length === 0 ? (
               <tr>
                 <td colSpan={totalCols}>
                   <div className="flex text-gray text-sm items-center justify-center h-[300px]">
