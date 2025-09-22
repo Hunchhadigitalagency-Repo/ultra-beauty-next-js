@@ -6,6 +6,7 @@ import { setSelectedData } from "@/redux/features/authentication-slice";
 import { Col, ETypes } from "@/types/table";
 import { ICoupon } from "@/types/cupons";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
+import DateChips from "@/components/common/chips/date-chips";
 
 export const GeneralCouponConstant = (
   dispatch: AppDispatch
@@ -14,7 +15,7 @@ export const GeneralCouponConstant = (
     {
       title: "COUPON NAME",
       render: (data: ICoupon) => (
-        <span className="text-xs text-foreground">{data.name}</span>
+        <span className="text-sm text-foreground">{data.name}</span>
       ),
     },
 
@@ -30,12 +31,20 @@ export const GeneralCouponConstant = (
 
     {
       title: "EXPIRY DATE",
-      render: (data: ICoupon) => <span>{data.expiry_date}</span>,
+      render: (data: ICoupon) => <span><DateChips date={data.expiry_date || ""} /></span>,
     },
     {
       title: "STATUS",
       render: (data: ICoupon) => (
-        <TableStatusSwitch type={ETypes.COUPON} rowData={data} />
+        <div
+          className="flex gap-2 w-full justify-end"
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch(setSelectedData(data));
+          }}
+        >
+          <TableStatusSwitch type={ETypes.COUPON} rowData={data} />
+        </div>
       ),
     },
     {

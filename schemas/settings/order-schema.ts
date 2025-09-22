@@ -23,6 +23,8 @@ export const orderFilterSchema = z.object({
   customerName: z.string().optional(),
   email: z.string().email("Please enter a valid email address").optional().or(z.literal("")),
   dateRange: z.string().optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
 })
 
 export type OrderFilterValues = z.infer<typeof orderFilterSchema>

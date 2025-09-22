@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const SignatureSection: React.FunctionComponent = () => {
   return (
-    <div className="z-10 w-full md:w-full lg:w-1/2 ">
+    <div className="z-10 w-full md:w-full lg:w-1/2">
       <p className="mb-2 text-sm md:text-base font-playfair">
         Ultra Beauty & Brand
       </p>

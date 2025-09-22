@@ -15,7 +15,7 @@ const ProductTabsTrigger = ({ title, count, value }: IProductTabsTrigger) => {
     >
       {title}{" "}
       <span className="bg-[#EBEBEB] py-1.5 px-3 text-xs group-data-[state=active]:bg-transparent group-data-[state=active]:border group-data-[state=active]:border-primary">
-        ({count})
+        ({count || 0})
       </span>
     </TabsTrigger>
   );

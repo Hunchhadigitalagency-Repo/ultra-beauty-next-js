@@ -7,27 +7,22 @@ import { ISubCategory } from "@/types/Settings";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const SubCategoryConstant = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
+  onUpdate: (item: ISubCategory) => void
 ): Col<ISubCategory>[] => {
   return [
     {
       title: "SUB CATEGORY NAME",
       render: (data: ISubCategory) => <span>{data.name}</span>,
     },
-    // {
-    //   title: "STATUS",
-    //   render: (data: ISubCategory) => (
-    //     <Switch
-    //       checked={data.is_active}
-    //       id="activate"
-    //       className="cursor-pointer"
-    //     />
-    //   ),
-    // },
+    {
+      title: "CATEGORY NAME",
+      render: (data: ISubCategory) => <span>{data.category_name}</span>,
+    },
     {
       title: "STATUS",
       render: (data: ISubCategory) => (
-        <TableStatusSwitch type={ETypes.SUBCATEGORY} rowData={data} />
+        <TableStatusSwitch onUpdate={onUpdate} type={ETypes.SUBCATEGORY} rowData={data} />
       ),
     },
     {

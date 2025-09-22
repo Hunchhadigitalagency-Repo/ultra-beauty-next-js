@@ -7,13 +7,13 @@ import flowerImage from "@/assets/Flower.png";
 const SignatureImage: React.FunctionComponent = () => {
 
   return (
-    <div className="w-full md:w-1/2 lg:w-1/2 mt-10 md:mt-0  justify-center  z-10 hidden lg:flex ">
-      <div className="relative ">
+    <div className="w-full md:w-1/2 lg:w-1/2 mt-10 md:mt-0  justify-center  z-10 hidden lg:flex">
+      <div className="relative">
         <div>
           <Image
             src={womanImage}
             alt="woman image"
-            className="relative z-10  top-[-60px] lg:left-0 2xl:left-[90px]"
+            className="relative z-10  top-[-60px]"
           />
         </div>
 
@@ -21,7 +21,7 @@ const SignatureImage: React.FunctionComponent = () => {
           <Image
             src={flowerImage}
             alt="flower image"
-            className="absolute -bottom-20 lg:left-[30px] 2xl:left-[120px] z-20 "
+            className="absolute -bottom-20 left-[30px] z-20 "
           />
         </div>
 
@@ -29,7 +29,7 @@ const SignatureImage: React.FunctionComponent = () => {
           <Image
             src={Eclipse}
             alt="eclipse"
-            className="absolute z-0 bottom-[80px] w-[200px] h-[200px] lg:left-[50px] 2xl:left-[140px]"
+            className="absolute z-0 bottom-[80px] w-[200px] h-[200px] left-[50px] "
           />
         </div>
 
@@ -37,10 +37,9 @@ const SignatureImage: React.FunctionComponent = () => {
           <Image
             src={Eclipse}
             alt="eclipse"
-            className="absolute z-0 bottom-[150px] w-[300px] h-[300px] lg:left-[212px] xl:left-[312px] 2xl:left-[469px]"
+            className="absolute z-0 bottom-[150px] w-[300px] h-[300px] lg:left-[200px] xl:left-[295px] 2xl:left-[330px] "
           />
         </div>
-
       </div>
     </div>
   );

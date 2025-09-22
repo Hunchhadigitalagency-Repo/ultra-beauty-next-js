@@ -6,7 +6,7 @@ import { ITaxes } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const TaxConstant = (dispatch: AppDispatch): Col<ITaxes>[] => {
+export const TaxConstant = (dispatch: AppDispatch, onupdate:(item: ITaxes) => void): Col<ITaxes>[] => {
   return [
     {
       title: "TAX NAME",
@@ -19,7 +19,7 @@ export const TaxConstant = (dispatch: AppDispatch): Col<ITaxes>[] => {
     {
       title: "STATUS",
       render: (data: ITaxes) => (
-        <TableStatusSwitch type={ETypes.TAX} rowData={data} />
+        <TableStatusSwitch type={ETypes.TAX} rowData={data} onUpdate={onupdate}/>
       ),
     },
     {

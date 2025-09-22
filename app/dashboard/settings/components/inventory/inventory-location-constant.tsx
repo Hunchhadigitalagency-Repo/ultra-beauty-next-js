@@ -3,8 +3,9 @@ import { Col, ETypes } from "@/types/table";
 import TableActions from "@/components/common/table/table-actions";
 import { IInventory } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
+import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const InventoryConstant = (dispatch: AppDispatch): Col<IInventory>[] => {
+export const InventoryConstant = (dispatch: AppDispatch, onUpdate: (item: IInventory) => void): Col<IInventory>[] => {
   return [
     {
       title: "INVENTORY NAME",
@@ -13,6 +14,12 @@ export const InventoryConstant = (dispatch: AppDispatch): Col<IInventory>[] => {
     {
       title: "INVENTORY ADDRESS",
       render: (data: IInventory) => <span>{data.inventory_address}</span>,
+    },
+    {
+      title: "STATUS",
+      render: (data: IInventory) => (
+        <TableStatusSwitch type={ETypes.INVENTORY_LOCATION} rowData={data} onUpdate={onUpdate} />
+      ),
     },
     {
       title: "ACTION",

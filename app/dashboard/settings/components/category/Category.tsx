@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -11,7 +11,7 @@ import SearchBox from "@/components/common/filter/search-box";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import CustomTable from "@/components/common/table/custom-table";
 import { setActiveSetting } from "@/redux/features/setting-slice";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
+import { ESettings } from "@/types/table";
 
 const CategoryTab = () => {
   const dispatch = useAppDispatch();
@@ -19,13 +19,23 @@ const CategoryTab = () => {
   const scrollId = "infinite-scroll-container";
 
   const { searchQuery } = useAppSelector((state) => state.filter);
-
+  const [category, setCategory] = useState<ICategory[]>([])
   const { data, loading, hasMore, fetchNext } = useInfiniteFetch<ICategory>(
     "/categories",
     "search",
     searchQuery
   );
+  useEffect(() => {
+    setCategory(data)
+  }, [data])
 
+  const handleItemUpdate = (updatedItem: ICategory) => {
+    setCategory((prevData) =>
+      prevData.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
+      )
+    );
+  };
   return (
     <DataCard
       title="All Category"
@@ -35,7 +45,7 @@ const CategoryTab = () => {
 
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Category"))}
+            onClick={() => dispatch(setActiveSetting(ESettings.ADD_CATEGORY))}
           >
             Add Categories
           </Button>
@@ -47,14 +57,13 @@ const CategoryTab = () => {
           dataLength={data.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={CategoryConstant(dispatch)}
-            data={data as ICategory[]}
+            cols={CategoryConstant(dispatch, handleItemUpdate)}
+            data={ category  as ICategory[]}
             loading={loading && data.length === 0}
-            onRowClick={() => {}}
             height="h-auto"
             hasSerialNo={true}
           />

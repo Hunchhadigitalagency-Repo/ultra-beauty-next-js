@@ -1,7 +1,9 @@
 "use client";
 
 import HeaderBackCard from "@/components/common/cards/header-back-card";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
+import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -41,20 +43,29 @@ const ExpertRecommendationForm = ({
   const title = initialData
     ? "Edit Expert Recommendation"
     : "Add Expert Recommendation";
-  //   const dispatch = useAppDispatch();
 
   const router = useRouter();
-
   const form = useForm<ExpertRecommendationFormValues>({
     resolver: zodResolver(expertRecommendationSchema),
-    defaultValues: initialData || {
-      name: "",
-      designation: "",
-      company: "",
-      message: "",
-      recommended_products: [],
-      is_active: false,
-    },
+    defaultValues: initialData
+      ? {
+        name: initialData.name,
+        designation: initialData.designation,
+        company: initialData.company,
+        message: initialData.message,
+        photo: initialData.photo,
+        products: initialData.products || [],
+        is_active: initialData.is_active,
+      }
+      : {
+        name: "",
+        designation: "",
+        company: "",
+        message: "",
+        photo: "",
+        products: [],
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: ExpertRecommendationFormValues) => {
@@ -65,9 +76,13 @@ const ExpertRecommendationForm = ({
       formData.append("company", data.company);
       formData.append("message", data.message);
 
-      data?.recommended_products?.forEach((product) => {
-        formData.append("products", product);
+      data?.products?.forEach((product) => {
+        formData.append("products", product?.id?.toString());
       });
+
+      if (data.photo instanceof File) {
+        formData.append("photo", data.photo);
+      }
 
       formData.append("is_active", data?.is_active?.toString());
 
@@ -106,7 +121,7 @@ const ExpertRecommendationForm = ({
           <Form {...form}>
             <form
               id="expert-recommendation-form"
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit, err => console.log("error", err))}
               className="space-y-6"
             >
               <div className="grid sm:grid-cols-3 gap-2">
@@ -162,33 +177,13 @@ const ExpertRecommendationForm = ({
                 />
               </div>
 
-              <div className="grid sm:grid-cols-3 gap-2">
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem className="col-span-2">
-                      <FormLabel className="text-muted-foreground">
-                        MESSAGE
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          rows={8}
-                          placeholder="Enter your message here..."
-                          className="rounded-sm"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="recommended_products"
-                  render={({ field }) => (
-                    <FormItem className="m-0 p-0 col-span-2 sm:col-span-1">
+              <FormField
+                control={form.control}
+                name="products"
+                render={({ field }) => {
+                  console.log("field value", field.value)
+                  return (
+                    <FormItem className="m-0 p-0 col-span-2 sm:col-span-1 pb-4">
                       <FormLabel>PRODUCTS</FormLabel>
                       <FormControl>
                         <PaginatedProductSelect
@@ -201,9 +196,51 @@ const ExpertRecommendationForm = ({
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-              </div>
+                  )
+                }}
+              />
+
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel className="text-muted-foreground">
+                      MESSAGE
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={8}
+                        placeholder="Enter your message here..."
+                        className="rounded-sm"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="photo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className=" text-muted-foreground">
+                      BRAND IMAGE
+                    </FormLabel>
+                    <FormControl>
+                      <SingleImageUploader
+                        onChange={field.onChange}
+                        onRemove={() => field.onChange(undefined)}
+                        value={field.value}
+                        size="small"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

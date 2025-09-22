@@ -6,6 +6,8 @@ import Image from "next/image";
 import { IAdmin } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 
+import defaultProfile from "@/assets/images.jpeg"
+
 export const AdminConstant = (dispatch: AppDispatch): Col<IAdmin>[] => {
   return [
     {
@@ -14,32 +16,24 @@ export const AdminConstant = (dispatch: AppDispatch): Col<IAdmin>[] => {
         <div className="flex items-center gap-2">
           <Image
             src={
-              data?.image_url ||
-              "https://cdn-icons-png.flaticon.com/512/9187/9187604.png"
+              data?.profile?.profile_picture || defaultProfile
             }
-            alt={data.name}
+            alt={data.first_name}
             height={30}
             width={30}
             className=" h-8 w-8 rounded-full"
           />
-          <span>{data.name}</span>
+          <span>
+            {data.first_name} {data.last_name}
+          </span>
         </div>
       ),
     },
-    {
-      title: "ADMIN ADDRESS",
-      render: (data: IAdmin) => <span>{data.address}</span>,
-    },
+
     {
       title: "ADMIN EMAIL",
       render: (data: IAdmin) => <span>{data.email}</span>,
     },
-    // {
-    //   title: "STATUS",
-    //   render: (data: IAdmin) => (
-    //     <TableStatusSwitch type={ETypes.ADMIN} rowData={data} />
-    //   ),
-    // },
     {
       title: "ACTION",
       render: (data: IAdmin) => (
@@ -50,7 +44,11 @@ export const AdminConstant = (dispatch: AppDispatch): Col<IAdmin>[] => {
             dispatch(setSelectedData(data));
           }}
         >
-          <TableActions data={data} type={ETypes.ADMIN} name={data.name} />
+          <TableActions
+            data={data}
+            type={ETypes.ADMIN}
+            name={data.first_name}
+          />
         </div>
       ),
     },

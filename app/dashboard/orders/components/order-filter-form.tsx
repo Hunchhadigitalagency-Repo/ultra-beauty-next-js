@@ -24,29 +24,47 @@ import {
   OrderFilterValues,
 } from "@/schemas/settings/order-schema";
 import { SheetClose } from "@/components/ui/sheet";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { format, } from "date-fns";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setCriteria } from "@/redux/features/filter-slice";
 
 export default function OrderFilterForm() {
+  const dispatch = useAppDispatch();
+  const { criteria } = useAppSelector((state) => state.filter);
+  const { orderStatusDropdown } = useAppSelector((state) => state.dropdown);
+
   const form = useForm<OrderFilterValues>({
     resolver: zodResolver(orderFilterSchema),
     defaultValues: {
       orderId: "",
       status: "",
-      grandTotal: "",
+      grandTotal: undefined,
       customerName: "",
       email: "",
-      dateRange: "",
+      start_date: "",
+      end_date: "",
     },
   });
 
   function onSubmit(values: OrderFilterValues) {
-    console.log("Apply Filter:", values);
-    // Handle filter application logic here
+    dispatch(
+      setCriteria({
+        ...criteria,
+        order_id: values.orderId,
+        order_status: values.status,
+        customer_name: values.customerName,
+        // grand_total: values.grandTotal ?? "0",
+        email: values.email,
+        start_date: values.start_date,
+        end_date: values.end_date,
+      })
+    );
   }
 
   function onClear() {
     form.reset();
-    console.log("Filters cleared");
-    // Handle clear filter logic here
+    dispatch(setCriteria({}))
   }
 
   return (
@@ -87,11 +105,11 @@ export default function OrderFilterForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="processing">Processing</SelectItem>
-                  <SelectItem value="shipped">Shipped</SelectItem>
-                  <SelectItem value="delivered">Delivered</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                  {orderStatusDropdown?.map((status) => (
+                    <SelectItem key={status.id} value={status.id?.toString()}>
+                      {status.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -109,9 +127,10 @@ export default function OrderFilterForm() {
               </FormLabel>
               <FormControl>
                 <Input
+                  type="number"
                   placeholder="Enter the grand total"
                   className="border-gray-200 focus:border-gray-300"
-                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
               <FormMessage />
@@ -160,25 +179,32 @@ export default function OrderFilterForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="dateRange"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm font-medium text-gray-600 uppercase tracking-wide">
-                DATE RANGE FILTER
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter the date range"
-                  className="border-gray-200 focus:border-gray-300"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+            DATE RANGE FILTER
+          </FormLabel>
+          <FormControl>
+            <DateRangePicker
+              onUpdate={(values) => {
+                form.setValue(
+                  "start_date",
+                  values.range?.from
+                    ? format(values.range.from, "yyyy-MM-dd")
+                    : ""
+                );
+                form.setValue(
+                  "end_date",
+                  values.range?.to ? format(values.range.to, "yyyy-MM-dd") : ""
+                );
+              }}
+              initialDateFrom={form.getValues("start_date") || "2024-01-01"}
+              initialDateTo={form.getValues("end_date") || new Date()}
+              align="start"
+              locale="en-GB"
+              showCompare={false}
+            />
+          </FormControl>
+        </FormItem>
 
         <div className="flex gap-3 pt-4">
           <Button

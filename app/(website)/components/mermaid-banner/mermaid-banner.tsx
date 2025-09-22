@@ -5,13 +5,20 @@ import Image from 'next/image';
 import { AlertCircle } from "lucide-react";
 import useFetchData from '@/hooks/use-fetch';
 import { BannerResponse } from '@/types/banner';
+import { useRouter } from 'next/navigation';
 
 const MermaidBanner: React.FunctionComponent = () => {
 
   const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Mesh%20Banner`)
 
+  const router = useRouter();
+
+  const handleMeshBannerClick = (productSlug: string) => {
+    router.push(`/shop/${productSlug}`);
+  }
+
   return (
-    <div className='padding grid grid-cols-2 w-full gap-4 lg:gap-8 '>
+    <section>
       {
         loading ?
           (
@@ -38,20 +45,23 @@ const MermaidBanner: React.FunctionComponent = () => {
                 </div>
               ) :
               (
-                data?.map((banner) => (
-                  <div key={banner?.id} className='w-full aspect-square  relative lg:aspect-5/3 '>
-                    <Image
-                      fill
-                      src={banner.image}
-                      alt={banner.product_slug}
-
-                      className="object-cover rounded-2xl "
-                    />
-                  </div>
-                ))
+                <div className='padding grid grid-cols-2 w-full gap-4 lg:gap-8 '>
+                  {
+                    data?.map((banner) => (
+                      <div onClick={() => handleMeshBannerClick(banner.product.slug_name)} key={banner?.id} className='w-full aspect-square  relative lg:aspect-5/3 cursor-pointer'>
+                        <Image
+                          fill
+                          src={banner.image}
+                          alt={banner.product.name || 'image'}
+                          className="object-cover rounded-2xl "
+                        />
+                      </div>
+                    ))
+                  }
+                </div>
               )
       }
-    </div>
+    </section>
   )
 }
 

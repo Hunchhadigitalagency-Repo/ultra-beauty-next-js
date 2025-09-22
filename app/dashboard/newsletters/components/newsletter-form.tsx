@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import useFetchData from "@/hooks/use-fetch";
 
 import {
   createNewsletter,
@@ -32,7 +34,7 @@ import { INewsletters } from "@/types/cms";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -45,23 +47,42 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
   const router = useRouter();
 
   const title = initialData ? "Edit Newsletter" : "Add Newsletter";
+  const isEditMode = Boolean(initialData);
+  const newsLetterUrl = isEditMode ? `/cms/newsletters/${initialData?.id}` : "";
+  const { data: newsLetter, } = useFetchData<INewsletters>(newsLetterUrl);
+
+  const emptyDefaults = {
+    title: "",
+    users: [],
+    subject_header: "",
+    is_active: false,
+    is_saved_as_template: false,
+  }
 
   const form = useForm<NewsletterFormValues>({
     resolver: zodResolver(newsletterSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          title: "",
-          users: [],
-          subject_header: "",
-          is_active: false,
-          is_saved_as_template: false,
-        },
+    defaultValues: emptyDefaults
   });
+
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = newsLetter || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          title: newsLetter?.title,
+          users: newsLetter?.users,
+          subject_header: newsLetter?.subject_header,
+          is_active: newsLetter?.is_active,
+          is_saved_as_template: newsLetter?.is_saved_as_template,
+        });
+      }
+    }
+  }, [isEditMode, newsLetter, initialData, form]);
 
   const onSubmit = async (data: NewsletterFormValues) => {
     try {
-      console.log(data);
       if (initialData) {
         const response = await updateNewsletter(initialData.id, data);
         if (response.status === 200) {
@@ -125,12 +146,7 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
                         placeholder="Select Users"
                         fetchData={getUsersDropdown}
                         className="w-full"
-                        filterOptions={[
-                          { id: "1", name: "Non Buyers" },
-                          { id: "2", name: "Buyers" },
-                          { id: "3", name: "New Users" },
-                          { id: "4", name: "First Users" },
-                        ]}
+
                       />
                     </FormControl>
                     <FormMessage />
@@ -169,6 +185,56 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
                   </FormItem>
                 )}
               />
+
+              <div className="flex items-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_active"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="is_active"
+                        className="text-muted-foreground"
+                      >
+                        ACTIVATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="is_saved_as_template"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_saved_as_template"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="is_saved_as_template"
+                        className="text-muted-foreground"
+                      >
+                        SAVE AS TEMPLATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </form>
           </Form>
         </CardContent>

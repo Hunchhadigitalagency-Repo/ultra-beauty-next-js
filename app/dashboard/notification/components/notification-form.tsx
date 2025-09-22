@@ -81,7 +81,7 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
           <div className="flex w-full justify-between pb-6">
             <HeaderBackCard
               title={title}
-              fallBackLink="/dashboard/notifications"
+              fallBackLink="/dashboard/notification"
             />
           </div>
           <Form {...form}>

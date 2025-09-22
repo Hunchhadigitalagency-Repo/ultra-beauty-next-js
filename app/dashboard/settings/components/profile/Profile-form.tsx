@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   companyProfileSchema,
@@ -35,23 +34,12 @@ const Profile = ({ initialData }: ProfileFromProps) => {
   const form = useForm<CompanyProfileValues>({
     resolver: zodResolver(companyProfileSchema),
     defaultValues: {
-      companyName: "",
-      companyAddress: "",
-      companyLogo: "",
-      companyFavIcon: "",
+      companyName: initialData?.company_name,
+      companyAddress: initialData?.company_address,
+      companyLogo: initialData?.company_logo_url,
+      companyFavIcon: initialData?.company_favicon_url,
     },
   });
-
-  useEffect(() => {
-    if (initialData) {
-      form.reset({
-        companyName: initialData.company_name,
-        companyAddress: initialData.company_address,
-        companyLogo: initialData.company_logo_url,
-        companyFavIcon: initialData.company_favicon_url,
-      });
-    }
-  }, [initialData, form]);
 
   const onSubmit = async (data: CompanyProfileValues) => {
     try {
@@ -133,7 +121,7 @@ const Profile = ({ initialData }: ProfileFromProps) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-muted-foreground">
-                        COMPANY LOGO
+                        COMPANY LOGO (250px * 400px)
                       </FormLabel>
                       <FormControl>
                         <SingleImageUploader
@@ -153,7 +141,7 @@ const Profile = ({ initialData }: ProfileFromProps) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-muted-foreground">
-                        COMPANY FAV ICON
+                        COMPANY FAV ICON (32px * 32px)
                       </FormLabel>
                       <FormControl>
                         <SingleImageUploader

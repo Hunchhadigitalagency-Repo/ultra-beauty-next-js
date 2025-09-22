@@ -46,3 +46,10 @@ export interface CategoryOrderCount {
   total_amount_sold: number
   percentage_of_total_products: number
 }
+
+export interface CardStats {
+  key: string;
+  value: number;
+  percentage: number;
+  indicator: string;
+}

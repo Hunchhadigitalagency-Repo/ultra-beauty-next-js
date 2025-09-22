@@ -41,11 +41,11 @@ export const ProductConstants = (dispatch: AppDispatch): Col<IProduct>[] => {
     {
       title: "SOLD",
 
-      render: () => <span>{}</span>,
+      render: () => <span>{ }</span>,
     },
     {
       title: "TOTAL EARNINGS",
-      render: () => <span>{}</span>,
+      render: () => <span>{ }</span>,
     },
 
     {

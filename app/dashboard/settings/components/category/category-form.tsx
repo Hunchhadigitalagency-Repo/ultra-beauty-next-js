@@ -46,27 +46,29 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
     resolver: zodResolver(categorySchema),
     defaultValues: initialData
       ? {
-          categoryName: initialData.name,
-          categoryImage: initialData.icon ?? "",
-          activate: initialData.is_active ?? false,
-        }
+        categoryName: initialData.name,
+        categoryImage: initialData.icon ?? "",
+        activate: initialData.is_active ?? false,
+        is_featured: initialData.is_featured ?? false,
+      }
       : {
-          categoryName: "",
-          categoryImage: "",
-          activate: false,
-        },
+        categoryName: "",
+        categoryImage: "",
+        activate: false,
+        is_featured: false,
+      },
   });
 
   const onSubmit = async (data: CategoryValues) => {
     try {
       const formData = new FormData();
       formData.append("name", data.categoryName);
-      formData.append("icon", data.categoryImage);
-      formData.append("is_active", data?.activate?.toString());
-
       if (data.categoryImage instanceof File) {
-        formData.append("category_image", data.categoryImage);
+        formData.append("icon", data.categoryImage);
       }
+
+      formData.append("is_active", data?.activate?.toString());
+      formData.append("is_featured", data?.is_featured?.toString());
 
       if (initialData) {
         const response = await updateCategory(initialData.id, formData);
@@ -109,21 +111,27 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
                 control={form.control}
                 name="categoryImage"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel className=" text-muted-foreground">
                       CATEGORY IMAGE
                     </FormLabel>
                     <FormControl>
-                      <SingleImageUploader
-                        onChange={field.onChange}
-                        onRemove={() => field.onChange(undefined)}
-                        value={field.value}
-                      />
+                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-4 flex flex-col items-center justify-center hover:border-purple-500 transition-colors duration-300">
+                        <SingleImageUploader
+                          onChange={field.onChange}
+                          onRemove={() => field.onChange(undefined)}
+                          value={field.value}
+                        />
+                      </div>
                     </FormControl>
+                    <span className="text-xs text-gray-400 mt-1 block">
+                      NOTE: Please upload 500 x 500 px size
+                    </span>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="categoryName"
@@ -143,6 +151,29 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="is_featured"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-4 mt-6">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="activate"
+                        className="cursor-pointer"
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor="activate"
+                      className="text-muted-foreground"
+                    >
+                      IS FEATURED
+                    </FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="activate"

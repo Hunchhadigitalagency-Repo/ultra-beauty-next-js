@@ -7,7 +7,7 @@ import { INewsletters } from "@/types/cms";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const NewsletterConstants = (
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
 ): Col<INewsletters>[] => {
   return [
     {

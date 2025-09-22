@@ -1,6 +1,6 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import { Button } from "@/components/ui/button";
@@ -9,26 +9,42 @@ import { ReferralConstant } from "./referral-constant";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import { IReferral } from "@/types/Settings";
 import InfiniteScroll from "react-infinite-scroll-component";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import SearchBox from "@/components/common/filter/search-box";
+import { ESettings } from "@/types/table";
 
 const ReferralTab = () => {
   const dispatch = useAppDispatch();
   const scrollId = "infinite-scroll-container";
-    const {searchQuery} = useAppSelector((state)=>state.filter);
+  const { searchQuery } = useAppSelector((state) => state.filter);
+  const [Referall, setReferall] = useState<IReferral[]>([]);
 
-  const { data, loading, hasMore, fetchNext } =
-    useInfiniteFetch<IReferral>("/referral", "search", searchQuery);
+  const { data, loading, hasMore, fetchNext } = useInfiniteFetch<IReferral>(
+    "/referral",
+    "search",
+    searchQuery
+  );
+
+    useEffect(() => {
+      setReferall(data);
+    }, [data]);
+  
+    const handleItemUpdate = (updatedItem: IReferral) => {
+      setReferall((prevData) =>
+        prevData.map((item) =>
+          item.id === updatedItem.id ? updatedItem : item
+        )
+      );
+    };
   return (
     <DataCard
       title="Referral"
       filter={
         <div className="flex flex-col md:flex-row items-center gap-2">
-       <SearchBox />
+          <SearchBox />
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Referral"))}
+            onClick={() => dispatch(setActiveSetting(ESettings.ADD_REFERRAL))}
           >
             Add Referral
           </Button>
@@ -40,12 +56,12 @@ const ReferralTab = () => {
           dataLength={data.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={ReferralConstant(dispatch)}
-            data={data as IReferral[]}
+            cols={ReferralConstant(dispatch, handleItemUpdate)}
+            data={Referall as IReferral[]}
             loading={loading && data.length === 0}
             onRowClick={() => {}}
             height="h-auto"

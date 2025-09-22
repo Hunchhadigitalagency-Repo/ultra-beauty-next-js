@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { ChevronRightIcon } from "lucide-react";
-import { useAppDispatch } from "@/redux/hooks";
 
 import {
   Select,
@@ -28,11 +27,12 @@ import {
 } from "@/schemas/menu/products/product-schema";
 import { handleError } from "@/lib/error-handler";
 import { toast } from "sonner";
+
+import LoadingSpinner from "@/components/common/loader/loading-spinner";
 import {
   createProductAttribute,
   updateProductAttribute,
-} from "@/services/products/product-api";
-import LoadingSpinner from "@/components/common/loader/loading-spinner";
+} from "@/lib/api/menu/products-api";
 
 interface ProductAttributeFormProps {
   initialData: any | null;
@@ -41,9 +41,6 @@ interface ProductAttributeFormProps {
 export default function ProductAttributeForm({
   initialData,
 }: ProductAttributeFormProps) {
-  const dispatch = useAppDispatch();
-
-  console.log(dispatch);
   const themes = [
     { id: 1, name: "Red" },
     { id: 2, name: "Blue" },
@@ -57,13 +54,13 @@ export default function ProductAttributeForm({
 
   const defaultValues = initialData
     ? {
-        name: initialData?.name?.id?.toString(),
-        value: initialData?.value,
-      }
+      name: initialData?.name?.id?.toString(),
+      value: initialData?.value,
+    }
     : {
-        name: "",
-        value: "",
-      };
+      name: "",
+      value: "",
+    };
 
   const form = useForm<ProductAttributeFormValues>({
     resolver: zodResolver(productAttributeSchema),

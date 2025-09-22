@@ -6,6 +6,7 @@ import { setSelectedData } from "@/redux/features/authentication-slice";
 import { Col, ETypes } from "@/types/table";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 import { IFlashSales } from "@/types/flash-sales";
+import DateChips from "@/components/common/chips/date-chips";
 
 export const FlashSalesConstant = (
   dispatch: AppDispatch
@@ -25,12 +26,12 @@ export const FlashSalesConstant = (
 
     {
       title: "START DATE",
-      render: (data: IFlashSales) => <span>{data.start_date}</span>,
+      render: (data: IFlashSales) => <span><DateChips date={data.start_date} /></span>,
     },
 
     {
       title: "EXPIRY DATE",
-      render: (data: IFlashSales) => <span>{data.end_date}</span>,
+      render: (data: IFlashSales) => <span><DateChips date={data.end_date} /></span>,
     },
     {
       title: "STATUS",

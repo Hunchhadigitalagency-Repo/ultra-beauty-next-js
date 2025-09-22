@@ -23,6 +23,7 @@ import { orderSchema, OrderValues } from "@/schemas/settings/order-schema";
 import { IOrderStatus } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -36,24 +37,39 @@ const OrderStatusForm = ({ initialData }: OrderStatusFromProps) => {
     resolver: zodResolver(orderSchema),
     defaultValues: initialData
       ? {
-          orderStatusName: initialData.name,
-          orderStatusPosition: initialData.position,
-          primaryColor: initialData.primary_color,
-          textColor: initialData.text_color,
-          activate: initialData.is_active ?? false,
-          isTypeSuccess: initialData.is_type_success ?? false,
-          isTypeFailed: initialData.is_type_failed ?? false,
-        }
+        orderStatusName: initialData.name,
+        orderStatusPosition: initialData.position,
+        primaryColor: initialData.primary_color,
+        textColor: initialData.text_color,
+        activate: initialData.is_active ?? false,
+        isTypeSuccess: initialData.is_type_success ?? false,
+        isTypeFailed: initialData.is_type_failed ?? false,
+      }
       : {
-          orderStatusName: "",
-          orderStatusPosition: 1,
-          primaryColor: "",
-          textColor: "",
-          activate: false,
-          isTypeSuccess: true,
-          isTypeFailed: false,
-        },
+        orderStatusName: "",
+        orderStatusPosition: 1,
+        primaryColor: "",
+        textColor: "",
+        activate: false,
+        isTypeSuccess: true,
+        isTypeFailed: false,
+      },
   });
+  const isTypeSuccess = form.watch("isTypeSuccess");
+  const isTypeFailed = form.watch("isTypeFailed");
+  useEffect(() => {
+    // If success is turned on, turn off failed
+    if (isTypeSuccess && isTypeFailed) {
+      form.setValue("isTypeFailed", false);
+    }
+  }, [form, isTypeSuccess, isTypeFailed]);
+
+  useEffect(() => {
+    // If failed is turned on, turn off success
+    if (isTypeFailed && isTypeSuccess) {
+      form.setValue("isTypeSuccess", false);
+    }
+  }, [form, isTypeFailed, isTypeSuccess]);
 
   const onSubmit = async (data: OrderValues) => {
     try {
@@ -69,14 +85,14 @@ const OrderStatusForm = ({ initialData }: OrderStatusFromProps) => {
       if (initialData) {
         const response = await updateOrderStatus(initialData.id, formData);
         if (response.status === 200) {
-          toast("Order status updated successfully");
+          toast.success("Order status updated successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.ORDER_STATUS));
         }
       } else {
         const response = await createOrderStatus(formData);
         if (response.status === 201) {
-          toast("Order status created successfully");
+          toast.success("Order status created successfully");
           dispatch(toggleRefetchTableData());
           dispatch(setActiveSetting(ESettings.ORDER_STATUS));
         }
@@ -198,8 +214,12 @@ const OrderStatusForm = ({ initialData }: OrderStatusFromProps) => {
                         <FormControl>
                           <Switch
                             checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="isTypeSuccess"
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              if (checked) {
+                                form.setValue("isTypeFailed", false);
+                              }
+                            }} id="isTypeSuccess"
                             className="cursor-pointer"
                           />
                         </FormControl>
@@ -221,8 +241,12 @@ const OrderStatusForm = ({ initialData }: OrderStatusFromProps) => {
                         <FormControl>
                           <Switch
                             checked={field.value}
-                            onCheckedChange={field.onChange}
-                            id="isTypeFailed"
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              if (checked) {
+                                form.setValue("isTypeSuccess", false);
+                              }
+                            }} id="isTypeFailed"
                             className="cursor-pointer"
                           />
                         </FormControl>

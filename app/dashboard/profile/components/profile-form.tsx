@@ -22,29 +22,37 @@ import {
 import { handleError } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { updatePersonalProfile } from "@/lib/api/settings/profile-api";
+import { useState } from "react";
+import ChangePasswordModal from "./password-change";
+import { useAppDispatch } from "@/redux/hooks";
+import { setProfileDetails } from "@/redux/features/authentication-slice";
 
 interface ProfileFromProps {
   initialData: IPersonalProfile | null;
 }
 
 const PersonalProfile = ({ initialData }: ProfileFromProps) => {
+  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+  console.log('this is that', initialData);
+
+  const dispatch = useAppDispatch()
   const form = useForm<PersonalProfileValues>({
     resolver: zodResolver(personalProfileSchema),
     defaultValues: initialData
       ? {
-          firstName: initialData.first_name,
-          lastName: initialData.last_name,
-          personalAddress: initialData?.profile?.address,
-          personalEmail: initialData.email,
-          personalProfile: initialData?.profile?.profile_picture,
-        }
+        firstName: initialData.first_name,
+        lastName: initialData.last_name,
+        personalAddress: initialData?.profile?.address,
+        personalEmail: initialData.email,
+        personalProfile: initialData?.profile?.profile_picture,
+      }
       : {
-          firstName: "",
-          lastName: "",
-          personalAddress: "",
-          personalEmail: "",
-          personalProfile: "",
-        },
+        firstName: "",
+        lastName: "",
+        personalAddress: "",
+        personalEmail: "",
+        personalProfile: "",
+      },
   });
 
   const onSubmit = async (data: PersonalProfileValues) => {
@@ -63,6 +71,18 @@ const PersonalProfile = ({ initialData }: ProfileFromProps) => {
       if (response.status === 200) {
         toast.success("Profile updated successfully");
       }
+
+      const user = {
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        email: response.data.email,
+        address: response.data.address,
+        profile: {
+          profile_picture: response.data.profile_picture
+        }
+      }
+
+      dispatch(setProfileDetails(user))
     } catch (error) {
       handleError(error, toast);
     }
@@ -173,6 +193,21 @@ const PersonalProfile = ({ initialData }: ProfileFromProps) => {
               </div>
             </form>
           </Form>
+          <div className="flex  pt-4 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPasswordModalOpen(true)}
+            >
+              Change Password
+            </Button>
+
+          </div>
+
+          <ChangePasswordModal
+            open={isPasswordModalOpen}
+            onClose={() => setPasswordModalOpen(false)}
+          />
         </CardContent>
       </Card>
 

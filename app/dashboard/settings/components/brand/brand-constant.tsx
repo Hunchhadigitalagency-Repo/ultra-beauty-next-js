@@ -7,7 +7,8 @@ import { IBrand } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const BrandConstant = (dispatch: AppDispatch): Col<IBrand>[] => {
+export const BrandConstant = (dispatch: AppDispatch,   onUpdate: (data: IBrand) => void // New parameter
+): Col<IBrand>[] => {
   return [
     {
       title: "BRAND NAME",
@@ -28,7 +29,7 @@ export const BrandConstant = (dispatch: AppDispatch): Col<IBrand>[] => {
     {
       title: "STATUS",
       render: (data: IBrand) => (
-        <TableStatusSwitch type={ETypes.BRAND} rowData={data} />
+        <TableStatusSwitch type={ETypes.BRAND} rowData={data} onUpdate={onUpdate} />
       ),
     },
     {

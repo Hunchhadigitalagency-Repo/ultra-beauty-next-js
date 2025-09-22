@@ -1,9 +1,9 @@
 "use client";
 
 import HeaderBackCard from "@/components/common/cards/header-back-card";
-import { FormCombobox } from "@/components/common/form/form-combobox";
 import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+import { useCouponUser } from "@/components/seeds/coupon-users";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import useFetchDropdown from "@/hooks/use-fetch-dropdown";
 import { createCoupons, updateCoupons } from "@/lib/api/coupons/coupons-api";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
@@ -34,7 +33,6 @@ import {
   couponSchema,
 } from "@/schemas/coupons/coupons-schema";
 import { ICoupon } from "@/types/cupons";
-import { ICategoryDropdown } from "@/types/dropdown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -42,29 +40,28 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-// Example static user list
-const allUsers = [
-  {
-    id: "1",
-    name: "Ram kumar",
-    avatar: "https://randomuser.me/api/portraits/women/51.jpg",
-  },
-  {
-    id: "2",
-    name: "Shyam Bahadur",
-    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
-  },
-  {
-    id: "3",
-    name: "Someone kumar",
-    avatar: "https://randomuser.me/api/portraits/women/53.jpg",
-  },
-  {
-    id: "4",
-    name: "noone bahadur",
-    avatar: "https://randomuser.me/api/portraits/men/54.jpg",
-  },
-];
+// const allUsers = [
+//   {
+//     id: "1",
+//     name: "Ram kumar",
+//     avatar: "https://randomuser.me/api/portraits/women/51.jpg",
+//   },
+//   {
+//     id: "2",
+//     name: "Shyam Bahadur",
+//     avatar: "https://randomuser.me/api/portraits/men/52.jpg",
+//   },
+//   {
+//     id: "3",
+//     name: "Someone kumar",
+//     avatar: "https://randomuser.me/api/portraits/women/53.jpg",
+//   },
+//   {
+//     id: "4",
+//     name: "noone bahadur",
+//     avatar: "https://randomuser.me/api/portraits/men/54.jpg",
+//   },
+// ];
 
 interface CouponFormProps {
   initialData: ICoupon | null;
@@ -73,50 +70,58 @@ interface CouponFormProps {
 const CouponForm = ({ initialData }: CouponFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [selectedUsers, setSelectedUsers] = useState<typeof allUsers>([]);
+  const [selectedUsers, setSelectedUsers] = useState<any[]>([]);
   const title = initialData ? "Edit Coupons" : "Add Coupons";
+  const allUsers = useCouponUser();
+  // const allUsers = users?.map((user: any) => {
+  //   return {
+  //     id: user.user_id, // or String(user.user_id) if you need string
+  //     name: user.first_name + " " + user.last_name,
+  //     avatar: user.profile_picture || user.google_avatar || "/placeholder.svg",
+  //   };
+  // });
 
-  const { data: categories } = useFetchDropdown<ICategoryDropdown>(
-    "/categoriesdropdown/"
-  );
+  console.log(initialData);
 
-  const form = useForm<CouponFormValue>({
+  const form = useForm<any>({
     resolver: zodResolver(couponSchema),
     defaultValues: initialData
       ? {
-          coupon_type: initialData.coupon_type,
-          coupon_name: initialData.name,
-          coupon_image: initialData.image,
-          coupon_title: initialData.title,
-          coupon_sub_title: initialData.subtitle,
-          discount_percentage: initialData.discount_percentage,
-          coupon_code: initialData.code,
-          expiry_date: initialData.expiry_date,
-          products: initialData.products,
-          category: initialData.categories[0].toString(),
-          sub_category: initialData.subcategories[0].toString(),
-          commission_percentage: initialData.commission_percentage,
-          withdrawal_limit: initialData.withdrawal_limit,
-          influencer: initialData._influencers,
-          is_active: false,
-        }
+        coupon_type: initialData?.coupon_type,
+        coupon_name: initialData?.name,
+        coupon_image: initialData?.image,
+        coupon_title: initialData?.title,
+        coupon_sub_title: initialData?.subtitle,
+        discount_percentage: Number(initialData?.discount_percentage),
+        coupon_code: initialData?.code,
+        expiry_date: initialData?.expiry_date,
+        products: initialData?.products,
+        category: initialData?.categories?.[0]?.toString(),
+        sub_category: initialData?.subcategories?.[0]?.toString(),
+        commission_percentage: initialData?.commission_percentage || 0,
+        withdrawal_limit: initialData?.withdrawal_limit || 0,
+        influencer: initialData?._influencers,
+        is_active: initialData?.is_active,
+        non_reusable: initialData?.non_reusable,
+      }
       : {
-          coupon_type: "general",
-          coupon_name: "",
-          coupon_image: "",
-          coupon_title: "",
-          coupon_sub_title: "",
-          discount_percentage: 0,
-          coupon_code: "",
-          expiry_date: "",
-          products: [],
-          category: "",
-          sub_category: "",
-          is_active: false,
-          commission_percentage: 0,
-          withdrawal_limit: 0,
-          influencer: [],
-        },
+        coupon_type: "general",
+        coupon_name: "",
+        coupon_image: "",
+        coupon_title: "",
+        coupon_sub_title: "",
+        discount_percentage: 0,
+        coupon_code: "",
+        expiry_date: "",
+        products: [],
+        category: "",
+        sub_category: "",
+        is_active: false,
+        non_reusable: false,
+        commission_percentage: 0,
+        withdrawal_limit: 0,
+        influencer: [],
+      },
   });
 
   const watchType = form.watch("coupon_type");
@@ -129,7 +134,6 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
     try {
       const formData = new FormData();
 
-      console.log(data.products);
       if (watchType === "general") {
         formData.append("coupon_type", data.coupon_type);
         formData.append("name", data.coupon_name);
@@ -138,7 +142,7 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
           formData.append("title", data.coupon_title);
         }
         data.products?.forEach((product) =>
-          formData.append("products", product)
+          formData.append("products", product?.id?.toString())
         );
         if (data.category) {
           formData.append("categories", data.category);
@@ -157,6 +161,7 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
           data.discount_percentage.toString()
         );
         formData.append("is_active", data?.is_active?.toString());
+        formData.append("non_reusable", data?.non_reusable?.toString());
 
         if (data.coupon_image instanceof File) {
           formData.append("image", data.coupon_image);
@@ -164,6 +169,8 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
       }
 
       if (watchType === "influencer") {
+        // console.log('influencer data: ', data);
+
         formData.append("coupon_type", data.coupon_type);
         formData.append("name", data.coupon_name);
         formData.append("code", data.coupon_code);
@@ -184,7 +191,7 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
           );
         }
         data.products?.forEach((product) =>
-          formData.append("products", product)
+          formData.append("products", product?.id?.toString())
         );
         if (data.category) {
           formData.append("categories", data.category);
@@ -195,8 +202,9 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
         if (data.category) {
           formData.append("categories", data.category);
         }
+        // console.log(selectedUsers);
 
-        data.influencer?.forEach((inf) => formData.append("influencers", inf));
+        selectedUsers?.forEach((inf) => formData.append(`_influencers`, inf.id));
         formData.append("is_active", data?.is_active?.toString());
       }
 
@@ -234,66 +242,6 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6"
             >
-              {watchType === "general" && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="coupon_title"
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormLabel className="text-muted-foreground">
-                          COUPON TITLE
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter the coupon title"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="coupon_sub_title"
-                    render={({ field }) => (
-                      <FormItem className="space-y-1">
-                        <FormLabel className="text-muted-foreground">
-                          COUPON SUB-TITLE
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter the coupon sub-title"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="coupon_image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className=" text-muted-foreground">
-                          COUPON IMAGE
-                        </FormLabel>
-                        <FormControl>
-                          <SingleImageUploader
-                            onChange={field.onChange}
-                            onRemove={() => field.onChange(undefined)}
-                            value={field.value}
-                            size="small"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
-              )}
               <div className="grid md:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
@@ -371,7 +319,10 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
                           type="number"
                           value={field.value}
                           onChange={(e) => {
-                            field.onChange(Number(e.target.value));
+                            const val = parseInt(e.target.value);
+                            field.onChange(
+                              val > 0 && val < 100 ? val : ""
+                            );
                           }}
                           placeholder="Please enter the tax percentage."
                         />
@@ -441,7 +392,11 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
                               type="number"
                               value={field.value}
                               onChange={(e) => {
-                                field.onChange(Number(e.target.value));
+                                field.onChange(
+                                  e.target.value === ""
+                                    ? ""
+                                    : Number(e.target.value)
+                                );
                               }}
                               placeholder="Please enter the tax percentage."
                             />
@@ -453,88 +408,154 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
                   </>
                 )}
 
-                <FormField
-                  control={form.control}
-                  name="products"
-                  render={({ field }) => (
-                    <FormItem className="m-0 p-0">
-                      <FormLabel>PRODUCTS</FormLabel>
-                      <FormControl>
-                        <PaginatedProductSelect
-                          selectedValues={field.value}
-                          onSelectionChange={field.onChange}
-                          title="Select Products"
-                          fetchData={getProductsDropdown}
-                          className="w-full "
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormCombobox
-                  form={form}
-                  name="category"
-                  label="CATEGORY"
-                  placeholder="Select a category"
-                  searchPlaceholder="Search Category..."
-                  options={categories?.map((category) => ({
-                    value: category.id.toString(),
-                    label: category.name,
-                  }))}
-                />
-                <FormField
-                  control={form.control}
-                  name="sub_category"
-                  render={({ field }) => {
-                    const selectedCategory = form.watch("category");
-                    const subCategories =
-                      categories?.find((category) =>
-                        selectedCategory?.includes(category.id.toString())
-                      )?.subcategories || [];
-                    return (
-                      <FormItem>
-                        <FormLabel className="">SUB CATEGORY</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value?.toString()}
-                          defaultValue={field.value?.toString()}
-                        >
+                {
+                  form.watch('coupon_type') !== "general" &&
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="products"
+                      render={({ field }) => (
+                        <FormItem className="m-0 p-0">
+                          <FormLabel>PRODUCTS</FormLabel>
                           <FormControl>
-                            <SelectTrigger className="">
-                              <SelectValue
-                                defaultValue={field.value?.toString()}
-                                placeholder="Select Sub Category"
-                              />
-                            </SelectTrigger>
+                            <PaginatedProductSelect
+                              selectedValues={field.value}
+                              onSelectionChange={field.onChange}
+                              title="Select Products"
+                              fetchData={getProductsDropdown}
+                              className="w-full "
+                            />
                           </FormControl>
-                          <SelectContent>
-                            {subCategories.length > 0 ? (
-                              subCategories.map((option) => {
-                                return (
-                                  <SelectItem
-                                    key={option.id}
-                                    value={
-                                      option?.id ? option.id.toString() : ""
-                                    }
-                                  >
-                                    {option.name}
-                                  </SelectItem>
-                                );
-                              })
-                            ) : (
-                              <p className="text-sm px-4">
-                                No Subcategories Found
-                              </p>
-                            )}
-                          </SelectContent>
-                        </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {/* <FormCombobox
+                      form={form}
+                      name="category"
+                      label="CATEGORY"
+                      placeholder="Select a category"
+                      searchPlaceholder="Search Category..."
+                      options={categories?.map((category) => ({
+                        value: category.id.toString(),
+                        label: category.name,
+                      }))}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="sub_category"
+                      render={({ field }) => {
+                        const selectedCategory = form.watch("category");
+                        const subCategories =
+                          categories?.find((category) =>
+                            selectedCategory?.includes(category.id.toString())
+                          )?.subcategories || [];
+                        return (
+                          <FormItem>
+                            <FormLabel className="">SUB CATEGORY</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value?.toString()}
+                              defaultValue={field.value?.toString()}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="">
+                                  <SelectValue
+                                    defaultValue={field.value?.toString()}
+                                    placeholder="Select Sub Category"
+                                  />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {subCategories.length > 0 ? (
+                                  subCategories.map((option) => {
+                                    return (
+                                      <SelectItem
+                                        key={option.id}
+                                        value={
+                                          option?.id ? option.id.toString() : ""
+                                        }
+                                      >
+                                        {option.name}
+                                      </SelectItem>
+                                    );
+                                  })
+                                ) : (
+                                  <p className="text-sm px-4">
+                                    No Subcategories Found
+                                  </p>
+                                )}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    /> */}
+                  </>
+                }
+              </div>
+              {watchType === "general" && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="coupon_title"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-muted-foreground">
+                          COUPON TITLE
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter the coupon title"
+                            {...field}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
-                    );
-                  }}
-                />
-              </div>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="coupon_sub_title"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel className="text-muted-foreground">
+                          COUPON SUB-TITLE
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter the coupon sub-title"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="coupon_image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className=" text-muted-foreground">
+                          COUPON IMAGE
+                        </FormLabel>
+                        <FormControl>
+                          <SingleImageUploader
+                            onChange={field.onChange}
+                            onRemove={() => field.onChange(undefined)}
+                            value={field.value}
+                            size="small"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+
               {watchType === "influencer" && (
                 <div className=" flex flex-col gap-2">
                   <FormLabel className="text-muted-foreground">
@@ -566,7 +587,7 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
                     </Select>
                   </div>
 
-                  <div className=" grid grid-cols-4 gap-4">
+                  <div className="flex flex-wrap gap-4">
                     {selectedUsers.map((user) => (
                       <div
                         key={user.id}
@@ -592,29 +613,54 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
                   </div>
                 </div>
               )}
-              <FormField
-                control={form.control}
-                name="is_active"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-2">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="is_active"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="is_active"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className=" flex gap-10">
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-2">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="is_active"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="is_active"
+                        className="text-muted-foreground"
+                      >
+                        ACTIVATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="non_reusable"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-2">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="non_reusable"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="non_reusable"
+                        className="text-muted-foreground"
+                      >
+                        NON REUSABLE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </form>
           </Form>
         </CardContent>

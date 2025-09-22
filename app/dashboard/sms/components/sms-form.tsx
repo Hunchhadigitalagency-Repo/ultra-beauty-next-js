@@ -14,7 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { Switch } from "@/components/ui/switch";
+import useFetchData from "@/hooks/use-fetch";
 
 import { createSms, updateSms } from "@/lib/api/cms/sms-api";
 import { getUsersDropdown } from "@/lib/api/dropdown/dropdown-api";
@@ -25,10 +26,9 @@ import { useAppDispatch } from "@/redux/hooks";
 import { SmsFormValues, smsSchema } from "@/schemas/cms/sms-schema";
 import { ISms } from "@/types/cms";
 
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -40,24 +40,42 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const title = initialData ? "Edit Sms" : "Add Sms";
+  const title = initialData ? "Edit SMS" : "Add SMS";
+  const isEditMode = Boolean(initialData);
+
+  const smsUrl = isEditMode ? `/cms/sms/${initialData?.id}` : "";
+  const { data: sms, } = useFetchData<ISms>(smsUrl);
+  const emptyDefaults = {
+    title: "",
+    users: [],
+    subject_header: "",
+    is_active: false,
+    is_saved_as_template: false,
+  }
 
   const form = useForm<SmsFormValues>({
     resolver: zodResolver(smsSchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          title: "",
-          users: [],
-          subject_header: "",
-          is_active: false,
-          is_saved_as_template: false,
-        },
+    defaultValues: emptyDefaults
   });
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = sms || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          title: sms?.title,
+          users: sms?.users,
+          subject_header: sms?.subject_header,
+          is_active: sms?.is_active,
+          is_saved_as_template: sms?.is_saved_as_template,
+        });
+      }
+    }
+  }, [isEditMode, sms, initialData, form]);
 
   const onSubmit = async (data: SmsFormValues) => {
     try {
-      console.log(data);
       if (initialData) {
         const response = await updateSms(initialData.id, data);
         if (response.status === 200) {
@@ -83,10 +101,7 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
       <Card className="border-none shadow-none rounded-sm p-0">
         <CardContent className=" pt-4  pb-8">
           <div className="flex w-full justify-between pb-6">
-            <HeaderBackCard
-              title={title}
-              fallBackLink="/dashboard/sms"
-            />
+            <HeaderBackCard title={title} fallBackLink="/dashboard/sms" />
           </div>
           <Form {...form}>
             <form
@@ -161,6 +176,30 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
                         placeholder="Enter the blog description "
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="is_active"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-4 mt-9 md:mt-6">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="is_active"
+                        className="cursor-pointer"
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor="is_active"
+                      className="text-muted-foreground"
+                    >
+                      ACTIVATE
+                    </FormLabel>
                     <FormMessage />
                   </FormItem>
                 )}

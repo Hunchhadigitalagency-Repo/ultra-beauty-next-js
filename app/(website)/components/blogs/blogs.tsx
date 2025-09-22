@@ -14,6 +14,7 @@ const Blogs: React.FunctionComponent = () => {
     `cms-blogs/?page=1&page_size=3/`
   );
 
+
   return (
     <section className="space-y-8 padding">
       <div className="flex items-center justify-between gap-4">
@@ -44,7 +45,7 @@ const Blogs: React.FunctionComponent = () => {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {data && data.results.length > 0 ? (
             data.results.map((blog, index) => {
-              return <BlogCard key={index} {...blog} />;
+              return <BlogCard key={index} slug={blog.slug} sub_title={blog.sub_title} title={blog.title} author={blog.author.username} cover_image={blog.cover_image} created_at={blog.created_at} />;
             })
           ) : (
             <div className='flex flex-col items-center justify-center w-full h-60'>

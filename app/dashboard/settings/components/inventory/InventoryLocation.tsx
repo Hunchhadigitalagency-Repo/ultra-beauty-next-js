@@ -1,6 +1,6 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { InventoryConstant } from "./inventory-location-constant";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import InfiniteScroll from "react-infinite-scroll-component";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { IInventory } from "@/types/Settings";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import { ESettings } from "@/types/table";
@@ -24,6 +23,20 @@ const InventoryTab = () => {
     "search",
     searchQuery
   );
+
+   const [Inventory, setInventory] = useState<IInventory[]>([]);
+  
+    useEffect(() => {
+      setInventory(data);
+    }, [data]);
+  
+    const handleItemUpdate = (updatedItem: IInventory) => {
+      setInventory((prevData) =>
+        prevData.map((item) =>
+          item.id === updatedItem.id ? updatedItem : item
+        )
+      );
+    };
 
   return (
     <DataCard
@@ -47,12 +60,12 @@ const InventoryTab = () => {
           dataLength={data.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={InventoryConstant(dispatch)}
-            data={data as IInventory[]}
+            cols={InventoryConstant(dispatch, handleItemUpdate)}
+            data={Inventory as IInventory[]}
             loading={loading && data.length === 0}
             onRowClick={() => {}}
             height="h-auto"
