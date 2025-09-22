@@ -29,7 +29,7 @@ export default function CartHeader({ cartItemIds, onItemRemove, cartItemsData, o
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-[#EEEEEE]  text-custom-black">
+    <div className="flex items-center justify-between px-4 py-2 bg-secondary  text-custom-black">
       <div className="flex items-center gap-2">
         <Checkbox className="w-6 h-6 bg-white border-custom-black"
           checked={allSelected}

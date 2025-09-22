@@ -23,7 +23,7 @@ const DetailDecription: React.FunctionComponent = () => {
     }, [data?.detail_description]);
 
     return (
-        <section className='w-full padding'>
+        <section className='w-full'>
             {data?.detail_description && (
                 <div className="flex flex-col gap-3 text-sm leading-relaxed text-foreground">
                     <SectionHeader

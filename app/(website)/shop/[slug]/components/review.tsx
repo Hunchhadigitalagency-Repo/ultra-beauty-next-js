@@ -26,7 +26,7 @@ const Review: React.FC<ReviewProps> = ({ reviews }) => {
 
 
     return (
-        <section className="padding">
+        <section className="">
             <SectionHeader
                 title="Reviews"
                 titleClassName="font-semibold"

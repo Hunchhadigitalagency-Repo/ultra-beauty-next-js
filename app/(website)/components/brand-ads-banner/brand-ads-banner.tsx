@@ -14,7 +14,7 @@ import {
 
 const BrandAdsBanner: React.FunctionComponent = () => {
 
-    const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Single%20Banner`)
+    const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners-dropdown/?position=Single%20Banner`)
 
     return (
         <div className='padding'>

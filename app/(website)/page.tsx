@@ -6,7 +6,7 @@ import CategorySection from "./components/category/category-section";
 // import PromoVideoSection from "./components/promo-video/promo-video";
 import TrendingSection from "./components/trending/trending-section";
 import FeaturedSection from "./components/featured/featured-section";
-// import MermaidBanner from "./components/mermaid-banner/mermaid-banner";
+import MermaidBanner from "./components/mermaid-banner/mermaid-banner";
 import BrandsCard from "./components/brands-that-you-love/brands-section";
 import BrandAdsBanner from "./components/brand-ads-banner/brand-ads-banner";
 // import BeautyVideoSection from "./components/beauty-video/beauty-video-section";
@@ -28,7 +28,7 @@ export default function HomePage() {
       {/* <BeautyVideoSection /> */}
       <PromotionalCarousel />
       <FeaturedSection />
-      {/* <MermaidBanner /> */}
+      <MermaidBanner />
       {/* <PromoVideoSection /> */}
       <Blogs />
     </main>

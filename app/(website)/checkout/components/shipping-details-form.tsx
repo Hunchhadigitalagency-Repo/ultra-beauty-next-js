@@ -104,7 +104,7 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
 
   return (
     <div className="space-y-6 bg-white">
-      <div className="py-2 px-4 bg-[#EEEEEE] rounded-sm font-medium text-custom-black text-base">
+      <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base">
         <h2 className="">Shipping details</h2>
       </div>
 

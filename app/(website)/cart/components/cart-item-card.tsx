@@ -13,6 +13,7 @@ import PriceRow from "@/components/common/product/price-row";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import QuantityRow from "@/components/common/product/quantity-row";
 import { clearVoucherData, toggleCartItem, updateCartItemQuantity } from "@/redux/features/cart-slice";
+import Link from "next/link";
 
 export default function CartItemCard({ item, onRemove, refetch }: CartItemCardProps) {
 
@@ -85,14 +86,14 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
             checked={cartItem.some(cartItem => cartItem.id === item.id)}
             onCheckedChange={onCheckboxChange}
           />
-          <div className="relative w-full h-full sm:w-[80px] sm:h-[80px] md:w-[110px] md:h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
+          <Link href={`shop/${item.product.slug_name}`} className="relative w-full h-full sm:w-[80px] sm:h-[80px] md:w-[110px] md:h-[110px] rounded-lg overflow-hidden border border-gray-100 shadow-sm">
             <Image
               src={item.product.images[0].file || "/placeholder.svg"}
               alt={item.product.name}
               fill
               className="object-cover"
             />
-          </div>
+          </Link>
         </div>
 
         <div className="flex flex-col flex-1 w-full gap-3">

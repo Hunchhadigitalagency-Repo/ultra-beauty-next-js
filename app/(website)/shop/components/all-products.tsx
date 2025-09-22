@@ -7,8 +7,8 @@ import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
 import { useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useToggleWishlist } from "@/utils/wishList-utility";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import SearchBox from "@/components/common/filter/search-box";
 import ProductCard from "@/components/common/cards/product-card";
@@ -19,20 +19,39 @@ const AllProducts = () => {
 
   const toggleWishlist = useToggleWishlist();
   const { isAuthenticated } = useCheckToken();
-  // const queryParams = new URLSearchParams();
+
+  const queryParams = new URLSearchParams();
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [sortingValue, setSortingValue] = useState('');
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
-  const { selectedCategories } = useAppSelector(state => state.category);
+  const { selectedCategories, selectedBrands, priceRange } = useAppSelector(state => state.category);
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
 
-  const categoryQuery = selectedCategories.length > 0
-    ? `?category=${selectedCategories.join(',')}`
-    : '';
+  if (selectedCategories.length > 0) {
+    queryParams.set("category", selectedCategories.join(","));
+  }
 
-  const path = `public-products${categoryQuery}${searchValue ? `?search=${searchValue}` : ''}`;
+  if (searchValue) {
+    queryParams.set("search", searchValue);
+  }
+
+  if (sortingValue) {
+    queryParams.set('sort_by', sortingValue)
+  }
+
+  if (selectedBrands.length > 0) {
+    queryParams.set("brand", selectedBrands.join(','))
+  }
+
+  if (priceRange[0] !== 100 || priceRange[1] !== 10000) {
+    queryParams.set('min_price', priceRange[0].toString())
+    queryParams.set('max_price', priceRange[1].toString())
+  }
+
+  const path = `public-products/${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -67,15 +86,30 @@ const AllProducts = () => {
 
     <section className="relative flex flex-col gap-8 padding">
       <div className="flex flex-row items-center justify-between gap-4">
-        <SectionHeader title={`All Products (${count})`} description="" />
+        <SectionHeader
+          title={`All Products (${count})`}
+          description=""
+        />
         <div className="hidden lg:flex lg:gap-5">
-          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
-          <ProductSort />
+          <SearchBox
+            placeholder="Search Products"
+            sendValue={handleSearchValue}
+          />
+          <ProductSort
+            onChange={setSortingValue}
+            selectedValue={sortingValue}
+          />
         </div>
-        <Menu onClick={toggleFilter} className="w-5 h-5 text-foreground lg:hidden" />
+        <Menu
+          onClick={toggleFilter}
+          className="w-5 h-5 text-foreground lg:hidden"
+        />
       </div>
       <div className="flex lg:flex-row lg:gap-16">
-        <FilterSection showFilter={showFilter} onClose={toggleFilter} />
+        <FilterSection
+          showFilter={showFilter}
+          onClose={toggleFilter}
+        />
         <div className="flex-1">
           <InfiniteScroll
             dataLength={products.length}

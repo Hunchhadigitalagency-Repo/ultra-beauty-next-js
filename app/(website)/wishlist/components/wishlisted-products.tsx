@@ -194,7 +194,7 @@ const WishlistedProducts = () => {
                   </div>
                 </div>
                 <button className="flex items-center justify-center gap-2 py-2 text-sm text-white bg-primary">
-                  <Link href={`/shop/product/${product.slug_name}`}>
+                  <Link href={`/shop/${product.slug_name}`}>
                     View Product
                   </Link>
                 </button>

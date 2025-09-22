@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 const MermaidBanner: React.FunctionComponent = () => {
 
-  const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners/?position=Mesh%20Banner`)
+  const { data, loading, error } = useFetchData<BannerResponse[]>(`cms/advertisment-banners-dropdown/?position=Mesh%20Banner`)
 
   const router = useRouter();
 
