@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const attributeSchema = z.object({
   name: z.string().min(1, { message: "Attribute name is required." }),
-  type: z.string().min(1, { message: "Attribute type is required." }),
+  // type: z.string().min(1, { message: "Attribute type is required." }),
   is_active: z.boolean(),
   variations: z
     .array(

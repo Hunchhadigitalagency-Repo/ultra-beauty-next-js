@@ -21,7 +21,7 @@ const BrandAdsBanner: React.FunctionComponent = () => {
             {
                 loading ?
                     (<div className='flex items-center justify-center w-full h-60'>
-                        <p className='font-semibold text-base text-gray-400'>
+                        <p className='font-extralight text-sm text-gray-400'>
                             Loading Brand Ads Banners...
                         </p>
                     </div>
@@ -29,8 +29,8 @@ const BrandAdsBanner: React.FunctionComponent = () => {
                     error ?
                         (
                             <div className='flex flex-col items-center justify-center w-full h-60'>
-                                <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-                                <p className='text-base font-semibold text-gray-400'>
+                                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                                <p className='font-extralight text-sm text-gray-400'>
                                     Oops! Something went wrong...
                                 </p>
                             </div>
@@ -38,8 +38,8 @@ const BrandAdsBanner: React.FunctionComponent = () => {
                         data?.length === 0 ?
                             (
                                 <div className='flex flex-col items-center justify-center w-full h-60'>
-                                    <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-                                    <p className='text-base font-semibold text-gray-400 capitalize'>
+                                    <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                                    <p className='font-extralight text-sm text-gray-400 capitalize'>
                                         Oops! no brand ads banners right now...
                                     </p>
                                 </div>

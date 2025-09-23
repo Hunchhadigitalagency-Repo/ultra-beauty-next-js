@@ -16,16 +16,21 @@ const ReviewHistory: React.FunctionComponent = () => {
                     <ReviewHistoryLoader />
                 ) : error ? (
                     <div className='flex flex-col py-10 justify-center items-center'>
-                        <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-                        <p className="font-medium text-gray-700">
+                        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                        <p className="font-extralight text-sm text-gray-400">
                             Oops! Something went wrong.
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 font-extralight text-sm text-gray-400">
                             We couldn’t load the review history data. Please try again.
                         </p>
                     </div>
                 ) : data?.length === 0 ? (
-                    <div>No Reviews Yet</div>
+                    <div className='flex flex-col items-center justify-center w-full h-60'>
+                        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                        <p className='font-extralight text-sm text-gray-400'>
+                            No reviews yet
+                        </p>
+                    </div>
                 ) : (
                     <div className='flex flex-col gap-5'>
                         {

@@ -70,8 +70,8 @@ export default function PromotionalCarousel() {
           <LoadingSpinner />
         ) : error ? (
           <div className="flex flex-col gap-2 justify-center items-center">
-            <AlertCircle className="w-10 h-10 mb-2 font-semibold text-gray-400" />
-            <p className="font-semibold text-base text-gray-400">Oops! Something went wrong...</p>
+            <AlertCircle className="w-10 h-10 mb-2 text-gray-400" />
+            <p className="text-sm font-extralight text-gray-400">Oops! Something went wrong...</p>
             <p className="mt-1 text-sm text-gray-500">
               We couldn’t load the coupons. Please try again.
             </p>
@@ -79,8 +79,8 @@ export default function PromotionalCarousel() {
         ) : !data || data.length === 0 || !data.some(slide => slide.code) ? (
           // <--- remove carousel if no tickets (slide.code) exists
           <div className='flex flex-col items-center justify-center w-full h-60'>
-            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-            <p className='text-base font-semibold text-gray-400 capitalize'>
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className='text-sm font-extralight text-gray-400 capitalize'>
               Oops! no coupons right now...
             </p>
           </div>
