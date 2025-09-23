@@ -2,17 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { AlertCircle, X } from "lucide-react";
 import SectionHeader from "../header/section-header";
 import useFetchData from "@/hooks/use-fetch";
 import australis from "@/assets/australis.png"
 
-// interface Notification {
-//     id: number;
-//     image: string;
-//     message: string;
-//     read: boolean
-// }
 export type NotificatoinResponses = NotificationResponse[]
 
 interface NotificationResponse {
@@ -23,23 +17,6 @@ interface NotificationResponse {
     link: string
     is_active: boolean
 }
-
-// const notifications: Notification[] = [
-//     {
-//         id: 1,
-//         image: "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg",
-//         message: 'Your Item “Pregnancy Kit”  has been shipped to your current location.',
-//         read: false
-//     },
-//     {
-//         id: 2,
-//         image: "https://img.freepik.com/free-psd/view-sofa-interior-design-decor_23-2151772696.jpg",
-//         message: 'Your Item “Pregnancy Kit”  has been shipped to your current location.',
-//         read: true
-//     },
-// ];
-
-
 
 const NotificationModal = ({ onClose }: { onClose: () => void }) => {
 
@@ -58,31 +35,33 @@ const NotificationModal = ({ onClose }: { onClose: () => void }) => {
 
             {loading ? (
                 <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-gray'>
-                        Loading Notification...
+                    <p className='font-extralight text-sm text-gray-400'>
+                        Loading Notifications...
                     </p>
                 </div>
             ) : error ? (
                 <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-red'>
-                        Something went wrong while Fetching Notification
+                    <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                    <p className='font-extralight text-sm text-gray-400'>
+                        Oops! Something went wrong...
                     </p>
                 </div>
             ) : data?.length === 0 ? (
                 <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-red'>
-                        Something went wrong while Fetching Notification
+                    <p className='font-extralight text-sm text-gray-400'>
+                        No Notifications Found...
                     </p>
                 </div>
             ) : (
-                <div><div className="w-full flex justify-end gap-5 items-center">
-                    <button className="text-primary text-sm font-medium cursor-pointer">
-                        Mark All as Read
-                    </button>
-                    <button className="text-primary text-sm font-medium cursor-pointer">
-                        Delete All Notification
-                    </button>
-                </div>
+                <div>
+                    <div className="w-full flex justify-end gap-5 items-center">
+                        <button className="text-primary text-sm font-medium cursor-pointer">
+                            Mark All as Read
+                        </button>
+                        <button className="text-primary text-sm font-medium cursor-pointer">
+                            Delete All Notification
+                        </button>
+                    </div>
                     <div className="max-h-[350px] overflow-y-auto space-y-4">
                         {data?.map((notification) => (
                             <div key={notification.id} className="flex items-start gap-3 pb-3">

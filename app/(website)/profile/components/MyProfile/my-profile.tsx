@@ -6,7 +6,8 @@ import OrderTable from "../Table/order-table";
 import { useAppSelector } from "@/redux/hooks";
 import ProfileModal from "./components/profile-modal";
 import ShippingModal from "./components/shipping-modal";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import fallbackImage from "@/assets/images/fallback-product.jpg";
 import ShippingDetailsModal from "./components/shipping-details-modal";
 import ProfileInformationLoader from "./components/profile-information-loader";
 import ShippingInformationLoader from "./components/shipping-information-loader";
@@ -82,8 +83,11 @@ const MyProfile: React.FunctionComponent = () => {
             loading ? (
               <ProfileInformationLoader />
             ) : error ? (
-              <div className="border-t p-4 flex justify-center items-center h-35 text-red-500">
-                Something Went Wrong While Fetching Profile ...
+              <div className='flex flex-col items-center justify-center w-full h-35'>
+                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                <p className='font-extralight text-sm text-gray-400'>
+                  Oops! Something went wrong...
+                </p>
               </div>
             ) : (
               <div className="border-t p-4 flex gap-4">
@@ -91,7 +95,7 @@ const MyProfile: React.FunctionComponent = () => {
                   {
                     imgSource && (
                       <Image
-                        src={typeof imgSource === "string" ? imgSource : ""}
+                        src={typeof imgSource === "string" ? imgSource : fallbackImage}
                         alt="Profile"
                         fill
                         className="object-cover rounded-full"
@@ -154,8 +158,11 @@ const MyProfile: React.FunctionComponent = () => {
           {loading ? (
             <ShippingInformationLoader />
           ) : error ? (
-            <div className="border-t p-4 flex justify-center items-center h-35 text-red-500">
-              Something Went Wrong While Fetching Shipping ...
+            <div className='flex flex-col items-center justify-center w-full h-35'>
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className='font-extralight text-sm text-gray-400'>
+                Oops! Something went wrong...
+              </p>
             </div>
           ) : (
             <div className="border-t p-4 flex flex-col gap-1.5">

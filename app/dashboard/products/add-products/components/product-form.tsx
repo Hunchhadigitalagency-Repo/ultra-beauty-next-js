@@ -164,7 +164,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         productName: initialData.name || "",
         sku: initialData.sku || "",
         productGeneralDescription: initialData.general_description || "",
-        quantity: Number(initialData.quantity) || 0,
+        quantity: initialData.quantity || 0,
         productDetailedDescription: initialData.detail_description || "",
         category: initialData.category?.id.toString() || "",
         sub_category: initialData?.subcategory?.id.toString() || "",
@@ -463,7 +463,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <Input
                           type="number"
                           placeholder="Enter the Quantity"
-                          value={field.value ?? undefined}
+                          value={field.value ?? ""}
                           min={1} // prevents typing values < 1
                           onChange={(e) => {
                             const val = e.target.valueAsNumber;

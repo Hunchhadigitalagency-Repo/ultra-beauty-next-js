@@ -43,19 +43,19 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
     resolver: zodResolver(attributeSchema),
     defaultValues: initialData
       ? {
-          name: initialData.name,
-          is_active: initialData.is_active ?? false,
-          variations:
-            initialData.variations?.map((v) => ({
-              name: v.name,
-              value: v.value,
-            })) ?? [],
-        }
+        name: initialData.name,
+        is_active: initialData.is_active ?? false,
+        variations:
+          initialData.variations?.map((v) => ({
+            name: v.name,
+            value: v.value,
+          })) ?? [],
+      }
       : {
-          name: "",
-          is_active: false,
-          variations: [{ name: "", value: "" }],
-        },
+        name: "",
+        is_active: false,
+        variations: [{ name: "", value: "" }],
+      },
   });
 
   const { fields, append, remove } = useFieldArray({
