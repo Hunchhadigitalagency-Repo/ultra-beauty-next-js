@@ -61,8 +61,8 @@ const BlogsList = () => {
               <BlogScrabbledLoader />
             ) : blogs?.length === 0 ? (
               <div className="w-full h-60 flex flex-col justify-center items-center">
-                <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-                <p className="text-base font-semibold text-gray-400 capitalize">
+                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                <p className="font-extralight text-sm text-gray-400 capitalize">
                   Oops! no blogs right now...
                 </p>
               </div>

@@ -62,18 +62,18 @@ export default function HeroSection() {
           <LoadingSpinner />
         ) : error ? (
           <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center">
-            <AlertCircle className="w-8 h-8 font-semiboldtext-gray-400 mb-2" />
-            <p className="text-base font-semibold text-gray-400">
+            <AlertCircle className="w-8 h-8 text-gray-400 mb-2" />
+            <p className="text-sm font-extralight text-gray-400">
               Oops! Something went wrong...
             </p>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm font-extralight text-gray-400 mt-1">
               We couldn’t load the carousel items. Please try again.
             </p>
           </div>
         ) : data?.length === 0 ? (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-            <p className="text-base font-semibold text-gray-400 capitalize">
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className="text-sm font-extralight text-gray-400 capitalize">
               Oops! no banner images right now...
             </p>
           </div>

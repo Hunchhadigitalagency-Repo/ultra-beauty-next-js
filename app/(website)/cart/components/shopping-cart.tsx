@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import SectionHeader from "@/components/common/header/section-header";
 import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
 import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem } from "@/redux/features/cart-slice";
+import { AlertCircle } from "lucide-react";
 
 
 export default function ShoppingCart() {
@@ -66,15 +67,16 @@ export default function ShoppingCart() {
         description="All the items are ready for checkout"
       />
       {loading ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-gray'>
+        <div className='flex items-center justify-center w-full h-60'>
+          <p className='font-extralight text-sm text-gray-400'>
             Loading Cart Items...
           </p>
         </div>
       ) : error ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-red'>
-            Error While Fetching Cart Items
+        <div className='flex flex-col items-center justify-center w-full h-60'>
+          <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+          <p className='font-extralight text-sm text-gray-400'>
+            Oops! Something went wrong...
           </p>
         </div>
       ) : CartItems?.length === 0 ? (

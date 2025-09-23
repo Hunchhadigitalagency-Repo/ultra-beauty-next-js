@@ -125,85 +125,89 @@ const CustomTable = <T,>({
                   </div>
                 </td>
               </tr>
-            ) : data?.length === 0 ? (
-              <tr>
-                <td colSpan={totalCols}>
-                  <div className="flex text-gray text-sm items-center justify-center h-[300px]">
-                    No Data Available!
-                  </div>
-                </td>
-              </tr>
             )
               : error ? (
                 <tr>
                   <td colSpan={totalCols}>
                     <div className="flex flex-col items-center w-full py-10 text-gray">
-                      <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-                      <p className="font-medium text-gray-700">Oops! Something went wrong.</p>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                      <p className="font-extralight text-sm text-gray-400">Oops! Something went wrong.</p>
+                      <p className="mt-1 text-sm font-extralight text-gray-400">
                         We couldn’t load the table items. Please try again.
                       </p>
                     </div>
                   </td>
                 </tr>
               )
-                : (
-                  data.map((item, rowIndex) => {
-                    const itemId = getItemId(item);
-                    const isSelected = selectedIds.includes(itemId);
+                : data?.length === 0 ? (
+                  <tr>
+                    <td colSpan={totalCols}>
+                      <div className="flex flex-col text-gray text-sm items-center justify-center h-[300px]">
+                        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                        <p className='font-extralight text-sm text-gray-400 capitalize'>
+                          No data found !
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                )
+                  : (
+                    data?.map((item, rowIndex) => {
+                      const itemId = getItemId(item);
+                      const isSelected = selectedIds.includes(itemId);
 
-                    return (
-                      <tr
-                        key={rowIndex}
-                        onClick={() => {
-                          // Only trigger row click if not clicking on checkbox
-                          if (onRowClick) {
-                            onRowClick(item);
-                          }
-                        }}
-                        className={`
+                      return (
+                        <tr
+                          key={rowIndex}
+                          onClick={() => {
+                            // Only trigger row click if not clicking on checkbox
+                            if (onRowClick) {
+                              onRowClick(item);
+                            }
+                          }}
+                          className={`
                       ${onRowClick ? "cursor-pointer" : ""}
                       ${isSelected
-                            ? "bg-blue-50"
-                            : striped && rowIndex % 2 === 1
-                              ? "bg-white"
-                              : "bg-white"
-                          }
+                              ? "bg-blue-50"
+                              : striped && rowIndex % 2 === 1
+                                ? "bg-white"
+                                : "bg-white"
+                            }
                       hover:bg-[#FAFAFA] border-t border-gray-200 first:border-t-0 text-sm
                     `}
-                      >
-                        {enableBulkSelect && (
-                          <td className="px-4 py-3">
-                            <Checkbox
-                              checked={isSelected}
-                              onCheckedChange={(checked) =>
-                                handleRowSelect(itemId, checked as boolean)
-                              }
-                              onClick={(e) => e.stopPropagation()}
-                              aria-label={`Select row ${rowIndex + 1}`}
-                            />
-                          </td>
-                        )}
-                        {hasSerialNo && (
-                          <td className="px-4 py-3">{rowIndex + 1}</td>
-                        )}
-                        {cols.map((col, colIndex) => (
-                          <td
-                            key={colIndex}
-                            className={`px-4 py-3 ${!hasSerialNo && colIndex === 0
-                              ? ""
-                              : colIndex === cols.length - 1
+                        >
+                          {enableBulkSelect && (
+                            <td className="px-4 py-3">
+                              <Checkbox
+                                checked={isSelected}
+                                onCheckedChange={(checked) =>
+                                  handleRowSelect(itemId, checked as boolean)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                                aria-label={`Select row ${rowIndex + 1}`}
+                              />
+                            </td>
+                          )}
+                          {hasSerialNo && (
+                            <td className="px-4 py-3">{rowIndex + 1}</td>
+                          )}
+                          {cols.map((col, colIndex) => (
+                            <td
+                              key={colIndex}
+                              className={`px-4 py-3 ${!hasSerialNo && colIndex === 0
                                 ? ""
-                                : "min-w-[120px]"
-                              } ${colIndex === cols.length - 1 && "text-right"}`}
-                          >
-                            {col.render(item)}
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })
-                )}
+                                : colIndex === cols.length - 1
+                                  ? ""
+                                  : "min-w-[120px]"
+                                } ${colIndex === cols.length - 1 && "text-right"}`}
+                            >
+                              {col.render(item)}
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })
+                  )}
           </tbody>
         </table>
       </div>

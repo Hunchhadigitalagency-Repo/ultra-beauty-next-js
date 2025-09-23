@@ -48,12 +48,12 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       render: (order: OrderResponse) => (
         <button
           style={{
-            backgroundColor: order.order_status.primary_color,
-            color: order.order_status.text_color,
+            backgroundColor: order.order_status?.primary_color,
+            color: order.order_status?.text_color,
           }}
           className="w-[100px] rounded-sm py-1 px-2 text-center"
         >
-          <p className="text-white">{order.order_status.name}</p>
+          <p className="text-white">{order.order_status?.name}</p>
         </button>
       )
     },

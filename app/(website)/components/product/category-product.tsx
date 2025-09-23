@@ -16,6 +16,7 @@ import {
     CarouselPrevious
 } from '@/components/ui/carousel';
 import { FeaturedCategoriesResponse } from '@/types/featured-categories';
+import { AlertCircle } from 'lucide-react';
 
 type CategoryProductProps = {
     featuredCategoryId: number;
@@ -57,20 +58,22 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({ featur
                 {
                     isLoading ? (
                         <div className='h-60 flex w-full justify-center items-center'>
-                            <p className='text-gray'>
+                            <p className='font-extralight text-sm text-gray-400'>
                                 Loading {featuredCategory.name}...
                             </p>
                         </div>
                     ) : error ? (
-                        <div className='h-60 flex w-full justify-center items-center'>
-                            <p className='text-red'>
-                                Error While Fetching {featuredCategory.name} Products
+                        <div className='flex flex-col items-center justify-center w-full h-60'>
+                            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                            <p className='text-sm font-extralight text-gray-400'>
+                                Oops! Something went wrong...
                             </p>
                         </div>
                     ) : categoryWiseProducts?.length === 0 ? (
-                        <div className='h-60 flex w-full justify-center items-center'>
-                            <p className='text-red'>
-                                No {featuredCategory.name} found
+                        <div className='flex flex-col items-center justify-center w-full h-60'>
+                            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                            <p className='text-base font-semibold text-gray-400 capitalize'>
+                                Oops! no {featuredCategory.name} right now...
                             </p>
                         </div>
                     ) :

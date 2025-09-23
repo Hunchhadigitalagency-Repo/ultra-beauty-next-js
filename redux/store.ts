@@ -16,7 +16,7 @@ import dropdown from "./features/dropdown-slice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["authentication", "setting", "cart", "navbar"],
+  whitelist: ["authentication", "setting", "cart", "navbar", "dropdown"],
 
 };
 
