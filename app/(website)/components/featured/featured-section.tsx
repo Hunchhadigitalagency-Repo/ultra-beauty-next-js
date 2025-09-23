@@ -39,24 +39,24 @@ const FeaturedSection = () => {
           loading ?
             (
               <div className='flex items-center justify-center w-full h-60'>
-                <p className='text-gray'>
+                <p className='text-base font-semibold text-gray-400'>
                   Loading Featured Product...
                 </p>
               </div>
             ) : error ?
               (
                 <div className='flex flex-col items-center justify-center w-full h-60'>
-                  <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-                  <p className='text-red'>
-                    Error Fetching Featured Products !
+                  <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                  <p className='text-base font-semibold text-gray-400'>
+                    Oops! Something went wrong...
                   </p>
                 </div>
               ) : featuredProducts?.length === 0 ?
                 (
                   <div className='flex flex-col items-center justify-center w-full h-60'>
-                    <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-                    <p className='text-red'>
-                      No Featured Products Found !
+                    <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                    <p className='text-base font-semibold text-gray-400 capitalize'>
+                      Oops! no featured products right now...
                     </p>
                   </div>
                 ) :

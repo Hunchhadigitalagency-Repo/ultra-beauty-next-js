@@ -11,6 +11,7 @@ import {
   CarouselItem,
   CarouselApi
 } from "@/components/ui/carousel";
+import { AlertCircle } from "lucide-react";
 
 export interface Link {
   next: string;
@@ -82,20 +83,22 @@ const BrandsSection: React.FunctionComponent = () => {
       <div className="relative w-full">
         {loading ? (
           <div className='flex items-center justify-center w-full h-60'>
-            <p className='text-gray'>
+            <p className='font-semibold text-base text-gray-400'>
               Loading Featured Brands...
             </p>
           </div>
         ) : error ? (
-          <div className='flex items-center justify-center w-full h-60'>
-            <p className='text-red'>
-              Error While Fetching Featured Brands
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+            <p className='text-base font-semibold text-gray-400'>
+              Oops! Something went wrong...
             </p>
           </div>
         ) : data?.results.length === 0 ? (
-          <div className='flex items-center justify-center w-full h-60'>
-            <p className='text-red'>
-              No Brands found
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+            <p className='text-base font-semibold text-gray-400 capitalize'>
+              Oops! no featured brands right now...
             </p>
           </div>
         ) : (

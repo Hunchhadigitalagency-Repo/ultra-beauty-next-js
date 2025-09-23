@@ -4,6 +4,7 @@ import TestimonialCard from './testimonial-card';
 import React, { useEffect, useState } from 'react';
 import SectionHeader from '@/components/common/header/section-header';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { AlertCircle } from 'lucide-react';
 
 interface TestimonialResponse {
 
@@ -55,21 +56,23 @@ const Testimonial = () => {
                 description='Here are the review of customers.'
             />
             {loading ? (
-                <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-gray'>
-                        Loading Testimonials ...
+                <div className='flex items-center justify-center w-full h-60'>
+                    <p className='font-semibold text-base text-gray-400'>
+                        Loading Testimonials...
                     </p>
                 </div>
             ) : error ? (
-                <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-red'>
-                        Error While Fetching Testimonials
+                <div className='flex flex-col items-center justify-center w-full h-60'>
+                    <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                    <p className='text-base font-semibold text-gray-400'>
+                        Oops! Something went wrong...
                     </p>
                 </div>
             ) : data?.length === 0 ? (
-                <div className='h-60 flex w-full justify-center items-center'>
-                    <p className='text-red'>
-                        No Testimonials Found !
+                <div className='flex flex-col items-center justify-center w-full h-60'>
+                    <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                    <p className='text-base font-semibold text-gray-400 capitalize'>
+                        Oops! no testimonials right now...
                     </p>
                 </div>
             ) : (
