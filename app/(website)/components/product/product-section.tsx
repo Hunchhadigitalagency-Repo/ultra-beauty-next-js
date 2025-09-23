@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { AlertCircle } from 'lucide-react';
 
 interface ProductSectionProps {
   headerTitle: string;
@@ -54,21 +55,23 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
       <div>
 
         {isLoading ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-gray'>
-              Loading {headerTitle}...
+          <div className='flex items-center justify-center w-full h-60'>
+            <p className='font-semibold text-base text-gray-400'>
+              Loading {headerTitle} Products...
             </p>
           </div>
         ) : error ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-red'>
-              Error While Fetching {headerTitle} Products
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+            <p className='text-base font-semibold text-gray-400'>
+              Oops! Something went wrong...
             </p>
           </div>
         ) : products?.length === 0 ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-red'>
-              No {headerTitle} found
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+            <p className='text-base font-semibold text-gray-400 capitalize'>
+              Oops! no {headerTitle} Products right now...
             </p>
           </div>
         ) : (

@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/carousel";
 import useFetchData from "@/hooks/use-fetch";
 import { HeroSectionResponse } from "@/app/(website)/components/hero/hero-section";
+import LoadingSpinner from "../loader/loading-spinner";
+import { AlertCircle } from "lucide-react";
 
 // const slides = [
 //   {
@@ -46,7 +48,7 @@ export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  const { data } = useFetchData<HeroSectionResponse[]>('cms/banner-page/?page=blog');
+  const { data, loading, error } = useFetchData<HeroSectionResponse[]>('cms/banner-page/?page=blog');
 
   useEffect(() => {
     if (!api) {
@@ -74,33 +76,54 @@ export default function HeroCarousel() {
   }, [api, isHovered]);
 
   return (
-    <section className="relative overflow-hidden padding">
-      <Carousel
-        setApi={setApi}
-        className="w-full h-full"
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <CarouselContent className=" h-[300px] md:h-[442px]">
-          {data?.map((slide, index) => (
-            <CarouselItem key={slide.id} className="h-full">
-              <div className="relative w-full h-full">
-                <div className="absolute inset-0">
-                  <Image
-                    src={slide.image || "/placeholder.svg"}
-                    alt="Modern workspace with plants and ergonomic furniture"
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                  />
-                  <div className="absolute inset-0 " />
-                </div>
+    <section className="relative overflow-hidden padding h-[300px] md:h-[442px]">
+      {
+        loading ? (
+          <LoadingSpinner />
+        ) : error ? (
+          <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center">
+            <AlertCircle className="w-8 h-8 font-semiboldtext-gray-400 mb-2" />
+            <p className="text-base font-semibold text-gray-400">
+              Oops! Something went wrong...
+            </p>
+            <p className="text-sm text-gray-400 mt-1">
+              We couldn’t load the carousel items. Please try again.
+            </p>
+          </div>
+        ) : data?.length === 0 ? (
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+            <p className="text-base font-semibold text-gray-400 capitalize">
+              Oops! no banner images right now...
+            </p>
+          </div>
+        ) : (
+          <Carousel
+            setApi={setApi}
+            className="w-full h-full"
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <CarouselContent className=" h-[300px] md:h-[442px]">
+              {data?.map((slide, index) => (
+                <CarouselItem key={slide.id} className="h-full">
+                  <div className="relative w-full h-full">
+                    <div className="absolute inset-0">
+                      <Image
+                        src={slide.image || "/placeholder.svg"}
+                        alt="Modern workspace with plants and ergonomic furniture"
+                        fill
+                        className="object-cover"
+                        priority={index === 0}
+                      />
+                      <div className="absolute inset-0 " />
+                    </div>
 
-                {/* <div className="relative z-10 px-8 h-full flex items-center justify-start max-w-lg">
+                    {/* <div className="relative z-10 px-8 h-full flex items-center justify-start max-w-lg">
                   <div className="  space-y-4">
                     <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl  font-bold leading-snug  text-primary">
                       {slide.title}
@@ -116,24 +139,25 @@ export default function HeroCarousel() {
                   </div>
                 </div> */}
 
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
-                  {data.map((_, slideIndex) => (
-                    <button
-                      key={slideIndex}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${slideIndex === current
-                        ? "bg-orange-500 scale-110"
-                        : "bg-white/50 hover:bg-white/70"
-                        }`}
-                      onClick={() => api?.scrollTo(slideIndex)}
-                      aria-label={`Go to slide ${slideIndex + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+                      {data.map((_, slideIndex) => (
+                        <button
+                          key={slideIndex}
+                          className={`w-3 h-3 rounded-full transition-all duration-300 ${slideIndex === current
+                            ? "bg-orange-500 scale-110"
+                            : "bg-white/50 hover:bg-white/70"
+                            }`}
+                          onClick={() => api?.scrollTo(slideIndex)}
+                          aria-label={`Go to slide ${slideIndex + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        )}
     </section>
   );
 }

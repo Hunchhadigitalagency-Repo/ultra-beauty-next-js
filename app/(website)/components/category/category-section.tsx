@@ -14,6 +14,7 @@ import SectionHeader from "@/components/common/header/section-header";
 import { toggleCategory } from "@/redux/features/category-slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
+import { AlertCircle } from "lucide-react";
 
 interface Category {
   id: number;
@@ -54,20 +55,24 @@ const CategorySection: React.FunctionComponent = () => {
         {
           loading ? (
             <div className='flex items-center justify-center w-full h-60'>
-              <p className='text-gray'>
+              <p className='font-semibold text-base text-gray-400'>
                 Loading Categories...
               </p>
             </div>
           ) : error ? (
-            <div className='flex items-center justify-center w-full h-60'>
-              <p className='text-red'>
-                Error While Fetching Categories
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+              <p className='text-base font-semibold text-gray-400'>
+                Oops! Something went wrong...
               </p>
             </div>
           ) : data?.length === 0 ? (
-            <p className="text-sm text-center text-muted-foreground">
-              No Categories found
-            </p>
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+              <p className='text-base font-semibold text-gray-400 capitalize'>
+                Oops! no categories right now...
+              </p>
+            </div>
           ) : (
             <Carousel
               className="w-full"

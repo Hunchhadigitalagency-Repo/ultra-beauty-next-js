@@ -6,6 +6,7 @@ import { MdFormatQuote } from "react-icons/md";
 import { BrandResponse } from '@/types/product';
 import SearchBox from '@/components/common/filter/search-box';
 import SectionHeader from '@/components/common/header/section-header';
+import { AlertCircle } from 'lucide-react';
 
 const BrandsDescSection: React.FunctionComponent = () => {
 
@@ -31,20 +32,24 @@ const BrandsDescSection: React.FunctionComponent = () => {
 
       {loading ? (
         <div className='flex items-center justify-center w-full h-60'>
-          <p className='text-gray'>
-            Loading ...
+          <p className='font-semibold text-base text-gray-400'>
+            Loading Brands Banner...
           </p>
         </div>
       ) : error ? (
-        <div className='flex items-center justify-center w-full h-60'>
-          <p className='text-red'>
-            Error While Fetching Featured Brands Banner
+        <div className='flex flex-col items-center justify-center w-full h-60'>
+          <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+          <p className='text-base font-semibold text-gray-400'>
+            Oops! Something went wrong...
           </p>
         </div>
       ) : data?.results.length === 0 ? (
-        <p className="text-sm text-center text-muted-foreground">
-          No Brands Banner Found
-        </p>
+        <div className='flex flex-col items-center justify-center w-full h-60'>
+          <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+          <p className='text-base font-semibold text-gray-400 capitalize'>
+            Oops! no brand banners right now...
+          </p>
+        </div>
       ) : (
         <div className="space-y-10">
           {brandDetails?.map((brand, index) => (
