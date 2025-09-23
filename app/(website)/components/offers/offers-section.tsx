@@ -13,6 +13,7 @@ import useFetchData from '@/hooks/use-fetch';
 import { ProductResponse } from '@/types/product';
 import LinkText from '@/components/common/header/link-text';
 import SectionHeader from '@/components/common/header/section-header';
+import { AlertCircle } from 'lucide-react';
 
 
 const OffersSection = () => {
@@ -38,21 +39,23 @@ const OffersSection = () => {
                         {
                             loading ? (
                                 <div className='flex items-center justify-center w-full h-60'>
-                                    <p className='text-gray'>
-                                        Loading Offer Section...
+                                    <p className='font-semibold text-base text-gray-400'>
+                                        Loading Offers...
                                     </p>
                                 </div>
                             ) : error ? (
-                                <div className='flex items-center justify-center w-full h-60'>
-                                    <p className='text-red'>
-                                        Error While Fetching Offer Section
+                                <div className='flex flex-col items-center justify-center w-full h-60'>
+                                    <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                                    <p className='text-base font-semibold text-gray-400'>
+                                        Oops! Something went wrong...
                                     </p>
                                 </div>
                             ) : (
                                 saleProducts?.results?.length === 0 ? (
-                                    <div className='flex items-center justify-center w-full h-60'>
-                                        <p className='text-red'>
-                                            No Offers Found !
+                                    <div className='flex flex-col items-center justify-center w-full h-60'>
+                                        <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                                        <p className='text-base font-semibold text-gray-400 capitalize'>
+                                            Oops! no offers right now...
                                         </p>
                                     </div>
                                 ) :

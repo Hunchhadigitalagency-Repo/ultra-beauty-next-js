@@ -5,7 +5,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({
   className,
-  containerClassName="h-screen",
+  containerClassName = "h-screen",
 }: LoadingSpinnerProps) {
   return (
     <div className={`flex justify-center items-center ${containerClassName}`}>

@@ -22,25 +22,25 @@ const MermaidBanner: React.FunctionComponent = () => {
       {
         loading ?
           (
-            <div className='h-60 flex w-full justify-center items-center'>
-              <p className='text-gray'>
-                Loading Banner...
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <p className='text-base font-semibold text-gray-400'>
+                Loading banner...
               </p>
             </div>
           ) : error ?
             (
-              <div className='h-60 flex flex-col w-full justify-center items-center'>
-                <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-                <p className='text-red'>
-                  Error Fetching Mermaid Banners !
+              <div className='flex flex-col items-center justify-center w-full h-60'>
+                <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
+                <p className='text-base font-semibold text-gray-400'>
+                  Oops! Something went wrong...
                 </p>
               </div>
             ) : data?.length === 0 ?
               (
                 <div className='h-60 flex flex-col w-full justify-center items-center'>
-                  <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-                  <p className='text-red'>
-                    No Banners Found !
+                  <AlertCircle className="w-8 h-8 font-semibold text-gray-400 mb-2" />
+                  <p className='text-base font-semibold text-gray-400 capitalize'>
+                    Oops! no banners right now...
                   </p>
                 </div>
               ) :
