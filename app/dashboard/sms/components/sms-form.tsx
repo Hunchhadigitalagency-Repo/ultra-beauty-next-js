@@ -172,7 +172,10 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
                     <FormControl>
                       <RichTextEditor
                         value={field.value}
-                        onChange={field.onChange}
+                        onChange={(value)=> {
+                          field.onChange(value)
+                          form.trigger('message')
+                        }}
                         placeholder="Enter the blog description "
                       />
                     </FormControl>
