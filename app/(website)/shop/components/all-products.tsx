@@ -137,7 +137,7 @@ const AllProducts = () => {
                   imageSrc={product.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
-                  brand={product.brand.brand_name}
+                  brand={product.brand.name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

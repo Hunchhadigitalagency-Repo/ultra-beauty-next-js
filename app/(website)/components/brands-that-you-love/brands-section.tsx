@@ -106,7 +106,7 @@ const BrandsSection: React.FunctionComponent = () => {
             opts={{ align: "start", loop: true }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
-            <CarouselContent className="mt-1 -ml-4">
+            <CarouselContent className="mt-1 -ml-4 gap-2">
               {brandDetails?.map((brand, index) => (
                 <CarouselItem
                   key={index}
