@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 
 import { Col } from "@/types/table";
-import StatusCard from "@/components/common/cards/outline-status-card";
 import { TopSelling } from "@/types/product";
 
 export const TopSellingConstants = (): Col<TopSelling>[] => {
@@ -34,17 +33,14 @@ export const TopSellingConstants = (): Col<TopSelling>[] => {
     {
       title: "STATUS",
 
-      render: (data: TopSelling) => (
-        <StatusCard
-          status={
-            data.available_stock === 0
-              ? "empty"
-              : data.available_stock <= 10
-                ? "low stock"
-                : "in stock"
-          }
-        />
-      ),
+      render: (data: TopSelling) =>
+        <span className="capitalize">{
+          data.available_stock === 0
+            ? "empty"
+            : data.available_stock <= 10
+              ? "low stock"
+              : "in stock"
+        }</span>
     },
     {
       title: "SOLD",
@@ -54,7 +50,7 @@ export const TopSellingConstants = (): Col<TopSelling>[] => {
     {
       title: "TOTAL EARNING",
 
-      render: (data: TopSelling) => <div className="flex w-full justify-start"><span>{data.total_earning}</span> </div>,
+      render: (data: TopSelling) => <div className="flex w-full justify-center items-center0"><span>{data.total_earning}</span></div>
     },
   ];
 };
