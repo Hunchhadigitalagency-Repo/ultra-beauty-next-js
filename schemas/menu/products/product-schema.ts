@@ -54,10 +54,10 @@ export const productSchema = z
     sku: z.string().min(1, "SKU is required"),
     productGeneralDescription: z
       .string()
-      .min(1, "Product description is required"),
+      .min(10, "Product description is required"),
     productDetailedDescription: z
       .string()
-      .min(1, "Detailed description is required"),
+      .min(10, "Detailed description is required"),
     quantity: z.number().nonnegative("Quantity must be a positive number"),
     category: z.string().min(1, "Category is required"),
     sub_category: z.string().optional(),
