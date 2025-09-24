@@ -18,7 +18,7 @@ const OutlineStatusCard: React.FC<IStatusCard> = ({ status, primaryColor, textCo
       }}
       className="w-[100px] rounded-sm py-1 px-2 text-center"
     >
-      <p className="text-white">{status}</p>
+      <p className="text-black">{status}</p>
     </button>
   );
 };

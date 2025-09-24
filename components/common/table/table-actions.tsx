@@ -14,22 +14,32 @@ import { ESettings, ETypes } from "@/types/table";
 import { handleDeleteData } from "@/lib/delete-data-utils";
 import DeleteModal from "../modals/delete-modal";
 import { setActiveSetting } from "@/redux/features/setting-slice";
-interface TableActionProps<T extends { id: number }> {
+import EditModal from "../modals/edit-model";
+
+interface TableActionProps<
+  T extends { id?: number; slug?: string; slug_name?: string }
+> {
   data: T;
   type: string;
   name: string;
-  action?: string;
+  action?: string
 }
 
-const TableActions = <T extends { id: number }>({
+const TableActions = <
+  T extends { id?: number; slug?: string; slug_name?: string }
+>({
   data,
   type,
   name,
+  action,
 }: TableActionProps<T>) => {
   const [isDeleteClick, setIsDeleteClick] = useState(false);
   const dispatch = useAppDispatch();
   const [isEditClick, setIsEditClick] = useState(false);
-
+  const isEdit =
+    type === ETypes.INVOICES
+    || type === ETypes.CANCEL_REQUEST
+    || type === ETypes.RETURN_REQUEST
   const handleDeleteClick = (value: boolean) => {
     setIsDeleteClick(value);
   };
@@ -53,6 +63,8 @@ const TableActions = <T extends { id: number }>({
       router.push(
         "/dashboard/expert-recommendation/edit-expert-recommendation"
       );
+    } else if (type === ETypes.INVENTORY) {
+      router.push(`/dashboard/inventory/edit/${data.id}`);
     } else if (type === ETypes.CATEGORY) {
       dispatch(setActiveSetting(ESettings.EDIT_CATEGORY));
     } else if (type === ETypes.BLOG_CATEGORY) {
@@ -77,6 +89,12 @@ const TableActions = <T extends { id: number }>({
       dispatch(setActiveSetting(ESettings.EDIT_INVENTORY_LOCATION));
     } else if (type === ETypes.ORDER_STATUS) {
       dispatch(setActiveSetting(ESettings.EDIT_ORDER_STATUS));
+    } else if (type === ETypes.PREFERENCES) {
+      dispatch(setActiveSetting(ESettings.EDIT_PREFERENCES));
+    } else if (type === ETypes.HELP_AND_SUPPORT) {
+      dispatch(setActiveSetting(ESettings.EDIT_HELP_AND_SUPPORT));
+    } else if (type === ETypes.ROLES) {
+      dispatch(setActiveSetting(ESettings.EDIT_ROLE));
     } else if (type === ETypes.SMS) {
       router.push("/dashboard/sms/edit-sms");
     } else if (type === ETypes.FAQ) {
@@ -91,6 +109,12 @@ const TableActions = <T extends { id: number }>({
       router.push("/dashboard/cupons/edit-coupon");
     } else if (type === ETypes.TESTIMONIAL) {
       router.push("/dashboard/testimonials/edit-testimonials");
+    } else if (type === ETypes.NOTIFICATION) {
+      router.push("/dashboard/notification/edit-notification");
+    } else if (type === ETypes.CAREER) {
+      router.push("/dashboard/career/edit-career");
+    } else if (type === ETypes.TEAM) {
+      router.push("/dashboard/team/edit-team");
     } else {
       handleEditClick(true);
     }
@@ -106,9 +130,6 @@ const TableActions = <T extends { id: number }>({
   //       break;
   //   }
   // };
-
-  console.log(isEditClick);
-  console.log(isDeleteClick);
 
   return (
     <>
@@ -126,14 +147,16 @@ const TableActions = <T extends { id: number }>({
               <EyeIcon className="size-4" />
               View Details
             </button> */}
-
-            <button
-              className="w-full flex items-center gap-2 p-2 hover:bg-secondary cursor-pointer text-textColor text-sm font-medium"
-              onClick={handleEdit}
-            >
-              <EditIcon className="size-4" />
-              Edit
-            </button>
+            {
+              !isEdit &&
+              < button
+                className="w-full flex items-center gap-2 p-2 hover:bg-secondary cursor-pointer text-textColor text-sm font-medium"
+                onClick={handleEdit}
+              >
+                <EditIcon className="size-4" />
+                Edit
+              </button>
+            }
 
             <button
               className="w-full flex items-center text-red-400 gap-2 p-2 hover:bg-secondary cursor-pointer text-textColor text-sm font-medium"
@@ -144,16 +167,40 @@ const TableActions = <T extends { id: number }>({
             </button>
           </div>
         </PopoverContent>
-      </Popover>
+      </Popover >
 
       {isDeleteClick && (
         <DeleteModal
           itemName={name}
-          onDelete={() => handleDeleteData(data.id as number, type)}
+          onDelete={() =>
+            handleDeleteData(
+              type === ETypes.BLOGS ||
+                type === ETypes.TESTIMONIAL ||
+                type === ETypes.CAREER
+                ? (data.slug as string)
+                : type === ETypes.INVENTORY
+                  ? (data.id as number)
+                  : type === ETypes.PRODUCTS
+                    ? (data?.slug_name as string)
+                    : type === ETypes.FAQ
+                      ? (data?.slug_name as string)
+                      : (data.id as number),
+              type,
+              action || "",
+            )
+
+          }
           setIsOptionClick={setIsDeleteClick}
           type={type}
         />
-      )}
+      )
+      }
+
+      {
+        isEditClick && (
+          <EditModal type={type} setIsOptionClick={setIsEditClick} />
+        )
+      }
     </>
   );
 };

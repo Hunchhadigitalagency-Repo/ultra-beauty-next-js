@@ -10,7 +10,7 @@ export const updateTestimonials = async (id: number | string, data: FormData) =>
   return response;
 };
 
-export const deleteTestimonials = async (id: number) => {
+export const deleteTestimonials = async (id: string | number) => {
   const response = await api.delete(`/cms/testimonials/${id}/`);
   return response;
 };
