@@ -234,7 +234,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   ]);
 
   const onSubmit = async (data: ProductFormValues) => {
-    console.log(data, "sumitted add form daata")
     try {
       setLoading(true);
       const formData = new FormData();
@@ -410,12 +409,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   }, [categories, initialData, form]);
   const [Error, setError] = useState<string>();
   const handlevError = (err: any) => {
-    console.log('this is the rrpr we ahve ', err);
-
     if (err.variantItems) {
       setError(err.variantItems?.root?.message);
-    } else {
-      setError(JSON.stringify(err));
     }
   };
   return (

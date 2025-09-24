@@ -15,11 +15,9 @@ export interface Results {
 const TopSellingSection = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("week");
 
-  const { data: topSellings } = useFetchData<Results>(`/top-sellings/?time_range=${selectedPeriod}`, true);
+  const { data: topSellings, loading, error } = useFetchData<Results>(`/top-sellings/?time_range=${selectedPeriod}`, true);
 
   const topSelling = topSellings?.results || [];
-
-
 
   return (
     <DataCard
@@ -35,7 +33,8 @@ const TopSellingSection = () => {
         <CustomTable<TopSelling>
           cols={TopSellingConstants()}
           data={topSelling}
-          loading={false}
+          loading={loading}
+          error={error}
           onRowClick={() => { }}
           height="h-auto"
         />

@@ -31,8 +31,8 @@ export const LowStockConstants = (): Col<any>[] => {
     {
       title: "REMAINING",
 
-      render: (data: any) => <div className="flex w-full justify-start">
-        <span>{data.remaining_units}</span>,
+      render: (data: any) => <div className="flex w-full justify-center items-center">
+        <span>{data.remaining_units}</span>
       </div>
     },
   ];
