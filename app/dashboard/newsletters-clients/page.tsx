@@ -13,25 +13,28 @@ const InfiniteScroll = dynamic(() => import("react-infinite-scroll-component"), 
 });
 
 const NewsletterClients = () => {
-  const { data,  hasMore, fetchNext } = useInfiniteFetch('/cms/news-letter-email/')
+  const { data, hasMore, fetchNext } = useInfiniteFetch('/cms/news-letter-email/')
   const scrollId = "infinite-scroll-container";
 
   return (
-    <div id={scrollId}>
-      <InfiniteScroll
-        dataLength={data?.length || 0}
-        next={fetchNext}
-        hasMore={!!hasMore}
-        loader={<InfiniteScrollLoader />}
-        scrollableTarget={scrollId}
-      >
-        <CustomTable
-          data={data || []}
-          cols={NewsletteEmailrConstant()}
-          height='h-auto'
-        />
-      </InfiniteScroll>
-    </div>
+    <main className="space-y-4 bg-white p-4">
+
+      <div id={scrollId}>
+        <InfiniteScroll
+          dataLength={data?.length || 0}
+          next={fetchNext}
+          hasMore={!!hasMore}
+          loader={<InfiniteScrollLoader />}
+          scrollableTarget={scrollId}
+        >
+          <CustomTable
+            data={data || []}
+            cols={NewsletteEmailrConstant()}
+            height='h-auto'
+          />
+        </InfiniteScroll>
+      </div>
+    </main>
   )
 }
 

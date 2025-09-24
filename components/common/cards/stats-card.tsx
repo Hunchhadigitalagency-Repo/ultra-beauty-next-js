@@ -47,7 +47,7 @@ const StatsCard = ({
             <h2 className="text-foreground text-2xl font-semibold">{value}</h2>
 
             {
-                percentage &&
+                typeof percentage === "number" &&
                 <div className="flex items-center justify-between text-xs">
                     <div className={`flex items-center gap-1 ${indicatorColor}`}>
                         {percentage}%
