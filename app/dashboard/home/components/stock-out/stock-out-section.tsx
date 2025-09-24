@@ -35,7 +35,7 @@ const StockOutSection = () => {
                   className="object-cover w-full h-full"
                 />
               </div>
-              <span className="font-sm text-sm text-foreground text-lg">{item.name}</span>
+              <span className="font-sm text-sm text-foreground">{item.name}</span>
             </div>
           ))
         ) : (

@@ -16,6 +16,7 @@ const ReadMoreBlogs: React.FunctionComponent = () => {
   const path = id ? `cms/blogs/${id}` : "";
   const { data, loading, error } = useFetchData<IBlog>(path, true);
 
+  console.log(data, "data from read more blogs");
   const recommended_blogs = data?.recommended_blogs as RecommendedBlog[];
 
   return (

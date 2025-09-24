@@ -20,7 +20,7 @@ export interface Results {
 }
 
 const LowStockSection = () => {
-  const { data: lowStocks } = useFetchData<Results>("/lowstock/", true);
+  const { data: lowStocks, loading, error } = useFetchData<Results>("/lowstock/", true);
 
   const lowStock = lowStocks?.results || [];
   return (
@@ -29,7 +29,8 @@ const LowStockSection = () => {
         <CustomTable<LowStock>
           cols={LowStockConstants()}
           data={lowStock as LowStock[]}
-          loading={false}
+          loading={loading}
+          error={error}
           onRowClick={() => { }}
           height="h-auto"
         />

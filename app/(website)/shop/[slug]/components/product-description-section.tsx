@@ -7,9 +7,9 @@ import React,
   useState
 } from "react";
 import {
-  Plus,
+  // Plus,
   ShoppingCart,
-  SquareCheck
+  // SquareCheck
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -295,7 +295,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         </div>
       </div>
       {/*Bundle Product Section */}
-      {
+      {/* {
         product.variants?.length >= 1 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold">Bundle and Save</h2>
@@ -342,7 +342,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
             </Button>
           </div>
         )
-      }
+      } */}
     </div >
   );
 };
