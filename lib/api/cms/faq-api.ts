@@ -6,12 +6,12 @@ export const createFaq = async (data: FaqFormValues) => {
   return response;
 };
 
-export const updateFaq = async (id: number, data: FaqFormValues) => {
+export const updateFaq = async (id: number, data: Partial<FaqFormValues>) => {
   const response = await api.patch(`/cms/faqs/${id}/`, data);
   return response;
 };
 
-export const deleteFaq = async (id: number) => {
+export const deleteFaq = async (id: number | string) => {
   const response = await api.delete(`/cms/faqs/${id}/`);
   return response;
 };

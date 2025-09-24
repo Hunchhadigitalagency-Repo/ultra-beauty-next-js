@@ -27,7 +27,7 @@ import { updateCareer } from "@/lib/api/cms/career-api";
 import { updateInventoryLocation } from "@/lib/api/settings/inventory-location-api";
 import { updateFlashSales } from "@/lib/api/sales/flash-sales-api";
 import { updateNavigationInfo } from "@/lib/api/cms/navigation-info-api";
-// import { updateFaq } from "@/lib/api/cms/faq-api";
+import { updateFaq } from "@/lib/api/cms/faq-api";
 import { updateRolesandPermissions } from "@/lib/api/settings/roles-permissions-api";
 import { updateTeam } from "@/lib/api/cms/team-api";
 
@@ -95,9 +95,11 @@ const TableStatusSwitch = ({ type, rowData, onUpdate }: Props) => {
         case ETypes.NAVIGATION_INFO:
           response = await updateNavigationInfo(rowData.id, formData);
           break;
-        // case ETypes.FAQ:
-        //   response = await updateFaq(rowData.slug, formData);
-        //   break;
+        case ETypes.FAQ:
+          response = await updateFaq(rowData.slug, {
+            is_active: checked,
+          });
+          break;
         case ETypes.SECTION_MANAGEMENT:
           response = await updateSection(rowData.id, formData);
           break;
