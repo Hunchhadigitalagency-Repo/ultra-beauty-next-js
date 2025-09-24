@@ -509,8 +509,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       </FormLabel>
                       <FormControl>
                         <TextEditor
-                          value={field.value}
-                          onChange={field.onChange}
+                          heightClass="!max-w-[300px]"
+                          value={field.value || ""}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            form.trigger("productGeneralDescription");
+                          }}
                           placeholder="Enter the Product Description"
                         />
                       </FormControl>
@@ -518,6 +522,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="productDetailedDescription"
@@ -529,9 +534,13 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       </FormLabel>
                       <FormControl>
                         <TextEditor
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Enter the Product Description"
+                          heightClass="!max-w-[300px]"
+                          value={field.value || ""}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            form.trigger("productDetailedDescription");
+                          }}
+                          placeholder="Enter the Product Detailed Description"
                         />
                       </FormControl>
                       <FormMessage />
@@ -657,7 +666,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           placeholder="Please enter the Discount Percentage"
                           onChange={(e) => {
                             const val = e.target.valueAsNumber;
-                            field.onChange(val > 0 ? val.toString() : ""); // only allow positive values
+                            field.onChange(val > 0 ? val.toString() : "");
                           }}
                         />
                       </FormControl>
@@ -976,7 +985,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                                       : undefined
                                   )
                                 }
-                                min={1}
+                                required
                               />
                             </FormControl>
                             <FormMessage />
