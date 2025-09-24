@@ -234,6 +234,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   ]);
 
   const onSubmit = async (data: ProductFormValues) => {
+    console.log(data, "sumitted add form daata")
     try {
       setLoading(true);
       const formData = new FormData();
@@ -274,8 +275,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       formData.append("flash_sale_discount", data.flashSalesDiscount || "");
       formData.append("is_flash_sale", data.activateFlashSales.toString());
-      data.package?.forEach((item) => {
-        formData.append(`package`, item?.id.toString());
+      data.package?.forEach((item, index) => {
+        formData.append(`package[${index}][id]`, item.id.toString());
+        formData.append(`package[${index}][name]`, item.name);
       });
       formData.append("inventory", data.selectInventory ?? "");
       if (data.variantItems && data.variantItems.length > 0) {

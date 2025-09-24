@@ -133,7 +133,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
           <h1 className="mb-2 text-sm font-medium text-[#7A7A7A] font-poppins">
-            {product.brand.brand_name || 'No Brand'}
+            {product.brand.name || 'No Brand'}
           </h1>
           <div className="flex items-center gap-5">
             <RatingStars rating={product.average_rating} />

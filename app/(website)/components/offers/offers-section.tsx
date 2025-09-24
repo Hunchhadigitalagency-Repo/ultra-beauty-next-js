@@ -35,7 +35,7 @@ const OffersSection = () => {
                 <Carousel
                     className="w-full"
                 >
-                    <CarouselContent className="-ml-4">
+                    <CarouselContent className="-ml-4 gap-2">
                         {
                             loading ? (
                                 <div className='flex items-center justify-center w-full h-60'>
@@ -66,7 +66,7 @@ const OffersSection = () => {
                                                 className="pl-4 basis-[45%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                                                 <OffersCard
                                                     imageSrc={saleproduct?.images[0]?.file}
-                                                    brand={saleproduct?.brand.brand_name}
+                                                    brand={saleproduct?.brand?.name}
                                                     productName={saleproduct?.name}
                                                     slugName={saleproduct?.slug_name}
                                                 />

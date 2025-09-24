@@ -78,12 +78,12 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
           <Carousel
             className="w-full"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-4 gap-2">
               {products?.map((product) => {
                 return (
                   <CarouselItem
                     key={product.name}
-                    className="pl-4 basis-1/2 lg:basis-1/4"
+                    className="basis-1/2 lg:basis-1/4 border"
                   >
                     <div className="flex w-full h-full">
                       <ProductCard
