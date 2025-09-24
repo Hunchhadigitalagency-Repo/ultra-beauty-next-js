@@ -231,7 +231,7 @@ export interface BrandResponse {
 
 export interface Brand {
   id: number
-  brand_name: string
+  name: string
   brand_image: string
   description?: string
   is_featured: boolean

@@ -37,6 +37,9 @@ export function FormCombobox({
     opt.label.toLowerCase().includes(search.toLowerCase())
   );
 
+
+  console.log(options, 'Options');
+
   return (
     <FormField
       control={form.control}
@@ -62,9 +65,9 @@ export function FormCombobox({
                   <SelectValue
                     placeholder={placeholder}
                     defaultValue={field.value}
-                  >
-                    {options.find((opt) => opt.value === field.value)?.label}
-                  </SelectValue>
+                  />
+                  {/* {options.find((opt) => opt.value === field.value)?.label} */}
+                  {/* </SelectValue> */}
                 </SelectTrigger>
               </FormControl>
 

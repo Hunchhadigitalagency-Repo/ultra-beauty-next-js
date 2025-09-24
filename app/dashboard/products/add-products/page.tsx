@@ -3,9 +3,7 @@ import ProductForm from "./components/product-form";
 
 const AddProductsPage = () => {
   return (
-    <div>
-      <ProductForm initialData={null} />
-    </div>
+    <ProductForm initialData={null} />
   );
 };
 
