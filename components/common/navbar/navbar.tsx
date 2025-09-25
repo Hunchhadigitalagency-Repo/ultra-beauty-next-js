@@ -14,9 +14,9 @@ import { ChevronDown } from 'lucide-react';
 import { CartResponse } from "@/types/cart";
 import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
-import Logo from '@/assets/images/Artboard 2-02.svg'
 import { Button } from "@/components/ui/button";
 import { WishListResponse } from "@/types/wishlist";
+import Logo from '@/assets/images/Artboard 2-02.svg'
 import NotificationModal from "./notification-modal";
 import { ICategoryDropdown } from "@/types/dropdown";
 import { usePathname, useRouter } from "next/navigation";
@@ -111,6 +111,28 @@ export default function Navbar() {
     router.push(`/shop`)
   }
 
+  const searchAreaRef = useRef<HTMLDivElement>(null);
+  const searchIconRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchIconRef.current && searchIconRef.current.contains(event.target as Node)) {
+        const searchState = !searchOpen;
+        setSearchOpen(searchState);
+      }
+      if (searchAreaRef.current && !searchAreaRef.current.contains(event.target as Node) &&
+        searchIconRef.current && !searchIconRef.current.contains(event.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchOpen]);
+
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 "
     >
@@ -134,7 +156,7 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <div className="relative h-full w-full">
+            <div className="relative h-full w-full" onMouseLeave={() => setSearchOpen(false)}>
               {
                 !searchOpen &&
                 <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
@@ -174,7 +196,7 @@ export default function Navbar() {
               }
               {/* Search Bar */}
               {searchOpen &&
-                <div className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300">
+                <div ref={searchAreaRef} className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300">
                   <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
                 </div>
               }
@@ -185,7 +207,8 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setSearchOpen(!searchOpen)}
+              // onClick={() => setSearchOpen(!searchOpen)}
+              ref={searchIconRef}
               className="hidden lg:block hover:text-primary md:text-sm"
             >
               <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
@@ -295,11 +318,15 @@ export default function Navbar() {
         }
       </div >
 
-      <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">
-        <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
-          <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
+      {
+        pathname === '/' &&
+        <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">
+          <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
+            <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
+          </div>
         </div>
-      </div>
+      }
+
     </header >
   );
 }
