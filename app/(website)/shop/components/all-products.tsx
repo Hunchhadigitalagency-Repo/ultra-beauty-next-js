@@ -133,11 +133,11 @@ const AllProducts = () => {
               {products?.map((product, index) => (
                 <ProductCard
                   key={index}
-                  slug={product.slug_name}
-                  imageSrc={product.images?.[0]?.file}
+                  slug={product?.slug_name}
+                  imageSrc={product?.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
-                  brand={product.brand.name}
+                  brand={product.brand?.name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

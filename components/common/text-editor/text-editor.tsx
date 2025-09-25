@@ -25,6 +25,13 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
     ref
   ) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const onChangeRef = useRef(onChange);
+
+    useEffect(() => {
+      onChangeRef.current = onChange;
+    }, [onChange]);
+
     // Helper function to clean empty content for validation
     const cleanEmptyContent = (content: string): string => {
       if (!content) return "";
@@ -53,6 +60,7 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
       return content; // Return original content if it has actual content
     };
     useEffect(() => {
+      const el = textareaRef.current;
       const loadScripts = async () => {
         if (!window.$) {
           const jqueryScript = document.createElement('script');
@@ -74,10 +82,10 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
         await new Promise((resolve) => {
           summernoteScript.onload = resolve;
         });
-        if (textareaRef.current && window.$) {
-          window.$(textareaRef.current).summernote({
+        if (el && window.$) {
+          window.$(el).summernote({
             height: 120,
-            placeholder: placeholder,
+            placeholder,
             // Add width constraint and word wrapping options
             width: '100%',
             disableResizeEditor: false,
@@ -98,7 +106,7 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
               onChange: function (contents: string) {
                 // Clean up empty content for proper validation
                 const cleanedContents = cleanEmptyContent(contents);
-                onChange(cleanedContents);
+                onChangeRef.current(cleanedContents);
               },
               onPaste: function (e: any) {
                 // Get the pasted HTML content
@@ -161,17 +169,17 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
             }
           });
           if (value) {
-            window.$(textareaRef.current).summernote('code', value);
+            window.$(el).summernote('code', value);
           }
         }
       };
       loadScripts();
       return () => {
-        if (textareaRef.current && window.$) {
-          window.$(textareaRef.current).summernote('destroy');
+        if (el && window.$) {
+          window.$(el).summernote('destroy');
         }
       };
-    }, []);
+    }, [placeholder]);
     useEffect(() => {
       if (textareaRef.current && window.$ && window.$(textareaRef.current).summernote) {
         const currentContent = window.$(textareaRef.current).summernote('code');

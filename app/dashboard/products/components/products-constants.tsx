@@ -17,7 +17,7 @@ export const ProductConstants = (dispatch: AppDispatch): Col<IProduct>[] => {
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
             <Image
-              src={"/placeholder.svg?height=40&width=40"}
+              src={data?.images?.[0].file}
               alt={data.name}
               width={40}
               height={40}
