@@ -4,15 +4,14 @@ import Image from 'next/image';
 import useFetchData from '@/hooks/use-fetch';
 import { MdFormatQuote } from "react-icons/md";
 import { BrandResponse } from '@/types/product';
-import SearchBox from '@/components/common/filter/search-box';
 import SectionHeader from '@/components/common/header/section-header';
 import { AlertCircle } from 'lucide-react';
+import BrandsModal from '@/components/common/brands/brandsModal';
 
 const BrandsDescSection: React.FunctionComponent = () => {
 
   const { data, loading, error } = useFetchData<BrandResponse>("/public-brands");
   const brandDetails = data?.results
-
 
   return (
     <section className='space-y-8 padding'>
@@ -23,10 +22,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
           title="Brands That You Love"
           description="Find the brand from the market that are loved by everyone."
         />
-        <SearchBox
-          className='py-2 text-sm font-semibold rounded-sm md:text-xl lg:text-base md:mt-5 focus-visible:border-white'
-          placeholder="Find the brand as your requirement"
-        />
+        <BrandsModal />
       </div>
       {/* brand level with description */}
 

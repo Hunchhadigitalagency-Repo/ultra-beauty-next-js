@@ -21,13 +21,17 @@ const ReadMoreBlogs: React.FunctionComponent = () => {
 
   return (
     <section className="space-y-6 padding">
-      <div className="flex items-center justify-between gap-4">
-        <SectionHeader
-          title="Read More"
-          description="Read more blogs thate we have posted"
-        />
-        <LinkText title="See All" href="/blogs" />
-      </div>
+      {
+        recommended_blogs && recommended_blogs.length > 0 && (
+          <div className="flex items-center justify-between gap-4">
+            <SectionHeader
+              title="Read More"
+              description="Read more blogs thate we have posted"
+            />
+            <LinkText title="See All" href="/blogs" />
+          </div>
+        )
+      }
       {
         loading ? (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

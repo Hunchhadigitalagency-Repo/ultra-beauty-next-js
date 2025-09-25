@@ -50,8 +50,8 @@ const Testimonial = () => {
     }, [api, isHovered]);
 
     return (
-        <section className='w-full h-full pb-8 space-y-8'>
-            <SectionHeader className='padding-x'
+        <section className='w-full h-full padding pb-8 space-y-8'>
+            <SectionHeader
                 title='Testimonial'
                 description='Here are the review of customers.'
             />
@@ -76,7 +76,7 @@ const Testimonial = () => {
                     </p>
                 </div>
             ) : (
-                <div className="relative w-full">
+                <div className="w-full relative">
                     <Carousel setApi={setApi}
                         opts={{ align: "start", loop: true }}
                         onMouseEnter={() => setIsHovered(true)}
@@ -88,7 +88,6 @@ const Testimonial = () => {
                                     className="basis-[75%]  md:basis-1/2 xl:basis-[40%]"
                                 >
                                     <TestimonialCard
-
                                         image={detail.image}
                                         name={detail.name}
                                         rating={detail.rating}
