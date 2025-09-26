@@ -38,6 +38,10 @@ const BlogsList = () => {
     fetchNext,
   } = useInfiniteFetch<IBlog>(searchUrl, "9", undefined, undefined, isLoggedIn); // Fetch 9 at a time
 
+
+  // const sortedNewToOld = blogs?.sort(
+  //   (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  // );
   return (
     <section className="space-y-4 padding">
       <div className="flex items-center justify-between gap-4">
