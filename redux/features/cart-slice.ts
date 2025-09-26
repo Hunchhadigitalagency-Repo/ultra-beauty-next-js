@@ -51,6 +51,15 @@ const cartSlice = createSlice({
             }
         },
 
+        updateSelectedCartItem: (state, action) => {
+            const { id, quantity, price } = action.payload;
+            const existing = state.cartItem.find(item => item.id === id);
+            if (existing) {
+                existing.quantity = quantity;
+                existing.price = price;
+            }
+        },
+
         deleteCartItem: (state, action: PayloadAction<number>) => {
             state.cartItem = state.cartItem.filter(item => item.id !== action.payload);
         },
@@ -120,7 +129,8 @@ export const {
     clearCartCount,
     decreaseCartCountBy,
     setCartCount,
-    setShippingFee
+    setShippingFee,
+    updateSelectedCartItem
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
