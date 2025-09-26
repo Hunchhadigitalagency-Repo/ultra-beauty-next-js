@@ -59,6 +59,25 @@ export interface IBlog {
   send_as_newsletter: boolean
 }
 
+export interface IBlogWithIsNew {
+  id: number
+  title: string
+  sub_title: string
+  slug: string
+  description: string
+  tags: string
+  author: Author
+  category: Category
+  cover_image: string
+  recommended_products: RecommendedProduct[]
+  recommended_blogs: RecommendedBlog[]
+  created_at: string
+  updated_at: string
+  is_active: boolean
+  send_as_newsletter: boolean
+  is_new: boolean
+}
+
 export interface BlogsList {
   links: links;
   count: number;

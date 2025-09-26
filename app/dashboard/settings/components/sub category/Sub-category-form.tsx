@@ -193,7 +193,7 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="is_used_to_build_system"
                   render={({ field }) => (
@@ -215,7 +215,7 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </form>
           </Form>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -503,14 +504,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <TextEditor
-                          heightClass="!max-w-[300px]"
-                          value={field.value || ""}
-                          onChange={(value) => {
-                            field.onChange(value);
-                            form.trigger("productGeneralDescription");
-                          }}
-                          placeholder="Enter the Product Description"
+                        <Textarea
+                          className="text-justify"
+                          placeholder="Enter the General Description"
+                          {...field}
+                          rows={3}
                         />
                       </FormControl>
                       <FormMessage />
