@@ -119,6 +119,11 @@ export const sidebarData = {
           icon: HelpCircle,
         },
         {
+          title: SidebarItems.ADVERTISMENT,
+          url: "/dashboard/advertisement",
+          icon: Image,
+        },
+        {
           title: SidebarItems.NEWSLETTERS,
           url: "/dashboard/newsletters",
           icon: Mail,

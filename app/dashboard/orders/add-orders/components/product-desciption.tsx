@@ -29,7 +29,6 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
     const [quantity, setQuantity] = useState(1);
     const [errors, setErrors] = useState<ErrorState>({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
-    const [expanded, setExpanded] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttribute[]>([]);
     const dispatch = useAppDispatch()
     // console.log(product);
@@ -227,16 +226,16 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
 
                 {product?.general_description && (
                     <div className="text-sm md:text-base text-gray-700 font-poppins leading-relaxed">
-                        <div className={`${expanded ? "" : "line-clamp-3"}`} dangerouslySetInnerHTML={{ __html: product?.general_description }} />
-                        <button
-                            onClick={() => setExpanded(!expanded)}
-                            className="mt-2 text-sm text-blue-600 hover:underline"
-                        >
-                            {expanded ? "Read Less" : "Read More"}
-                        </button>
+                        <div
+                            className={`
+        max-h-[8rem] 
+        overflow-y-auto 
+      `}
+                            dangerouslySetInnerHTML={{ __html: product?.general_description }}
+                        />
+
                     </div>
                 )}
-
 
                 {attributeOrder.length > 0 && (
                     <div className="flex  gap-10">

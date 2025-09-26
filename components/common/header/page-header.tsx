@@ -58,7 +58,7 @@ const PageHeader = ({
             <h4 className={`text-sm text-foreground capitalize ${typeClass}`}>
               {type}
             </h4>
-            <div className="bg-gray text-foreground py-1 px-2 text-xs">
+            <div className="bg-pink text-foreground py-1 px-2 text-xs">
               {totalItems}
             </div>
           </div>}
