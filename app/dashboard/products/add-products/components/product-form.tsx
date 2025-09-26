@@ -70,6 +70,7 @@ import { IProduct } from "@/types/type-product";
 interface ProductFormProps {
   initialData: IProduct | null;
 }
+interface AttMana { id: number, value: string }
 
 export default function ProductForm({ initialData }: ProductFormProps) {
   const dispatch = useAppDispatch();
@@ -87,11 +88,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     null
   );
   const [variantId, setVaiantId] = useState<number>(1);
-  const [currentVariantId, setCurrentVaiantId] = useState<string>('');
+  const [currentVariantId, setCurrentVaiantId] = useState<number | null>(null);
   const [toDeleteAttribute, setToDeleteAttribute] = useState<{ id: number | null, name: string | null }>({
     id: null,
     name: null
   })
+  const [variantStatus, setVariantStatus] = useState<AttMana[]>([])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -148,7 +150,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       const variantItems =
         initialData.variants?.map((variant) => {
-          // console.log(variant);
+          console.log(variant);
           return {
             id: variant.id,
             name: variant.item_name || "",
@@ -166,7 +168,27 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               })) || [],
           };
         }) || [];
+      const newVariantStatus: any = [];
 
+      initialData.variants?.forEach((variant) => {
+        // Collect all attribute names for the current variant
+        const attributeNames: string[] = variant.product_variants
+          ?.map((variantClass) => variantClass.attribute?.name)
+          // Filter out null/undefined names
+          .filter((name): name is string => !!name)
+          || [];
+
+        if (variant.id !== undefined) {
+          newVariantStatus.push({
+            id: variant.id,
+            // Value is the array of attribute names (e.g., ["Color", "Size"])
+            value: attributeNames,
+          });
+        }
+      });
+
+      setVariantStatus(newVariantStatus);
+      setVaiantId(newVariantStatus.length);
       const formData = {
         productName: initialData.name || "",
         sku: initialData.sku || "",
@@ -249,7 +271,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       let fileIndex = 0;
 
       convertedFiles.forEach((fileData,) => {
-        
+
         if (fileData.file instanceof File) {
           formData.append(`images[${fileIndex}][file]`, fileData.file);
           formData.append(`images[${fileIndex}][file_type]`, "image");
@@ -368,7 +390,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   };
 
   const addVariant = () => {
-    setVaiantId(prev => prev + 1)
+
     const newItem = {
       variantId: variantId,
       name: sameAsParentName ? productName : "",
@@ -529,7 +551,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           value={field.value || ""}
                           onChange={(value) => {
                             console.log('the value has ben changed', value);
-                            
+
                             field.onChange(value);
                             form.trigger("productGeneralDescription");
                           }}
@@ -1060,7 +1082,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         onClick={() => {
                           setCurrentVariantIndex(index);
                           if (field.variantId) {
-                            setCurrentVaiantId(field.variantId.toString())
+                            console.log(variantId);
+                            
+                            setCurrentVaiantId(field.variantId)
                           }
                           setIsAttributeModalOpen(true);
                         }}
@@ -1074,7 +1098,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         }
                         onDelete={(attributeIndex, name) => {
                           if (field.variantId) {
-                            setCurrentVaiantId(field.variantId.toString())
+                            setCurrentVaiantId(field.variantId)
                             setToDeleteAttribute({
                               id: field.variantId,
                               name: name,
@@ -1314,9 +1338,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       <AttributeModal
         isOpen={isAttributeModalOpen}
         onClose={() => setIsAttributeModalOpen(false)}
-        currentVariantId={currentVariantId ?? ""}
+        currentVariantId={currentVariantId ?? null}
         onSave={handleSaveAttribute}
         toDelete={toDeleteAttribute}
+        existingVariants={variantStatus as any}
       />
     </div>
   );

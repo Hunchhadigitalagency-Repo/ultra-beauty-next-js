@@ -27,7 +27,7 @@ import * as z from "zod";
 import useFetchDropdown from "@/hooks/use-fetch-dropdown";
 import type { IAttribute } from "@/types/Settings";
 import { FormCombobox } from "@/components/common/form/form-combobox";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 const attributeSchema = z.object({
   name: z.string().min(1, "Please select an attribute name"),
@@ -36,12 +36,19 @@ const attributeSchema = z.object({
 
 type AttributeFormData = z.infer<typeof attributeSchema>;
 
+
+interface AttMana {
+  id: number ;
+  value: string[]
+}
+
 interface AttributeModalProps {
   isOpen: boolean;
-  currentVariantId?: number | string;
+  currentVariantId?: number | null;
+  existingVariants?: AttMana[];
   onClose: () => void;
   toDelete?: {
-    id: number | string | null, name: string | null
+    id: number | null, name: string | null
   },
   onSave?: (data: {
     attribute: string;
@@ -51,40 +58,43 @@ interface AttributeModalProps {
   }) => void;
 }
 
-interface AttMana {
-  id: number | string;
-  value: string[]
-}
 
-const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave, toDelete }: AttributeModalProps) => {
+const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave,  }: AttributeModalProps) => {
   const { data: attributes } = useFetchDropdown<IAttribute>(
     "/attribute/?pagination=false"
   );
+  console.log('this is bcuret', currentVariantId);
+  
+  // const [selectedAttributes, setSelectedAttributes] = useState<AttMana[]>(existingVariants ?? []);
+  
+  
+//   useEffect(() => {
+//     setSelectedAttributes(existingVariants ?? [])
+//   }, [existingVariants])
 
-  const [selectedAttributes, setSelectedAttributes] = useState<AttMana[]>([]);
+// console.log(selectedAttributes);
 
 
-
-  useEffect(() => {
-    if (toDelete?.id !== undefined) {
-      setSelectedAttributes((prev) =>
-        prev
-          .map((item) =>
-            item.id === toDelete.id
-              ? {
-                ...item,
-                value: item.value.filter(
-                  (val) =>
-                    (toDelete.name && val !== toDelete.name) ||
-                    (toDelete.id && val !== String(toDelete.id))
-                ),
-              }
-              : item
-          )
-          .filter((item) => item.value.length > 0)
-      );
-    }
-  }, [toDelete]);
+//   useEffect(() => {
+//     if (toDelete?.id !== undefined) {
+//       setSelectedAttributes((prev) =>
+//         prev
+//           .map((item) =>
+//             item.id === toDelete.id
+//               ? {
+//                 ...item,
+//                 value: item.value.filter(
+//                   (val) =>
+//                     (toDelete.name && val !== toDelete.name) ||
+//                     (toDelete.id && val !== String(toDelete.id))
+//                 ),
+//               }
+//               : item
+//           )
+//           .filter((item) => item.value.length > 0)
+//       );
+//     }
+//   }, [toDelete]);
 
 
   const form = useForm<AttributeFormData>({
@@ -118,30 +128,30 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave, toDelete }:
         variant_name: selectedVariation.name,
       });
 
-      setSelectedAttributes((prev) => {
-        console.log('this is that',prev);
-        
-        const existing = prev.find((item) => item.id === currentVariantId);
+      // setSelectedAttributes((prev) => {
+      //   console.log('this is that', prev);
 
-        if (existing) {
-          return prev.map((item) =>
-            item.id === currentVariantId
-              ? {
-                ...item,
-                value: [...new Set([...item.value, selectedAttribute.name])],
-              }
-              : item
-          );
-        }
+      //   const existing = prev.find((item) => item.id === currentVariantId);
 
-        return [
-          ...prev,
-          {
-            id: currentVariantId,
-            value: [selectedAttribute.name],
-          },
-        ];
-      });
+      //   if (existing) {
+      //     return prev.map((item) =>
+      //       item.id === currentVariantId
+      //         ? {
+      //           ...item,
+      //           value: [...new Set([...item.value, selectedAttribute.name])],
+      //         }
+      //         : item
+      //     );
+      //   }
+
+      //   return [
+      //     ...prev,
+      //     {
+      //       id: currentVariantId,
+      //       value: [selectedAttribute.name],
+      //     },
+      //   ];
+      // });
 
     }
 
@@ -161,7 +171,7 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave, toDelete }:
     form.handleSubmit((data) => onSubmit(data, event))(event);
   };
 
-console.log('updating thing', selectedAttributes);
+  // console.log('updating thing', selectedAttributes);
 
 
   return (
@@ -180,14 +190,14 @@ console.log('updating thing', selectedAttributes);
               searchPlaceholder="Search Attribute Name..."
               options={
                 attributes
-                  ?.filter((attribute) => {
-                    const alreadySelected = selectedAttributes.some(
-                      (attr) =>
-                        attr.id === currentVariantId &&
-                        attr.value.includes(attribute.name)
-                    );
-                    return !alreadySelected;
-                  })
+                  // ?.filter((attribute) => {
+                  //   const alreadySelected = selectedAttributes.some(
+                  //     (attr) =>
+                  //       attr.id === currentVariantId &&
+                  //       attr.value.includes(attribute.name)
+                  //   );
+                  //   return !alreadySelected;
+                  // })
                   .map((attribute) => ({
                     value: attribute.id.toString(),
                     label: attribute.name,
