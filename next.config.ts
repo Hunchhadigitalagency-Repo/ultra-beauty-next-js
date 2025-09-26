@@ -68,6 +68,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: "api.ultrabeautybrands.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ultrabeauty.blr1.digitaloceanspaces.com",
       }
     ],
   },
