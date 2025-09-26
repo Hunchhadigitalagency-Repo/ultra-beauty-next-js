@@ -35,55 +35,71 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="lg:hidden">
-          <Menu className="size-5" />
+          <Menu className="size-5 text-pink-600" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="p-4 w-80">
+      <SheetContent
+        side="right"
+        className="p-6 w-80 bg-white shadow-xl border-l border-pink-200"
+      >
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
-          <SheetDescription>Navigate through our website</SheetDescription>
+          <SheetTitle className="text-lg font-semibold text-pink-600">
+            Menu
+          </SheetTitle>
+          <SheetDescription className="text-sm text-gray-500">
+            Navigate through our website
+          </SheetDescription>
         </SheetHeader>
-        <nav className="flex flex-col mt-8 space-y-4">
-          <div className="pt-4 space-y-2">
+
+        <nav className="flex flex-col mt-4 space-y-3">
+          <div className="pt-4 ">
             <Link
               href="/"
-              className="block text-blue-600 hover:text-blue-800"
+              className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
             <Link
+              href="/shop"
+              className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
+              onClick={() => setIsOpen(false)}
+            >
+              Shop
+            </Link>
+            <Link
               href="/blogs"
-              className="block text-blue-600 hover:text-blue-800"
+              className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
               onClick={() => setIsOpen(false)}
             >
               Blogs
             </Link>
             <Link
               href="/about"
-              className="block text-blue-600 hover:text-blue-800"
+              className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
               onClick={() => setIsOpen(false)}
             >
               About Us
             </Link>
             <Link
               href="/contact"
-              className="block text-blue-600 hover:text-blue-800"
+              className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
               onClick={() => setIsOpen(false)}
             >
               Contact Us
             </Link>
+
             {isLoggedIn ? (
               <>
                 <Link
                   href="/help"
-                  className="block text-blue-600 hover:text-blue-800"
+                  className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Help and Support
                 </Link>
                 <button
-                  className="block text-blue-600 hover:text-blue-800 text-left w-full"
+                  className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 w-full text-left transition"
                   onClick={handleLogout}
                 >
                   Logout
@@ -93,21 +109,21 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
               <>
                 <Link
                   href="/login"
-                  className="block text-blue-600 hover:text-blue-800"
+                  className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
                   href="/signup"
-                  className="block text-blue-600 hover:text-blue-800"
+                  className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Signup
                 </Link>
                 <Link
                   href="/help"
-                  className="block text-blue-600 hover:text-blue-800"
+                  className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Help and Support
@@ -117,6 +133,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
           </div>
         </nav>
       </SheetContent>
+
       {isLoggedIn && showLogoutModal && (
         <LogoutModal
           showLogoutModal={showLogoutModal}

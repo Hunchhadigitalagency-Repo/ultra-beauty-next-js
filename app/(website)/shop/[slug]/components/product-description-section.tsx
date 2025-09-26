@@ -14,8 +14,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import esewa from "@/assets/esewa.png";
-import khalti from "@/assets/khalti.png";
+// import esewa from "@/assets/esewa.png";
+// import khalti from "@/assets/khalti.png";
 import coin from "@/assets/coin-dollar.png";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -286,12 +286,12 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               C.O.D
             </span>
           </div>
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+          {/* <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image src={esewa.src} alt="esewa" fill className="rounded-full " />
           </div>
           <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image src={khalti.src} alt="Khalti" fill className="rounded-full " />
-          </div>
+          </div> */}
         </div>
       </div>
       {/*Bundle Product Section */}

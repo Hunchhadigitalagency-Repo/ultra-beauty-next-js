@@ -40,7 +40,7 @@ const NotificationModal = ({ onClose }: { onClose: () => void }) => {
                     </p>
                 </div>
             ) : error ? (
-                <div className='h-60 flex w-full justify-center items-center'>
+                <div className='h-60 flex flex-col w-full justify-center items-center'>
                     <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
                     <p className='font-extralight text-sm text-gray-400'>
                         Oops! Something went wrong...
@@ -53,35 +53,22 @@ const NotificationModal = ({ onClose }: { onClose: () => void }) => {
                     </p>
                 </div>
             ) : (
-                <div>
-                    <div className="w-full flex justify-end gap-5 items-center">
-                        <button className="text-primary text-sm font-medium cursor-pointer">
-                            Mark All as Read
-                        </button>
-                        <button className="text-primary text-sm font-medium cursor-pointer">
-                            Delete All Notification
-                        </button>
-                    </div>
-                    <div className="max-h-[350px] overflow-y-auto space-y-4">
-                        {data?.map((notification) => (
-                            <div key={notification.id} className="flex items-start gap-3 pb-3">
-                                <Image
-                                    src={notification.image || australis}
-                                    width={300}
-                                    height={300}
-                                    alt="Notification"
-                                    className="w-12 h-12 rounded object-cover"
-                                />
-                                <p className={`text-sm text-foreground ${notification.is_active ? 'font-normal' : 'font-medium'}`}>
-                                    {notification.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-
+                <div className="max-h-[350px] overflow-y-auto space-y-4">
+                    {data?.map((notification) => (
+                        <div key={notification.id} className="flex items-start gap-3 pb-3">
+                            <Image
+                                src={notification.image || australis}
+                                width={300}
+                                height={300}
+                                alt="Notification"
+                                className="w-12 h-12 rounded object-cover"
+                            />
+                            <p className={`text-sm text-foreground ${notification.is_active ? 'font-normal' : 'font-medium'}`}>
+                                {notification.description}
+                            </p>
+                        </div>
+                    ))}
                 </div>)}
-
-
         </div>
     );
 };
