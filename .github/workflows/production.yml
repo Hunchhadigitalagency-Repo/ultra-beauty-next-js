@@ -1,9 +1,8 @@
-name: Deploy to Droplet
+name: Deploy to Droplet (Production)
 on:
   push:
     branches:
       - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +17,7 @@ jobs:
         node-version: '18'
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install dependencies (with dev)
       run: npm ci
 
     - name: Build application
@@ -29,58 +28,27 @@ jobs:
         NEXT_PUBLIC_ESEWA_SECRET_KEY: ${{ secrets.NEXT_PUBLIC_ESEWA_SECRET_KEY }}
       run: npm run build
 
+    - name: Prune devDependencies
+      run: npm prune --production
+
     - name: Create deployment package
       run: |
-        # Create a deployment directory
         mkdir deployment-package
 
-        # Copy build output and essential files
+        # Copy runtime only
         cp -r .next deployment-package/
+        cp -r public deployment-package/ || true
+        cp -r assets deployment-package/ || true
+
+        # Keep node_modules (production-only after prune)
+        cp -r node_modules deployment-package/
+
+        # Copy configs
         cp package.json deployment-package/
-        cp package-lock.json deployment-package/
-        cp next.config.ts deployment-package/
         cp ecosystem.config.js deployment-package/
+        cp next.config.ts deployment-package/ 
 
-        # Copy all source code directories needed at runtime
-        cp -r app deployment-package/
-        cp -r lib deployment-package/
-        cp -r components deployment-package/
-        cp -r services deployment-package/
-        cp -r types deployment-package/
-        cp -r constants deployment-package/
-        cp -r hooks deployment-package/
-        cp -r schemas deployment-package/
-        cp -r redux deployment-package/
-        cp -r hoc deployment-package/
-
-        # Copy public folder if it exists
-        if [ -d "public" ]; then
-          cp -r public deployment-package/
-        fi
-
-        # Copy assets folder if it exists
-        if [ -d "assets" ]; then
-          cp -r assets deployment-package/
-        fi
-
-        # Copy configuration files
-        if [ -f "tsconfig.json" ]; then
-          cp tsconfig.json deployment-package/
-        fi
-        if [ -f "next-env.d.ts" ]; then
-          cp next-env.d.ts deployment-package/
-        fi
-        if [ -f "tailwind.config.js" ]; then
-          cp tailwind.config.js deployment-package/
-        fi
-        if [ -f "postcss.config.mjs" ]; then
-          cp postcss.config.mjs deployment-package/
-        fi
-        if [ -f "components.json" ]; then
-          cp components.json deployment-package/
-        fi
-
-        # Create a compressed archive
+        # Create tarball
         tar -czf deployment.tar.gz -C deployment-package .
 
     - name: Upload deployment package
@@ -105,46 +73,23 @@ jobs:
         password: ${{ secrets.DROPLET_PASSWORD }}
         script: |
           set -e
-
-          # Navigate to project directory
           cd /var/www/production/production-ultra-beauty-next-js
 
-          # Stop PM2 process if running
-          pm2 stop ultra-beauty-frontend-production 2>/dev/null || echo "Process not running"
-
-          # Backup current deployment (optional)
-          if [ -d ".next" ]; then
-            rm -rf .next.backup 2>/dev/null || true
-            mv .next .next.backup 2>/dev/null || true
-          fi
+          # Stop PM2 process
+          pm2 stop ultra-beauty-frontend-production 2>/dev/null || true
 
           # Extract new deployment
+          rm -rf .next node_modules public assets || true
           tar -xzf /tmp/deployment.tar.gz -C .
 
-          # Create logs directory if it doesn't exist
-          mkdir -p logs
-
-          # Install only production dependencies
-          npm ci --only=production
-
-          # Verify environment file exists
-          if [ ! -f ".env" ]; then
-            echo "⚠️  Warning: .env file not found. Please ensure environment variables are set."
+          # Restart PM2
+          if pm2 describe ultra-beauty-frontend-production > /dev/null; then
+            pm2 restart ecosystem.config.js --update-env
           else
-            echo "✅ Environment file found"
-          fi
-
-          # Start/restart PM2 process using ecosystem file
-          if pm2 describe ultra-beauty-frontend-production > /dev/null 2>&1; then
-            echo "Restarting existing PM2 process..."
-            pm2 restart ecosystem.config.js
-          else
-            echo "Starting new PM2 process..."
-            pm2 start ecosystem.config.js
+            pm2 start ecosystem.config.js --name ultra-beauty-frontend-production
           fi
 
           # Clean up
           rm -f /tmp/deployment.tar.gz
-          rm -rf .next.backup 2>/dev/null || true
 
-          echo "🚀 Deployment completed successfully!"
+          echo "🚀 Production deployment completed!"
