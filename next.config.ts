@@ -60,6 +60,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "developapi.ultrabeautybrands.com",
       },
+      {
+        protocol: "https",
+        hostname: "api.ultrabeautybrands.com",
+      }
+      ,
+      {
+        protocol: "http",
+        hostname: "api.ultrabeautybrands.com",
+      }
     ],
   },
 };
