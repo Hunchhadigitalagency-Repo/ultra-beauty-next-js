@@ -68,7 +68,11 @@ export interface IProduct {
   updated_at: string;
   package: any[] | null;
   my_wishlist: boolean;
+<<<<<<< HEAD
+  average_rating: number;
+=======
   sold_unit: number
+>>>>>>> 096e23c46adc159a2a2218757293ebb155a52c87
 }
 export interface CategoryFilter {
   id: number;

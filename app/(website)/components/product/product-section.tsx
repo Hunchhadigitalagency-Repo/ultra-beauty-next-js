@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Result } from '@/types/product';
+import { IProduct } from '@/types/product';
 import { useAppSelector } from '@/redux/hooks';
 import LinkText from '@/components/common/header/link-text';
 import { useToggleWishlist } from '@/utils/wishList-utility';
@@ -20,7 +20,7 @@ interface ProductSectionProps {
   headerDescription: string;
   buttonText?: string;
   headerLink: string;
-  products: Result[] | [];
+  products: IProduct[] | [];
   isLoading?: boolean;
   error?: Error | null;
 }
