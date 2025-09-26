@@ -27,6 +27,7 @@ import * as z from "zod";
 import useFetchDropdown from "@/hooks/use-fetch-dropdown";
 import type { IAttribute } from "@/types/Settings";
 import { FormCombobox } from "@/components/common/form/form-combobox";
+import { useEffect, useState } from "react";
 
 const attributeSchema = z.object({
   name: z.string().min(1, "Please select an attribute name"),
@@ -37,7 +38,11 @@ type AttributeFormData = z.infer<typeof attributeSchema>;
 
 interface AttributeModalProps {
   isOpen: boolean;
+  currentVariantId?: number | string;
   onClose: () => void;
+  toDelete?: {
+    id: number | string | null, name: string | null
+  },
   onSave?: (data: {
     attribute: string;
     attribute_variant: string;
@@ -45,10 +50,42 @@ interface AttributeModalProps {
     variant_name: string;
   }) => void;
 }
-const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
+
+interface AttMana {
+  id: number | string;
+  value: string[]
+}
+
+const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave, toDelete }: AttributeModalProps) => {
   const { data: attributes } = useFetchDropdown<IAttribute>(
     "/attribute/?pagination=false"
   );
+
+  const [selectedAttributes, setSelectedAttributes] = useState<AttMana[]>([]);
+
+
+
+  useEffect(() => {
+    if (toDelete?.id !== undefined) {
+      setSelectedAttributes((prev) =>
+        prev
+          .map((item) =>
+            item.id === toDelete.id
+              ? {
+                ...item,
+                value: item.value.filter(
+                  (val) =>
+                    (toDelete.name && val !== toDelete.name) ||
+                    (toDelete.id && val !== String(toDelete.id))
+                ),
+              }
+              : item
+          )
+          .filter((item) => item.value.length > 0)
+      );
+    }
+  }, [toDelete]);
+
 
   const form = useForm<AttributeFormData>({
     resolver: zodResolver(attributeSchema),
@@ -57,6 +94,8 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
       value: "",
     },
   });
+
+
 
   const onSubmit = (data: AttributeFormData, event?: React.FormEvent) => {
     if (event) {
@@ -71,18 +110,45 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
       (variation) => variation.id.toString() === data.value
     );
 
-    if (selectedAttribute && selectedVariation) {
+    if (selectedAttribute && selectedVariation && currentVariantId !== undefined) {
       onSave?.({
         attribute: data.name,
         attribute_variant: data.value,
         attribute_name: selectedAttribute.name,
         variant_name: selectedVariation.name,
       });
+
+      setSelectedAttributes((prev) => {
+        console.log('this is that',prev);
+        
+        const existing = prev.find((item) => item.id === currentVariantId);
+
+        if (existing) {
+          return prev.map((item) =>
+            item.id === currentVariantId
+              ? {
+                ...item,
+                value: [...new Set([...item.value, selectedAttribute.name])],
+              }
+              : item
+          );
+        }
+
+        return [
+          ...prev,
+          {
+            id: currentVariantId,
+            value: [selectedAttribute.name],
+          },
+        ];
+      });
+
     }
 
     form.reset();
     onClose();
   };
+
 
   const handleClose = () => {
     form.reset();
@@ -94,6 +160,9 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
     event.stopPropagation();
     form.handleSubmit((data) => onSubmit(data, event))(event);
   };
+
+console.log('updating thing', selectedAttributes);
+
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -110,12 +179,23 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
               placeholder="Select an attribute"
               searchPlaceholder="Search Attribute Name..."
               options={
-                attributes?.map((attribute) => ({
-                  value: attribute.id.toString(),
-                  label: attribute.name,
-                })) || []
+                attributes
+                  ?.filter((attribute) => {
+                    const alreadySelected = selectedAttributes.some(
+                      (attr) =>
+                        attr.id === currentVariantId &&
+                        attr.value.includes(attribute.name)
+                    );
+                    return !alreadySelected;
+                  })
+                  .map((attribute) => ({
+                    value: attribute.id.toString(),
+                    label: attribute.name,
+                  })) || []
               }
+
             />
+
             <FormField
               control={form.control}
               name="value"
@@ -127,35 +207,29 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
                   )?.variations || [];
                 return (
                   <FormItem>
-                    <FormLabel className="">
+                    <FormLabel>
                       ATTRIBUTE VALUE
                       <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value?.toString()}
-                      defaultValue={field.value?.toString()}
                     >
                       <FormControl>
-                        <SelectTrigger className="">
-                          <SelectValue
-                            defaultValue={field.value?.toString()}
-                            placeholder="Select Attribute Value"
-                          />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Attribute Value" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {variations.length > 0 ? (
-                          variations.map((option, index) => {
-                            return (
-                              <SelectItem
-                                key={`variation-${option.id}-${option.name}-${index}`}
-                                value={option?.id ? option.id.toString() : ""}
-                              >
-                                {option.name}
-                              </SelectItem>
-                            );
-                          })
+                          variations.map((option, index) => (
+                            <SelectItem
+                              key={`variation-${option.id}-${index}`}
+                              value={option.id.toString()}
+                            >
+                              {option.name}
+                            </SelectItem>
+                          ))
                         ) : (
                           <p className="text-sm px-4">No variations Found</p>
                         )}
@@ -166,7 +240,9 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
                 );
               }}
             />
-            <div className="flex justify-end w-full ">
+
+            {/* Save Button */}
+            <div className="flex justify-end w-full">
               <Button
                 type="submit"
                 className="w-auto px-10 bg-black rounded-3xl hover:bg-gray-500"
@@ -180,4 +256,5 @@ const AttributeModal = ({ isOpen, onClose, onSave }: AttributeModalProps) => {
     </Dialog>
   );
 };
+
 export default AttributeModal;

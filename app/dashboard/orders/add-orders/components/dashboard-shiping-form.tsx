@@ -29,7 +29,7 @@ import { setShippingInfo } from "@/redux/features/checkout-slice";
 import { ShippingFormValuesAdmin, ShippingSchemaAdmin } from "@/schemas/checkout/checkout-dashboard";
 
 type ShippingFormProps = {
-  onDataChange: (data: Partial<ShippingFormValuesAdmin> | null) => void;
+  onDataChange: (data: Partial<ShippingFormValuesAdmin>) => void;
   getCity: (data: string) => void;
   isWebsite: boolean;
 };

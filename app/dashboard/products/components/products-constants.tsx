@@ -12,16 +12,15 @@ export const ProductConstants = (dispatch: AppDispatch): Col<IProduct>[] => {
   return [
     {
       title: "PRODUCT NAME",
-
       render: (data: IProduct) => (
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
             <Image
-              src={data?.images?.[0].file}
+              src={data?.images[0]?.file}
               alt={data.name}
               width={40}
               height={40}
-              className="object-cover"
+              className="object-cover h-full w-full"
             />
           </div>
           <span className="font-medium text-gray-800">{data.name}</span>
@@ -36,18 +35,23 @@ export const ProductConstants = (dispatch: AppDispatch): Col<IProduct>[] => {
     {
       title: "STATUS",
 
-      render: () => <StatusCard status={""} />,
+      render: (data: IProduct) => (
+        <StatusCard
+          status={
+            parseInt(data?.quantity || '0') === 0
+              ? "empty"
+              : parseInt(data?.quantity || '0') <= 10
+                ? "low stock"
+                : "in stock"
+          }
+        />
+      ),
     },
     {
       title: "SOLD",
 
-      render: () => <span>{ }</span>,
+      render: (data: IProduct) => <span>{data.sold_unit}</span>,
     },
-    {
-      title: "TOTAL EARNINGS",
-      render: () => <span>{ }</span>,
-    },
-
     {
       title: "Action",
       render: (data: IProduct) => (
