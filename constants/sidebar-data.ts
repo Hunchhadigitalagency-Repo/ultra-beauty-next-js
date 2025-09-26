@@ -108,11 +108,11 @@ export const sidebarData = {
           url: "/dashboard/contacts",
           icon: Phone,
         },
-        {
-          title: SidebarItems.PARTNER_COMPANY,
-          url: "/dashboard/partner-company",
-          icon: Building2,
-        },
+        // {
+        //   title: SidebarItems.PARTNER_COMPANY,
+        //   url: "/dashboard/partner-company",
+        //   icon: Building2,
+        // },
         {
           title: SidebarItems.FAQS,
           url: "/dashboard/faqs",
@@ -128,11 +128,11 @@ export const sidebarData = {
           url: "/dashboard/newsletters-clients",
           icon: Info,
         },
-        {
-          title: SidebarItems.SMS,
-          url: "/dashboard/sms",
-          icon: MessageSquare,
-        },
+        // {
+        //   title: SidebarItems.SMS,
+        //   url: "/dashboard/sms",
+        //   icon: MessageSquare,
+        // },
         {
           title: SidebarItems.BANNERS,
           url: "/dashboard/banners",

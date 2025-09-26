@@ -1,27 +1,35 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
 import { IBlog } from "@/types/cms";
+import { AlertCircle } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
+import React, { useMemo, useState } from "react";
 import BlogCard from "../../components/blogs/blog-card";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SearchBox from "@/components/common/filter/search-box";
+import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
-import { useAppSelector } from "@/redux/hooks";
-import { AlertCircle } from "lucide-react";
+import BlogsFilter from "./blogs-filter";
+
 
 const BlogsList = () => {
 
-  const [searchValue, setSearchValue] = useState("");
   const { isLoggedIn } = useAppSelector(state => state.authentication)
+
+  const [searchValue, setSearchValue] = useState("");
+  const [filterValue, setFilterValue] = useState('');
+
+
+  const getValue = (value: string) => {
+    setSearchValue(value);
+  };
 
   // Dynamically create the search URL
   const searchUrl = useMemo(() => {
     const encoded = encodeURIComponent(searchValue.trim());
     return encoded ? `/cms-blogs/?search=${encoded}` : "/cms-blogs/";
   }, [searchValue]);
-
   // Custom infinite fetch hook
   const {
     data: blogs,
@@ -30,16 +38,14 @@ const BlogsList = () => {
     fetchNext,
   } = useInfiniteFetch<IBlog>(searchUrl, "9", undefined, undefined, isLoggedIn); // Fetch 9 at a time
 
-  // Set search value when search box input changes
-  const getValue = (value: string) => {
-    setSearchValue(value);
-  };
-
   return (
     <section className="space-y-4 padding">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader title="Blogs" description="Watch inside story" />
-        <SearchBox placeholder="Search Blogs" sendValue={getValue} />
+        <div className="flex gap-4">
+          <SearchBox placeholder="Search Blogs" sendValue={getValue} />
+          <BlogsFilter selectedValue={filterValue} onChange={setFilterValue} />
+        </div>
       </div>
 
       <div>
@@ -63,7 +69,7 @@ const BlogsList = () => {
               <div className="w-full h-60 flex flex-col justify-center items-center">
                 <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
                 <p className="font-extralight text-sm text-gray-400 capitalize">
-                  Oops! no blogs right now...
+                  Oops! blogs not found...
                 </p>
               </div>
             ) : (

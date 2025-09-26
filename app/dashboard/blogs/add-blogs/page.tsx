@@ -5,7 +5,7 @@ import BlogForm from '../components/blog-form'
 const AddBlogsPage = () => {
   return (
     <div>
-      <BlogForm initialData={null}/>
+      <BlogForm initialData={null} />
     </div>
   )
 }

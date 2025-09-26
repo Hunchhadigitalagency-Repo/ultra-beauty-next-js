@@ -58,7 +58,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
                 <div className="relative w-full rounded-none h-28 md:h-32">
                   <Image
                     src={brand?.brand_image}
-                    alt={`${brand?.name} logo`}
+                    alt={`${brand?.brand_name} logo`}
                     layout="fill"
                     className='object-cover'
                   />
@@ -68,7 +68,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
               <div className="w-full space-y-1">
                 <MdFormatQuote className="w-6 h-6 text-primary sm:w-10 sm:h-10 md:w-14 md:h-14" />
                 <h3 className="text-lg font-bold sm:text-xl md:text-2xl text-primary">
-                  {brand?.name}
+                  {brand?.brand_name}
                 </h3>
                 <p className="text-xs leading-relaxed text-justify sm:text-sm text-foreground font-poppins">
                   {brand?.description}

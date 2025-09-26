@@ -220,13 +220,24 @@ export interface Link {
   previous: string;
 }
 
+export interface MyBrand {
+  id: number
+  brand_name: string
+  brand_image: string
+  description?: string
+  is_featured: boolean
+  is_active: boolean
+  created_at: string
+  updated_at: string
+  is_deleted: boolean
+}
 export interface BrandResponse {
   links: Link;
   count: number;
   page_size: number;
   total_pages: number;
   current_page: number;
-  results: Brand[]
+  results: MyBrand[]
 }
 
 export interface Brand {

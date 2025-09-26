@@ -285,7 +285,12 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                     <FormControl>
                       <RichTextEditor
                         value={field.value}
-                        onChange={field.onChange}
+                        onChange={
+                          (value) => {
+                            field.onChange(value);
+                            form.trigger("description");
+                          }
+                        }
                         placeholder="Enter the Description"
                         heightClass="!max-h-[250px] h-[250px]"
                       />

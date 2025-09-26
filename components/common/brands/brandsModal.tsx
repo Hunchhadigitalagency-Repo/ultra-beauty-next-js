@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Brand } from '@/types/product';
+import { MyBrand } from '@/types/product';
 import { useRouter } from 'next/navigation';
 import SearchBox from '../filter/search-box'
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,7 +27,7 @@ const BrandsModal = () => {
     const {
         data: searchedBrandsData,
         loading
-    } = useInfiniteFetch<Brand>(path || "", "", searchTerm.toString(), "", isLoggedIn);
+    } = useInfiniteFetch<MyBrand>(path || "", "", searchTerm.toString(), "", isLoggedIn);
     console.log(searchedBrandsData, "searched brand data")
 
     const handleSearchValue = useCallback((value: string) => {
@@ -91,12 +91,12 @@ const BrandsModal = () => {
                                                 <div className="relative w-12 h-12 lg:w-16 lg:h-16">
                                                     <Image
                                                         src={item.brand_image}
-                                                        alt={item.name || 'Brand Image'}
+                                                        alt={item.brand_name || 'Brand Image'}
                                                         fill
                                                         className="object-cover rounded"
                                                     />
                                                 </div>
-                                                <h1 className="text-sm font-medium">{item.name}</h1>
+                                                <h1 className="text-sm font-medium">{item.brand_name}</h1>
                                             </div>
                                             <ArrowUpLeft onClick={() => handleBrandClick(item.id)}
                                                 className="w-4 h-4 md:w-5 md:h-5" />
