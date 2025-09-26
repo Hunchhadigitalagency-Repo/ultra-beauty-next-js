@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -91,3 +92,14 @@ export const getTransectionAmount = (data: any[], total_amount: number) => {
 
   return payableAmount.toFixed(2);
 };
+
+
+
+export const handleImageError = (err: any) => {
+  if(err.images || err.image){
+    const errorMessage = (err.images || err.image)?.[0]?.file?.message
+    console.log('this is message', errorMessage);
+    
+    toast.error(errorMessage);
+  }
+}

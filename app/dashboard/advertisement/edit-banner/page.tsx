@@ -5,6 +5,7 @@ import AdvertiseForm from '../components/avdertise-form'
 
 const EditAdverBanner = () => {
     const { selectedData } = useAppSelector(state => state.authentication)
+    
     return (
         <div>
             <AdvertiseForm initialData={selectedData} />

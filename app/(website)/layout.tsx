@@ -6,9 +6,10 @@ import Footer from "@/components/common/footer/footer";
 import MobileFootbar from "@/components/mobile/MobileFootbar";
 // import MobileFilterMenu from "@/components/mobile/MobileFilterMenu";
 import AnnouncementBar from "@/components/common/navbar/announcement-bar";
+import useTrackVisit from "@/hooks/use-track-visit";
 
 const WebsiteLayout = ({ children }: { children: React.ReactNode }) => {
-
+  useTrackVisit();
   return (
     <div className="bg-white">
       <AnnouncementBar />

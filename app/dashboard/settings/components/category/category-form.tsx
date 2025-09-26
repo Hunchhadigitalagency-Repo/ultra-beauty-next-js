@@ -150,53 +150,56 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
                   </FormItem>
                 )}
               />
+              <div className="flex gap-5">
 
-              <FormField
-                control={form.control}
-                name="is_featured"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      IS FEATURED
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="activate"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="activate"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="activate"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="activate"
+                        className="text-muted-foreground"
+                      >
+                        ACTIVATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="is_featured"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="activate"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="activate"
+                        className="text-muted-foreground"
+                      >
+                        IS FEATURED
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </form>
           </Form>
         </CardContent>

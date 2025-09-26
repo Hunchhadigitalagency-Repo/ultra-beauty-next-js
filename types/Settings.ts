@@ -56,6 +56,7 @@ export interface IBrand {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  is_featured: boolean;
 }
 
 export interface IAttributeVariation {
