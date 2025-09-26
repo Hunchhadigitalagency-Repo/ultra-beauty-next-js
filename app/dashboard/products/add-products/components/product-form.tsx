@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
@@ -30,7 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
+import { cn, handleImageError } from "@/lib/utils";
 import {
   type ProductFormValues,
   productSchema,
@@ -61,16 +60,17 @@ import {
 } from "@/lib/api/dropdown/dropdown-api";
 
 import VariantAttributeDisplay from "./variant-attribute-display";
-import { IDashboardProduct } from "@/types/product";
 import { formatDateForInput } from "@/lib/date-time-utils";
 import ButtonLoader from "@/components/common/loader/button-loader";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
 import api from "@/services/api-instance";
 import { setSelectedData } from "@/redux/features/authentication-slice";
+import { IProduct } from "@/types/type-product";
 
 interface ProductFormProps {
-  initialData: IDashboardProduct | null;
+  initialData: IProduct | null;
 }
+interface AttMana { id: number, value: string }
 
 export default function ProductForm({ initialData }: ProductFormProps) {
   const dispatch = useAppDispatch();
@@ -87,6 +87,13 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const [currentVariantIndex, setCurrentVariantIndex] = useState<number | null>(
     null
   );
+  const [variantId, setVaiantId] = useState<number>(1);
+  const [currentVariantId, setCurrentVaiantId] = useState<number | null>(null);
+  const [toDeleteAttribute, setToDeleteAttribute] = useState<{ id: number | null, name: string | null }>({
+    id: null,
+    name: null
+  })
+  const [variantStatus, setVariantStatus] = useState<AttMana[]>([])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -143,8 +150,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       const variantItems =
         initialData.variants?.map((variant) => {
-          // console.log(variant);
+          console.log(variant);
           return {
+            id: variant.id,
             name: variant.item_name || "",
             price: variant.item_price || "",
             quantity: Number(variant.item_quantity) || 0,
@@ -160,12 +168,32 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               })) || [],
           };
         }) || [];
+      const newVariantStatus: any = [];
 
+      initialData.variants?.forEach((variant) => {
+        // Collect all attribute names for the current variant
+        const attributeNames: string[] = variant.product_variants
+          ?.map((variantClass) => variantClass.attribute?.name)
+          // Filter out null/undefined names
+          .filter((name): name is string => !!name)
+          || [];
+
+        if (variant.id !== undefined) {
+          newVariantStatus.push({
+            id: variant.id,
+            // Value is the array of attribute names (e.g., ["Color", "Size"])
+            value: attributeNames,
+          });
+        }
+      });
+
+      setVariantStatus(newVariantStatus);
+      setVaiantId(newVariantStatus.length);
       const formData = {
         productName: initialData.name || "",
         sku: initialData.sku || "",
         productGeneralDescription: initialData.general_description || "",
-        quantity: initialData.quantity || 0,
+        quantity: Number(initialData.quantity) ?? 0,
         productDetailedDescription: initialData.detail_description || "",
         category: initialData.category?.id.toString() || "",
         sub_category: initialData?.subcategory?.id.toString() || "",
@@ -235,14 +263,19 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   ]);
 
   const onSubmit = async (data: ProductFormValues) => {
+
     try {
       setLoading(true);
       const formData = new FormData();
 
-      convertedFiles.forEach((fileData, index) => {
+      let fileIndex = 0;
+
+      convertedFiles.forEach((fileData,) => {
+
         if (fileData.file instanceof File) {
-          formData.append(`images[${index}][file]`, fileData.file);
-          formData.append(`images[${index}][file_type]`, "image");
+          formData.append(`images[${fileIndex}][file]`, fileData.file);
+          formData.append(`images[${fileIndex}][file_type]`, "image");
+          fileIndex++
         }
       });
 
@@ -275,9 +308,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       formData.append("flash_sale_discount", data.flashSalesDiscount || "");
       formData.append("is_flash_sale", data.activateFlashSales.toString());
-      data.package?.forEach((item, index) => {
-        formData.append(`package[${index}][id]`, item.id.toString());
-        formData.append(`package[${index}][name]`, item.name);
+      data.package?.forEach((item) => {
+        formData.append(`package[]`, item?.id.toString());
       });
       formData.append("inventory", data.selectInventory ?? "");
       if (data.variantItems && data.variantItems.length > 0) {
@@ -293,6 +325,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         formData.append("attribute_image", data.attributeImage.toString());
 
         data.variantItems.forEach((item, index) => {
+          if (item.id) {
+            formData.append(`variants[${index}][id]`, item.id.toString());
+          }
           if (item.name)
             formData.append(`variants[${index}][item_name]`, item.name);
           if (item.price)
@@ -355,7 +390,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   };
 
   const addVariant = () => {
+
     const newItem = {
+      variantId: variantId,
       name: sameAsParentName ? productName : "",
       price: attributePrice ? price : "",
       quantity: 0,
@@ -410,9 +447,14 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   }, [categories, initialData, form]);
   const [Error, setError] = useState<string>();
   const handlevError = (err: any) => {
+
     if (err.variantItems) {
       setError(err.variantItems?.root?.message);
     }
+    if (err.images || err.image) {
+      handleImageError(err)
+    }
+
   };
   return (
     <div className=" space-y-6">
@@ -461,7 +503,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <Input
                           type="number"
                           placeholder="Enter the Quantity"
-                          value={field.value ?? ""}
+                          value={field.value ?? ''}
                           min={1} // prevents typing values < 1
                           onChange={(e) => {
                             const val = e.target.valueAsNumber;
@@ -504,18 +546,22 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Textarea
-                          className="text-justify"
-                          placeholder="Enter the General Description"
-                          {...field}
-                          rows={3}
+                        <TextEditor
+                          heightClass="!max-w-[300px]"
+                          value={field.value || ""}
+                          onChange={(value) => {
+                            console.log('the value has ben changed', value);
+
+                            field.onChange(value);
+                            form.trigger("productGeneralDescription");
+                          }}
+                          placeholder="Enter the Product Description"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="productDetailedDescription"
@@ -527,13 +573,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       </FormLabel>
                       <FormControl>
                         <TextEditor
-                          heightClass="!max-w-[300px]"
-                          value={field.value || ""}
+                          value={field.value}
                           onChange={(value) => {
                             field.onChange(value);
                             form.trigger("productDetailedDescription");
                           }}
-                          placeholder="Enter the Product Detailed Description"
+                          placeholder="Enter the Product Description"
                         />
                       </FormControl>
                       <FormMessage />
@@ -659,7 +704,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           placeholder="Please enter the Discount Percentage"
                           onChange={(e) => {
                             const val = e.target.valueAsNumber;
-                            field.onChange(val > 0 ? val.toString() : "");
+                            field.onChange(val > 0 ? val.toString() : ""); // only allow positive values
                           }}
                         />
                       </FormControl>
@@ -978,7 +1023,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                                       : undefined
                                   )
                                 }
-                                required
                               />
                             </FormControl>
                             <FormMessage />
@@ -1001,6 +1045,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                                   </FormLabel>
                                   <FormControl>
                                     <SingleImageUploader
+                                      id={`cover-upload-${index}`} // 👈 unique id per uploader
+                                      key={field.name}
                                       onChange={field.onChange}
                                       onRemove={() => field.onChange(undefined)}
                                       value={field.value}
@@ -1035,6 +1081,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         className="bg-black rounded-3xl hover:bg-gray-500 pr-4"
                         onClick={() => {
                           setCurrentVariantIndex(index);
+                          if (field.variantId) {
+                            console.log(variantId);
+                            
+                            setCurrentVaiantId(field.variantId)
+                          }
                           setIsAttributeModalOpen(true);
                         }}
                       >
@@ -1045,9 +1096,17 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           form.watch(`variantItems.${index}.variant_classes`) ||
                           []
                         }
-                        onDelete={(attributeIndex) =>
-                          handleDeleteAttribute(index, attributeIndex)
-                        }
+                        onDelete={(attributeIndex, name) => {
+                          if (field.variantId) {
+                            setCurrentVaiantId(field.variantId)
+                            setToDeleteAttribute({
+                              id: field.variantId,
+                              name: name,
+                            });
+                          }
+                          handleDeleteAttribute(index, attributeIndex);
+                        }}
+
                       />
                     </div>
                     {Error && <span className="text-red">{Error}</span>}
@@ -1077,43 +1136,37 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           onChange={field.onChange}
                           value={convertedFiles}
                           onRemove={async (updatedFiles) => {
-                            const removedFiles = convertedFiles.filter(
-                              (file) => !updatedFiles.includes(file)
-                            );
+                            const removedFiles = convertedFiles.filter((file) => !updatedFiles.includes(file))
 
                             for (const removed of removedFiles) {
                               if (removed.id) {
                                 try {
-                                  const newImages = initialData?.images?.filter(
-                                    (img) => img.id !== removed.id
-                                  );
+                                  const newImages = initialData?.images?.filter((img) => img.id !== removed.id)
                                   dispatch(
                                     setSelectedData({
                                       ...initialData,
                                       images: newImages,
-                                    })
-                                  );
+                                    }),
+                                  )
 
-                                  const response = await api.delete(
-                                    `/delete-product-image/${removed.id}/`
-                                  );
+                                  const response = await api.delete(`/delete-product-image/${removed.id}/`)
                                   if (response?.status === 200) {
-                                    toast.success(
-                                      `File with id ${removed.id} deleted`
-                                    );
+                                    toast.success(`File with id ${removed.id} deleted`)
                                   }
                                 } catch (error) {
-                                  console.error(error);
-                                  toast.error("Error deleting file:");
+                                  console.error(error)
+                                  toast.error("Error deleting file:")
                                 }
                               }
                             }
 
-                            field.onChange(updatedFiles);
+                            field.onChange(updatedFiles)
                           }}
                           setConvertedFile={setConvertedFiles}
                           isEdit={initialData !== null}
                           accept=".png,.jpg,.jpeg,.webp"
+                          form={form}
+                          fieldName="images"
                         />
                       </FormControl>
                       <FormMessage />
@@ -1236,14 +1289,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     />
                   )}
 
-                  <CardTitle className="py-4">Product specification</CardTitle>
-
                   <FormField
                     control={form.control}
                     name="productTutorialDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>PRODUCT OR CASE DESCRIPTION</FormLabel>
+                        <FormLabel>PRODUCT SPECIFICATION</FormLabel>
                         <FormControl>
                           <TextEditor
                             value={field.value ?? ""}
@@ -1287,7 +1338,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       <AttributeModal
         isOpen={isAttributeModalOpen}
         onClose={() => setIsAttributeModalOpen(false)}
+        currentVariantId={currentVariantId ?? null}
         onSave={handleSaveAttribute}
+        toDelete={toDeleteAttribute}
+        existingVariants={variantStatus as any}
       />
     </div>
   );

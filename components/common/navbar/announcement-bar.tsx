@@ -4,6 +4,42 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAppSelector } from "@/redux/hooks";
 import LogoutModal from "../modals/logout-modal";
+import { useRouter } from "next/navigation";
+import { Marquee, MarqueeContent, MarqueeItem } from "@/components/ui/shadcn-io/marquee";
+import useFetchData from "@/hooks/use-fetch";
+import { INavigationInfo } from "@/types/navigation-info";
+
+
+export const dummy = [
+  {
+    "id": 47,
+    "title": "Get Flash sales and off on early birds 10% discount ",
+    "product": {
+      "name": "Pregnancy Pillow",
+      "slug_name": "pregnancysku"
+    },
+    "is_active": true
+  },
+  // {
+  //   "id": 47,
+  //   "title": "Get Flash sales and off on early birds 10% discount 22222222222222222",
+  //   "product": {
+  //     "name": "Pregnancy Pillow",
+  //     "slug_name": "pregnancysku"
+  //   },
+  //   "is_active": true
+  // },
+  // {
+  //   "id": 47,
+  //   "title": "Get Flash sales and off on early birds 10% discount 333333333333333333333333",
+  //   "product": {
+  //     "name": "Pregnancy Pillow",
+  //     "slug_name": "pregnancysku"
+  //   },
+  //   "is_active": true
+  // },
+]
+
 
 export default function AnnouncementBar() {
   const { isLoggedIn, profileDetails } = useAppSelector(
@@ -11,14 +47,27 @@ export default function AnnouncementBar() {
   );
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { data } = useFetchData<INavigationInfo[]>('/cms/navigation-infos-dropdown/')
+  console.log('this is that data', data);
+
+  const router = useRouter()
 
   return (
     <div className="bg-[#FAFAFA] text-black w-full px-8 padding-x h-12 flex items-center justify-between">
       <div className="flex items-center justify-between flex-1 text-sm">
-        <div className="relative overflow-hidden max-w-[300px] h-full flex justify-center items-center">
-          <span className="text-sm font-normal text-black slide-text">
-            20% Off on New Brand Earth Mama! Shop Now
-          </span>
+        <div className="flex items-center justify-center flex-1 text-sm lg:justify-between">
+          <div className="relative max-w-[300px] h-full flex items-center overflow-hidden group">
+            <Marquee>
+              <MarqueeContent pauseOnHover={true}>
+                {data && data?.map((info, index) => (
+                  <MarqueeItem key={index} className="inline-flex mr-20 cursor-pointer" onClick={() => router.push(`/shop/${1}`)}>
+                    <span className="whitespace-nowrap text-black">{info.title}</span>
+                  </MarqueeItem>
+                ))}
+              </MarqueeContent>
+            </Marquee>
+
+          </div>
         </div>
         {isLoggedIn ? (
           <div className="items-center hidden space-x-4 lg:flex">

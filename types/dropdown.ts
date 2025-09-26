@@ -8,16 +8,17 @@ export interface IPaginatedDropdown {
 
 export interface IPaginatedDropdownData {
   id: number;
+  slug_name?: string;
   image?: string;
+  user?: string;
   name: string;
 }
-
 export interface IDropdownFilterOption {
   id: string
   name: string
 }
 
-export interface ICategoryDropdown{
+export interface ICategoryDropdown {
   id: number;
   name: string;
   subcategories: IDropdownFilterOption[];

@@ -64,7 +64,7 @@ const MobileMenu = ({ isOpen, setIsOpen }: MobileMenuProps) => {
               href="/shop"
               className="block rounded-lg px-3 py-2 text-pink-600 hover:bg-pink-50 hover:text-pink-700 transition"
               onClick={() => setIsOpen(false)}
-            >
+            >``
               Shop
             </Link>
             <Link

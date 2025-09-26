@@ -24,7 +24,7 @@ const InventoryTable = ({ setDatalength }: Props) => {
     "/inventory-management/",
     "search",
     searchQuery,
-    ETypes.INVENTORY
+    ETypes.INVENTORY,
   );
 
   const dispatch = useAppDispatch();

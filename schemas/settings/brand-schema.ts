@@ -11,6 +11,7 @@ export const brandSchema = z.object({
     z.string().min(1, { message: "Brand image is required." }),
   ]),
   activate: z.boolean(),
+  is_featured: z.boolean(),
 });
 
 export type BrandValues = z.infer<typeof brandSchema>;

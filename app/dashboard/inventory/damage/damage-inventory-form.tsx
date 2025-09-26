@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import useFetchData from "@/hooks/use-fetch-data";
 import { damageReturn } from "@/lib/api/inventory/inventory-apis";
 import { toast } from "sonner";
 import SingleFileUploader from "@/components/common/ImageUploader/file-uploader";
@@ -25,7 +26,6 @@ import {
 import { useRouter } from "next/navigation";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
-import useFetchData from "@/hooks/use-fetch";
 
 interface ProductOption {
   id: number;
@@ -74,7 +74,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     }
   }, [productData, form, index]);
 
-
+ 
 
   return (
     <div className="bg-white p-4 rounded-xl shadow-sm w-full">
@@ -299,54 +299,54 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
             </div>
           </div>
 
-          <div className="h-32"></div>
-          <div className="fixed bottom-6 right-0 w-full p-2 lg:w-1/4 z-50">
-            <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col lg:items-start gap-4">
-              <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
-                ATTACHMENT
-              </div>
-
-              <div className="flex gap-4 relative w-full">
-                <FormField
-                  control={form.control}
-                  name="attachments"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="relative w-full">
-                          <Input
-                            placeholder="Select your Attachment"
-                            className="bg-white w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500"
-                            readOnly
-                            value={field.value?.[0]?.name || ""}
-                          />
-                          <div className="absolute inset-0 opacity-0">
-                            <SingleFileUploader
-                              value={field.value?.[0] || undefined}
-                              onChange={(file) =>
-                                field.onChange(file ? [file] : [])
-                              }
-                              onRemove={() => field.onChange([])}
-                              fileType="*/*"
-                            />
-                          </div>
-                        </div>
-                      </FormControl>
-                      <FormMessage className="text-sm text-red-500" />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  onClick={form.handleSubmit(onSubmit)}
-                  className="bg-black hover:bg-black-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-                >
-                  Save
-                </Button>
-              </div>
-
-            </div>
-          </div>
+          <div className="h-32"></div>         
+          <div className={`flex justify-end items-end  ${fields.length < 2 && "mt-10"} `}>
+                   <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col lg:items-start gap-4">
+                     <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
+                       ATTACHMENT
+                     </div>
+       
+                     <div className="flex gap-4 relative w-full">
+                       <FormField
+                         control={form.control}
+                         name="attachments"
+                         render={({ field }) => (
+                           <FormItem>
+                             <FormControl>
+                               <div className="relative w-full">
+                                 <Input
+                                   placeholder="Select your Attachment"
+                                   className="bg-white w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-500"
+                                   readOnly
+                                   value={field.value?.[0]?.name || ""}
+                                 />
+                                 <div className="absolute inset-0 opacity-0">
+                                   <SingleFileUploader
+                                     value={field.value?.[0] || undefined}
+                                     onChange={(file) =>
+                                       field.onChange(file ? [file] : [])
+                                     }
+                                     onRemove={() => field.onChange([])}
+                                     fileType="*/*"
+                                   />
+                                 </div>
+                               </div>
+                             </FormControl>
+                             <FormMessage className="text-sm text-red-500" />
+                           </FormItem>
+                         )}
+                       />
+                       <Button
+                         type="submit"
+                         onClick={form.handleSubmit(onSubmit)}
+                         className="bg-black hover:bg-black-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                       >
+                         Save
+                       </Button>
+                     </div>
+       
+                   </div>
+                 </div>
         </form>
       </Form>
     </div>

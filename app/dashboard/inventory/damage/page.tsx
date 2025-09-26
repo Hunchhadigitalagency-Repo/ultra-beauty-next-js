@@ -2,7 +2,7 @@
 
 import React from "react";
 import DamageManagementForm from "./damage-inventory-form";
-import useFetchData from "@/hooks/use-fetch";
+import useFetchData from "@/hooks/use-fetch-data";
 
 
 interface ProductDropdownItem {

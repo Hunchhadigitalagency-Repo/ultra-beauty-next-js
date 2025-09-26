@@ -19,7 +19,6 @@ const InventoryFilter = () => {
   const dispatch = useAppDispatch();
   const { criteria } = useAppSelector((state) => state.filter);
 
-  // Create the form
   const form = useForm<IFormValues>({
     defaultValues: {
       category: "",
