@@ -62,7 +62,7 @@ const AllProducts = () => {
     hasMore,
     count,
     fetchNext,
-  } = useInfiniteFetch<Result>(path || "", "", "", "", isLoggedIn);
+  } = useInfiniteFetch<Result>(path || "", "", "", "", !isLoggedIn);
 
 
   const handleToggleWishlist = (slug: string | undefined, isWishlisted: boolean | undefined) => {

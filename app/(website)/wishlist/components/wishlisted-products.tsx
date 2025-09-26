@@ -39,7 +39,7 @@ const WishlistedProducts = () => {
   const deleteWishlistClient = async (slug: string) => {
     try {
       await deleteWishlist(slug);
-      await refetch();
+      refetch();
       toast.success('Item removed from wishlist');
     } catch (error) {
       toast.error(`Error removing item from wishlist: ${error}`);
@@ -67,7 +67,8 @@ const WishlistedProducts = () => {
   }
 
   const handleClearAllWishlist = () => {
-    deleteAllWishlist().then(refetch)
+    deleteAllWishlist();
+    refetch();
     dispatch(setWishlistCount(0))
     setWishlistUpdates({});
   }
