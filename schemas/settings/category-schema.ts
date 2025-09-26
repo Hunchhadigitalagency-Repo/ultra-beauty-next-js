@@ -11,11 +11,18 @@ export const categorySchema = z.object({
     z.string().min(1, { message: "Category image is required." }),
   ]),
   activate: z.boolean(),
+  is_featured: z.boolean(),
 });
 
 export const subCategorySchema = z.object({
   category: z.string().min(1, { message: "Cateogry name is required." }),
   name: z.string().min(1, { message: "Sub cateogry name is required." }),
+  image: z.union([
+    z.instanceof(File).refine((file) => file.size <= MAX_FILE_SIZE, {
+      message: "File size must be less than 10MB",
+    }), z.string().min(1, 'Image is required')
+  ]),
+  is_used_to_build_system: z.boolean(),
   is_active: z.boolean(),
 });
 

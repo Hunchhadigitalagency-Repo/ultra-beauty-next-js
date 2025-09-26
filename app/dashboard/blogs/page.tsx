@@ -1,27 +1,33 @@
 "use client";
 import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
-
+import React, {   } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { BlogConstants } from "./components/blog-constants";
 import { IBlog } from "@/types/cms";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
 
 const BlogsCMS = () => {
   const dispatch = useAppDispatch();
 
+  const { searchQuery } = useAppSelector((state) => state.filter);
   const scrollId = "infinite-scroll-container";
-  const { data, loading, hasMore, fetchNext, count } =
-    useInfiniteFetch<IBlog>("/cms/blogs/");
+  const { data, loading, hasMore, fetchNext,  totalCount } = useInfiniteFetch<IBlog>(
+    "/cms/blogs/",
+    "search",
+    searchQuery
+  );
 
+ 
   return (
     <main className="space-y-4 bg-white p-4">
       <PageHeader
         type="Blog"
-        totalItems={count}
+        totalItems={totalCount}
         searchPlaceholder="Search by Blog ID"
         path="/dashboard/blogs/add-blogs"
         buttonText="Create Blog"
@@ -38,7 +44,6 @@ const BlogsCMS = () => {
             cols={BlogConstants(dispatch)}
             data={data as IBlog[]}
             loading={loading && data.length === 0}
-            onRowClick={() => {}}
             height="h-auto"
           />
         </InfiniteScroll>
@@ -47,4 +52,4 @@ const BlogsCMS = () => {
   );
 };
 
-export default BlogsCMS;
+export default withPermissions(BlogsCMS, [Permissions.CAN_READ_BLOGS]);

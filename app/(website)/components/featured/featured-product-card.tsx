@@ -5,18 +5,19 @@ interface FeaturedProductCardProps {
   image: string;
   title: string;
   desc: string;
+  onFeaturedProductClick?: () => void;
 }
 
-const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title, desc }) => {
+const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title, desc, onFeaturedProductClick }) => {
 
   return (
-    <div className="flex flex-col gap-3 justify-center items-center w-full">
+    <div className="cursor-pointer flex flex-col gap-3 justify-center items-center w-full" onClick={onFeaturedProductClick}>
       <div className="relative w-full h-44 md:h-60 lg:h-80 xl:h-96 overflow-hidden rounded-md">
         <Image
           src={image}
           alt="brand logo"
           layout="fill"
-          objectFit="cover"
+          objectFit="object-cover"
         />
       </div>
       <div className=" flex flex-col">

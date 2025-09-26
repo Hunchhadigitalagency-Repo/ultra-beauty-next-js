@@ -6,6 +6,7 @@ import LinkText from '@/components/common/header/link-text';
 import brandsHeroImage from "@/assets/temp-images/aboutusbg.png";
 import SectionHeader from '@/components/common/header/section-header';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { AlertCircle } from 'lucide-react';
 
 interface Link {
     next: string;
@@ -91,17 +92,25 @@ const BrandsSection: React.FunctionComponent = () => {
                         {/* Right - Brand Carousel */}
 
                         {loading ? (
-                            <p className="text-sm text-center text-muted-foreground">
-                                Loading Brands Hero Section
-                            </p>
+                            <div className='flex items-center justify-center w-full h-60'>
+                                <p className='font-extralight text-sm text-gray-400'>
+                                    Loading Brands Carousels...
+                                </p>
+                            </div>
                         ) : error ? (
-                            <p className="text-sm font-medium text-center text-red-500">
-                                Something Went Wrong While Fetching Brands Hero Section Details
-                            </p>
+                            <div className='flex flex-col items-center justify-center w-full h-60'>
+                                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                                <p className='font-extralight text-sm text-gray-400'>
+                                    Oops! Something went wrong...
+                                </p>
+                            </div>
                         ) : data?.results.length === 0 ? (
-                            <p className="text-sm text-center text-muted-foreground">
-                                No Brands Hero Section Details Found
-                            </p>
+                            <div className='flex flex-col items-center justify-center w-full h-60'>
+                                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                                <p className='font-extralight text-sm text-gray-400 capitalize'>
+                                    Oops! no brands carousel right now...
+                                </p>
+                            </div>
                         ) : (
                             <div className="w-full md:pb-14">
                                 <div className='flex justify-end py-4 mr-4 sm:mr-8 md:mr-16'>
@@ -131,8 +140,6 @@ const BrandsSection: React.FunctionComponent = () => {
 
                 </div>
             </div>
-
-
         </section>
     )
 }

@@ -6,7 +6,7 @@ import { IReferral } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const ReferralConstant = (dispatch: AppDispatch): Col<IReferral>[] => {
+export const ReferralConstant = (dispatch: AppDispatch, onUpdate: (item:IReferral) => void): Col<IReferral>[] => {
   return [
     {
       title: "REFERRAL NAME",
@@ -19,7 +19,7 @@ export const ReferralConstant = (dispatch: AppDispatch): Col<IReferral>[] => {
     {
       title: "STATUS",
       render: (data: IReferral) => (
-        <TableStatusSwitch type={ETypes.REFERRAL} rowData={data} />
+        <TableStatusSwitch type={ETypes.REFERRAL} rowData={data} onUpdate={onUpdate}/>
       ),
     },
     {

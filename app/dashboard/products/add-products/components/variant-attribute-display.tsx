@@ -45,7 +45,7 @@ export default function VariantAttributeDisplay({
 
     // Default display for other attributes (like size, material, etc.)
     return (
-      <div className="px-3 py-1 border border-gray-300 rounded text-sm bg-gray-50">
+      <div className="px-5 py-1 border border-gray-700 rounded-[2px] text-sm bg-gray-50">
         {attribute.variant_name}
       </div>
     );
@@ -55,8 +55,9 @@ export default function VariantAttributeDisplay({
     return null;
   }
 
+
   return (
-    <div className="flex flex-wrap gap-2 items-center mt-2">
+    <div className="flex flex-wrap md:gap-5 gap-2 items-center mt-2">
       {attributes.map((attribute, index) => (
         <div
           key={`${attribute.attribute}-${attribute.attribute_variant}-${index}`}

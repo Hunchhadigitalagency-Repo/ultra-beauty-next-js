@@ -5,12 +5,12 @@ export const createTestimonials = async (data: FormData) => {
   return response;
 };
 
-export const updateTestimonials = async (id: number, data: FormData) => {
+export const updateTestimonials = async (id: number | string, data: FormData) => {
   const response = await api.patch(`/cms/testimonials/${id}/`, data);
   return response;
 };
 
-export const deleteTestimonials = async (id: number) => {
+export const deleteTestimonials = async (id: string | number) => {
   const response = await api.delete(`/cms/testimonials/${id}/`);
   return response;
 };

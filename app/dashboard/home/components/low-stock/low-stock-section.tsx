@@ -3,57 +3,38 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
 import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
 import { LowStockConstants } from "./low-stock-constants";
+import useFetchData from "@/hooks/use-fetch";
+// import useFetchDataToken from "@/hooks/use-fetch-data-token";
 
-export const tableData = [
-  {
-    order_id: "ORD123456",
-    image: "",
-    name: "Running Shoes",
-    price: "$59.99",
-    status: "Processing",
-    sold: "John Doe",
-    earnings: 2,
-    payment: "Paid",
-    order_date: "2025-06-13",
-  },
-  {
-    order_id: "ORD123457",
-    image: "",
-    name: "Wireless Headphones",
-    price: "$89.00",
-    status: "Shipped",
-    sold: "Jane Smith",
-    earnings: 1,
-    payment: "Pending",
-    order_date: "2025-06-12",
-  },
-  {
-    order_id: "ORD123458",
-    image: "",
-    name: "Gaming Laptop",
-    price: "$1200.00",
-    status: "Delivered",
-    sold: "Alice Johnson",
-    earnings: 1,
-    payment: "Paid",
-    order_date: "2025-06-11",
-  },
-];
+interface LowStock {
+  id: number;
+  name: string;
+  image: string;
+  remaining_units: number;
+  sold_units: number;
+  status: string;
+}
+export interface Results {
+  results: LowStock[];
+}
 
 const LowStockSection = () => {
-  const dispatch = useAppDispatch();
+  const { data: lowStocks, loading, error } = useFetchData<Results>("/lowstock/", true);
 
+  const lowStock = lowStocks?.results || [];
   return (
-    <DataCard title="Low Stock" filter={<span>Filter</span>}>
-      <CustomTable<any>
-        cols={LowStockConstants(dispatch)}
-        data={tableData as any[]}
-        loading={false}
-        onRowClick={() => {}}
-        height="h-auto"
-      />
+    <DataCard title="Low Stock" >
+      <div className="h-[300px] overflow-y-auto">
+        <CustomTable<LowStock>
+          cols={LowStockConstants()}
+          data={lowStock as LowStock[]}
+          loading={loading}
+          error={error}
+          onRowClick={() => { }}
+          height="h-auto"
+        />
+      </div>
     </DataCard>
   );
 };

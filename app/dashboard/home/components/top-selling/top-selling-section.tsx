@@ -1,35 +1,44 @@
 "use client";
 
-import React from "react";
-import { useAppDispatch } from "@/redux/hooks";
-import useFetchData from "@/hooks/use-fetch";
-import { PaginatedResponse } from "@/types/common";
-import { TopSellingProduct } from "@/types/dashboard";
 import DataCard from "@/components/common/cards/data-card";
-import { TopSellingConstants } from "./top-selling-constants";
 import CustomTable from "@/components/common/table/custom-table";
+import React, { useState } from "react";
+import { TopSellingConstants } from "./top-selling-constants";
+import { TopSelling } from "@/types/product";
+import TopSellingFilter from "./top-selling-filter";
+import useFetchData from "@/hooks/use-fetch";
 
-interface TopSellingProductResponse extends PaginatedResponse {
-  results: TopSellingProduct[]
+export interface Results {
+  results: TopSelling[];
 }
 
 const TopSellingSection = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("week");
 
-  const { data: TopSellingProductResponseWithPagination, error, loading } = useFetchData<TopSellingProductResponse>(`top-sellings/?time_range=week`, true)
-  const TopSellingProduct = TopSellingProductResponseWithPagination?.results
+  const { data: topSellings, loading, error } = useFetchData<Results>(`/top-sellings/?time_range=${selectedPeriod}`, true);
 
-  const dispatch = useAppDispatch();
+  const topSelling = topSellings?.results || [];
 
   return (
-    <DataCard title="Top Selling" filter={<span>Filter</span>}>
-      <CustomTable<TopSellingProduct>
-        cols={TopSellingConstants(dispatch)}
-        data={TopSellingProduct as TopSellingProduct[]}
-        loading={loading}
-        error={error}
-        onRowClick={() => { }}
-        height="h-auto"
-      />
+    <DataCard
+      title="Top Selling"
+      filter={
+        <TopSellingFilter
+          selected={selectedPeriod}
+          onChange={setSelectedPeriod}
+        />
+      }
+    >
+      <div className="h-[400px] overflow-y-auto">
+        <CustomTable<TopSelling>
+          cols={TopSellingConstants()}
+          data={topSelling}
+          loading={loading}
+          error={error}
+          onRowClick={() => { }}
+          height="h-auto"
+        />
+      </div>
     </DataCard>
   );
 };

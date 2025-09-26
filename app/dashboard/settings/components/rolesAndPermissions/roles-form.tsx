@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useMemo } from "react";
 import HeaderBackCard from "@/components/common/cards/header-back-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,65 +15,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { rolesSchema, RolesValues } from "@/schemas/settings/roles-schema";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Image from "next/image";
+
 import {
   getAllEntities,
   mapRolesDataToForm,
 } from "@/lib/roles-permissions-utils";
 import { permissionsData } from "@/constants/permissions-data";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IRoles } from "@/types/roles-permissions";
+import { IRolesPermissions } from "@/types/roles-permissions";
 import { ESettings } from "@/types/table";
+import { PaginatedMultiSelect } from "@/components/common/paginated-select/paginated-multi-select";
+import { getUsersDropdown } from "@/lib/api/dropdown/dropdown-api";
+import {
+  createRolesandPermissions,
+  updateRolesandPermissions,
+} from "@/lib/api/settings/roles-permissions-api";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/redux/hooks";
+import { toggleRefetchTableData } from "@/redux/features/table-slice";
+import { handleError } from "@/lib/error-handler";
+import { setActiveSetting } from "@/redux/features/setting-slice";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-// Example static user list
-const allUsers = [
-  {
-    id: "1",
-    name: "Ram kumar",
-    avatar: "https://randomuser.me/api/portraits/women/51.jpg",
-  },
-  {
-    id: "2",
-    name: "Shyam Bahadur",
-    avatar: "https://randomuser.me/api/portraits/men/52.jpg",
-  },
-  {
-    id: "3",
-    name: "Someone kumar",
-    avatar: "https://randomuser.me/api/portraits/women/53.jpg",
-  },
-  {
-    id: "4",
-    name: "noone bahadur",
-    avatar: "https://randomuser.me/api/portraits/men/54.jpg",
-  },
-];
-
-interface RolesFromProps {
-  initialData: IRoles | null;
+interface RolesFormProps {
+  initialData: IRolesPermissions | null;
 }
 
-const RolesForm = ({ initialData }: RolesFromProps) => {
-  const initialFormData =
-    initialData !== null && mapRolesDataToForm(permissionsData, initialData);
+const RolesForm = ({ initialData }: RolesFormProps) => {
+
+
+  const dispatch = useAppDispatch();
+
   const flattenedConfig = getAllEntities(permissionsData);
 
-  const form = useForm<RolesValues>({
-    resolver: zodResolver(rolesSchema),
-    defaultValues: initialFormData || {
+  const emptyDefaults = useMemo(() => {
+    return {
       role_name: "",
+      users: [],
       entities: flattenedConfig.reduce((acc, entity) => {
         acc[entity.data] = entity.permissions.reduce(
           (permissionAcc, permission) => {
@@ -83,27 +69,49 @@ const RolesForm = ({ initialData }: RolesFromProps) => {
         );
         return acc;
       }, {} as RolesValues["entities"]),
-    },
+      is_active: false,
+    };
+  }, [flattenedConfig]);
+
+  // const initialFormData = initialData !== null && mapRolesDataToForm(permissionsData, initialData);
+
+  const form = useForm<RolesValues>({
+    resolver: zodResolver(rolesSchema),
+    defaultValues: initialData ? {
+      role_name: initialData.role,
+      is_active: initialData.is_active,
+      users: initialData?.user.map(user => user.id.toString()) || [],
+    } : emptyDefaults,
   });
 
-  const [selectedUsers, setSelectedUsers] = useState<typeof allUsers>([]);
-  const [openGroupIndexes, setOpenGroupIndexes] = useState<number[]>([]);
+  useEffect(() => {
+    if (initialData) {
+      const mapped = mapRolesDataToForm(permissionsData, initialData);
+      form.reset(mapped as unknown as Partial<RolesValues>);
+    }
+  }, [initialData, form]);
 
-  const toggleGroup = (index: number) => {
-    setOpenGroupIndexes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
-  };
-
-  const removeUser = (id: string) => {
-    setSelectedUsers((prev) => prev.filter((u) => u.id !== id));
-  };
-
-  const onSubmit = (data: RolesValues) => {
-    console.log("Submitted Data: ", {
-      ...data,
-      selectedUsers,
-    });
+  const onSubmit = async (data: RolesValues) => {
+    console.log('this is the data', data)
+    try {
+      if (initialData) {
+        const response = await updateRolesandPermissions(initialData.id, data);
+        if (response.status === 200) {
+          toast.success("Roles updated successfully");
+          dispatch(toggleRefetchTableData());
+          dispatch(setActiveSetting(ESettings.ROLES));
+        }
+      } else {
+        const response = await createRolesandPermissions(data);
+        if (response.status === 201) {
+          toast.success("Roles created successfully");
+          dispatch(toggleRefetchTableData());
+          dispatch(setActiveSetting(ESettings.ROLES));
+        }
+      }
+    } catch (error) {
+      handleError(error, toast);
+    }
   };
 
   return (
@@ -146,111 +154,75 @@ const RolesForm = ({ initialData }: RolesFromProps) => {
                 )}
               />
 
-              <div className=" flex flex-col gap-2">
-                <FormLabel className="text-muted-foreground">
-                  SELECT USERS
-                </FormLabel>
-
-                <div className=" w-full">
-                  <Select
-                    onValueChange={(userId) => {
-                      const user = allUsers.find((u) => u.id === userId);
-                      if (
-                        user &&
-                        !selectedUsers.find((u) => u.id === user.id)
-                      ) {
-                        setSelectedUsers((prev) => [...prev, user]);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select the user to assign the role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allUsers.map((user) => (
-                        <SelectItem key={user.id} value={user.id}>
-                          {user.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className=" grid grid-cols-4 gap-4">
-                  {selectedUsers.map((user) => (
-                    <div
-                      key={user.id}
-                      className="relative flex items-center gap-2 border rounded-md px-3 py-2"
-                    >
-                      <Image
-                        src={user.avatar}
-                        alt={user.name}
-                        height={10}
-                        width={10}
-                        className="w-10 h-10 rounded-full"
+              <FormField
+                control={form.control}
+                name="users"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>USERS</FormLabel>
+                    <FormControl>
+                      <PaginatedMultiSelect
+                        selectedValues={field.value}
+                        onSelectionChange={field.onChange}
+                        placeholder="Select Users"
+                        fetchData={getUsersDropdown}
+                        className="w-full"
                       />
-                      <span className="text-sm">{user.name}</span>
-                      <button
-                        type="button"
-                        className="absolute -top-1 right-2 text-base cursor-pointer text-gray-400 hover:text-red-500 ml-1"
-                        onClick={() => removeUser(user.id)}
-                      >
-                        x
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {/* Permissions Accordion */}
-              <div className="space-y-3">
-                {permissionsData.map((group, index) => (
-                  <div key={index} className=" rounded-md bg-muted">
-                    <div
-                      onClick={() => toggleGroup(index)}
-                      className="cursor-pointer p-3 flex justify-between items-center"
+              <div className="h-[240px] overflow-y-auto">
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full space-y-3"
+                >
+                  {permissionsData.map((group, index) => (
+                    <AccordionItem
+                      key={index}
+                      value={`item-${index}`}
+                      className="border-b-0"
                     >
-                      <span className="text-sm font-medium">{group.title}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          openGroupIndexes.includes(index) ? "rotate-180" : ""
-                        }`}
-                      />
-                    </div>
-                    {openGroupIndexes.includes(index) &&
-                      group.permissions.length > 0 && (
-                        <div className="pl-6 pb-4 space-y-2">
-                          {group.permissions.map((permission) => (
-                            <FormField
-                              key={`${group.data}.${permission}`}
-                              control={form.control}
-                              name={`entities.${group.data}.${permission}`}
-                              render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value}
-                                      onCheckedChange={field.onChange}
-                                    />
-                                  </FormControl>
-                                  <div className="space-y-1 leading-none">
-                                    <FormLabel className="capitalize">
-                                      {permission} Permission
-                                    </FormLabel>
-                                  </div>
-                                </FormItem>
-                              )}
-                            ></FormField>
-                          ))}
-                        </div>
-                      )}
-                  </div>
-                ))}
+                      <AccordionTrigger className="cursor-pointer p-3 flex justify-between items-center bg-muted text-sm font-medium">
+                        {group.title}
+                      </AccordionTrigger>
+
+                      <AccordionContent className="p-4 space-y-4">
+                        {group.permissions.map((permission) => (
+                          <FormField
+                            key={`${group.data}.${permission}`}
+                            control={form.control}
+                            name={`entities.${group.data}.${permission}`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md bg-white">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="capitalize">
+                                    {permission} Permission
+                                  </FormLabel>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
 
               <FormField
                 control={form.control}
-                name="activate"
+                name="is_active"
                 render={({ field }) => (
                   <FormItem className="flex items-center gap-4 mt-6">
                     <FormControl>

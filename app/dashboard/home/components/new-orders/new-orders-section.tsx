@@ -1,37 +1,36 @@
 "use client";
 
-import React from "react";
-import useFetchData from "@/hooks/use-fetch";
-import { useAppDispatch } from "@/redux/hooks";
-import { PaginatedResponse } from "@/types/common";
-import { NewOrderResponse } from "@/types/dashboard";
 import DataCard from "@/components/common/cards/data-card";
-import { NewOrdersConstants } from "./new-orders-constants";
 import CustomTable from "@/components/common/table/custom-table";
+import React from "react";
+import { NewOrdersConstants } from "./new-orders-constants";
+import { useRouter } from "next/navigation";
+import { INeworders } from "@/types/orders";
+import useFetchData from "@/hooks/use-fetch";
 
+export interface Results {
+  results: INeworders[];
+}
 const NewOrdersSection = () => {
-  interface NewOrderResponseWithPagination extends PaginatedResponse {
-    results: NewOrderResponse[]
-  }
+  const router = useRouter();
+  const { data: newOrders, loading, error } = useFetchData<Results>("/new-orders/", true);
 
-  const dispatch = useAppDispatch();
-  const { data: NewOrderResponseWithPagination, error, loading } = useFetchData<NewOrderResponseWithPagination>('new-orders/', true)
-  const NewOrdersData = NewOrderResponseWithPagination?.results
-
+  const newOrder = newOrders?.results || [];
   return (
     <DataCard
       title="New Orders"
-      count={NewOrdersData?.length}
-      filter={<span>Filter</span>}
+      count={newOrder.length}
     >
-      <CustomTable<NewOrderResponse>
-        cols={NewOrdersConstants(dispatch)}
-        data={NewOrdersData as NewOrderResponse[]}
-        loading={loading}
-        error={error}
-        onRowClick={() => { }}
-        height="h-auto"
-      />
+      <div className="h-[400px] overflow-y-auto">
+        <CustomTable<INeworders>
+          cols={NewOrdersConstants()}
+          data={newOrder as INeworders[]}
+          loading={loading}
+          error={error}
+          onRowClick={(item) => router.push(`/dashboard/orders/single/${item.order_id}`)}
+          height="h-auto"
+        />
+      </div>
     </DataCard>
   );
 };

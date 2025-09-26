@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import useFetchData from "@/hooks/use-fetch";
 
 import {
   createPartnerCompany,
@@ -32,7 +33,7 @@ import {
 import { IPartnerCompany } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -46,17 +47,38 @@ const PartnerCompanyForm = ({ initialData }: PartnerCompanyFormProps) => {
 
   const title = initialData ? "Edit Partner Company" : "Add Partner Company";
 
+  const isEditMode = Boolean(initialData);
+  const partnerCompanyUrl = isEditMode ? `/cms/partner-companies/${initialData?.id}` : "";
+
+  const { data: partnerCompney } = useFetchData<IPartnerCompany>(partnerCompanyUrl)
+
+  const emptyDefaults = {
+    name: "",
+    link: "",
+    logo: "",
+    is_active: false,
+  }
+
   const form = useForm<PartnerCompanyFormValues>({
     resolver: zodResolver(partnerCompanySchema),
-    defaultValues: initialData
-      ? initialData
-      : {
-          name: "",
-          link: "",
-          logo: "",
-          is_active: false,
-        },
+    defaultValues: emptyDefaults
   });
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = partnerCompney || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          name: dataToUse.name,
+          link: dataToUse.link,
+          logo: dataToUse.logo,
+          is_active: dataToUse.is_active,
+        })
+      }
+
+    }
+  }, [initialData, isEditMode, partnerCompney, form])
 
   const onSubmit = async (data: PartnerCompanyFormValues) => {
     try {

@@ -1,128 +1,106 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { UseFormReturn } from "react-hook-form";
+import { FormField, FormItem, FormLabel, FormMessage, FormControl } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { LucideSearch } from "lucide-react";
 
 export interface ComboboxOption {
   label: string;
   value: string;
 }
 
-interface FormComboboxProps {
+interface FormSelectWithSearchProps {
   form: UseFormReturn<any>;
   name: string;
   label?: string;
-  description?: string;
   placeholder?: string;
   searchPlaceholder?: string;
-  emptyText?: string;
   options: ComboboxOption[];
-  disabled?: boolean;
-  className?: string;
+  isRequired?: boolean;
 }
 
 export function FormCombobox({
   form,
   name,
   label,
-  description,
-  placeholder = "Select an option...",
-  searchPlaceholder = "Search...",
-  emptyText = "No options found.",
+  placeholder,
+  searchPlaceholder = "Select an option...",
   options,
-  disabled = false,
-  className,
-}: FormComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  isRequired,
+}: FormSelectWithSearchProps) {
+  const [search, setSearch] = React.useState("");
+
+  const filteredOptions = options.filter((opt) =>
+    opt.label.toLowerCase().includes(search.toLowerCase())
+  );
+
+
+  console.log(options, 'Options');
 
   return (
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
-        <FormItem className={className}>
-          {label && <FormLabel>{label}</FormLabel>}
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+      render={({ field }) => {
+        console.log('Field: ', field);
+        // console.log(options.find((opt) => opt.value === String(field.value)))
+        return (
+          <FormItem>
+            {label && (
+              <FormLabel>
+                {label} {isRequired && <span className="text-red-500">*</span>}
+              </FormLabel>
+            )}
+            <Select
+              onValueChange={(val) => {
+                field.onChange(val);
+              }}
+              value={field.value}
+            >
               <FormControl>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  disabled={disabled}
-                  className={cn(
-                    "w-full justify-between",
-                    !field.value && "!text-muted-foreground",
-                    "bg-white text-foreground font-normal"
-                  )}
-                >
-                  {field.value
-                    ? options.find((option) => option.value === field.value)
-                        ?.label
-                    : placeholder}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
+                <SelectTrigger className="bg-white">
+                  <SelectValue
+                    placeholder={placeholder}
+                    defaultValue={field.value}
+                  />
+                  {/* {options.find((opt) => opt.value === field.value)?.label} */}
+                  {/* </SelectValue> */}
+                </SelectTrigger>
               </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0" align="start">
-              <Command>
-                <CommandInput placeholder={searchPlaceholder} className="h-9" />
-                <CommandList>
-                  <CommandEmpty>{emptyText}</CommandEmpty>
-                  <CommandGroup>
-                    {options.map((option) => (
-                      <CommandItem
-                        key={option.value}
-                        value={option.label}
-                        onSelect={() => {
-                          form.setValue(name, option.value);
-                          setOpen(false);
-                        }}
-                      >
+
+              <SelectContent className="p-0">
+                <div className="p-2 sticky top-0 bg-white z-10 flex items-center space-x-2">
+                  <LucideSearch className="w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder={searchPlaceholder}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="h-8 text-sm flex-1"
+                    autoFocus
+                    onKeyDown={(e) => e.stopPropagation()}
+                  />
+                </div>
+
+                <div className="max-h-60 overflow-y-auto">
+                  {filteredOptions.length > 0 ? (
+                    filteredOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
                         {option.label}
-                        <Check
-                          className={cn(
-                            "ml-auto h-4 w-4",
-                            field.value === option.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <div className="p-2 text-sm text-muted-foreground">No results found</div>
+                  )}
+                </div>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )
+      }}
     />
   );
 }

@@ -1,6 +1,6 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,8 @@ import { setActiveSetting } from "@/redux/features/setting-slice";
 import { IOrderStatus } from "@/types/Settings";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScroll from "react-infinite-scroll-component";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import SearchBox from "@/components/common/filter/search-box";
+import { ESettings } from "@/types/table";
 
 const OrderTab = () => {
   const dispatch = useAppDispatch();
@@ -23,16 +23,30 @@ const OrderTab = () => {
     "search",
     searchQuery
   );
+  const [order, setorder] = useState<IOrderStatus[]>([]);
 
+  useEffect(() => {
+    setorder(data);
+  }, [data]);
+
+  const handleItemUpdate = (updatedItem: IOrderStatus) => {
+    setorder((prevData) =>
+      prevData.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
+      )
+    );
+  };
   return (
     <DataCard
       title="Order Status"
       filter={
         <div className="flex flex-col md:flex-row items-center gap-2">
-         <SearchBox />
+          <SearchBox />
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Order Status"))}
+            onClick={() =>
+              dispatch(setActiveSetting(ESettings.ADD_ORDER_STATUS))
+            }
           >
             Add Order Status
           </Button>
@@ -44,12 +58,12 @@ const OrderTab = () => {
           dataLength={data.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={OrderStatusConstant(dispatch)}
-            data={data as IOrderStatus[]}
+            cols={OrderStatusConstant(dispatch, handleItemUpdate)}
+            data={order as IOrderStatus[]}
             loading={loading && data.length === 0}
             onRowClick={() => {}}
             height="h-auto"

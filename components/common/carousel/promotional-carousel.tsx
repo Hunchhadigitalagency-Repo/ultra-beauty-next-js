@@ -33,7 +33,7 @@ interface PromotionalCarouselProps {
 
 export default function PromotionalCarousel() {
 
-  const { data, loading, error } = useFetchData<PromotionalCarouselProps[]>('generalcoupons/', true)
+  const { data, loading, error } = useFetchData<PromotionalCarouselProps[]>('generalcoupons/')
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -70,16 +70,20 @@ export default function PromotionalCarousel() {
           <LoadingSpinner />
         ) : error ? (
           <div className="flex flex-col gap-2 justify-center items-center">
-            <AlertCircle className="w-10 h-10 mb-2 text-red-500" />
-            <p className="font-medium text-gray-700">Oops! Something went wrong.</p>
+            <AlertCircle className="w-10 h-10 mb-2 text-gray-400" />
+            <p className="text-sm font-extralight text-gray-400">Oops! Something went wrong...</p>
             <p className="mt-1 text-sm text-gray-500">
               We couldn’t load the coupons. Please try again.
             </p>
           </div>
         ) : !data || data.length === 0 || !data.some(slide => slide.code) ? (
           // <--- remove carousel if no tickets (slide.code) exists
-          <>
-          </>
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className='text-sm font-extralight text-gray-400 capitalize'>
+              Oops! no coupons right now...
+            </p>
+          </div>
         ) : (
           <Carousel
             setApi={setApi}

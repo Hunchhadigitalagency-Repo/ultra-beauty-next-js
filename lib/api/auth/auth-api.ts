@@ -30,7 +30,7 @@ type GoogleLoginFormValue = z.infer<typeof googleLoginFormSchema>;
 
 export const googleLogin = async (data: GoogleLoginFormValue) => {
   try {
-    const response = await apiBase.post("/google-sign-in/", data);
+    const response = await apiBase.post("auth/google/login/", data);
     return response;
   } catch (error) {
     throw error;

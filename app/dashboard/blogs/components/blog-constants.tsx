@@ -6,8 +6,9 @@ import TableActions from "@/components/common/table/table-actions";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import { Col, ETypes } from "@/types/table";
 import { IBlog } from "@/types/cms";
+import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const BlogConstants = (dispatch: AppDispatch): Col<IBlog>[] => {
+export const BlogConstants = (dispatch: AppDispatch,): Col<IBlog>[] => {
   return [
     {
       title: "BLOG NAME",
@@ -19,7 +20,7 @@ export const BlogConstants = (dispatch: AppDispatch): Col<IBlog>[] => {
               alt={data.title}
               width={68}
               height={68}
-              className="object-cover"
+              className="object-cover w-full h-full"
             />
           </div>
 
@@ -29,13 +30,8 @@ export const BlogConstants = (dispatch: AppDispatch): Col<IBlog>[] => {
     },
 
     {
-      title: "BLOG SUB-TITLE",
-      render: (data: IBlog) => <span>{data.sub_title}</span>,
-    },
-
-    {
       title: "AUTHOR",
-      render: (data: IBlog) => <span>{data.author?.username}</span>,
+      render: (data: IBlog) => <span>{data.author?.username || "-"}</span>,
     },
     {
       title: "CATEGORY",
@@ -44,6 +40,13 @@ export const BlogConstants = (dispatch: AppDispatch): Col<IBlog>[] => {
     {
       title: "TAGS",
       render: (data: IBlog) => <span>{data.tags}</span>,
+    },
+
+    {
+      title: "STATUS",
+      render: (data: IBlog) => (
+        <TableStatusSwitch type={ETypes.BLOGS} rowData={data} />
+      ),
     },
 
     {

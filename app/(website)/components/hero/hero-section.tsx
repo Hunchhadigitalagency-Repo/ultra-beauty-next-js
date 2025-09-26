@@ -31,7 +31,7 @@ export interface Category {
 export default function HeroSection() {
 
   const params = window.location;
-  const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop/' : '/cms/banner-general/'
+  const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop' : '/cms/banner-general'
   const { data, error, loading } = useFetchData<HeroSectionResponse[]>(
     path
   )
@@ -62,18 +62,19 @@ export default function HeroSection() {
           <LoadingSpinner />
         ) : error ? (
           <div className="h-full w-full flex flex-col items-center justify-center p-6 text-center">
-            <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-            <p className="text-gray-700 font-medium">
-              Oops! Something went wrong.
+            <AlertCircle className="w-8 h-8 text-gray-400 mb-2" />
+            <p className="text-sm font-extralight text-gray-400">
+              Oops! Something went wrong...
             </p>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm font-extralight text-gray-400 mt-1">
               We couldn’t load the carousel items. Please try again.
             </p>
           </div>
         ) : data?.length === 0 ? (
-          <div className="w-full h-full flex justify-center items-center">
-            <p className="text-sm text-muted-foreground">
-              No Banners Found
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className="text-sm font-extralight text-gray-400 capitalize">
+              Oops! no banner images right now...
             </p>
           </div>
         ) : (

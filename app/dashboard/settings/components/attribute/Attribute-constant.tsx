@@ -8,26 +8,20 @@ import { IAttribute } from "@/types/Settings";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
-export const AttributeConstant = (dispatch: AppDispatch): Col<IAttribute>[] => {
+export const AttributeConstant = (dispatch: AppDispatch, onUpdate: (item: IAttribute) => any): Col<IAttribute>[] => {
   return [
     {
       title: "ATTRIBUTE",
       render: (data: IAttribute) => <span>{data.name}</span>,
     },
-    {
-      title: "VALUE",
-      render: (data: IAttribute) => <span>{data?.variations?.[0]?.value}</span>,
-    },
-    {
-      title: "TYPE",
-      render: (data: IAttribute) => <span>{data.type}</span>,
-    },
+
     {
       title: "STATUS",
       render: (data: IAttribute) => (
-        <TableStatusSwitch type={ETypes.ATTRIBUTE} rowData={data} />
+        <TableStatusSwitch type={ETypes.ATTRIBUTE} rowData={data} onUpdate={onUpdate}/>
       ),
     },
+
     {
       title: "ACTION",
       render: (data: IAttribute) => (

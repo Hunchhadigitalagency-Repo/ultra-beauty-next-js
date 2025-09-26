@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { CalendarIcon, Plus, X } from "lucide-react";
 import { format } from "date-fns";
@@ -55,13 +56,19 @@ import {
   getBrandsDropdown,
   getInventoryLocationDropdown,
   getProductsDropdown,
+  getTaxesDropdown,
 } from "@/lib/api/dropdown/dropdown-api";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
+
 import VariantAttributeDisplay from "./variant-attribute-display";
-import { IProduct } from "@/types/product";
+import { IDashboardProduct } from "@/types/product";
+import { formatDateForInput } from "@/lib/date-time-utils";
+import ButtonLoader from "@/components/common/loader/button-loader";
+import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
+import api from "@/services/api-instance";
+import { setSelectedData } from "@/redux/features/authentication-slice";
 
 interface ProductFormProps {
-  initialData: IProduct | null;
+  initialData: IDashboardProduct | null;
 }
 
 export default function ProductForm({ initialData }: ProductFormProps) {
@@ -73,12 +80,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [isAttributeModalOpen, setIsAttributeModalOpen] = useState(false);
   const [convertedFiles, setConvertedFiles] = useState<FileWithMetadata[]>([]);
   const [currentVariantIndex, setCurrentVariantIndex] = useState<number | null>(
     null
   );
-  const initialDataSetRef = useRef(false);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -95,17 +102,16 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       activateFlashSales: false,
       package: [],
       selectInventory: "",
-      slug: "",
-      warehouse: "",
       sameAsParentName: false,
+      flashSalesEndDate: new Date(),
       attributePrice: false,
       attributeDiscount: false,
       attributeImage: false,
       variantItems: [],
-      published: false,
+      published: true,
       featured: false,
-      hot: false,
-      shopNow: false,
+      new: false,
+      is_best_seller: false,
       taxApplicable: false,
       productTutorialDescription: "",
       youtubeUrl: "",
@@ -113,7 +119,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     },
   });
 
-  const { fields, remove } = useFieldArray({
+  const { fields, remove, append, replace } = useFieldArray({
     control: form.control,
     name: "variantItems",
   });
@@ -125,67 +131,83 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const price = form.watch("price");
 
   useEffect(() => {
-    if (initialData && !initialDataSetRef.current) {
-      initialDataSetRef.current = true;
-
+    if (initialData) {
       const urls =
         initialData?.images?.map((item) => ({
-          file: item.file,
-          id: item.id,
+          file: item?.file,
+          id: item?.id,
         })) || [];
 
       setConvertedFiles(urls);
 
-      form.reset({
+      const variantItems =
+        initialData.variants?.map((variant) => {
+          // console.log(variant);
+          return {
+            name: variant.item_name || "",
+            price: variant.item_price || "",
+            quantity: Number(variant.item_quantity) || 0,
+            sku: variant?.sku || "",
+            image: variant?.item_image || "",
+            variant_classes:
+              variant.product_variants?.map((variantClass) => ({
+                attribute: variantClass.attribute?.id?.toString() || "",
+                attribute_variant:
+                  variantClass.attribute_variant?.id?.toString() || "",
+                attribute_name: variantClass.attribute?.name || "",
+                variant_name: variantClass.attribute_variant?.name || "",
+              })) || [],
+          };
+        }) || [];
+
+      const formData = {
         productName: initialData.name || "",
         sku: initialData.sku || "",
         productGeneralDescription: initialData.general_description || "",
+        quantity: initialData.quantity || 0,
         productDetailedDescription: initialData.detail_description || "",
         category: initialData.category?.id.toString() || "",
         sub_category: initialData?.subcategory?.id.toString() || "",
-        brand: initialData.brand?.toString() || "",
+        brand: initialData.brand?.id.toString() || "",
         price: initialData.price || "",
         discount: initialData.discount_percentage || "",
+        flashSalesEndDate: new Date(initialData.flash_end_date) || new Date(),
         activateFlashSales: initialData.is_flash_sale || false,
         flashSalesDiscount: initialData.flash_sale_discount || "",
         images: urls,
-        variantItems:
-          initialData.variants?.map((variant: any) => ({
-            name: variant.item_name || "",
-            price: variant.item_price || "",
-            quantity: variant.item_quantity || "",
-            sku: variant.sku || "",
-            image: variant.item_image,
-            variant_classes:
-              variant.product_variants?.map((variantClass: any) => ({
-                attribute: variantClass.attribute || "",
-                attribute_variant: variantClass.attribute_variant || "",
-                attribute_name: variantClass.attribute_name || "",
-                variant_name: variantClass.variant_name || "",
-              })) || [],
-          })) || [],
+        variantItems: variantItems,
         published: initialData.is_published || false,
         featured: initialData.is_Featured || false,
-        hot: initialData.is_new || false,
-        shopNow: initialData.is_must_sold || false,
+        new: initialData.is_new || false,
+        is_best_seller: initialData.is_best_seller || false,
         taxApplicable: initialData.is_tax_applicable || false,
         productTutorialDescription: initialData.tutorial || "",
         youtubeUrl: initialData.youtube_link || "",
-        package: [],
-        selectInventory: "",
-        slug: initialData.slug_name || "",
-        warehouse: "",
-        sameAsParentName: false,
-        attributePrice: false,
-        attributeDiscount: false,
-        attributeImage: false,
-      });
+        package: initialData.package || [],
+        selectInventory: initialData?.inventory?.id.toString() || "",
+        sameAsParentName: initialData?.same_as_parent_name || false,
+        attributePrice: initialData?.attribute_price || false,
+        attributeDiscount: initialData?.attribute_discount || false,
+        attributeImage: initialData?.variants?.some(
+          (v) => v.item_image !== null && v.item_image !== ""
+        )
+          ? true
+          : false,
+
+        taxType: initialData?.tax_applied?.id.toString() || "",
+      };
+
+      form.reset(formData);
+
+      if (variantItems.length > 0) {
+        replace(variantItems);
+      }
     }
-  }, [initialData, form]);
+  }, [initialData, form, replace]);
 
   useEffect(() => {
-    const currentItems = form.getValues("variantItems");
-    if (currentItems.length > 0) {
+    if (fields.length > 0) {
+      const currentItems = form.getValues("variantItems") || [];
       const updatedItems = currentItems.map((item) => ({
         ...item,
         name: sameAsParentName ? productName : item.name,
@@ -194,25 +216,30 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       const hasChanges = currentItems.some(
         (item, index) =>
-          item.name !== updatedItems[index].name ||
-          item.price !== updatedItems[index].price
+          item.name !== updatedItems[index]?.name ||
+          item.price !== updatedItems[index]?.price
       );
 
       if (hasChanges) {
         form.setValue("variantItems", updatedItems);
       }
     }
-  }, [sameAsParentName, attributePrice, productName, price, form]);
+  }, [
+    sameAsParentName,
+    attributePrice,
+    productName,
+    price,
+    form,
+    fields.length,
+  ]);
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
+      setLoading(true);
       const formData = new FormData();
 
       convertedFiles.forEach((fileData, index) => {
         if (fileData.file instanceof File) {
-          if (index === 0) {
-            formData.append("images[0][file]", fileData.file);
-          }
           formData.append(`images[${index}][file]`, fileData.file);
           formData.append(`images[${index}][file_type]`, "image");
         }
@@ -221,59 +248,91 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       formData.append("name", data.productName);
       formData.append("sku", data.sku);
       formData.append("general_description", data.productGeneralDescription);
+      formData.append("quantity", data.quantity.toString());
       formData.append("detail_description", data.productDetailedDescription);
       formData.append("price", data.price);
+
       if (data.discount) {
         formData.append("discount_percentage", data.discount);
       }
+
       formData.append("category", data.category);
+
       if (data.sub_category) {
-        formData.append("sub_category", data.sub_category);
+        formData.append("subcategory", data.sub_category);
+      }
+      if (data.brand) {
+        formData.append("brand", data.brand);
       }
 
-      formData.append("brand", data.brand);
       if (data.flashSalesEndDate) {
-        formData.append("flash_end_date", data.flashSalesEndDate.toISOString());
+        formData.append(
+          "flash_end_date",
+          formatDateForInput(new Date(data.flashSalesEndDate.toISOString()))
+        );
       }
+
       formData.append("flash_sale_discount", data.flashSalesDiscount || "");
       formData.append("is_flash_sale", data.activateFlashSales.toString());
       data.package?.forEach((item, index) => {
-        formData.append(`package[${index}]`, item);
+        formData.append(`package[${index}][id]`, item.id.toString());
+        formData.append(`package[${index}][name]`, item.name);
       });
       formData.append("inventory", data.selectInventory ?? "");
-      formData.append("slug", data.slug ?? "");
-      formData.append("warehouse", data.warehouse ?? "");
-      data.variantItems.forEach((item, index) => {
-        formData.append(`variants[${index}][item_name]`, item.name);
-        formData.append(`variants[${index}][item_price]`, item.price);
-        formData.append(`variants[${index}][item_quantity]`, item.quantity);
-        formData.append(`variants[${index}][sku]`, item.sku);
-        if (item.image) {
-          formData.append(`variants[${index}][item_image]`, item.image);
-        }
-        if (item.variant_classes) {
-          item.variant_classes.forEach((variantClass, classIndex) => {
-            formData.append(
-              `variants[${index}][variant_classes][${classIndex}][attribute]`,
-              variantClass.attribute
-            );
-            formData.append(
-              `variants[${index}][variant_classes][${classIndex}][attribute_variant]`,
-              variantClass.attribute_variant
-            );
-          });
-        }
-      });
+      if (data.variantItems && data.variantItems.length > 0) {
+        formData.append(
+          "same_as_parent_name",
+          data.sameAsParentName.toString()
+        );
+        formData.append("attribute_price", data.attributePrice.toString());
+        formData.append(
+          "attribute_discount",
+          data.attributeDiscount.toString()
+        );
+        formData.append("attribute_image", data.attributeImage.toString());
+
+        data.variantItems.forEach((item, index) => {
+          if (item.name)
+            formData.append(`variants[${index}][item_name]`, item.name);
+          if (item.price)
+            formData.append(`variants[${index}][item_price]`, item.price);
+          formData.append(
+            `variants[${index}][item_quantity]`,
+            item.quantity.toString()
+          );
+
+          if (item.image && item.image instanceof File) {
+            formData.append(`variants[${index}][item_image]`, item.image);
+          }
+
+          if (item.variant_classes) {
+            item.variant_classes.forEach((variantClass, classIndex) => {
+              formData.append(
+                `variants[${index}][variant_classes][${classIndex}][attribute]`,
+                variantClass.attribute
+              );
+              formData.append(
+                `variants[${index}][variant_classes][${classIndex}][attribute_variant]`,
+                variantClass.attribute_variant
+              );
+            });
+          }
+        });
+      }
 
       formData.append("youtube_link", data.youtubeUrl ?? "");
+      formData.append("tutorial", data.productTutorialDescription ?? "");
       formData.append("is_published", data.published.toString());
       formData.append("is_Featured", data.featured.toString());
-      formData.append("hot", data.hot.toString());
-      formData.append("shop_now", data.shopNow.toString());
+      formData.append("is_new", data.new.toString());
+      formData.append("is_best_seller", data.is_best_seller.toString());
       formData.append("is_tax_applicable", data.taxApplicable.toString());
+      if (data.taxType) {
+        formData.append("tax_applied", data.taxType);
+      }
 
       if (initialData) {
-        const response = await updateProduct(initialData.id, formData);
+        const response = await updateProduct(initialData.slug_name, formData);
         if (response.status === 200) {
           toast.success("Product updated successfully");
           dispatch(toggleRefetchTableData());
@@ -289,22 +348,21 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false);
     }
   };
 
   const addVariant = () => {
-    // const parentName = form.getValues("productName");
-    // const parentPrice = form.getValues("price");
-    const currentItems = form.getValues("variantItems") || [];
     const newItem = {
       name: sameAsParentName ? productName : "",
       price: attributePrice ? price : "",
-      quantity: "",
+      quantity: 0,
       sku: "",
       image: attributeImage ? undefined : "",
       variant_classes: [],
     };
-    form.setValue("variantItems", [...currentItems, newItem]);
+    append(newItem);
   };
 
   const handleSaveAttribute = (attributeData: {
@@ -314,14 +372,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     variant_name: string;
   }) => {
     if (currentVariantIndex !== null) {
-      const currentItems = form.getValues("variantItems");
+      const currentItems = form.getValues("variantItems") || [];
       const updatedItems = [...currentItems];
-
       if (!updatedItems[currentVariantIndex].variant_classes) {
         updatedItems[currentVariantIndex].variant_classes = [];
       }
-
-      updatedItems[currentVariantIndex].variant_classes.push(attributeData);
+      updatedItems[currentVariantIndex].variant_classes!.push(attributeData);
       form.setValue("variantItems", updatedItems);
     }
   };
@@ -330,16 +386,40 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     variantIndex: number,
     attributeIndex: number
   ) => {
-    const currentItems = form.getValues("variantItems");
+    const currentItems = form.getValues("variantItems") || [];
     const updatedItems = [...currentItems];
     updatedItems[variantIndex]?.variant_classes?.splice(attributeIndex, 1);
     form.setValue("variantItems", updatedItems);
   };
 
+  useEffect(() => {
+    if (initialData?.subcategory && categories?.length > 0) {
+      const categoryWithSubcategory = categories.find((category) =>
+        category.subcategories?.some(
+          (sub) => sub.id.toString() === initialData.subcategory?.id.toString()
+        )
+      );
+
+      if (categoryWithSubcategory) {
+        form.setValue("category", categoryWithSubcategory.id.toString());
+
+        form.setValue("sub_category", initialData.subcategory.id.toString());
+      }
+    }
+  }, [categories, initialData, form]);
+  const [Error, setError] = useState<string>();
+  const handlevError = (err: any) => {
+    if (err.variantItems) {
+      setError(err.variantItems?.root?.message);
+    }
+  };
   return (
     <div className=" space-y-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit, (err) => handlevError(err))}
+          className="space-y-6"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Product General Information */}
             <Card>
@@ -352,7 +432,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   name="productName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PRODUCT NAME</FormLabel>
+                      <FormLabel>
+                        PRODUCT NAME
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter the Name of the product"
@@ -366,10 +449,39 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
                 <FormField
                   control={form.control}
+                  name={`quantity`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        PRODUCT QUANTITY
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter the Quantity"
+                          value={field.value ?? ""}
+                          min={1} // prevents typing values < 1
+                          onChange={(e) => {
+                            const val = e.target.valueAsNumber;
+                            field.onChange(val > 0 ? val : ""); // only allow positive values
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="sku"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PRODUCT SKU</FormLabel>
+                      <FormLabel>
+                        PRODUCT SKU
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter the sku of the product"
@@ -386,11 +498,18 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   name="productGeneralDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PRODUCT GENERAL DESCRIPTION</FormLabel>
+                      <FormLabel>
+                        PRODUCT GENERAL DESCRIPTION
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <TextEditor
-                          value={field.value}
-                          onChange={field.onChange}
+                          heightClass="!max-w-[300px]"
+                          value={field.value || ""}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            form.trigger("productGeneralDescription");
+                          }}
                           placeholder="Enter the Product Description"
                         />
                       </FormControl>
@@ -398,35 +517,46 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="productDetailedDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PRODUCT DETAILED DESCRIPTION</FormLabel>
+                      <FormLabel>
+                        PRODUCT DETAILED DESCRIPTION
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <TextEditor
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Enter the Product Description"
+                          heightClass="!max-w-[300px]"
+                          value={field.value || ""}
+                          onChange={(value) => {
+                            field.onChange(value);
+                            form.trigger("productDetailedDescription");
+                          }}
+                          placeholder="Enter the Product Detailed Description"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <CardTitle className="py-4">Product Specific Info</CardTitle>
                 <FormCombobox
                   form={form}
                   name="category"
-                  label="Category"
+                  label="Category "
                   placeholder="Select a category"
                   searchPlaceholder="Search Category..."
                   options={categories?.map((category) => ({
                     value: category.id.toString(),
                     label: category.name,
                   }))}
+                  isRequired
                 />
+
                 <FormField
                   control={form.control}
                   name="sub_category"
@@ -437,12 +567,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         (category) =>
                           category.id.toString() === selectedCategory
                       )?.subcategories || [];
+
                     return (
                       <FormItem>
-                        <FormLabel className="">
-                          Sub Category
-                          <span className="text-red-500">*</span>
-                        </FormLabel>
+                        <FormLabel className="">Sub Category</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value?.toString()}
@@ -482,41 +610,27 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     );
                   }}
                 />
+
                 <FormField
                   control={form.control}
                   name="brand"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="">
-                        Brand
-                        <span className="text-red-500">*</span>
-                      </FormLabel>
+                      <FormLabel className="">Brand</FormLabel>
                       <FormControl>
                         <PaginatedSelect
                           value={field.value}
                           onValueChange={field.onChange}
-                          placeholder="Select Brand"
+                          placeholder={
+                            initialData?.brand
+                              ? initialData?.brand?.name
+                              : "Select Brand"
+                          }
                           fetchData={getBrandsDropdown}
                           className="w-full"
                         />
                       </FormControl>
 
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="warehouse"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>WAREHOUSE</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Here we will have slug"
-                          {...field}
-                        />
-                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -535,11 +649,20 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PRICE</FormLabel>
+                      <FormLabel>
+                        PRICE
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Please enter the product price"
-                          {...field}
+                          type="number"
+                          min={1} // prevents typing values < 1
+                          value={field.value || ""}
+                          placeholder="Please enter the Discount Percentage"
+                          onChange={(e) => {
+                            const val = e.target.valueAsNumber;
+                            field.onChange(val > 0 ? val.toString() : "");
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -554,8 +677,16 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       <FormLabel>DISCOUNT %</FormLabel>
                       <FormControl>
                         <Input
+                          type="number"
+                          min={1} // prevents typing values < 1
+                          value={field.value || ""}
                           placeholder="Please enter the Discount Percentage"
-                          {...field}
+                          onChange={(e) => {
+                            const val = e.target.valueAsNumber;
+                            field.onChange(
+                              val > 0 && val < 100 ? val.toString() : ""
+                            ); // only allow positive values
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -577,60 +708,79 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="flashSalesEndDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>FLASH SALES END DATE</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "w-full pl-3 text-left font-normal bg-white",
-                                !field.value && "text-muted-foreground"
-                              )}
+
+                {form.watch("activateFlashSales") && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="flashSalesEndDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>FLASH SALES END DATE</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal bg-white",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>
+                                      Select the end date of flash sales
+                                    </span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
                             >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Select the end date of flash sales</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="flashSalesDiscount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>FLASH SALES DISCOUNT %</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min={1} // prevents typing values < 1
+                              max={100}
+                              value={field.value || ""}
+                              placeholder="Please enter the Discount Percentage"
+                              onChange={(e) => {
+                                const val = e.target.valueAsNumber;
+                                field.onChange(
+                                  val > 0 && val < 100 ? val.toString() : ""
+                                ); // only allow positive values
+                              }}
+                            />
                           </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) => date < new Date()}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="flashSalesDiscount"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>FLASH SALES DISCOUNT %</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Please enter the Discount Percentage"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
                 <CardTitle className="py-4">Bundle and Package</CardTitle>
                 <FormField
                   control={form.control}
@@ -659,32 +809,21 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   name="selectInventory"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>SELECT INVENTORY LOCATION</FormLabel>
-
+                      <FormLabel>
+                        SELECT INVENTORY LOCATION
+                        <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <PaginatedSelect
                           value={field.value || ""}
                           onValueChange={field.onChange}
-                          placeholder="Select Inventory Location"
+                          placeholder={
+                            initialData?.inventory
+                              ? initialData?.inventory?.name
+                              : "Select Inventory Location"
+                          }
                           fetchData={getInventoryLocationDropdown}
                           className="w-full"
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>SLUG</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Here we will have slug"
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -700,11 +839,15 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             <CardHeader className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-4">
                 Variant Management{" "}
-                <div className="size-6 flex items-center justify-center bg-orange-500 text-white rounded-full">
+                <div className="size-6 flex items-center justify-center bg-primary text-white rounded-full">
                   <span className="text-xs">{fields.length}</span>
                 </div>{" "}
               </CardTitle>
-              <Button type="button" onClick={addVariant} className="">
+              <Button
+                type="button"
+                onClick={addVariant}
+                className="bg-black rounded-3xl hover:bg-gray-500"
+              >
                 <Plus className="h-4 w-4" />
                 Add Variant
               </Button>
@@ -779,7 +922,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     key={field.id}
                     className="space-y-4 border p-4 relative"
                   >
-                    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 items-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
                       <FormField
                         control={form.control}
                         name={`variantItems.${index}.name`}
@@ -800,22 +943,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           </FormItem>
                         )}
                       />
-                      <FormField
-                        control={form.control}
-                        name={`variantItems.${index}.sku`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>ITEM SKU</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Please Enter the SKU"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+
                       <FormField
                         control={form.control}
                         name={`variantItems.${index}.price`}
@@ -842,42 +970,53 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                             <FormLabel>ITEM QUANTITY</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Please Enter the Quantity"
-                                {...field}
+                                type="number"
+                                placeholder="Enter the Currency Rate"
+                                value={field.value == 0 ? "" : field.value}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    parseInt(e.target.value) > 0
+                                      ? Number(e.target.value)
+                                      : undefined
+                                  )
+                                }
+                                required
                               />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </div>
 
-                    {/* Conditional Image Field */}
-                    {attributeImage && (
-                      <div className="mt-4">
-                        <FormField
-                          control={form.control}
-                          name={`variantItems.${index}.image`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>
-                                ITEM IMAGE
-                                <span className="text-red-500">*</span>
-                              </FormLabel>
-                              <FormControl>
-                                <SingleImageUploader
-                                  onChange={field.onChange}
-                                  onRemove={() => field.onChange(undefined)}
-                                  value={field.value}
-                                  size="small"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
+                      {attributeImage && (
+                        <div className="">
+                          <FormField
+                            control={form.control}
+                            name={`variantItems.${index}.image`}
+                            render={({ field }) => {
+                              // console.log("this is the fields", field);
+                              return (
+                                <FormItem>
+                                  <FormLabel>
+                                    ITEM IMAGE
+                                    <span className="text-red-500">*</span>
+                                  </FormLabel>
+                                  <FormControl>
+                                    <SingleImageUploader
+                                      onChange={field.onChange}
+                                      onRemove={() => field.onChange(undefined)}
+                                      value={field.value}
+                                      size="small"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
 
                     <div className="absolute right-4 top-1">
                       <div className=" flex gap-2">
@@ -892,9 +1031,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         </Button>
                       </div>
                     </div>
-                    <div>
+                    <div className="flex flex-wrap gap-6 items-center">
                       <Button
                         type="button"
+                        className="bg-black rounded-3xl hover:bg-gray-500 pr-4"
                         onClick={() => {
                           setCurrentVariantIndex(index);
                           setIsAttributeModalOpen(true);
@@ -902,16 +1042,17 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       >
                         <Plus className="size-4" /> Add Attribute
                       </Button>
+                      <VariantAttributeDisplay
+                        attributes={
+                          form.watch(`variantItems.${index}.variant_classes`) ||
+                          []
+                        }
+                        onDelete={(attributeIndex) =>
+                          handleDeleteAttribute(index, attributeIndex)
+                        }
+                      />
                     </div>
-                    <VariantAttributeDisplay
-                      attributes={
-                        form.watch(`variantItems.${index}.variant_classes`) ||
-                        []
-                      }
-                      onDelete={(attributeIndex) =>
-                        handleDeleteAttribute(index, attributeIndex)
-                      }
-                    />
+                    {Error && <span className="text-red">{Error}</span>}
                   </section>
                 ))}
             </CardContent>
@@ -921,7 +1062,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             {/* Photo Gallery */}
             <Card>
               <CardHeader>
-                <CardTitle>Photo Gallery</CardTitle>
+                <CardTitle>
+                  Photo Gallery
+                  <span className="text-red-500">*</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <FormField
@@ -934,7 +1078,41 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           isMultiple
                           onChange={field.onChange}
                           value={convertedFiles}
-                          onRemove={field.onChange}
+                          onRemove={async (updatedFiles) => {
+                            const removedFiles = convertedFiles.filter(
+                              (file) => !updatedFiles.includes(file)
+                            );
+
+                            for (const removed of removedFiles) {
+                              if (removed.id) {
+                                try {
+                                  const newImages = initialData?.images?.filter(
+                                    (img) => img.id !== removed.id
+                                  );
+                                  dispatch(
+                                    setSelectedData({
+                                      ...initialData,
+                                      images: newImages,
+                                    })
+                                  );
+
+                                  const response = await api.delete(
+                                    `/delete-product-image/${removed.id}/`
+                                  );
+                                  if (response?.status === 200) {
+                                    toast.success(
+                                      `File with id ${removed.id} deleted`
+                                    );
+                                  }
+                                } catch (error) {
+                                  console.error(error);
+                                  toast.error("Error deleting file:");
+                                }
+                              }
+                            }
+
+                            field.onChange(updatedFiles);
+                          }}
                           setConvertedFile={setConvertedFiles}
                           isEdit={initialData !== null}
                           accept=".png,.jpg,.jpeg,.webp"
@@ -987,10 +1165,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     />
                     <FormField
                       control={form.control}
-                      name="hot"
+                      name="new"
                       render={({ field }) => (
                         <FormItem className="flex items-center justify-between">
-                          <FormLabel>HOT</FormLabel>
+                          <FormLabel>NEW</FormLabel>
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -1002,10 +1180,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     />
                     <FormField
                       control={form.control}
-                      name="shopNow"
+                      name="is_best_seller"
                       render={({ field }) => (
                         <FormItem className="flex items-center justify-between">
-                          <FormLabel>SHOP NOW</FormLabel>
+                          <FormLabel>BEST SELLER</FormLabel>
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -1031,7 +1209,37 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                       )}
                     />
                   </div>
-                  <CardTitle className="py-4">Product Tutorial</CardTitle>
+                  {form.watch("taxApplicable") && (
+                    <FormField
+                      control={form.control}
+                      name="taxType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-muted-foreground">
+                            TAX
+                          </FormLabel>
+
+                          <FormControl className="w-full rounded-xs cursor-pointer">
+                            <PaginatedSelect
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              placeholder={
+                                initialData?.tax_applied
+                                  ? initialData?.tax_applied.name
+                                  : "Select Tax Type"
+                              }
+                              fetchData={getTaxesDropdown}
+                              className="w-full"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  <CardTitle className="py-4">Product specification</CardTitle>
+
                   <FormField
                     control={form.control}
                     name="productTutorialDescription"
@@ -1040,7 +1248,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <FormLabel>PRODUCT OR CASE DESCRIPTION</FormLabel>
                         <FormControl>
                           <TextEditor
-                            value={field.value}
+                            value={field.value ?? ""}
                             onChange={field.onChange}
                             placeholder="Enter the Product Description"
                           />
@@ -1071,8 +1279,8 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           </div>
 
           <div className="flex justify-end">
-            <Button type="submit" className=" px-8">
-              Save Product
+            <Button type="submit" className="px-8" disabled={loading}>
+              {loading ? <ButtonLoader /> : "Save Product"}
             </Button>
           </div>
         </form>

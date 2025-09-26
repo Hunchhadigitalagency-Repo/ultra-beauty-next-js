@@ -6,6 +6,7 @@ import {
 } from "@/schemas/auth/auth-schema";
 
 import { z } from "zod";
+import api from "@/services/api-instance";
 
 type ForgotPasswordFormValue = z.infer<typeof forgotPasswordFormSchema>;
 
@@ -39,3 +40,8 @@ export const resetPasswordApi = async (data: ResetPasswordFormValue) => {
     throw error;
   }
 };
+
+export const updatePassword = async ({ old_password, new_password }: { old_password: string, new_password: string }) => {
+  const response = await api.post("/auth/change-password/", { old_password, new_password, confirm_new_password: new_password })
+  return response
+}

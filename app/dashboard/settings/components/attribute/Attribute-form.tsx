@@ -12,13 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Plus, Trash2 } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -50,21 +43,19 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
     resolver: zodResolver(attributeSchema),
     defaultValues: initialData
       ? {
-          name: initialData.name,
-          type: initialData.type,
-          is_active: initialData.is_active ?? false,
-          variations:
-            initialData.variations?.map((v) => ({
-              name: v.name,
-              value: v.value,
-            })) ?? [],
-        }
+        name: initialData.name,
+        is_active: initialData.is_active ?? false,
+        variations:
+          initialData.variations?.map((v) => ({
+            name: v.name,
+            value: v.value,
+          })) ?? [],
+      }
       : {
-          name: "",
-          type: "",
-          is_active: false,
-          variations: [{ name: "", value: "" }],
-        },
+        name: "",
+        is_active: false,
+        variations: [{ name: "", value: "" }],
+      },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -112,58 +103,24 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6"
             >
-              <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-muted-foreground">
-                        ATTRIBUTE NAME
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Please Enter the Name of Attribute"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-muted-foreground">
-                        ATTRIBUTE TYPE
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value || ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Enter the Type of the Attribute" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Checkbox">Checkbox</SelectItem>
-                          <SelectItem value="Radio Button">
-                            Radio Button
-                          </SelectItem>
-                          <SelectItem value="Other Button">
-                            Other Button
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-muted-foreground">
+                      ATTRIBUTE NAME
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Please Enter the Name of Attribute"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="flex flex-col md:flex-row text-center justify-between">
                 <h4 className="text-lg font-semibold">Attribute Variation</h4>
@@ -237,7 +194,7 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
                 <h1>View Style in frontend</h1>
                 <div className="flex flex-col md:flex-row gap-6 items-center">
                   <h1>{form.watch("name") || "Attribute"}</h1>
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 ">
                     {form.watch("variations")?.map((variation, index) => (
                       <div
                         key={index}

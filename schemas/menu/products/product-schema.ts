@@ -27,10 +27,10 @@ const variantClassSchema = z.object({
 });
 
 const variantItemSchema = z.object({
-  name: z.string().min(1, "Item name is required"),
-  price: z.string().min(1, "Price is required"),
-  quantity: z.string().min(1, "Quantity is required"),
-  sku: z.string().min(1, "SKU is required"),
+  name: z.string().optional(),
+  price: z.string().optional(),
+  quantity: z.number().nonnegative("Quantity must be a positive number"),
+  // sku: z.string().min(1, "SKU is required"),
   image: z
     .union([
       z.instanceof(File).refine((file) => file.size <= MAX_FILE_SIZE, {
@@ -43,56 +43,57 @@ const variantItemSchema = z.object({
   variant_classes: z.array(variantClassSchema).optional(),
 });
 
+export const paginatedSelectSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, "Name is required"),
+});
+
 export const productSchema = z
   .object({
     productName: z.string().min(1, "Product name is required"),
     sku: z.string().min(1, "SKU is required"),
     productGeneralDescription: z
       .string()
-      .min(1, "Product description is required"),
+      .min(10, "Product description is required"),
     productDetailedDescription: z
       .string()
-      .min(1, "Detailed description is required"),
-
+      .min(10, "Detailed description is required"),
+    quantity: z.number().nonnegative("Quantity must be a positive number"),
     category: z.string().min(1, "Category is required"),
     sub_category: z.string().optional(),
-    brand: z.string().min(1, "Brand is required"),
-
+    brand: z.string().optional(),
     price: z.string().min(1, "Price is required"),
     discount: z.string().optional(),
     activateFlashSales: z.boolean(),
     flashSalesEndDate: z.date().optional(),
     flashSalesDiscount: z.string().optional(),
 
-    package: z.array(z.string()).optional(),
+    package: z.array(paginatedSelectSchema).optional(),
 
-    selectInventory: z.string().optional(),
-    slug: z.string().optional(),
-    warehouse: z.string().optional(),
-
+    selectInventory: z.string().min(1, "Inventory is location"),
     sameAsParentName: z.boolean(),
     attributePrice: z.boolean(),
     attributeDiscount: z.boolean(),
     attributeImage: z.boolean(),
-    variantItems: z
-      .array(variantItemSchema)
-      .min(1, "At least one variant is required"),
+    variantItems: z.array(variantItemSchema).optional(),
 
     published: z.boolean(),
     featured: z.boolean(),
-    hot: z.boolean(),
-    shopNow: z.boolean(),
+    new: z.boolean(),
+    is_best_seller: z.boolean(),
     taxApplicable: z.boolean(),
-
-    productTutorialDescription: z
-      .string()
-      .min(1, "Product Tutorial Description is required"),
+    taxType: z.string().optional(),
+    productTutorialDescription: z.string().optional(),
     youtubeUrl: z.string().optional(),
     images: z.array(fileSchema).min(1, "At least one attachment is required"),
   })
   .refine(
     (data) => {
-      if (data.attributeImage && data.variantItems.length > 0) {
+      if (
+        data.attributeImage &&
+        data.variantItems &&
+        data.variantItems.length > 0
+      ) {
         return data.variantItems.every((item) => {
           return (
             item.image &&
@@ -108,8 +109,21 @@ export const productSchema = z
         "All variant items must have images when attribute image is enabled",
       path: ["variantItems"],
     }
+  )
+  .refine(
+    (data) => {
+      if (data.variantItems && data.variantItems.length > 0) {
+        return data.variantItems.every(
+          (item) => item.variant_classes && item.variant_classes.length > 0
+        );
+      }
+      return true;
+    },
+    {
+      message: "Each variant must have at least one attribute",
+      path: ["variantItems"],
+    }
   );
-
 export type ProductFormValues = z.infer<typeof productSchema>;
 export type VariantClass = z.infer<typeof variantClassSchema>;
 

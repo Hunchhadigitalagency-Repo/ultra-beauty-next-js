@@ -14,6 +14,7 @@ import SectionHeader from "@/components/common/header/section-header";
 import { toggleCategory } from "@/redux/features/category-slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
+import { AlertCircle } from "lucide-react";
 
 interface Category {
   id: number;
@@ -54,20 +55,24 @@ const CategorySection: React.FunctionComponent = () => {
         {
           loading ? (
             <div className='flex items-center justify-center w-full h-60'>
-              <p className='text-gray'>
+              <p className='font-extralight text-sm text-gray-400'>
                 Loading Categories...
               </p>
             </div>
           ) : error ? (
-            <div className='flex items-center justify-center w-full h-60'>
-              <p className='text-red'>
-                Error While Fetching Categories
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className='font-extralight text-sm text-gray-400'>
+                Oops! Something went wrong...
               </p>
             </div>
           ) : data?.length === 0 ? (
-            <p className="text-sm text-center text-muted-foreground">
-              No Categories found
-            </p>
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className='font-extralight text-sm text-gray-400 capitalize'>
+                Oops! no categories right now...
+              </p>
+            </div>
           ) : (
             <Carousel
               className="w-full"
@@ -75,15 +80,13 @@ const CategorySection: React.FunctionComponent = () => {
                 align: "start",
               }}
             >
-              <CarouselContent className="-ml-4">
+              <CarouselContent className="-ml-4 gap-2">
                 {data?.map((category, index) => (
                   <CarouselItem
                     key={index}
-                    className=" basis-[40%] pl-4 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6 xl:gap-2"
+                    className="basis-[40%] pl-4 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6 xl:gap-2"
                   >
-                    <button onClick={() => handleCategoryCardClick(category.id)}>
-                      <CategoryCard title={category.name} image={category.icon} />
-                    </button>
+                    <CategoryCard id={category.id} title={category.name} image={category.icon} onCategoryClick={handleCategoryCardClick} />
                   </CarouselItem>
                 ))}
               </CarouselContent>

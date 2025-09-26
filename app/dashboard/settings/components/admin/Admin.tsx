@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 import { AdminConstant } from "./admin-constant";
 import { IAdmin } from "@/types/Settings";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import SearchBox from "@/components/common/filter/search-box";
+import { ESettings } from "@/types/table";
 
 const AdminTab = () => {
   const dispatch = useAppDispatch();
@@ -19,8 +19,11 @@ const AdminTab = () => {
   const scrollId = "infinite-scroll-container";
   const { searchQuery } = useAppSelector((state) => state.filter);
 
-  const { data, loading, hasMore, fetchNext } =
-    useInfiniteFetch<IAdmin>("/admin", "search", searchQuery);
+  const { data, loading, hasMore, fetchNext } = useInfiniteFetch<IAdmin>(
+    "/admin",
+    "search",
+    searchQuery
+  );
 
   return (
     <DataCard
@@ -30,7 +33,7 @@ const AdminTab = () => {
           <SearchBox />
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Admin"))}
+            onClick={() => dispatch(setActiveSetting(ESettings.ADD_ADMIN))}
           >
             Add Admins
           </Button>
@@ -42,14 +45,14 @@ const AdminTab = () => {
           dataLength={data?.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
             cols={AdminConstant(dispatch)}
             data={data as IAdmin[]}
             loading={loading && data.length === 0}
-            onRowClick={() => {}}
+            onRowClick={() => { }}
             height="h-auto"
             hasSerialNo={true}
           />

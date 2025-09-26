@@ -3,28 +3,23 @@ import { AppDispatch } from "@/redux/store";
 import TableActions from "@/components/common/table/table-actions";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import { Col, ETypes } from "@/types/table";
-import BackgroundStatusCard from "@/components/common/cards/background-status-card";
+import { ITransactions } from "@/types/transactions";
+import { formatDateTime } from "@/lib/date-time-utils";
 
-
-export const TransactionConstants = (dispatch: AppDispatch): Col<any>[] => {
+export const TransactionConstants = (
+  dispatch: AppDispatch
+): Col<ITransactions>[] => {
   return [
+
     {
-      title: "ID",
-      render: (data: any) => (
+      title: "TRANSACTION ID",
+      render: (data: ITransactions) => (
         <span className="font-medium text-foreground text-sm">#{data.id}</span>
       ),
     },
     {
-      title: "TRANSACTION ID",
-      render: (data: any) => (
-        <span className="font-medium text-foreground text-sm">
-          {data.transaction_id}
-        </span>
-      ),
-    },
-    {
       title: "AMOUNT",
-      render: (data: any) => (
+      render: (data: ITransactions) => (
         <span className="font-medium text-foreground text-sm">
           Nrs. {data.amount}
         </span>
@@ -32,7 +27,7 @@ export const TransactionConstants = (dispatch: AppDispatch): Col<any>[] => {
     },
     {
       title: "INVOICE ID",
-      render: (data: any) => (
+      render: (data: ITransactions) => (
         <span className="font-medium text-foreground text-sm">
           {data.invoice_id}
         </span>
@@ -40,23 +35,21 @@ export const TransactionConstants = (dispatch: AppDispatch): Col<any>[] => {
     },
     {
       title: "ORDER ID",
-      render: (data: any) => (
-        <span className="font-medium text-foreground text-sm">#{data.order_id}</span>
+      render: (data: ITransactions) => (
+        <span className="font-medium text-foreground text-sm">#{data.id}</span>
       ),
     },
     {
       title: "DATE",
-      render: (data: any) => (
-        <span className="font-medium text-foreground text-sm">{data.date}</span>
+      render: (data: ITransactions) => (
+        <span className="font-medium text-foreground text-sm">
+          {formatDateTime(data.date)}
+        </span>
       ),
     },
     {
-      title: "STATUS",
-      render: (data: any) => <BackgroundStatusCard status={data.status} />,
-    },
-    {
       title: "ACTIONS",
-      render: (data: any) => (
+      render: (data: ITransactions) => (
         <div
           className="flex gap-2 w-full justify-end"
           onClick={(e) => {
@@ -67,7 +60,7 @@ export const TransactionConstants = (dispatch: AppDispatch): Col<any>[] => {
           <TableActions
             data={data}
             type={ETypes.TRANSACTIONS}
-            name={data.customerName as string}
+            name={`Transaction ID: ${data.id}`}
           />
         </div>
       ),

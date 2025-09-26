@@ -17,6 +17,7 @@ export interface IOrderItem {
 
 export interface IOrderDetail {
   id: number;
+  name?: string;
   order: number;
   product: IProduct;
   product_variant: IProductVariant;
@@ -24,6 +25,51 @@ export interface IOrderDetail {
   price: number;
   total_price: number;
   status: "pending" | "Delivered" | "Packed" | "Placed" | "Shipped" | string;
+}
+
+export interface IOrders extends IOrder { }
+export interface IOrderStatus {
+  id: number;
+  name: string;
+  is_active: boolean;
+  is_type_success: boolean;
+  is_type_failed: boolean;
+  position: number;
+  primary_color: string;
+  text_color: string;
+}
+
+export interface IUser {
+  id: number;
+  username: string;
+  email: string;
+  address: string | null;
+  phone_number: string | null;
+  profile_picture: string;
+  first_name?: string;
+  last_name?: string;
+}
+export interface IOrder {
+  id: number;
+  order_id?: number;
+  user_id: number;
+  has_invoice: boolean;
+  invoice_id: number | null;
+  status?: string;
+  total_price?: string;
+  order_status: IOrderStatus;
+  order_created: string;
+  payment_method: string;
+  payment_status: "pending" | "paid" | "failed" | string;
+  discount_amount: number;
+  vat_amount: number;
+  sub_total: number;
+  total_amount: number;
+  coupon_discount: number;
+  shipping_fee: number | null;
+  user: IUser;
+  shipping_info: IShippingInfo;
+  order_details: IOrderDetail[];
 }
 
 export interface IProduct {
@@ -68,14 +114,17 @@ export interface IProductVariant {
 
 export interface IVariantAttribute {
   id: number;
-  attribute_id: number;
-  attribute: string;
-  attribute_variant_id: number;
-  attribute_variant: string;
+  attribute: {
+    id: number;
+    name: string;
+  };
+  attribute_variant: {
+    id: number;
+    name: string;
+  };
   created_at: string;
   updated_at: string;
 }
-
 export interface IOrderResponse {
   id: number;
   user_id: number;
@@ -232,6 +281,36 @@ export interface CancelResultResponse {
 }
 export interface CancelOrderResponse extends PaginatedResponse {
   results: CancelResultResponse[]
+}
+
+//dashboard
+
+export interface Status {
+  id: number
+  name: string
+  is_active: boolean
+  is_type_success: boolean
+  is_type_failed: boolean
+  position: number
+  primary_color: string
+  text_color: string
+}
+export interface INewOrder {
+  order_id: number
+  total_amount: string
+  status: Status
+  customer: string
+  payment_method: string
+  order_date: string
+  product_name: string
+  quantity: number
+}
+
+export interface INeworders extends INewOrder { }
+
+export interface IStockOut {
+  name: string;
+  image: string;
 }
 
 // order details end------------------------------------------------------------------------------

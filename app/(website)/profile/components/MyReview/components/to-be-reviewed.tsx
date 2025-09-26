@@ -16,11 +16,11 @@ const ToBeReviewed: React.FunctionComponent = () => {
                     <ReviewLoader />
                 ) : error ? (
                     <div className='flex flex-col py-10 justify-center items-center'>
-                        <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-                        <p className="font-medium text-gray-700">
+                        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                        <p className=" text-sm font-extralight text-gray-400">
                             Oops! Something went wrong.
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 text-sm font-extralight text-gray-400">
                             We couldn’t load the review history data. Please try again.
                         </p>
                     </div>
@@ -36,8 +36,10 @@ const ToBeReviewed: React.FunctionComponent = () => {
                         />
                     ))
                 ) : (
-                    <div className="text-gray-500 text-center">
-                        No items to be reviewed.
+                    <div className='flex flex-col items-center justify-center w-full h-60'>
+                        <p className='font-extralight text-sm text-gray-400'>
+                            No items to be reviewed.
+                        </p>
                     </div>
                 )}
         </section>

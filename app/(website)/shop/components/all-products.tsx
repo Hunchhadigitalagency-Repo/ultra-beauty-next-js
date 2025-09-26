@@ -24,6 +24,7 @@ const AllProducts = () => {
 
   const [showFilter, setShowFilter] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [sortingValue, setSortingValue] = useState('');
   const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
 
   const { selectedCategories, selectedBrands, priceRange } = useAppSelector(state => state.category);
@@ -35,6 +36,10 @@ const AllProducts = () => {
 
   if (searchValue) {
     queryParams.set("search", searchValue);
+  }
+
+  if (sortingValue) {
+    queryParams.set('sort_by', sortingValue)
   }
 
   if (selectedBrands.length > 0) {
@@ -81,10 +86,19 @@ const AllProducts = () => {
 
     <section className="relative flex flex-col gap-8 padding">
       <div className="flex flex-row items-center justify-between gap-4">
-        <SectionHeader title={`All Products (${count})`} description="" />
+        <SectionHeader
+          title={`All Products (${count})`}
+          description=""
+        />
         <div className="hidden lg:flex lg:gap-5">
-          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
-          <ProductSort />
+          <SearchBox
+            placeholder="Search Products"
+            sendValue={handleSearchValue}
+          />
+          <ProductSort
+            onChange={setSortingValue}
+            selectedValue={sortingValue}
+          />
         </div>
         <Menu
           onClick={toggleFilter}
@@ -92,7 +106,10 @@ const AllProducts = () => {
         />
       </div>
       <div className="flex lg:flex-row lg:gap-16">
-        <FilterSection showFilter={showFilter} onClose={toggleFilter} />
+        <FilterSection
+          showFilter={showFilter}
+          onClose={toggleFilter}
+        />
         <div className="flex-1">
           <InfiniteScroll
             dataLength={products.length}
@@ -116,11 +133,11 @@ const AllProducts = () => {
               {products?.map((product, index) => (
                 <ProductCard
                   key={index}
-                  slug={product.slug_name}
-                  imageSrc={product.images?.[0]?.file}
+                  slug={product?.slug_name}
+                  imageSrc={product?.images?.[0]?.file}
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
-                  brand={product.brand.brand_name}
+                  brand={product.brand?.name}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

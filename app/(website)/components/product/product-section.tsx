@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { AlertCircle } from 'lucide-react';
 
 interface ProductSectionProps {
   headerTitle: string;
@@ -54,33 +55,35 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
       <div>
 
         {isLoading ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-gray'>
-              Loading {headerTitle}...
+          <div className='flex items-center justify-center w-full h-60'>
+            <p className='font-extralight text-sm text-gray-400'>
+              Loading {headerTitle} Products...
             </p>
           </div>
         ) : error ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-red'>
-              Error While Fetching {headerTitle} Products
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className='font-extralight text-sm text-gray-400'>
+              Oops! Something went wrong...
             </p>
           </div>
         ) : products?.length === 0 ? (
-          <div className='h-60 flex w-full justify-center items-center'>
-            <p className='text-red'>
-              No {headerTitle} found
+          <div className='flex flex-col items-center justify-center w-full h-60'>
+            <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+            <p className='font-extralight text-sm text-gray-400 capitalize'>
+              Oops! no {headerTitle} Products right now...
             </p>
           </div>
         ) : (
           <Carousel
             className="w-full"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-4 gap-2">
               {products?.map((product) => {
                 return (
                   <CarouselItem
                     key={product.name}
-                    className="pl-4 basis-1/2 lg:basis-1/4"
+                    className="basis-1/2 lg:basis-1/4 border"
                   >
                     <div className="flex w-full h-full">
                       <ProductCard

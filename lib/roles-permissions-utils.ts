@@ -1,7 +1,7 @@
 import { EUserRoles, IUserPermission } from "@/types/permissions";
 import {
   IPermissionConfig,
-  IRoles,
+  IRolesPermissions,
   IRolesFormData,
 } from "@/types/roles-permissions";
 
@@ -27,12 +27,12 @@ export function getAllEntities(
 
 export function mapRolesDataToForm(
   defaultConfig: IPermissionConfig[],
-  backendData: IRoles
+  backendData: IRolesPermissions
 ): IRolesFormData {
   const allEntities = getAllEntities(defaultConfig);
 
   const formData: IRolesFormData = {
-    role_name: backendData.role_name,
+    role_name: backendData.role,
     entities: allEntities.reduce((acc, entity) => {
       acc[entity.data] = entity.permissions.reduce(
         (permissionAcc, permission) => {

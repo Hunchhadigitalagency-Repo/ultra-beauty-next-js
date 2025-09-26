@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Heart } from "lucide-react";
+import { AlertCircle, Heart } from "lucide-react";
 import { Result } from "@/types/product";
 import { useDispatch } from "react-redux";
 import WishlistCard from "./wishlist-card";
@@ -130,9 +130,12 @@ const WishlistedProducts = () => {
                 />
               ))
             ) : (
-              <p className="text-sm text-center pt-51 text-muted-foreground">
-                No wishlisted items found.
-              </p>
+              <div className='flex flex-col items-center justify-center w-full h-60'>
+                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                <p className='text-sm font-extralight text-gray-400 capitalize'>
+                  Oops! no wishlisted items found...
+                </p>
+              </div>
             )
           }
         </div>
@@ -146,11 +149,25 @@ const WishlistedProducts = () => {
 
         {
           isLoading ? (
-            <p>Loading...</p>
+            <div className='flex items-center justify-center w-full h-60'>
+              <p className='font-semibold text-base text-gray-400'>
+                Loading...
+              </p>
+            </div>
           ) : error ? (
-            <p>Something went wrong</p>
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className='text-sm font-extralight text-gray-400'>
+                Oops! Something went wrong...
+              </p>
+            </div>
           ) : flashSaleProducts?.length === 0 ? (
-            <p>No sale products found</p>
+            <div className='flex flex-col items-center justify-center w-full h-60'>
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className='text-sm font-extralight text-gray-400 capitalize'>
+                Oops! no sales products right now...
+              </p>
+            </div>
           ) : (
             flashSaleProducts?.map((product, index) => (
               <div key={index} className="flex flex-col gap-2 mt-8 shadow">
@@ -194,7 +211,7 @@ const WishlistedProducts = () => {
                   </div>
                 </div>
                 <button className="flex items-center justify-center gap-2 py-2 text-sm text-white bg-primary">
-                  <Link href={`/shop/product/${product.slug_name}`}>
+                  <Link href={`/shop/${product.slug_name}`}>
                     View Product
                   </Link>
                 </button>

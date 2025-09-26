@@ -1,8 +1,8 @@
 "use client";
 
 import HeaderBackCard from "@/components/common/cards/header-back-card";
-import { FormCombobox } from "@/components/common/form/form-combobox";
-import { PaginatedProductSelect } from "@/components/common/paginated-select/paginated-product-select";
+import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,15 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import useFetchDropdown from "@/hooks/use-fetch-dropdown";
+import useFetchData from "@/hooks/use-fetch";
 import {
   createNavigationInfo,
   updateNavigationInfo,
@@ -31,12 +24,12 @@ import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
 import {
   NavigationInfoFormValues,
-  navigationInfoSchema,
+  navigationInfoFormSchema,
 } from "@/schemas/cms/navigation-info-schema";
-import { ICategoryDropdown } from "@/types/dropdown";
 import { INavigationInfo } from "@/types/navigation-info";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -48,73 +41,102 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
   const title = initialData ? "Edit Navigation Info" : "Add Navigation Info";
 
   const router = useRouter();
+  const isEditMode = Boolean(initialData);
+
+  const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
+  const { data: navigationInfo, } = useFetchData<INavigationInfo>(blogUrl);
+
+  const emptyDefaults = {
+    title: "",
+    is_active: false,
+    products: "",
+    // discount_percentage: "",
+    // expiry_datetime: "",
+    // category: "",
+    // sub_category: "",
+  }
 
   const form = useForm<NavigationInfoFormValues>({
-    resolver: zodResolver(navigationInfoSchema),
-    defaultValues: initialData
-      ? {
-          title: initialData.title,
-          discount_percentage: initialData.discount_percentage || 0,
-          expiry_datetime: initialData.expiry_datetime || "",
-          products: initialData.products || [],
-          category: initialData.categories[0],
-          sub_category: initialData.subcategories[0],
-          is_active: initialData.is_active ?? false,
-        }
-      : {
-          title: "",
-          discount_percentage: 0,
-          expiry_datetime: "",
-          is_active: false,
-          products: [],
-          category: "",
-          sub_category: "",
-        },
+    resolver: zodResolver(navigationInfoFormSchema),
+    defaultValues: emptyDefaults
+    // ? {
+    //   title: initialData.title,
+    //   discount_percentage: initialData.discount_percentage?.toString() || "",
+    //   expiry_datetime: initialData.expiry_datetime
+    //     && new Date(initialData.expiry_datetime)
+    //       .toISOString()
+    //       .slice(0, 16)
+    //     || "",
+    //   products: initialData.products || [],
+    //   category: initialData.categories[0],
+    //   sub_category: initialData.subcategories[0],
+    //   is_active: initialData.is_active ?? false,
+    // }
+
   });
 
-  const { data: categories } = useFetchDropdown<ICategoryDropdown>(
-    "/categoriesdropdown/"
-  );
+  // const { data: categories } = useFetchDropdown<ICategoryDropdown>(
+  //   "/categoriesdropdown/"
+  // );
+
+  useEffect(() => {
+    if (isEditMode) {
+      const dataToUse = navigationInfo || initialData;
+
+      if (dataToUse) {
+        form.reset({
+          title: dataToUse.title,
+          products: dataToUse.products?.id?.toString() || '',
+          is_active: dataToUse.is_active ?? false,
+          // discount_percentage: dataToUse.discount_percentage?.toString() || "",
+          // expiry_datetime: dataToUse.expiry_datetime
+          //   && new Date(dataToUse.expiry_datetime)
+          //     .toISOString()
+          //     .slice(0, 16)
+          //   || "",
+          //category: dataToUse.categories[0],
+          // sub_category: dataToUse.subcategories[0],
+        });
+      }
+    }
+  }, [isEditMode, navigationInfo, initialData, form]);
 
   const onSubmit = async (data: NavigationInfoFormValues) => {
     try {
       const formData = new FormData();
       formData.append("title", data.title);
-      formData.append(
-        "discount_percentage",
-        data.discount_percentage.toString()
-      );
-      formData.append("expiry_datetime", data.expiry_datetime);
-      if (data.category) {
-        formData.append("categories", data.category);
-      }
-      if (data.sub_category) {
-        formData.append("subcategories", data.sub_category);
-      }
+
+      // const discountNumber = parseFloat(data.discount_percentage);
+      // formData.append("discount_percentage", discountNumber.toString());
+      // formData.append("expiry_datetime", data.expiry_datetime);
+
+      // if (data.category) {
+      //   formData.append("categories", data.category);
+      // }
+      // if (data.sub_category) {
+      //   formData.append("subcategories", data.sub_category);
+      // }
       formData.append("is_active", data?.is_active?.toString());
 
-      data?.products?.forEach((product) => {
-        formData.append("products", product);
-      });
+      // Correctly handle the products array for FormData
+      // data?.products?.forEach((product) => {
+      formData.append("product", data.products);
+      // });
 
+      // ... rest of your update/create logic
       if (initialData) {
-        const response = await updateNavigationInfo(initialData.id, formData);
-        if (response.status === 200) {
-          toast.success("Navigation info updated successfully");
-          router.push("/dashboard/navigation-info");
-        }
+        await updateNavigationInfo(initialData.id, formData);
+        toast.success("Navigation info updated successfully");
+        router.push("/dashboard/navigation-info");
       } else {
-        const response = await createNavigationInfo(formData);
-        if (response.status === 201) {
-          toast.success("Navigation info created successfully");
-          router.push("/dashboard/navigation-info");
-        }
+        await createNavigationInfo(formData);
+        toast.success("Navigation info created successfully");
+        router.push("/dashboard/navigation-info");
       }
     } catch (error) {
       handleError(error, toast);
     }
   };
-
   return (
     <>
       <Card className="border-none shadow-none rounded-sm p-0">
@@ -128,7 +150,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
           <Form {...form}>
             <form
               id="setting-brand-form"
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit, error => console.log("this is the error ", error))}
               className="space-y-6"
             >
               <FormField
@@ -150,58 +172,6 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                 )}
               />
 
-              <div className="grid sm:grid-cols-3 gap-2">
-                <FormField
-                  control={form.control}
-                  name="discount_percentage"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel className=" text-muted-foreground">
-                        DISCOUNT PERCENTAGE
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          inputMode="decimal"
-                          value={field.value}
-                          onChange={(e) => {
-                            const onlyNums = e.target.value.replace(
-                              /[^0-9.]/g,
-                              ""
-                            );
-                            const sanitized = onlyNums.replace(
-                              /(\..*?)\..*/g,
-                              "$0"
-                            );
-                            field.onChange(Number(sanitized));
-                          }}
-                          placeholder="Please enter the discount percentage."
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="expiry_datetime"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel className="text-muted-foreground">
-                        EXPIRY DATE & TIME
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="datetime-local"
-                          {...field}
-                          className="w-full"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
 
               <div className="grid sm:grid-cols-3 gap-2">
                 <FormField
@@ -211,10 +181,10 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                     <FormItem className="m-0 p-0">
                       <FormLabel>PRODUCTS</FormLabel>
                       <FormControl>
-                        <PaginatedProductSelect
-                          selectedValues={field.value}
-                          onSelectionChange={field.onChange}
-                          title="Select Products"
+                        <PaginatedSelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          placeholder="Select Products"
                           fetchData={getProductsDropdown}
                           className="w-full "
                         />
@@ -223,7 +193,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                     </FormItem>
                   )}
                 />
-                <FormCombobox
+                {/* <FormCombobox
                   form={form}
                   name="category"
                   label="CATEGORY"
@@ -284,7 +254,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                       </FormItem>
                     );
                   }}
-                />
+                /> */}
               </div>
 
               <FormField
@@ -329,3 +299,60 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
 };
 
 export default NavigationInfoForm;
+
+//  <div className="grid sm:grid-cols-3 gap-2">
+//               <FormField
+//                 control={form.control}
+//                 name="discount_percentage"
+//                 render={({ field }) => (
+//                   <FormItem className="space-y-1">
+//                     <FormLabel className=" text-muted-foreground">
+//                       DISCOUNT PERCENTAGE
+//                     </FormLabel>
+//                     <FormControl>
+//                       <Input
+//                         type="number"
+//                         inputMode="decimal"
+//                         value={field.value === "" ? "" : field.value}
+//                         onChange={(e) => {
+//                           const value = e.target.value;
+
+//                           // If empty, set to empty string
+//                           if (value === "") {
+//                             field.onChange("");
+//                             return;
+//                           }
+//                           const onlyNums = value.replace(/[^0-9.]/g, "");
+//                           const sanitized = onlyNums.replace(/(\..*?)\..*/g, "$1");
+//                           field.onChange(sanitized);
+//                         }}
+//                         onFocus={(e) => {
+//                           e.target.select();
+//                         }}
+//                         placeholder="Please enter the discount percentage."
+//                       />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//               <FormField
+//                 control={form.control}
+//                 name="expiry_datetime"
+//                 render={({ field }) => (
+//                   <FormItem className="space-y-1">
+//                     <FormLabel className="text-muted-foreground">
+//                       EXPIRY DATE & TIME
+//                     </FormLabel>
+//                     <FormControl>
+//                       <Input
+//                         type="datetime-local"
+//                         {...field}
+//                         className="w-full"
+//                       />
+//                     </FormControl>
+//                     <FormMessage />
+//                   </FormItem>
+//                 )}
+//               />
+//             </div>

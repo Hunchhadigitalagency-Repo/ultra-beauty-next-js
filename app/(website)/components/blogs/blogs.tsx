@@ -14,6 +14,7 @@ const Blogs: React.FunctionComponent = () => {
     `cms-blogs/?page=1&page_size=3/`
   );
 
+
   return (
     <section className="space-y-8 padding">
       <div className="flex items-center justify-between gap-4">
@@ -28,29 +29,30 @@ const Blogs: React.FunctionComponent = () => {
       {loading ? (
         <BlogScrabbledLoader />
       ) : error ? (
-        <div className='flex items-center justify-center w-full h-60'>
-          <p className='text-red'>
-            Error While Fetching Blogs
+        <div className='flex flex-col items-center justify-center w-full h-60'>
+          <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+          <p className='text-sm font-extralight text-gray-400'>
+            Oops! Something went wrong...
           </p>
         </div>
       ) : data?.results.length === 0 ? (
         <div className='flex flex-col items-center justify-center w-full h-60'>
-          <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-          <p className='text-red'>
-            No Blogs Found !
+          <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+          <p className='text-sm font-extralight text-gray-400 capitalize'>
+            Oops! no blogs right now...
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {data && data.results.length > 0 ? (
             data.results.map((blog, index) => {
-              return <BlogCard key={index} {...blog} />;
+              return <BlogCard key={index} slug={blog.slug} sub_title={blog.sub_title} title={blog.title} author={blog.author.username} cover_image={blog.cover_image} created_at={blog.created_at} />;
             })
           ) : (
             <div className='flex flex-col items-center justify-center w-full h-60'>
-              <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-              <p className='text-red'>
-                No Data Found !
+              <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400 " />
+              <p className='text-base font-semibold text-gray-400 capitalize'>
+                Oops! no blogs right now...
               </p>
             </div>
           )}

@@ -1,18 +1,31 @@
+"use client";
+
 import PageHeader from "@/components/common/header/page-header";
-import React from "react";
+import React, { useState } from "react";
 import TransactionTable from "./components/transaction-table";
+import { withPermissions } from "@/hoc/withPermissions";
+import { Permissions } from "@/types/permissions";
+import { ETypes } from "@/types/table";
 
 const TransactionsPage = () => {
+  const [dataLength, setDataLength] = useState<number>(0)
+
+  const getDatalength = (length: number) => {
+    setDataLength(length)
+  }
   return (
     <main className="space-y-4 p-4 bg-white">
       <PageHeader
-        totalItems={0}
+        totalItems={dataLength}
         searchPlaceholder="Search by Transaction ID"
-        type="Transaction"
+        type={"All Transaction"}
+        pageType={ETypes.TRANSACTIONS}
       />
-      <TransactionTable />
+      <TransactionTable setDatalength={getDatalength}/>
     </main>
   );
 };
 
-export default TransactionsPage;
+export default withPermissions(TransactionsPage, [
+  Permissions.CAN_READ_TRANSACTIONS,
+]);

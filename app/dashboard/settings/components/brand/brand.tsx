@@ -1,15 +1,15 @@
 import DataCard from "@/components/common/cards/data-card";
 import CustomTable from "@/components/common/table/custom-table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Button } from "@/components/ui/button";
 import { BrandConstant } from "./brand-constant";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import InfiniteScroll from "react-infinite-scroll-component";
-import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
 import { IBrand } from "@/types/Settings";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import SearchBox from "@/components/common/filter/search-box";
+import { ESettings } from "@/types/table";
 
 const BrandTab = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +17,7 @@ const BrandTab = () => {
   const scrollId = "infinite-scroll-container";
 
   const { searchQuery } = useAppSelector((state) => state.filter);
+  const [brandCategories, setbrandCategories] = useState<IBrand[]>([]);
 
   const { data, loading, hasMore, fetchNext } = useInfiniteFetch<IBrand>(
     "/brand",
@@ -24,6 +25,17 @@ const BrandTab = () => {
     searchQuery
   );
 
+  useEffect(() => {
+    setbrandCategories(data);
+  }, [data]);
+
+  const handleItemUpdate = (updatedItem: IBrand) => {
+    setbrandCategories((prevData) =>
+      prevData.map((item) =>
+        item.id === updatedItem.id ? updatedItem : item
+      )
+    );
+  };
   return (
     <DataCard
       title="Brand"
@@ -32,7 +44,7 @@ const BrandTab = () => {
           <SearchBox />
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(setActiveSetting("Add Brand"))}
+            onClick={() => dispatch(setActiveSetting(ESettings.ADD_BRAND))}
           >
             Add Brand
           </Button>
@@ -44,14 +56,14 @@ const BrandTab = () => {
           dataLength={data.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<InfiniteScrollLoader />}
+          loader={<></>}
           scrollableTarget={scrollId}
         >
           <CustomTable
-            cols={BrandConstant(dispatch)}
-            data={data as IBrand[]}
+            cols={BrandConstant(dispatch, handleItemUpdate)}
+            data={brandCategories as IBrand[]}
             loading={loading && data.length === 0}
-            onRowClick={() => {}}
+            onRowClick={() => { }}
             height="h-auto"
             hasSerialNo={true}
           />
