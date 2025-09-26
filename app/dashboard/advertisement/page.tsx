@@ -19,7 +19,7 @@ const BannerPage = () => {
 
   const scrollId = "infinite-scroll-container";
   const { data, loading, hasMore, fetchNext, totalCount} =
-    useInfiniteFetch<IAdvertisementBanner>("/cms/advertisment-banners/", "search", searchQuery);
+    useInfiniteFetch<IAdvertisementBanner>("/cms/advertisment-banners/", "search", searchQuery, "", false);
 
   return (
     <main className="space-y-4 bg-white p-4">
@@ -27,7 +27,7 @@ const BannerPage = () => {
         type="Banners"
         totalItems={totalCount}
         searchPlaceholder="Search by banner type"
-        path="/dashboard/banners/add-banner"
+        path="/dashboard/advertisement/add-banner"
         buttonText="Add Banners"
         isSearch={true}
       />

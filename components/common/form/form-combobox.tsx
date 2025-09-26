@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { UseFormReturn } from "react-hook-form";
-import { FormField, FormItem, FormLabel, FormMessage, FormControl } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { LucideSearch } from "lucide-react";
+import * as React from "react"
+import type { UseFormReturn } from "react-hook-form"
+import { FormField, FormItem, FormLabel, FormMessage, FormControl } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { LucideSearch } from "lucide-react"
 
 export interface ComboboxOption {
-  label: string;
-  value: string;
+  label: string
+  value: string
 }
 
 interface FormSelectWithSearchProps {
-  form: UseFormReturn<any>;
-  name: string;
-  label?: string;
-  placeholder?: string;
-  searchPlaceholder?: string;
-  options: ComboboxOption[];
-  isRequired?: boolean;
+  form: UseFormReturn<any>
+  name: string
+  label?: string
+  placeholder?: string
+  searchPlaceholder?: string
+  options: ComboboxOption[]
+  isRequired?: boolean
 }
 
 export function FormCombobox({
@@ -31,22 +31,20 @@ export function FormCombobox({
   options,
   isRequired,
 }: FormSelectWithSearchProps) {
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = React.useState("")
 
-  const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(search.toLowerCase())
-  );
-
-
-  console.log(options, 'Options');
+  const safeOptions = options || []
+  const filteredOptions = safeOptions.filter((opt) => opt.label.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <FormField
       control={form.control}
       name={name}
       render={({ field }) => {
-        console.log('Field: ', field);
-        // console.log(options.find((opt) => opt.value === String(field.value)))
+        const selectedOption = safeOptions.find((opt) => opt.value === String(field.value))
+
+        const selectValue = selectedOption ? field.value : undefined
+
         return (
           <FormItem>
             {label && (
@@ -56,18 +54,23 @@ export function FormCombobox({
             )}
             <Select
               onValueChange={(val) => {
-                field.onChange(val);
+                if (val && val !== "") {
+                  field.onChange(val)
+                }
               }}
-              value={field.value}
+              value={selectValue}
             >
               <FormControl>
                 <SelectTrigger className="bg-white">
-                  <SelectValue
-                    placeholder={placeholder}
-                    defaultValue={field.value}
-                  />
-                  {/* {options.find((opt) => opt.value === field.value)?.label} */}
-                  {/* </SelectValue> */}
+                  <SelectValue placeholder={placeholder}>
+                    {selectedOption
+                      ? selectedOption.label
+                      : field.value && safeOptions.length > 0
+                        ? `Invalid option: ${field.value}`
+                        : field.value && safeOptions.length === 0
+                          ? "Loading..."
+                          : placeholder}
+                  </SelectValue>
                 </SelectTrigger>
               </FormControl>
 
@@ -85,7 +88,9 @@ export function FormCombobox({
                 </div>
 
                 <div className="max-h-60 overflow-y-auto">
-                  {filteredOptions.length > 0 ? (
+                  {safeOptions.length === 0 ? (
+                    <div className="p-2 text-sm text-muted-foreground">Loading options...</div>
+                  ) : filteredOptions.length > 0 ? (
                     filteredOptions.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -102,5 +107,5 @@ export function FormCombobox({
         )
       }}
     />
-  );
+  )
 }

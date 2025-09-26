@@ -1,6 +1,6 @@
 "use client";
-import useFetchData from "@/hooks/use-fetch";
 import PurchaseInventoryForm from "./purchase-inventory-form";
+import useFetchData from "@/hooks/use-fetch-data";
 
 interface ProductDropdownItem {
   id: number;

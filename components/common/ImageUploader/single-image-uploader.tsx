@@ -8,6 +8,7 @@ interface FileUploaderProps {
   value: string | File | undefined;
   acceptedFileTypes?: string;
   size?: string;
+  id?: string; // 👈 add id
 }
 
 export default function SingleImageUploader({
@@ -15,9 +16,9 @@ export default function SingleImageUploader({
   onRemove,
   value,
   size = "big",
+  id,
 }: FileUploaderProps) {
   const [showDragDrop, setShowDragDrop] = useState(!value);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleDeleteFile = () => {
     onRemove();
@@ -34,20 +35,9 @@ export default function SingleImageUploader({
     }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      onChange?.(file);
-      setShowDragDrop(false);
-    }
-  };
-
   return (
     <div className="space-y-2">
-      <div className="flex items-start gap-6">
+      <div className={`flex items-start gap-6`}>
         {value && (
           <div className="relative">
             <Image
@@ -74,33 +64,23 @@ export default function SingleImageUploader({
 
       {showDragDrop && (
         <label
-          htmlFor="cover-upload"
-          className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer flex ${
-            size === "small" ? "py-1" : "justify-center"
-          } items-center gap-6 transition-colors ${
-            isDragging ? "border-primary bg-primary/10" : "border-gray-300"
-          }`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
+          htmlFor={id || 'cover-upload'} 
+          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer flex ${size === "small" ? "py-1" : "justify-center"
+            } items-center gap-6`}
         >
           <ImagePlus
-            className={`${
-              size === "small"
-                ? "text-gray-900 w-8 h-8"
-                : "text-gray-500 w-20 h-20"
-            }`}
+            className={` ${size === "small"
+              ? " text-gray-900 w-8 h-8"
+              : " text-gray-500 w-20 h-20"
+              }`}
             strokeWidth={0.5}
           />
-          <div>
+          <div className="">
             <span className="text-sm text-gray-600">Drag and drop or </span>
             <span className="text-sm text-primary">upload image</span>
           </div>
           <input
-            id="cover-upload"
+            id={id || 'cover-upload'} 
             type="file"
             className="hidden"
             accept="image/*"

@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "ultrabeauty.blr1.digitaloceanspaces.com",
+      },
+      {
+        protocol: "https",
         hostname: "randomuser.me",
       },
       {
