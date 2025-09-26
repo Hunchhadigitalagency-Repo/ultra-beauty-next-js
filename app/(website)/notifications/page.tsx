@@ -25,13 +25,7 @@ const Notifications = () => {
     return (
         <main className='mt-4 mb-4 '>
             <section className='grid padding'>
-                <div className='grid grid-cols-[40%_1fr] sm:grid-cols-[1fr_1fr]'>
-                    <h1 className='text-sm text-foreground sm:text-base md:text-lg'>Notifications</h1>
-                    <div className='flex justify-around font-light text-center sm:justify-end sm:gap-6 text-primary notifications-action-buttons sm:text-lg '>
-                        <p className='font-medium cursor-pointer'>Mark All as Read</p>
-                        <p className='font-medium cursor-pointer'>Delete</p>
-                    </div>
-                </div>
+                <h1 className='text-sm text-foreground sm:text-base md:text-lg'>Notifications</h1>
                 <div className="w-full divide-y">
                     {
                         loading ? (

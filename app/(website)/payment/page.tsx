@@ -4,11 +4,11 @@ import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import Esewa from '@/assets/esewa.png';
 import React, { useState } from 'react';
-import Khalti from '@/assets/khalti.png';
+// import Khalti from '@/assets/khalti.png';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { addOrders } from '@/lib/api/order/order-apis';
-import CashOnDelivery from '@/assets/cash-on-delivery.png';
+// import CashOnDelivery from '@/assets/cash-on-delivery.png';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import SectionHeader from '@/components/common/header/section-header';
 import { generateEsewaPayload } from '@/lib/api/payment/payment-apis';
@@ -18,8 +18,8 @@ import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/re
 
 const PAYMENT_GATEWAYS = [
   { name: 'Esewa', image: Esewa, value: 'esewa' },
-  { name: 'Khalti', image: Khalti, value: 'khalti' },
-  { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
+  // { name: 'Khalti', image: Khalti, value: 'khalti' },
+  // { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
 ];
 
 
