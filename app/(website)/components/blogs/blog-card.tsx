@@ -25,8 +25,8 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
   const router = useRouter();
 
   return (
-    <section className="w-full rounded-lg overflow-hidden space-y-2 border-[1px] border-[#D7D7D7] p-3">
-      <div onClick={() => { router.push(`/blogs/${slug}`) }} className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group cursor-pointer">
+    <div onClick={() => { router.push(`/blogs/${slug}`) }} className="cursor-pointer w-full rounded-lg overflow-hidden space-y-2 border-[1px] border-[#D7D7D7] p-3">
+      <div className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group">
         {cover_image ? (
           <Image
             src={cover_image}
@@ -45,7 +45,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
         )}
       </div>
 
-      <h3 className="text-xl font-semibold line-clamp-1 font-playfair text-foreground">
+      <h3 className="text-xl font-semibold line-clamp-2 font-playfair text-foreground">
         {title}
       </h3>
 
@@ -67,7 +67,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
       <p className="overflow-hidden text-sm font-normal text-foreground text-ellipsis line-clamp-2">
         {sub_title}
       </p>
-    </section>
+    </div>
   );
 };
 
