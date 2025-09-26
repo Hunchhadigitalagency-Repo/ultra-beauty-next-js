@@ -72,8 +72,8 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({ featur
                     ) : categoryWiseProducts?.length === 0 ? (
                         <div className='flex flex-col items-center justify-center w-full h-60'>
                             <AlertCircle className="w-8 h-8 mb-2 font-semibold text-gray-400" />
-                            <p className='text-base font-semibold text-gray-400 capitalize'>
-                                Oops! no {featuredCategory.name} right now...
+                            <p className='font-extralight text-sm text-gray-400 capitalize'>
+                                Oops! no {featuredCategory.name} products right now...
                             </p>
                         </div>
                     ) :

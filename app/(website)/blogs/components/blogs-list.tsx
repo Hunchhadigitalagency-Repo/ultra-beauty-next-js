@@ -10,7 +10,6 @@ import SearchBox from "@/components/common/filter/search-box";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
 import BlogScrabbledLoader from "@/components/ui/blog-scribble";
 import SectionHeader from "@/components/common/header/section-header";
-import BlogsFilter from "./blogs-filter";
 
 
 const BlogsList = () => {
@@ -18,7 +17,7 @@ const BlogsList = () => {
   const { isLoggedIn } = useAppSelector(state => state.authentication)
 
   const [searchValue, setSearchValue] = useState("");
-  const [filterValue, setFilterValue] = useState('');
+  // const [filterValue, setFilterValue] = useState('');
 
 
   const getValue = (value: string) => {
@@ -38,17 +37,13 @@ const BlogsList = () => {
     fetchNext,
   } = useInfiniteFetch<IBlog>(searchUrl, "9", undefined, undefined, isLoggedIn); // Fetch 9 at a time
 
-
-  // const sortedNewToOld = blogs?.sort(
-  //   (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  // );
   return (
     <section className="space-y-4 padding">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader title="Blogs" description="Watch inside story" />
         <div className="flex gap-4">
           <SearchBox placeholder="Search Blogs" sendValue={getValue} />
-          <BlogsFilter selectedValue={filterValue} onChange={setFilterValue} />
+          {/* <BlogsFilter selectedValue={filterValue} onChange={setFilterValue} /> */}
         </div>
       </div>
 

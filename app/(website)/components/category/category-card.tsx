@@ -23,7 +23,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, image, onCategoryCli
                     src={image || "/placeholder.png"}
                     alt={title || "Category image"}
                     fill
-                    className="object-contain"
+                    className="object-cover"
                 />
             </div>
             <p className="text-sm font-medium text-center uppercase md:text-base">
