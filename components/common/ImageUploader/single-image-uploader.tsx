@@ -8,7 +8,7 @@ interface FileUploaderProps {
   value: string | File | undefined;
   acceptedFileTypes?: string;
   size?: string;
-  id?: string; // 👈 add id
+  id?: string;
 }
 
 export default function SingleImageUploader({
@@ -19,7 +19,7 @@ export default function SingleImageUploader({
   id,
 }: FileUploaderProps) {
   const [showDragDrop, setShowDragDrop] = useState(!value);
-
+  const [isDragging, setIsDragging] = useState(false);
   const handleDeleteFile = () => {
     onRemove();
     onChange?.("");
@@ -35,6 +35,16 @@ export default function SingleImageUploader({
     }
   };
 
+  const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      onChange?.(file);
+      setShowDragDrop(false);
+    }
+  };
   return (
     <div className="space-y-2">
       <div className={`flex items-start gap-6`}>
@@ -64,9 +74,16 @@ export default function SingleImageUploader({
 
       {showDragDrop && (
         <label
-          htmlFor={id || 'cover-upload'} 
-          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer flex ${size === "small" ? "py-1" : "justify-center"
-            } items-center gap-6`}
+          htmlFor="file-input"
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer flex ${size === "small" ? "py-1" : "justify-center"
+            } items-center gap-1 ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+            }`}
         >
           <ImagePlus
             className={` ${size === "small"
@@ -80,7 +97,7 @@ export default function SingleImageUploader({
             <span className="text-sm text-primary">upload image</span>
           </div>
           <input
-            id={id || 'cover-upload'} 
+            id={id || 'cover-upload'}
             type="file"
             className="hidden"
             accept="image/*"

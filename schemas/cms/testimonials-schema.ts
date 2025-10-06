@@ -10,7 +10,7 @@ const baseSchema = {
 };
 
 
-const textTestimonialSchema = z.object({
+export const textTestimonialSchema = z.object({
   ...baseSchema,
   is_video: z.literal(false),
   message: z.string().min(1, "Message is required"),
@@ -28,6 +28,7 @@ const textTestimonialSchema = z.object({
   ]),
 });
 
+export type TextTestimonialFormValues = z.infer<typeof textTestimonialSchema>;  
 
 const videoTestimonialSchema = z.object({
   ...baseSchema,

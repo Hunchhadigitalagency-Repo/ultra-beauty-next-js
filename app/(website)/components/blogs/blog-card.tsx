@@ -26,7 +26,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
 
   return (
     <div onClick={() => { router.push(`/blogs/${slug}`) }} className="cursor-pointer w-full rounded-lg overflow-hidden space-y-2 border-[1px] border-[#D7D7D7] p-3">
-      <div className="relative mb-6 w-full h-[400px] overflow-hidden rounded-lg group">
+      <div className="relative mb-6 w-full h-[300px] overflow-hidden rounded-lg group">
         {cover_image ? (
           <Image
             src={cover_image}

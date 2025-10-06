@@ -4,6 +4,7 @@ import { Megaphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "./components/confirmation-modal";
+import { createEmail } from "@/lib/api/cms/newsletter-api";
 
 
 export default function Newsletter() {
@@ -21,14 +22,13 @@ export default function Newsletter() {
     if (!consent || !email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) return;
     try {
       setStatus("loading");
-      setTimeout(() => {
-        setStatus("done");
-        setEmail('');
-        setConsent(false);
-      }, 1000); // simulate delay
-
+      await createEmail(email);
+      setConsent(false);
+      setEmail("");
     } catch {
       setStatus("error");
+    } finally {
+      setStatus("done");
     }
   };
 
