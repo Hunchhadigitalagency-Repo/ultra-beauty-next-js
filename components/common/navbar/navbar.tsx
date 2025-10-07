@@ -12,21 +12,25 @@ import Link from "next/link";
 import Image from "next/image";
 import MobileMenu from "./mobile-menu";
 import SearchModal from "./search-modal";
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown } from "lucide-react";
 import { CartResponse } from "@/types/cart";
 import useFetchData from "@/hooks/use-fetch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { WishListResponse } from "@/types/wishlist";
-import Logo from '@/assets/images/Artboard 2-02.svg'
-import NotificationModal from "./notification-modal";
+import Logo from "@/assets/images/Artboard 2-02.svg";
+import NotificationModal, { NotificationResponse } from "./notification-modal";
 import { ICategoryDropdown } from "@/types/dropdown";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
-import { toggleBrands, toggleCategory, toggleSubcategory } from "@/redux/features/category-slice";
+import {
+  toggleBrands,
+  toggleCategory,
+  toggleSubcategory,
+} from "@/redux/features/category-slice";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -43,7 +47,6 @@ export interface IBrandDropdown {
 }
 
 export default function Navbar() {
-
   const router = useRouter();
   const path = usePathname();
   const dispatch = useAppDispatch();
@@ -54,25 +57,44 @@ export default function Navbar() {
   const [showNotification, setShowNotification] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isBrandDropdownVisible, setIsBrandDropdownVisible] = useState(false);
-  const [hoveredCategory, setHoveredCategory] = useState<ICategoryDropdown | null>(null)
+  const [hoveredCategory, setHoveredCategory] =
+    useState<ICategoryDropdown | null>(null);
   const isActive = (pathname: string) => path === pathname;
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   const cartCount = useAppSelector((state) => state.cart.cartCount);
-  const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
+  const { isLoggedIn, accessToken } = useAppSelector(
+    (state) => state.authentication
+  );
 
-  const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
-  const { data: brandDropdownData } = useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
+  const { data: dropdownCategoryData } =
+    useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+  const { data: brandDropdownData } =
+    useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
+  const {
+    data: notifications,
+    loading,
+    error,
+  } = useFetchData<NotificationResponse[]>(
+    "/cms/notifications/all-notification/"
+  );
 
-  const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
-    config: { headers: { Authorization: `Bearer ${accessToken}` } }
-  });
-  const { data: cartData } = useFetchData<CartResponse>('carts/', false, {
-    config: { headers: { Authorization: `Bearer ${accessToken}` } }
+  const { data: wishListData } = useFetchData<WishListResponse>(
+    "/wishlists/",
+    false,
+    {
+      config: { headers: { Authorization: `Bearer ${accessToken}` } },
+    }
+  );
+  const { data: cartData } = useFetchData<CartResponse>("carts/", false, {
+    config: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
 
   useEffect(() => {
     if (wishListData && !hasFetched.current.wishlist) {
-      const count = wishListData.results.reduce((sum, item) => sum + (item.products?.length || 0), 0);
+      const count = wishListData.results.reduce(
+        (sum, item) => sum + (item.products?.length || 0),
+        0
+      );
       dispatch(setWishlistCount(count));
       hasFetched.current.wishlist = true;
     }
@@ -88,19 +110,19 @@ export default function Navbar() {
 
   const handleCategoryEnter = () => {
     setIsDropdownVisible(true);
-  }
+  };
 
   const handleCategoryLeave = () => {
     setIsDropdownVisible(false);
-  }
+  };
 
   const handleBrandEnter = () => {
     setIsBrandDropdownVisible(true);
-  }
+  };
 
   const handleBrandLeave = () => {
     setIsBrandDropdownVisible(false);
-  }
+  };
 
   const handleDropdownEnter = () => {
     setIsDropdownVisible(true);
@@ -119,132 +141,149 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (shopByCategoryRef.current && !shopByCategoryRef.current.contains(event.target as Node) &&
-        dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        shopByCategoryRef.current &&
+        !shopByCategoryRef.current.contains(event.target as Node) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownVisible(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const handleCategoryCardClick = (categoryId: number, subcategoryId: number) => {
-    setIsDropdownVisible(false)
+  const handleCategoryCardClick = (
+    categoryId: number,
+    subcategoryId: number
+  ) => {
+    setIsDropdownVisible(false);
     dispatch(toggleCategory({ id: categoryId, checked: true }));
     dispatch(toggleSubcategory({ id: subcategoryId, checked: true }));
     setHoveredCategory(null);
-    router.push(`/shop`)
-  }
-  
-  const handleBrandCardClick = (brandId: number,) => {
-    setIsBrandDropdownVisible(false)
+    router.push(`/shop`);
+  };
+
+  const handleBrandCardClick = (brandId: number) => {
+    setIsBrandDropdownVisible(false);
     dispatch(toggleBrands({ id: brandId, checked: true }));
     setHoveredCategory(null);
-    router.push(`/shop`)
-  }
+    router.push(`/shop`);
+  };
 
   const searchAreaRef = useRef<HTMLDivElement>(null);
   const searchIconRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchIconRef.current && searchIconRef.current.contains(event.target as Node)) {
+      if (
+        searchIconRef.current &&
+        searchIconRef.current.contains(event.target as Node)
+      ) {
         const searchState = !searchOpen;
         setSearchOpen(searchState);
       }
-      if (searchAreaRef.current && !searchAreaRef.current.contains(event.target as Node) &&
-        searchIconRef.current && !searchIconRef.current.contains(event.target as Node)) {
+      if (
+        searchAreaRef.current &&
+        !searchAreaRef.current.contains(event.target as Node) &&
+        searchIconRef.current &&
+        !searchIconRef.current.contains(event.target as Node)
+      ) {
         setSearchOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [searchOpen]);
 
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 "
-    >
+    <header className="sticky top-0 z-50 border-b border-gray-200 ">
       <div className="py-2 padding-x bg-secondary">
-
         {/* Notification */}
         {showNotification && (
-          <NotificationModal onClose={() => setShowNotification(false)} />
+          <NotificationModal
+            onClose={() => setShowNotification(false)}
+            data={notifications}
+            loading={loading}
+            error={error}
+          />
         )}
 
         <div className="relative flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className=" flex items-center justify-center">
             <div className=" relative w-40 lg:w-52 h-20">
-              <Image
-                src={Logo}
-                alt="logo"
-                fill
-              />
+              <Image src={Logo} alt="logo" fill />
             </div>
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <div className="relative h-full w-full" >
-              {
-                !searchOpen &&
+            <div className="relative h-full w-full">
+              {!searchOpen && (
                 <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
                   {navItems.map((item, index) => (
                     <li
                       key={index}
-                      className={`transition-all duration-200 hover:text-primary ${item.isDropdown ? "flex items-center h-full" : ""
-                        }`}
+                      className={`transition-all duration-200 hover:text-primary ${
+                        item.isDropdown ? "flex items-center h-full" : ""
+                      }`}
                       ref={item.isDropdown ? shopByCategoryRef : undefined}
-                      onMouseEnter={item.isDropdown &&
-                        item.name === "Shop by Category"
-                        ? handleCategoryEnter
-                        : item.name === "Brands"
+                      onMouseEnter={
+                        item.isDropdown && item.name === "Shop by Category"
+                          ? handleCategoryEnter
+                          : item.name === "Brands"
                           ? handleBrandEnter
-                          : undefined}
-                      onMouseLeave={item.isDropdown &&
-                        item.name === "Shop by Category"
-                        ? handleCategoryLeave
-                        : item.name === "Brands"
+                          : undefined
+                      }
+                      onMouseLeave={
+                        item.isDropdown && item.name === "Shop by Category"
+                          ? handleCategoryLeave
+                          : item.name === "Brands"
                           ? handleBrandLeave
-                          : undefined}
+                          : undefined
+                      }
                     >
                       {item.isDropdown ? (
                         <button
-                          className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${isDropdownVisible ? "text-primary" : ""
-                            }`}
+                          className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${
+                            isDropdownVisible ? "text-primary" : ""
+                          }`}
                         >
                           <p className="transition-all duration-200 line-clamp-1 text-xs xl:text-sm">
                             {item.name}
                           </p>
                           <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-200 ${isDropdownVisible ? "rotate-180" : ""
-                              }`}
+                            className={`w-4 h-4 transition-transform duration-200 ${
+                              isDropdownVisible ? "rotate-180" : ""
+                            }`}
                           />
                         </button>
                       ) : (
-                        <Link
-                          className="text-xs xl:text-sm"
-                          href={item.href!}
-                        >
+                        <Link className="text-xs xl:text-sm" href={item.href!}>
                           {item.name}
                         </Link>
                       )}
                     </li>
                   ))}
                 </ul>
-              }
+              )}
               {/* Search Bar */}
-              {searchOpen &&
-                <div ref={searchAreaRef} className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300">
+              {searchOpen && (
+                <div
+                  ref={searchAreaRef}
+                  className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300"
+                >
                   <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
                 </div>
-              }
+              )}
             </div>
           </nav>
           {/* Right side icons */}
@@ -256,10 +295,19 @@ export default function Navbar() {
               ref={searchIconRef}
               className="hidden lg:block hover:text-primary md:text-sm"
             >
-              {searchOpen ?
-                <X className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
-                : <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
-              }
+              {searchOpen ? (
+                <X
+                  className={`size-5 md:size-4 xl:size-5 ${
+                    searchOpen && "text-primary"
+                  }`}
+                />
+              ) : (
+                <Search
+                  className={`size-5 md:size-4 xl:size-5 ${
+                    searchOpen && "text-primary"
+                  }`}
+                />
+              )}
             </Button>
             <Button
               variant="ghost"
@@ -267,7 +315,11 @@ export default function Navbar() {
               className="relative hover:text-primary"
               onClick={() => router.push("/wishlist")}
             >
-              <Heart className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-primary"}`} />
+              <Heart
+                className={`size-5 md:size-4 xl:size-5 ${
+                  isActive("/wishlist") && "text-primary"
+                }`}
+              />
               {isLoggedIn && wishlistCount > 0 && (
                 <Badge
                   variant="destructive"
@@ -275,8 +327,7 @@ export default function Navbar() {
                 >
                   {wishlistCount}
                 </Badge>
-              )
-              }
+              )}
             </Button>
             <Button
               variant="ghost"
@@ -285,17 +336,18 @@ export default function Navbar() {
               onClick={() => router.push("/cart")}
             >
               <ShoppingCart
-                className={`size-5 md:size-4 xl:size-5 ${isActive("/cart") && "text-primary"}`}
+                className={`size-5 md:size-4 xl:size-5 ${
+                  isActive("/cart") && "text-primary"
+                }`}
               />
-              {
-                isLoggedIn && cartCount > 0 &&
+              {isLoggedIn && cartCount > 0 && (
                 <Badge
                   variant="destructive"
                   className="absolute flex items-center justify-center p-0 text-xs rounded-full -top-2 -right-2 size-4"
                 >
                   {cartCount}
                 </Badge>
-              }
+              )}
             </Button>
             {isLoggedIn ? (
               <Button
@@ -305,8 +357,9 @@ export default function Navbar() {
                 onClick={() => router.push("/profile")}
               >
                 <CircleUser
-                  className={` size-5 md:size-4 xl:size-5 ${isActive("/profile") && "text-primary"
-                    }`}
+                  className={` size-5 md:size-4 xl:size-5 ${
+                    isActive("/profile") && "text-primary"
+                  }`}
                 />
               </Button>
             ) : (
@@ -316,17 +369,20 @@ export default function Navbar() {
               onClick={() => setShowNotification((prev) => !prev)}
               variant="ghost"
               size="icon"
-              className="hidden md:flex hover:text-primary"
+              className="hidden md:flex hover:text-primary relative"
             >
               <Bell className="size-5 md:size-4 xl:size-5" />
+              <div className="bg-primary text-white rounded-full text-[9px] absolute -top-1 -right-1 px-1.5 py-0.5">
+                {notifications?.length || 0}
+              </div>
             </Button>
+
             {/* Mobile menu */}
             <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
         </div>
         {/* Mega Menu */}
-        {
-          isDropdownVisible &&
+        {isDropdownVisible && (
           <div
             ref={dropdownRef}
             className="absolute left-120 z-50 pt-5 transition-all ease-in-out "
@@ -349,12 +405,17 @@ export default function Navbar() {
                     {dropdownCategoryData?.map((category) => (
                       <div
                         key={category.id}
-                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${hoveredCategory?.id === category.id ? "bg-secondary text-primary" : "hover:bg-secondary/50"
-                          }`}
+                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${
+                          hoveredCategory?.id === category.id
+                            ? "bg-secondary text-primary"
+                            : "hover:bg-secondary/50"
+                        }`}
                         onMouseEnter={() => setHoveredCategory(category)}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="font-medium font-sans">{category.name}</span>
+                          <span className="font-medium font-sans">
+                            {category.name}
+                          </span>
                         </div>
                         {category.subcategories.length > 0 && (
                           <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -369,16 +430,25 @@ export default function Navbar() {
               {hoveredCategory && hoveredCategory.subcategories.length > 0 && (
                 <div className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide  bg-white rounded-lg shadow-xl">
                   <div className="p-4">
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">{hoveredCategory.name}</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">
+                      {hoveredCategory.name}
+                    </h3>
                     <div className="space-y-1">
                       {hoveredCategory.subcategories.map((subcategory) => (
                         <span
                           key={subcategory.id}
                           className="block px-3 py-2.5 text-sm rounded-md transition-all duration-200 hover:bg-white  group cursor-pointer"
-                          onClick={() => handleCategoryCardClick(hoveredCategory.id, parseInt(subcategory.id))}
+                          onClick={() =>
+                            handleCategoryCardClick(
+                              hoveredCategory.id,
+                              parseInt(subcategory.id)
+                            )
+                          }
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-medium font-sans group-hover:text-primary">{subcategory.name}</span>
+                            <span className="font-medium font-sans group-hover:text-primary">
+                              {subcategory.name}
+                            </span>
                           </div>
                         </span>
                       ))}
@@ -388,9 +458,8 @@ export default function Navbar() {
               )}
             </div>
           </div>
-        }
-        {
-          isBrandDropdownVisible &&
+        )}
+        {isBrandDropdownVisible && (
           <div
             ref={dropdownRef}
             className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800"
@@ -431,18 +500,16 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-        }
-      </div >
+        )}
+      </div>
 
-      {
-        pathname === '/' &&
+      {pathname === "/" && (
         <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">
           <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
             <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
           </div>
         </div>
-      }
-
-    </header >
+      )}
+    </header>
   );
 }
