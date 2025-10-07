@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { Accordion, AccordionItem } from '@/components/ui/accordion';
 import { RangeFilter } from '@/components/common/filter/range-filter';
 import { CheckboxFilter } from '@/components/common/filter/checkbox-filter';
-import { BrandFilterResponse, Category, CheckboxOption } from '@/types/filter';
+import {    BrandFilterResult, Category, CheckboxOption } from '@/types/filter';
 
 
 const DropDownFilter: React.FunctionComponent = () => {
@@ -29,7 +29,7 @@ const DropDownFilter: React.FunctionComponent = () => {
 
     const { data: categories } = useFetchData<Category[]>('dropdown/category/');
 
-    const { data: brands } = useFetchData<BrandFilterResponse>('brand-dropdown/?pagination=false');
+    const { data: brands } = useFetchData<BrandFilterResult[]>('brand-dropdown/?pagination=false');
 
     const categoryOptions: CheckboxOption[] = categories?.map(item => ({
         id: item.id,
@@ -37,7 +37,7 @@ const DropDownFilter: React.FunctionComponent = () => {
         product_count: item.product_count
     })) || [];
 
-    const brandOptions: CheckboxOption[] = brands?.results.map(item => ({
+    const brandOptions: CheckboxOption[] = brands?.map(item => ({
         id: item.id,
         name: item.name
     })) || [];

@@ -5,6 +5,8 @@ import {
   Bell,
   Heart,
   CircleUser,
+  X,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -24,15 +26,21 @@ import React, { useEffect, useRef, useState } from "react";
 import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
-import { toggleCategory } from "@/redux/features/category-slice";
+import { toggleBrands, toggleCategory, toggleSubcategory } from "@/redux/features/category-slice";
 
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Shop by Category", isDropdown: true },
-  { name: "Blogs", href: "/blogs" },
+  { name: "Brands", isDropdown: true },
   { name: "About Us", href: "/about" },
   { name: "Contact Us", href: "/contact" },
 ];
+
+export interface IBrandDropdown {
+  id: number;
+  name: string;
+  image: string | null;
+}
 
 export default function Navbar() {
 
@@ -45,13 +53,15 @@ export default function Navbar() {
   const hasFetched = useRef({ cart: false, wishlist: false });
   const [showNotification, setShowNotification] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
+  const [isBrandDropdownVisible, setIsBrandDropdownVisible] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState<ICategoryDropdown | null>(null)
   const isActive = (pathname: string) => path === pathname;
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   const cartCount = useAppSelector((state) => state.cart.cartCount);
   const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
 
   const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+  const { data: brandDropdownData } = useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
 
   const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } }
@@ -84,11 +94,27 @@ export default function Navbar() {
     setIsDropdownVisible(false);
   }
 
+  const handleBrandEnter = () => {
+    setIsBrandDropdownVisible(true);
+  }
+
+  const handleBrandLeave = () => {
+    setIsBrandDropdownVisible(false);
+  }
+
   const handleDropdownEnter = () => {
     setIsDropdownVisible(true);
   };
   const handleDropdownLeave = () => {
     setIsDropdownVisible(false);
+    setHoveredCategory(null);
+  };
+
+  const handleBrandDropdownEnter = () => {
+    setIsBrandDropdownVisible(true);
+  };
+  const handleBrandDropdownLeave = () => {
+    setIsBrandDropdownVisible(false);
   };
 
   useEffect(() => {
@@ -105,9 +131,18 @@ export default function Navbar() {
     };
   }, []);
 
-  const handleCategoryCardClick = (categoryId: number) => {
+  const handleCategoryCardClick = (categoryId: number, subcategoryId: number) => {
     setIsDropdownVisible(false)
     dispatch(toggleCategory({ id: categoryId, checked: true }));
+    dispatch(toggleSubcategory({ id: subcategoryId, checked: true }));
+    setHoveredCategory(null);
+    router.push(`/shop`)
+  }
+  
+  const handleBrandCardClick = (brandId: number,) => {
+    setIsBrandDropdownVisible(false)
+    dispatch(toggleBrands({ id: brandId, checked: true }));
+    setHoveredCategory(null);
     router.push(`/shop`)
   }
 
@@ -156,7 +191,7 @@ export default function Navbar() {
           </Link>
           {/* Desktop Navigation */}
           <nav className="items-center justify-center hidden w-full h-full lg:flex">
-            <div className="relative h-full w-full" onMouseLeave={() => setSearchOpen(false)}>
+            <div className="relative h-full w-full" >
               {
                 !searchOpen &&
                 <ul className="h-full lg:max-w-[50vw] lg:gap-6 lg:text-sm xl:max-w-[60vw] flex justify-center items-center w-full xl:gap-14 xl:text-[15px]">
@@ -166,8 +201,18 @@ export default function Navbar() {
                       className={`transition-all duration-200 hover:text-primary ${item.isDropdown ? "flex items-center h-full" : ""
                         }`}
                       ref={item.isDropdown ? shopByCategoryRef : undefined}
-                      onMouseEnter={item.isDropdown ? handleCategoryEnter : undefined}
-                      onMouseLeave={item.isDropdown ? handleCategoryLeave : undefined}
+                      onMouseEnter={item.isDropdown &&
+                        item.name === "Shop by Category"
+                        ? handleCategoryEnter
+                        : item.name === "Brands"
+                          ? handleBrandEnter
+                          : undefined}
+                      onMouseLeave={item.isDropdown &&
+                        item.name === "Shop by Category"
+                        ? handleCategoryLeave
+                        : item.name === "Brands"
+                          ? handleBrandLeave
+                          : undefined}
                     >
                       {item.isDropdown ? (
                         <button
@@ -211,7 +256,10 @@ export default function Navbar() {
               ref={searchIconRef}
               className="hidden lg:block hover:text-primary md:text-sm"
             >
-              <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
+              {searchOpen ?
+                <X className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
+                : <Search className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"}`} />
+              }
             </Button>
             <Button
               variant="ghost"
@@ -281,39 +329,107 @@ export default function Navbar() {
           isDropdownVisible &&
           <div
             ref={dropdownRef}
-            className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800"
+            className="absolute left-120 z-50 pt-5 transition-all ease-in-out "
             onMouseEnter={handleDropdownEnter}
             onMouseLeave={handleDropdownLeave}
           >
-            <div
-              className="h-full overflow-hidden overflow-y-scroll bg-white shadow-xl shadow-bottom scrollbar-hide"
-            >
-              {/* Categories Grid */}
-              <div className="border-t padding">
-                <div className="grid grid-cols-5 grid-flow-row auto-rows-[50px] gap-3 py-1">
+            <div className="flex overflow-hidden bg-none rounded-lg gap-5">
+              <div className="w-[280px] h-[450px] bg-white  shadow-xl rounded-lg overflow-y-auto border-r border-border ">
+                <div className="p-2">
                   <Link
                     href="/shop"
-                    className='flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
+                    className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
                     onClick={() => setIsDropdownVisible(false)}
                   >
-                    <p className='text-sm whitespace-nowrap font-poppins'>All Products</p>
+                    <span className="font-medium font-sans">All Products</span>
+                    <ChevronRight className="w-4 h-4 opacity-0 transition-opacity group-hover:opacity-100" />
                   </Link>
-                  {
-                    dropdownCategoryData?.map((individualDropdownCategory) => (
-                      <button
-                        key={individualDropdownCategory.id}
-                        className='cursor-pointer flex items-center justify-center transition-all duration-200 border rounded-sm hover:bg-secondary hover:text-primary hover:border-primary'
-                        onClick={() => handleCategoryCardClick(individualDropdownCategory.id)}
+
+                  <div className="space-y-1">
+                    {dropdownCategoryData?.map((category) => (
+                      <div
+                        key={category.id}
+                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${hoveredCategory?.id === category.id ? "bg-secondary text-primary" : "hover:bg-secondary/50"
+                          }`}
+                        onMouseEnter={() => setHoveredCategory(category)}
                       >
-                        <p className="text-sm whitespace-nowrap font-poppins">
-                          {individualDropdownCategory.name}
-                        </p>
-                      </button>
-                    ))
-                  }
+                        <div className="flex items-center gap-3">
+                          <span className="font-medium font-sans">{category.name}</span>
+                        </div>
+                        {category.subcategories.length > 0 && (
+                          <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div >
-            </div >
+              </div>
+
+              {/* Subcategories Panel - Right Side */}
+              {hoveredCategory && hoveredCategory.subcategories.length > 0 && (
+                <div className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide  bg-white rounded-lg shadow-xl">
+                  <div className="p-4">
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">{hoveredCategory.name}</h3>
+                    <div className="space-y-1">
+                      {hoveredCategory.subcategories.map((subcategory) => (
+                        <span
+                          key={subcategory.id}
+                          className="block px-3 py-2.5 text-sm rounded-md transition-all duration-200 hover:bg-white  group cursor-pointer"
+                          onClick={() => handleCategoryCardClick(hoveredCategory.id, parseInt(subcategory.id))}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium font-sans group-hover:text-primary">{subcategory.name}</span>
+                          </div>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        }
+        {
+          isBrandDropdownVisible &&
+          <div
+            ref={dropdownRef}
+            className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800"
+            onMouseEnter={handleBrandDropdownEnter}
+            onMouseLeave={handleBrandDropdownLeave}
+          >
+            <div className="h-full overflow-hidden bg-white shadow-xl shadow-bottom rounded-lg border border-border">
+              <div className="border-t border-border p-4">
+                <div className="grid grid-cols-5 gap-4 auto-rows-[90px] overflow-y-auto max-h-[450px] scrollbar-hide">
+                  {brandDropdownData?.map((brand) => (
+                    <button
+                      key={brand.id}
+                      className="flex flex-col items-center justify-center gap-2 p-2  rounded-md border
+                        transition-all duration-200 cursor-pointer  hover:shadow-lg hover:border-primary"
+                      onClick={() => handleBrandCardClick(brand.id)}
+                    >
+                      <div className="w-40 h-20 flex items-center justify-center">
+                        {brand.image ? (
+                          <Image
+                            src={brand.image}
+                            width={56}
+                            height={56}
+                            alt={brand.name}
+                            className="object-contain w-full h-full "
+                          />
+                        ) : (
+                          <span className="w-14 h-14 flex items-center justify-center overflow-hidden rounded-full bg-gray-100 text-lg font-semibold text-gray-700 uppercase">
+                            {brand.name?.charAt(0) || "?"}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs font-medium font-poppins text-gray-700 text-center truncate w-full">
+                        {brand.name}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         }
       </div >

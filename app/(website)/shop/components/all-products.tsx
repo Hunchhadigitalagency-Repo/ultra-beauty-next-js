@@ -5,7 +5,7 @@ import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
 import { Result } from "@/types/product";
-import { useAppSelector } from "@/redux/hooks";
+import {  useAppSelector } from "@/redux/hooks";
 import useCheckToken from "@/hooks/use-check-token";
 import { useToggleWishlist } from "@/utils/wishList-utility";
 import InfiniteScroll from "react-infinite-scroll-component";

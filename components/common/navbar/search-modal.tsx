@@ -76,6 +76,10 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                                     <li
                                         key={index}
                                         className="flex items-center justify-between px-2 py-3 border-gray-200 rounded-md cursor-pointer hover:bg-gray-50"
+                                        onClick={() => {
+                                            router.push(`/shop/${item.slug_name}`);
+                                            onClose?.();
+                                        }}
                                     >
                                         <div className="flex items-center gap-1 md:gap-3">
                                             <div className="relative w-12 h-12 md:w-16 md:h-16">
