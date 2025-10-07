@@ -12,7 +12,6 @@ export default function VariantAttributeDisplay({
   attributes,
   onDelete,
 }: VariantAttributeDisplayProps) {
-  console.log('from there', attributes);
   const getAttributeDisplay = (attribute: VariantClass) => {
     // Check if it's a color attribute (you can customize this logic based on your attribute types)
 

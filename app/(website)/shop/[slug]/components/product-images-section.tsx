@@ -11,6 +11,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
   is_flash_sale,
   flashEndDate,
   onToggleWishlist,
+  active_image,
   isWishlisted,
   is_new
 }) => {
@@ -24,8 +25,14 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
   const pad = (n: number) => n.toString().padStart(2, "0");
 
   const [selectedImage, setSelectedImage] = useState<string>(
-    images?.[0]?.file || ""
+    active_image || images?.[0]?.file || ""
   );
+
+  useEffect(() => {
+    if (active_image) {
+      setSelectedImage(active_image)
+    }
+  }, [active_image])
 
   useEffect(() => {
     if (!flashEndDate) return;

@@ -21,6 +21,6 @@ export const createUserTestimonials = async (data: FormData) => {
 }
 
 export const updateUserTestimonials = async (data: FormData, slug: string ) => {
-    const response = await api.post(`cms/user-testimonials/${slug}`, data);
+    const response = await api.patch(`cms/user-testimonials/${slug}/`, data);
   return response;
 }

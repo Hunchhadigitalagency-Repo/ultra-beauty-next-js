@@ -1,8 +1,5 @@
 "use client";
-import DOMPurify from "dompurify";
-import { FAQResponse } from "@/types/faq";
-import useFetchData from "@/hooks/use-fetch";
-import { Playfair_Display } from 'next/font/google';
+
 import SectionHeader from "@/components/common/header/section-header";
 import {
   Accordion,
@@ -10,16 +7,25 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import useFetchData from "@/hooks/use-fetch-data";
+import { FAQResponse } from "@/types/faq";
+import DOMPurify from "dompurify";
 
-const playfair = Playfair_Display({ subsets: ['latin'] });
+interface FaqProps {
+  page_query?: string;
+  product_slug?: string
+}
+export default function FAQSection({ page_query, product_slug }: FaqProps) {
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useFetchData<FAQResponse[]>(`cms/faqs/?pagination=false&type=${page_query}&product_slug=${product_slug}`);
 
-export default function FAQSection() {
-  const { data, loading, error } = useFetchData<FAQResponse[]>(
-    "cms/faqs/?pagination=false"
-  );
+  if (!data || data.length == 0) return;
 
   return (
-    <section className="space-y-8 padding">
+    <section className="px-10 space-y-12">
       {/* Header */}
       <SectionHeader
         title="What People Normally Ask"
@@ -29,43 +35,42 @@ export default function FAQSection() {
 
       {/* FAQ Accordion */}
       {loading ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-gray'>
-            Loading FAQs...
-          </p>
-        </div>
+        <p className="text-center text-muted-foreground text-sm">
+          Loading FAQs...
+        </p>
       ) : error ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-red'>
-            Something went wrong while Fetching FAQs
-          </p>
-        </div>
+        <p className="text-center text-red-500 text-sm font-medium">
+          Something Went Wrong While Fetching FAQs
+        </p>
       ) : data?.length === 0 ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-red'>
-            Something went wrong while Fetching FAQs
-          </p>
-        </div>
+        <p className="text-center text-muted-foreground text-sm">
+          No FAQs found
+        </p>
       ) : (
-        <Accordion type="single" collapsible className="flex flex-col gap-2 pt-5">
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue={data && data.length > 0 ? `${data[0].id}` : undefined}
+        >
           {data?.map((faq) => (
             <AccordionItem
               key={faq.id}
               value={`${faq.id}`}
-              className="px-6 py-2 bg-white rounded-none"
+              className="rounded-lg px-6 py-2 bg-white border-none"
             >
-              <AccordionTrigger className={`text-left !font-playfair cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-medium text-xl ${playfair.className}`}>
-
-                <span
-                  style={{ fontFamily: "Playfair Display" }}
+              <AccordionTrigger className="text-left cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-semibold text-sm lg:text-base">
+                <div
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(faq.question, { FORBID_ATTR: ['style'] }),
+                    __html: DOMPurify.sanitize(faq.question),
                   }}
                 />
-
               </AccordionTrigger>
-              <AccordionContent className="pt-2 pb-4 text-sm leading-relaxed text-foreground font-poppins">
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.answer) }} />
+              <AccordionContent className="text-foreground text-xs lg:text-sm leading-relaxed pt-2 pb-4">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(faq.answer),
+                  }}
+                />
               </AccordionContent>
             </AccordionItem>
           ))}
