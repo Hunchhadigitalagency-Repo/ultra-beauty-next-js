@@ -72,39 +72,43 @@ export default function SingleImageUploader({
         )}
       </div>
 
-      {showDragDrop && (
-        <label
-          htmlFor="file-input"
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer flex ${size === "small" ? "py-1" : "justify-center"
-            } items-center gap-1 ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
-            }`}
-        >
-          <ImagePlus
-            className={` ${size === "small"
-              ? " text-gray-900 w-8 h-8"
-              : " text-gray-500 w-20 h-20"
-              }`}
-            strokeWidth={0.5}
-          />
-          <div className="">
-            <span className="text-sm text-gray-600">Drag and drop or </span>
-            <span className="text-sm text-primary">upload image</span>
-          </div>
-          <input
-            id={id || 'cover-upload'}
-            type="file"
-            className="hidden"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </label>
-      )}
+     {showDragDrop && (
+  <label
+    htmlFor={id || 'cover-upload'}
+    onDragOver={(e) => {
+      e.preventDefault();
+      setIsDragging(true);
+    }}
+    onDragLeave={() => setIsDragging(false)}
+    onDrop={handleDrop}
+    className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer flex ${
+      size === "small" ? "py-1" : "justify-center"
+    } items-center gap-1 ${
+      isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+    }`}
+  >
+    <ImagePlus
+      className={`${
+        size === "small"
+          ? "text-gray-900 w-8 h-8"
+          : "text-gray-500 w-20 h-20"
+      }`}
+      strokeWidth={0.5}
+    />
+    <div>
+      <span className="text-sm text-gray-600">Drag and drop or </span>
+      <span className="text-sm text-primary">upload image</span>
+    </div>
+    <input
+      id={id || 'cover-upload'}
+      type="file"
+      className="hidden"
+      accept="image/*"
+      onChange={handleFileChange}
+    />
+  </label>
+)}
+
     </div>
   );
 }
