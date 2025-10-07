@@ -1,13 +1,12 @@
-import React from 'react';
-import Helper from './helper-section';
+import React from "react";
+import Helper from "./helper-section";
 
 const ResetPassword = () => {
+  return (
+    <div>
+      <Helper />
+    </div>
+  );
+};
 
-    return (
-        <div>
-            <Helper />
-        </div>
-    )
-}
-
-export default ResetPassword
+export default ResetPassword;
