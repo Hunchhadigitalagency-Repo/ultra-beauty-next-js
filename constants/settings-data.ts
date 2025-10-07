@@ -17,4 +17,7 @@ export const settingData = [
   { data: "inventory-location", title: "Inventory Location" },
   { data: "taxes", title: "Taxes" },
   { data: "admin-users", title: "Admins" },
+  { data: "help-and-support", title: "Help and Support" },
+  { data: "privacy-policy", title: "Privacy Policy" },
+  { data: "terms-and-condition", title: "Terms and Condition" },
 ];
