@@ -63,13 +63,12 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave,  }: Attribu
   const { data: attributes } = useFetchDropdown<IAttribute>(
     "/attribute/?pagination=false"
   );
-  console.log('this is bcuret', currentVariantId);
   
   // const [selectedAttributes, setSelectedAttributes] = useState<AttMana[]>(existingVariants ?? []);
   
   
 //   useEffect(() => {
-//     setSelectedAttributes(existingVariants ?? [])
+//     setSelectedAttributes(existingVarian ts ?? [])
 //   }, [existingVariants])
 
 // console.log(selectedAttributes);

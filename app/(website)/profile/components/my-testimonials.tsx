@@ -15,12 +15,14 @@ import { handleError } from "@/lib/error-handler";
 import { createUserTestimonials, updateUserTestimonials } from "@/lib/api/cms/testimonials-api";
 import useFetchData from "@/hooks/use-fetch";
 import { IDashboardITestimonial } from "@/types/cms";
+import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
 
 
 
 export default function MyTestimonials() {
 
-    const { data: initialData } = useFetchData<IDashboardITestimonial>('cms/user-testimonials/', true)
+    const { data, refetch } = useFetchData<IDashboardITestimonial[]>('cms/user-testimonials/', true)
+    const initialData = data?.[0] || null;
 
     const form = useForm<TextTestimonialFormValues>({
         resolver: zodResolver(textTestimonialSchema),
@@ -37,7 +39,7 @@ export default function MyTestimonials() {
     });
 
     React.useEffect(() => {
-        if(initialData){
+        if (initialData) {
             form.reset({
                 name: initialData.name,
                 designation: initialData.designation,
@@ -50,6 +52,7 @@ export default function MyTestimonials() {
             })
         }
     }, [initialData])
+
     async function onSubmit(data: TextTestimonialFormValues) {
         try {
             const formData = new FormData()
@@ -70,11 +73,15 @@ export default function MyTestimonials() {
                 if (response.status === 200) {
                     toast.success("Testimonial updated successfully")
                 }
+                form.reset()
+                refetch()
             } else {
                 const response = await createUserTestimonials(formData)
                 if (response.status === 201) {
                     toast.success("Testimonial created successfully")
                 }
+                form.reset()
+                refetch()
             }
         } catch (error) {
             handleError(error, toast)
@@ -84,7 +91,7 @@ export default function MyTestimonials() {
 
     return (
         <div className="w-full p-6 bg-white rounded-2xl shadow">
-            <h2 className="text-xl font-semibold mb-4">{initialData? "Edit Testimonial" : "Add Testimonial"}</h2>
+            <h2 className="text-xl font-semibold mb-4">{initialData ? "Edit Testimonial" : "Add Testimonial"}</h2>
 
             <Form {...form}>
                 {/* Name */}
@@ -157,10 +164,11 @@ export default function MyTestimonials() {
                             <FormItem>
                                 <FormLabel>Image</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => field.onChange(e.target.files?.[0])}
+                                    <SingleImageUploader
+                                        value={field.value}
+                                        onRemove={() => field.onChange(undefined)}
+                                        onChange={field.onChange}
+                                        size="small"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -187,7 +195,7 @@ export default function MyTestimonials() {
                         )}
                     />
                     <Button type="submit" className="w-20 block ml-auto">
-                      {initialData? "Update" : "Save"} 
+                        {initialData ? "Update" : "Save"}
                     </Button>
                 </form>
             </Form>

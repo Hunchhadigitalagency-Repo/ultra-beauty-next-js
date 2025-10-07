@@ -96,10 +96,22 @@ export const getTransectionAmount = (data: any[], total_amount: number) => {
 
 
 export const handleImageError = (err: any) => {
-  if(err.images || err.image){
+  if (err.images || err.image) {
     const errorMessage = (err.images || err.image)?.[0]?.file?.message
     console.log('this is message', errorMessage);
-    
+
     toast.error(errorMessage);
   }
 }
+
+export const allImages = (images: any[], variant: any[]) => {
+  const imagess = (variant || [])
+    .filter((v: any) => v?.item_image)
+    .map((v: any) => ({
+      id: v?.id,
+      file: v?.item_image,
+      file_type: 'image',
+    }));
+
+  return [...(images || []), ...imagess];
+};

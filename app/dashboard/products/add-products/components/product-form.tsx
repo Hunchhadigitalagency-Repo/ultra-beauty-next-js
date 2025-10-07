@@ -39,7 +39,7 @@ import TextEditor from "@/components/common/text-editor/text-editor";
 import AttributeModal from "./attribute-modal";
 import { handleError } from "@/lib/error-handler";
 import { toast } from "sonner";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { createProduct, updateProduct } from "@/lib/api/menu/products-api";
 import { toggleRefetchTableData } from "@/redux/features/table-slice";
 import MultiImageUploader, {
@@ -66,15 +66,18 @@ import PaginatedProductSelect from "@/components/common/paginated-select/paginat
 import api from "@/services/api-instance";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import { IProduct } from "@/types/type-product";
+import { setAttribute } from "@/redux/features/filter-slice";
 
 interface ProductFormProps {
   initialData: IProduct | null;
 }
-interface AttMana { id: number, value: string }
 
 export default function ProductForm({ initialData }: ProductFormProps) {
   const dispatch = useAppDispatch();
-
+  const { attribute } = useAppSelector(state => state.filter)
+  const [generateId, setGenerateId] = useState(
+    attribute.reduce((acc, val) => acc + val.id, 0)
+  );
   const { data: categories } = useFetchDropdown<ICategoryDropdown>(
     "/categoriesdropdown/"
   );
@@ -87,13 +90,12 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const [currentVariantIndex, setCurrentVariantIndex] = useState<number | null>(
     null
   );
-  const [variantId, setVaiantId] = useState<number>(1);
+  // const [variantId, setVaiantId] = useState<number>(1);
   const [currentVariantId, setCurrentVaiantId] = useState<number | null>(null);
   const [toDeleteAttribute, setToDeleteAttribute] = useState<{ id: number | null, name: string | null }>({
     id: null,
     name: null
   })
-  const [variantStatus, setVariantStatus] = useState<AttMana[]>([])
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -150,7 +152,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
       const variantItems =
         initialData.variants?.map((variant) => {
-          console.log(variant);
           return {
             id: variant.id,
             name: variant.item_name || "",
@@ -171,24 +172,23 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       const newVariantStatus: any = [];
 
       initialData.variants?.forEach((variant) => {
-        // Collect all attribute names for the current variant
         const attributeNames: string[] = variant.product_variants
           ?.map((variantClass) => variantClass.attribute?.name)
-          // Filter out null/undefined names
           .filter((name): name is string => !!name)
           || [];
 
         if (variant.id !== undefined) {
           newVariantStatus.push({
             id: variant.id,
-            // Value is the array of attribute names (e.g., ["Color", "Size"])
             value: attributeNames,
           });
         }
       });
 
-      setVariantStatus(newVariantStatus);
-      setVaiantId(newVariantStatus.length);
+      newVariantStatus.forEach((variant: any) => {
+        dispatch(setAttribute({ id: variant.id, data: variant.value }));
+      });
+      // setVaiantId(newVariantStatus.length);
       const formData = {
         productName: initialData.name || "",
         sku: initialData.sku || "",
@@ -391,8 +391,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
   const addVariant = () => {
 
+
     const newItem = {
-      variantId: variantId,
+      variantId: generateId,
       name: sameAsParentName ? productName : "",
       price: attributePrice ? price : "",
       quantity: 0,
@@ -401,6 +402,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       variant_classes: [],
     };
     append(newItem);
+    setGenerateId(prev => prev + 1);
   };
 
   const handleSaveAttribute = (attributeData: {
@@ -428,6 +430,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     const updatedItems = [...currentItems];
     updatedItems[variantIndex]?.variant_classes?.splice(attributeIndex, 1);
     form.setValue("variantItems", updatedItems);
+    
   };
 
   useEffect(() => {
@@ -550,7 +553,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                           heightClass="!max-w-[300px]"
                           value={field.value || ""}
                           onChange={(value) => {
-                            console.log('the value has ben changed', value);
 
                             field.onChange(value);
                             form.trigger("productGeneralDescription");
@@ -1082,8 +1084,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         onClick={() => {
                           setCurrentVariantIndex(index);
                           if (field.variantId) {
-                            console.log(variantId);
-                            
                             setCurrentVaiantId(field.variantId)
                           }
                           setIsAttributeModalOpen(true);
@@ -1341,7 +1341,6 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         currentVariantId={currentVariantId ?? null}
         onSave={handleSaveAttribute}
         toDelete={toDeleteAttribute}
-        existingVariants={variantStatus as any}
       />
     </div>
   );

@@ -59,14 +59,12 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
 
       // Check if already initialized and destroy first
       if (window.$(textareaRef.current).data('summernote')) {
-        console.log('Destroying existing summernote instance');
         window.$(textareaRef.current).summernote('destroy');
       }
 
       isInitializingRef.current = true;
 
       try {
-        console.log('Initializing Summernote...');
         window.$(textareaRef.current).summernote({
           height: 120,
           placeholder: placeholder,
@@ -87,7 +85,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
           },
           callbacks: {
             onInit: function() {
-              console.log('Summernote initialized successfully!');
               setIsInitialized(true);
               isInitializingRef.current = false;
               
@@ -98,7 +95,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
             },
             onChange: function (contents: string) {
               const cleanedContents = cleanEmptyContent(contents);
-              console.log('onChange fired with cleaned content:', cleanedContents);
               onChange(cleanedContents);
             },
             onPaste: function (e: any) {
@@ -165,7 +161,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
     // Load scripts effect
     useEffect(() => {
       const loadScripts = async () => {
-        console.log('Loading scripts...');
         
         try {
           // Load jQuery
@@ -178,7 +173,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
               jqueryScript.onload = resolve;
               jqueryScript.onerror = reject;
             });
-            console.log('jQuery loaded');
           }
 
           // Load Summernote CSS
@@ -187,7 +181,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
             summernoteCSS.rel = 'stylesheet';
             summernoteCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css';
             document.head.appendChild(summernoteCSS);
-            console.log('Summernote CSS loaded');
           }
 
           // Load Summernote JS
@@ -200,7 +193,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
               summernoteScript.onload = resolve;
               summernoteScript.onerror = reject;
             });
-            console.log('Summernote JS loaded');
           }
 
           setScriptsLoaded(true);
@@ -232,7 +224,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
         const cleanedPropValue = cleanEmptyContent(value);
         
         if (cleanedCurrentContent !== cleanedPropValue) {
-          console.log('Updating content from props:', value);
           window.$(textareaRef.current).summernote('code', value);
         }
       }
@@ -242,7 +233,6 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
     useEffect(() => {
       return () => {
         if (textareaRef.current && window.$ && window.$(textareaRef.current).data('summernote')) {
-          console.log('Cleaning up Summernote');
           window.$(textareaRef.current).summernote('destroy');
         }
         setIsInitialized(false);

@@ -260,6 +260,7 @@ export interface SingleProductResponse extends Result {
 }
 export interface SingleProductPageProps {
   product: SingleProductResponse;
+  getVariantId: (id: number) => void;
 }
 
 export interface SelectedAttribute {
@@ -278,6 +279,7 @@ export interface ProductImagesSectionProps {
   flashEndDate?: string;
   isWishlisted?: boolean;
   is_new?: boolean;
+  active_image?: string; 
   onToggleWishlist: () => void;
 }
 

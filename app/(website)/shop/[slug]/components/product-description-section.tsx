@@ -31,7 +31,7 @@ import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/p
 import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
 
 
-const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product }) => {
+const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product, getVariantId }) => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -61,6 +61,12 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
   const variantId = optionStep.data?.map(item => item.id).toString();
 
+
+  useEffect(() => {
+    if (variantId) {
+      getVariantId(parseInt(variantId))
+    }
+  }, [variantId])
   const validateSelection = useCallback(() => {
     const newErrors: ErrorState = {};
     attributeOrder.forEach(attrName => {
@@ -107,7 +113,6 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       return [...prev, { name, value }];
     });
   }
-
   const handleSubmit = () => {
     setHasSubmitted(true);
     validateSelection();
@@ -225,8 +230,8 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       {/* Product Price */}
       <div className="flex flex-col items-start justify-between w-full gap-4 pt-2 pl-3 sm:flex-row sm:items-center sm:pl-0 sm:pt-6">
         <PriceRow
-          price={discountedPrice ?? ''}
-          previousPrice={product.price}
+          price={product.discount_percentage ? discountedPrice || '' : product.price}
+          previousPrice={product.discount_percentage && product.price}
           discountTag={product.discount_percentage}
           priceClassname="gap-5"
           discountClassName="bg-primary text-white"
