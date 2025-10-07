@@ -62,17 +62,31 @@ export default function Navbar() {
   const isActive = (pathname: string) => path === pathname;
   const { wishlistCount } = useAppSelector((state) => state.navbar);
   const cartCount = useAppSelector((state) => state.cart.cartCount);
-  const { isLoggedIn, accessToken } = useAppSelector((state) => state.authentication);
-const [categoryPosition, setCategoryPosition] = useState(0);
+  const { isLoggedIn, accessToken } = useAppSelector(
+    (state) => state.authentication
+  );
 
-  const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(`dropdown/category?is_not_empty=True`);
-  const { data: brandDropdownData } = useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
+  const { data: dropdownCategoryData } =
+    useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+  const { data: brandDropdownData } =
+    useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
+  const {
+    data: notifications,
+    loading,
+    error,
+  } = useFetchData<NotificationResponse[]>(
+    "/cms/notifications/all-notification/"
+  );
 
-  const { data: wishListData } = useFetchData<WishListResponse>('/wishlists/', false, {
-    config: { headers: { Authorization: `Bearer ${accessToken}` } }
-  });
-  const { data: cartData } = useFetchData<CartResponse>('carts/', false, {
-    config: { headers: { Authorization: `Bearer ${accessToken}` } }
+  const { data: wishListData } = useFetchData<WishListResponse>(
+    "/wishlists/",
+    false,
+    {
+      config: { headers: { Authorization: `Bearer ${accessToken}` } },
+    }
+  );
+  const { data: cartData } = useFetchData<CartResponse>("carts/", false, {
+    config: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
 
   useEffect(() => {
@@ -362,81 +376,90 @@ const [categoryPosition, setCategoryPosition] = useState(0);
                 {notifications?.length || 0}
               </div>
             </Button>
+
+            {/* Mobile menu */}
             <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
         </div>
-{
-  isDropdownVisible &&
-  <div
-    ref={dropdownRef}
-    className="absolute left-120 z-50 pt-5 transition-all ease-in-out "
-    onMouseEnter={handleDropdownEnter}
-    onMouseLeave={handleDropdownLeave}
-  >
-    <div className="flex overflow-hidden bg-none rounded-lg gap-5">
-      <div className="w-[280px] h-fit max-h-[450px] bg-white shadow-xl rounded-lg overflow-y-auto border-r border-border">
-        <div className="p-2">
-          <Link
-            href="/shop"
-            className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
-            onClick={() => setIsDropdownVisible(false)}
+        {/* Mega Menu */}
+        {isDropdownVisible && (
+          <div
+            ref={dropdownRef}
+            className="absolute left-120 z-50 pt-5 transition-all ease-in-out "
+            onMouseEnter={handleDropdownEnter}
+            onMouseLeave={handleDropdownLeave}
           >
-            <span className="font-medium font-sans">All Products</span>
-          </Link>
+            <div className="flex overflow-hidden bg-none rounded-lg gap-5">
+              <div className="w-[280px] h-[450px] bg-white  shadow-xl rounded-lg overflow-y-auto border-r border-border ">
+                <div className="p-2">
+                  <Link
+                    href="/shop"
+                    className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
+                    onClick={() => setIsDropdownVisible(false)}
+                  >
+                    <span className="font-medium font-sans">All Products</span>
+                    <ChevronRight className="w-4 h-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                  </Link>
 
-          <div className="space-y-1">
-            {dropdownCategoryData?.map((category, ) => (
-              <div
-                key={category.id}
-                id={`category-${category.id}`}
-                className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${
-                  hoveredCategory?.id === category.id ? "bg-secondary text-primary" : "hover:bg-secondary/50"
-                }`}
-                onMouseEnter={(e) => {
-                  setHoveredCategory(category);
-                  setCategoryPosition(e.currentTarget.offsetTop);
-                }}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="font-medium font-sans">{category.name}</span>
-                </div>
-                {category.subcategories.length > 0 && (
-                  <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {hoveredCategory && hoveredCategory.subcategories.length > 0 && (
-        <div 
-          className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide bg-white rounded-lg shadow-xl absolute left-[280px] transition-all duration-200"
-          style={{ top: `${categoryPosition}px` }}
-        >
-          <div className="p-4">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">{hoveredCategory.name}</h3>
-            <div className="space-y-1">
-              {hoveredCategory.subcategories.map((subcategory) => (
-                <span
-                  key={subcategory.id}
-                  className="block px-3 py-2.5 text-sm rounded-md transition-all duration-200 hover:bg-white group cursor-pointer"
-                  onClick={() => handleCategoryCardClick(hoveredCategory.id, parseInt(subcategory.id))}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium font-sans group-hover:text-primary">{subcategory.name}</span>
+                  <div className="space-y-1">
+                    {dropdownCategoryData?.map((category) => (
+                      <div
+                        key={category.id}
+                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${
+                          hoveredCategory?.id === category.id
+                            ? "bg-secondary text-primary"
+                            : "hover:bg-secondary/50"
+                        }`}
+                        onMouseEnter={() => setHoveredCategory(category)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="font-medium font-sans">
+                            {category.name}
+                          </span>
+                        </div>
+                        {category.subcategories.length > 0 && (
+                          <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        )}
+                      </div>
+                    ))}
                   </div>
-                </span>
-              ))}
+                </div>
+              </div>
+
+              {/* Subcategories Panel - Right Side */}
+              {hoveredCategory && hoveredCategory.subcategories.length > 0 && (
+                <div className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide  bg-white rounded-lg shadow-xl">
+                  <div className="p-4">
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">
+                      {hoveredCategory.name}
+                    </h3>
+                    <div className="space-y-1">
+                      {hoveredCategory.subcategories.map((subcategory) => (
+                        <span
+                          key={subcategory.id}
+                          className="block px-3 py-2.5 text-sm rounded-md transition-all duration-200 hover:bg-white  group cursor-pointer"
+                          onClick={() =>
+                            handleCategoryCardClick(
+                              hoveredCategory.id,
+                              parseInt(subcategory.id)
+                            )
+                          }
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium font-sans group-hover:text-primary">
+                              {subcategory.name}
+                            </span>
+                          </div>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  </div>
-}
-        {
-          isBrandDropdownVisible &&
+        )}
+        {isBrandDropdownVisible && (
           <div
             ref={dropdownRef}
             className="absolute left-0 right-0 z-50 pt-5 transition-all ease-in-out dropdown-outer top-18 duration-800"
