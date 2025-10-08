@@ -28,7 +28,7 @@ const DirectContact: React.FunctionComponent = () => {
                   Phone Number
                 </p>
                 <p>
-                  9800000000
+                  +977 9826940855
                 </p>
               </div>
             </div>
@@ -43,7 +43,7 @@ const DirectContact: React.FunctionComponent = () => {
                   Email Address
                 </p>
                 <p>
-                  support@actuallysave.com
+                  ultrabeautybrands@gmail.com
                 </p>
               </div>
             </div>
@@ -58,7 +58,7 @@ const DirectContact: React.FunctionComponent = () => {
                   Our Location
                 </p>
                 <p>
-                  Itahari, Sunsari,
+                  One Stop Mall Ground Floor, Jhapa District, Nepal
                 </p>
               </div>
             </div>

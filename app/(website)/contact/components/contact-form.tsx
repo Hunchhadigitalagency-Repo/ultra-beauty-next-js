@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 
 import { toast } from "sonner";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ContactFormValues,
   contactSchema,
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import apiBase from "@/services/api-base-instance";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ReCAPTCHA from "react-google-recaptcha";
 // import { Textarea } from "@/components/ui/textarea";
 
 
@@ -34,9 +35,11 @@ export default function ContactForm() {
       lastname: "",
       email: "",
       subject: "",
+      g_recaptcha_response: "",
       // message: "",
     },
   });
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
 
   async function onSubmit(values: ContactFormValues) {
     try {
@@ -159,7 +162,21 @@ export default function ContactForm() {
               </FormItem>
             )}
           /> */}
-
+          <FormField
+            control={form.control}
+            name="g_recaptcha_response"
+            render={() => <FormMessage />}
+          />
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
+            size="normal"
+            ref={recaptchaRef}
+            onChange={(token: string | null) => {
+              if (token) {
+                form.setValue("g_recaptcha_response", token)
+              }
+            }}
+          />
           {/* Submit Button */}
 
           <Button

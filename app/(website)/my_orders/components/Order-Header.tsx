@@ -61,6 +61,11 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
                             </Button>
                         )
                     }
+                    <Button
+                        onClick={() => router.push(`/order-tracking?order_id=${id}`)}
+                        className={`text-white cursor-pointer uppercase text-[10px] md:text-sm px-2 md:px-3 py-1.5 bg-red rounded-none  text-center`}>
+                        Track Orders
+                    </Button>
                 </div>
             </div>
             <OrderProductDetails

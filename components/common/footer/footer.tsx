@@ -135,28 +135,33 @@ const Footer: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">Kathmandu, Nepal</span>
+                  <span className="text-sm text-gray-300">One Stop Mall Ground Floor, Jhapa District, Nepal
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">555555555</span>
+                  <span className="text-sm text-gray-300">+977 9826940855
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">bsera@links.com</span>
+                  <span className="text-sm text-gray-300">            ultrabeautybrands@gmail.com
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
-                  {
-                    socialLinks?.map((social, index) => {
-                      return (
-                        <Link href={social.url} key={index}>
-                          <div className='relative w-6 h-6'>
-                            <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
-                          </div>
-                        </Link>
-                      )
-                    })
-                  }
+                  {socialLinks?.map((social, index) => (
+                    <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+                      <div className="relative w-6 h-6">
+                        <Image
+                          src={social.icon}
+                          alt={social.name}
+                          fill
+                          className="object-center rounded-sm transition-transform duration-300 hover:scale-110 hover:border"
+                        />
+                      </div>
+                    </Link>
+                  ))}
+
                 </div>
               </div>
             </div>
@@ -214,38 +219,41 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           {/* Contact Us - Desktop */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Mail className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300 uppercase">Hello@UltraBeauty.com</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300">BIRTAMOD - 4, JHAPA, KOSHI NEPAL</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300">
-                  +977-9824386694, 25254568
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                {
-                  socialLinks?.map((social, index) => {
-                    return (
-                      <Link href={social.url} key={index}>
-                        <div className='relative w-6 h-6'>
-                          <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
-                        </div>
-                      </Link>
-                    )
-                  })
-                }
+          <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">One Stop Mall Ground Floor, Jhapa District, Nepal
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">+977 9826940855
+                  </span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                  <span className="text-sm text-gray-300">            ultrabeautybrands@gmail.com
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  {socialLinks?.map((social, index) => (
+                    <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+                      <div className="relative w-6 h-6">
+                        <Image
+                          src={social.icon}
+                          alt={social.name}
+                          fill
+                          className="object-center rounded-sm transition-transform duration-300 hover:scale-120 "
+                        />
+                      </div>
+                    </Link>
+                  ))}
+
+                </div>
               </div>
             </div>
-          </div>
         </div>
         {/* Copyright */}
         <div className="flex-col items-center pt-8 pb-8 space-y-4 border-t-2 border-gray-700 mt-14 display-flex">

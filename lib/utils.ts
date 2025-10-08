@@ -1,3 +1,4 @@
+import { IOrderLog } from "@/types/orders";
 import { clsx, type ClassValue } from "clsx";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
@@ -114,4 +115,49 @@ export const allImages = (images: any[], variant: any[]) => {
     }));
 
   return [...(images || []), ...imagess];
+};
+
+
+export const generateOrderStatus = (orderStatusLogs: IOrderLog[]) => {
+  // Define all possible steps
+  const steps = ["processing", "packed", "shipped", "delivered"];
+
+  // Map our order statuses to these steps
+  const statusMap: Record<string, string> = {
+    Pending: "processing",
+    Packing: "packed",
+    Shipped: "shipped",
+    Delivered: "delivered",
+  };
+
+  // Sort logs by changed_at ascending
+  const sortedLogs = [...orderStatusLogs].sort(
+    (a, b) => new Date(a.changed_at).getTime() - new Date(b.changed_at).getTime()
+  );
+
+  // Build logs array for timeline
+  const logs = sortedLogs.map((log, index) => ({
+    date: new Date(log.changed_at).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
+    title: log.status.name,
+    description: `The order status changed to ${log.status.name}`,
+    isActive: index === sortedLogs.length - 1, // latest status is active
+  }));
+
+  // Build status object
+  const status: Record<string, string> = steps.reduce((acc, step) => {
+    const hasStepOccurred = sortedLogs.some(
+      (log) => statusMap[log.status.name] === step
+    );
+    acc[step] = hasStepOccurred ? "complete" : "";
+    return acc;
+  }, {} as Record<string, string>);
+
+  return { status, logs };
 };
