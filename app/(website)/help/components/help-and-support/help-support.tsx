@@ -6,15 +6,24 @@ import { useEffect, useState } from 'react';
 import useFetchData from '@/hooks/use-fetch';
 import { HelpAndSupport } from '@/types/help-and-support';
 import SectionHeader from '@/components/common/header/section-header';
+import { useAppSelector } from '@/redux/hooks';
 
 const HelpSupportSection: React.FunctionComponent = () => {
-
+  const { searchQuery } = useAppSelector(state => state.filter)
   const [isClamped, setIsClamped] = useState(false);
   const { data, error, loading } = useFetchData<HelpAndSupport[]>('help-and-support/');
+  const [help, setHelp] = useState(data);
 
   useEffect(() => {
     setIsClamped(true)
-  }, []);
+    if(data){
+      if(searchQuery){
+        setHelp(data.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase())))
+      }else {
+        setHelp(data)
+      }
+    }
+  }, [data, searchQuery]);
 
   return (
     <section className='space-y-2 padding'>
@@ -35,7 +44,7 @@ const HelpSupportSection: React.FunctionComponent = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 py-6 sm:grid-cols-2 md:grid-cols-3 gap-x-36 gap-y-6">
-          {data?.map((item, index) => (
+          {help?.map((item, index) => (
             <Link
               key={index}
               href={`/help/${item.id}`}

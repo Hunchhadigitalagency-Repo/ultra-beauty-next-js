@@ -119,45 +119,52 @@ export const allImages = (images: any[], variant: any[]) => {
 
 
 export const generateOrderStatus = (orderStatusLogs: IOrderLog[]) => {
-  // Define all possible steps
-  const steps = ["processing", "packed", "shipped", "delivered"];
-
-  // Map our order statuses to these steps
-  const statusMap: Record<string, string> = {
-    Pending: "processing",
-    Packing: "packed",
-    Shipped: "shipped",
-    Delivered: "delivered",
-  };
-
-  // Sort logs by changed_at ascending
-  const sortedLogs = [...orderStatusLogs].sort(
+  // Sort logs oldest to newest
+  const sorted = [...orderStatusLogs].sort(
     (a, b) => new Date(a.changed_at).getTime() - new Date(b.changed_at).getTime()
   );
 
-  // Build logs array for timeline
-  const logs = sortedLogs.map((log, index) => ({
-    date: new Date(log.changed_at).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }),
-    title: log.status.name,
-    description: `The order status changed to ${log.status.name}`,
-    isActive: index === sortedLogs.length - 1, // latest status is active
-  }));
+  // Initialize status
+  const statusMap = {
+    processing: 'upcoming',
+    packed: 'upcoming',
+    shipped: 'upcoming',
+    delivered: 'upcoming',
+  };
 
-  // Build status object
-  const status: Record<string, string> = steps.reduce((acc, step) => {
-    const hasStepOccurred = sortedLogs.some(
-      (log) => statusMap[log.status.name] === step
-    );
-    acc[step] = hasStepOccurred ? "complete" : "";
-    return acc;
-  }, {} as Record<string, string>);
+  // Update status based on logs
+  sorted.forEach(log => {
+    const name = log.status.name.toLowerCase();
 
-  return { status, logs };
+    if (name === 'pending') {
+      statusMap.processing = 'complete';
+    }
+    if (name === 'packing') {
+      statusMap.processing = 'complete';
+      statusMap.packed = 'complete';
+    }
+    if (name === 'delivering') {
+      statusMap.processing = 'complete';
+      statusMap.packed = 'complete';
+      statusMap.shipped = 'complete';
+    }
+    if (name === 'delivered') {
+      statusMap.processing = 'complete';
+      statusMap.packed = 'complete';
+      statusMap.shipped = 'complete';
+      statusMap.delivered = 'complete';
+    }
+  });
+  const logs = sorted.map((log, index) => {
+    const date = new Date(log.changed_at);
+    const formattedDate = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}, ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+    return {
+      date: formattedDate,
+      title: log.status.name,
+      isActive: sorted.length - 1 === index,
+      reviewLink: log.status.name.toLowerCase() === 'delivered' && index === 0,
+    };
+  });
+
+  return { logs };
 };

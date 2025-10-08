@@ -1,36 +1,48 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-const StatusHeader: React.FunctionComponent = () => {
-
-    const status = 'delivered';
-
+const StatusHeader = ({
+    status,
+    is_track = false,
+}: {
+    status: string;
+    is_track?: boolean;
+}) => {
     return (
         <div className="md:h-12 h-12 px-4 md:px-6 bg-secondary rounded-sm font-medium text-custom-black text-sm flex items-center justify-between">
-            {/* Left side: Order Info */}
+            {/* Left section: Order No */}
             <div className="flex flex-wrap gap-2 md:gap-6 text-xs md:text-sm">
-                <h4 className='flex gap-1'>
+                <h4 className="flex gap-1">
                     Order No:
-                    <span>
-                        #78647763728
-                    </span>
+                    <span>#78647763728</span>
                 </h4>
+
+                {/* Status after order number, only if tracking */}
             </div>
-            {/* Right Side: Order Status & Actions */}
-            <div className="flex justify-between gap-6 items-center">
-                {
-                    status === 'delivered' ? (
+                {is_track && (
+                    <span
+                        className={`text-white text-sm md:text-base px-3 py-1.5 rounded-[3px] ${status === 'delivered' ? 'bg-green-500' : 'bg-yellow-600 text-black'
+                            }`}
+                    >
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </span>
+                )}
+
+            {/* Right section */}
+            {!is_track && (
+                <div className="flex justify-between gap-6 items-center">
+                    {status === 'delivered' ? (
                         <span className="text-white text-sm md:text-base px-3 py-1.5 bg-green-500 rounded-[3px] text-center">
                             Delivered
                         </span>
                     ) : (
-                        <div className="flex  items-center gap-2">
+                        <div className="flex items-center gap-2">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="bg-yellow-600 text-black hover:text-red-700 text-xs md:text-sm font-medium h-auto p-0"
+                                className="bg-yellow-600 px-6 py-6 text-black hover:text-red-700 text-xs md:text-sm font-medium h-auto p-0"
                             >
-                                Cancel Order
+                                {status}
                             </Button>
                             <Button
                                 variant="ghost"
@@ -43,12 +55,11 @@ const StatusHeader: React.FunctionComponent = () => {
                                 </svg>
                             </Button>
                         </div>
-                    )
-                }
-            </div>
+                    )}
+                </div>
+            )}
         </div>
+    );
+};
 
-    )
-}
-
-export default StatusHeader
+export default StatusHeader;

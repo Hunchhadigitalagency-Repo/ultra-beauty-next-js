@@ -7,7 +7,7 @@ import { CreateOrderResponse } from '@/types/orders';
 import SectionHeader from '@/components/common/header/section-header';
 
 
-const Order: React.FunctionComponent = () => {
+const   Order: React.FunctionComponent = () => {
 
     const { id } = useParams();
     const { data, loading, error } = useFetchData<CreateOrderResponse>(`order/${id}/`, true)
