@@ -72,6 +72,23 @@ export interface IOrder {
   order_details: IOrderDetail[];
 }
 
+export interface IOrderLog {
+  id: number;
+  order: any;
+  status: {
+    id: number;
+    name: string;
+    primary_color: string;
+    text_color: string;
+    position: number;
+    is_active: boolean;
+    is_type_success: boolean;
+    is_type_failed: boolean;
+  };
+  changed_at: string;
+}
+
+
 export interface IProduct {
   id: number;
   image: string;
@@ -98,6 +115,7 @@ export interface IProduct {
   brand: number;
   tax_applied: string | null;
   package: any[];
+  average_rating?: number
 }
 
 export interface IProductVariant {

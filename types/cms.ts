@@ -154,6 +154,16 @@ export interface ITestimonial {
   is_active: boolean;
 }
 
+export interface IApplicant {
+  id: number;
+  full_name: string;
+  phone_no: string;
+  email: string;
+  cv: string;
+  cover_letter: string;
+  shortlisted: string;
+}
+
 export interface IDashboardITestimonial {
   id: number;
   name: string;
