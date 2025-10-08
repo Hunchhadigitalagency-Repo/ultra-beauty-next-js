@@ -5,7 +5,6 @@ import React from "react";
 interface StatusItem {
     date: string;
     title: string;
-    description: string;
     isActive?: boolean;
     reviewLink?: boolean;
 }
@@ -16,11 +15,11 @@ interface TimelineProps {
 
 const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) => {
     return (
-        <div className="p-2 md:p-4 w-full lg:w-1/2">
+        <div className="p-2 md:p-4 w-full lg:w-1/2 flex flex-col">
             {statuses.map((status, idx) => (
                 <div
                     key={idx}
-                    className={`flex w-full justify-center items-center relative flex-row`}
+                    className={`grid grid-cols-3 w-3/4 justify-center  items-center relative `}
                 >
                     <div className="w-[140px] text-sm text-gray-700 flex-shrink-0 sm:mb-0 ">
                         {status.date}
@@ -28,7 +27,7 @@ const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) 
 
                     <div className="relative mx-4 flex flex-col items-center">
                         <div
-                            className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-white z-10 ${status.isActive ? "bg-green-500" : "bg-[#7FBCFF]"
+                            className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-white z-10 ${status.isActive ? "bg-green-500" : "bg-gray-300"
                                 }`}
                         >
                             ✓
@@ -38,16 +37,13 @@ const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) 
                         )}
                     </div>
 
-                    <div className="">
+                    <div className="relative">
                         <h3
-                            className={`text-sm md:text-base font-semibold ${status.isActive ? "text-green-500" : "text-black"
+                            className={`absoulte text-sm md:text-base font-semibold ${status.isActive ? "text-green-500" : "text-gray-500"
                                 }`}
                         >
                             {status.title}
                         </h3>
-                        <p className="text-xs md:text-sm text-gray-700">
-                            {status.description}<br />
-                        </p>
                     </div>
                 </div>
             ))}
