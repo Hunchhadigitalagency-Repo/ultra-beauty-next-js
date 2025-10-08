@@ -7,6 +7,8 @@ export const contactSchema = z.object({
     .string({ required_error: "Email is required" })
     .email("Invalid email address"),
   subject: z.string().min(3, "Subject must be at least 3 characters"),
+  g_recaptcha_response: z.string().min(1, "reCAPTCHA verification failed"),
+
   // message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
