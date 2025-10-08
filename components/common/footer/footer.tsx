@@ -173,6 +173,9 @@ const Footer: React.FC = () => {
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray">SHOP</h3>
             <ul className="space-y-3">
+              <button className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary" onClick={() => router.push('/shop')}>
+                All Products
+              </button>
               {
                 categoriesData?.map((category) => (
                   <button key={category.name} className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary" onClick={() => handleCategoryClick(category.id)}>
@@ -220,40 +223,40 @@ const Footer: React.FC = () => {
           </div>
           {/* Contact Us - Desktop */}
           <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">Contact Us</h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">One Stop Mall Ground Floor, Jhapa District, Nepal
-                  </span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">+977 9826940855
-                  </span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">            ultrabeautybrands@gmail.com
-                  </span>
-                </div>
-                <div className="flex items-center gap-4">
-                  {socialLinks?.map((social, index) => (
-                    <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
-                      <div className="relative w-6 h-6">
-                        <Image
-                          src={social.icon}
-                          alt={social.name}
-                          fill
-                          className="object-center rounded-sm transition-transform duration-300 hover:scale-120 "
-                        />
-                      </div>
-                    </Link>
-                  ))}
+            <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                <span className="text-sm text-gray-300">One Stop Mall Ground Floor, Jhapa District, Nepal
+                </span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                <span className="text-sm text-gray-300">+977 9826940855
+                </span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
+                <span className="text-sm text-gray-300">            ultrabeautybrands@gmail.com
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                {socialLinks?.map((social, index) => (
+                  <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+                    <div className="relative w-6 h-6">
+                      <Image
+                        src={social.icon}
+                        alt={social.name}
+                        fill
+                        className="object-center rounded-sm transition-transform duration-300 hover:scale-120 "
+                      />
+                    </div>
+                  </Link>
+                ))}
 
-                </div>
               </div>
             </div>
+          </div>
         </div>
         {/* Copyright */}
         <div className="flex-col items-center pt-8 pb-8 space-y-4 border-t-2 border-gray-700 mt-14 display-flex">

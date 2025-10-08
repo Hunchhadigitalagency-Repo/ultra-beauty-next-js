@@ -62,18 +62,18 @@ const SingleProductPage: React.FunctionComponent = () => {
 
         <TabsContent
           value="Description"
-          className="py-4 space-y-6  w-full flex flex-col "
+          className="py-4 space-y-6  w-full flex flex-col min-h-[200px]"
         >
           <DetailDecription detail_description={detail_description || ''} title="" />
         </TabsContent>
-        <TabsContent value="Specification" className="py-4">
+        <TabsContent value="Specification" className="py-2 min-h-[200px]">
           <DetailDecription
             detail_description={tutorial}
             title=""
             youtube_link={youtube_link}
           />
         </TabsContent>
-        <TabsContent value="Reviews" className="py-4">
+        <TabsContent value="Reviews" className="py-4 min-h-[200px]">
           <Review reviews={reviews} />
         </TabsContent>
       </Tabs>

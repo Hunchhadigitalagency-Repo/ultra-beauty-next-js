@@ -26,7 +26,7 @@ const ContactSection: React.FunctionComponent = () => {
       />
 
       {/* Contact Details */}
-      <div className="grid grid-cols-1 justify-start items-start gap-8 py-4">
+      <div className="grid grid-cols-1 justify-start items-start gap-10 py-4">
         <ContactItem
           title="Phone Number"
           details="+977 9826940855"

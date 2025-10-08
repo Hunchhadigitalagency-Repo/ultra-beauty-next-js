@@ -40,7 +40,7 @@ const ContactPage: React.FunctionComponent = () => {
           <section className="grid grid-cols-1 gap-10 lg:grid-cols-2">
 
             {/* Contact Details */}
-            <div className="w-full h-full">
+            <div className="w-full h-fit">
               <ContactSection />
             </div>
 

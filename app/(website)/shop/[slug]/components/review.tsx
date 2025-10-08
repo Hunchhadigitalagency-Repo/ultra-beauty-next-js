@@ -90,11 +90,7 @@ export default function ReviewsComponent({ reviews,  }: ReviewsComponentProps) {
 
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-900">
-        Customer Reviews ({reviews.length})
-      </h2>
-
+    <div className="bg-white rounded-2xl p-6">
       {/* Reviews Marquee */}
       <div className="mb-8 overflow-x-auto no-scrollbar">
         <div className="flex gap-4">

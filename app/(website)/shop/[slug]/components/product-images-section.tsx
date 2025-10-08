@@ -88,30 +88,32 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
           </Badge>
         }
       </div>
-      {
-        images?.length > 1 && (
-          <div className="grid grid-cols-4 gap-6 overflow-x-auto md:gap-6">
-            {
-              images.map((img) => (
-                <div
-                  key={img.id}
-                  className={`flex-shrink-0 w-[75px] h-[75px] sm:w-[80px] md:w-full relative  sm:h-[120px] md:h-[150px]
-              ${selectedImage === img.file ? "border-2 border-primary rounded-md" : "border border-none"}`}
-                  onClick={() => setSelectedImage(img.file)}
-                >
-                  <Image
-                    src={img.file}
-                    alt={`Product thumbnail ${img.id}`}
-                    fill
-                    className="object-cover border-2 border-transparent rounded-md cursor-pointer"
-                  />
-                </div>
-              ))
-            }
-          </div>
-        )
-      }
-      {/* Flash Sale Badge */}
+      {images?.length > 1 && (
+        <div className="flex gap-4 overflow-x-auto py-2 px-2 scrollbar-hide">
+          {images.map((img) => (
+            <div
+              key={img.id}
+              onClick={() => setSelectedImage(img.file)}
+              className={`
+          flex-shrink-0 relative 
+          w-[75px] h-[75px] sm:w-[80px] sm:h-[120px] md:w-[120px] md:h-[130px] 
+          rounded-md overflow-hidden
+          cursor-pointer 
+          transition-all duration-200
+          ${selectedImage === img.file ? "border-2 border-primary scale-105" : "border border-gray-200 hover:border-gray-400"}
+        `}
+            >
+              <Image
+                src={img.file}
+                alt={`Product thumbnail ${img.id}`}
+                fill
+                className="object-cover w-full h-full rounded-md"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
       {
         flashEndDate &&
           is_flash_sale &&
