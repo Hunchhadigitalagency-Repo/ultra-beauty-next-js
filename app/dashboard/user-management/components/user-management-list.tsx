@@ -25,10 +25,9 @@ const UserManagementList = () => {
         type="User List"
         totalItems={count}
         searchPlaceholder="Search by Username"
-        // hasBulkActions={true}
         pageType={ETypes.USER_MANAGEMENT}
       />
-      <div id={scrollId} className="overflow-y-auto h-[calc(100vh-370px)]">
+      <div id={scrollId} className="overflow-y-auto h-[calc(100vh-190px)]">
         <InfiniteScroll
           dataLength={data.length}
           next={fetchNext}
@@ -40,9 +39,8 @@ const UserManagementList = () => {
             cols={UserManagementConstants()}
             data={data as IUsers[]}
             loading={loading && data.length === 0}
-            // enableBulkSelect={true}
             getItemId={(user) => user.id.toString()}
-            height="h-auto"
+            height="!h-full"
           />
         </InfiniteScroll>
       </div>

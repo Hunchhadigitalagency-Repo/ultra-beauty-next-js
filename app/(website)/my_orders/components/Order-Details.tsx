@@ -6,6 +6,7 @@ import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { OrderDetail, OrderStatus } from "@/types/orders";
 import ReviewModal from "../../profile/components/MyReview/components/review-modal";
+import DateChips from "@/components/common/chips/date-chips";
 
 
 interface OrderProductProps {
@@ -54,7 +55,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                             {/* Boxes */}
                             <div className="flex flex-wrap gap-3 md:gap-9">
                                 <div className="border-[1px] border-gray-500 px-1 lg:min-w-30 py-1  md:font-semibold font-poppins text-xs md:text-sm">
-                                    Date: {new Date(item.product.created_at).toLocaleDateString()}
+                                    Date:  <DateChips date={item.product.created_at}/>
                                 </div>
                                 <div
                                     className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30  md:font-semibold font-poppins text-xs md:text-sm">

@@ -48,10 +48,7 @@ export default function ProductDescription({
   if (!detail_description) return <EmptyState />;
 
   return (
-    <div className="bg-white rounded-2xl px-6">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-900">{title}</h2>
-
-      {/* Description Section */}
+    <div className="bg-white rounded-2xl px-6 mt-0">
       <div
         ref={contentRef}
         className={`rendered-content prose prose-sm sm:prose-base max-w-none text-gray-700 leading-relaxed transition-all duration-300 

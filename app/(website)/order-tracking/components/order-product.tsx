@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import RatingStars from '@/components/common/product/rating-stars';
 import SectionHeader from '@/components/common/header/section-header';
+import DateChips from '@/components/common/chips/date-chips';
 
 interface OrderProductProps {
     imageSrc: string
@@ -52,7 +53,7 @@ const OrderProduct: React.FunctionComponent<OrderProductProps> = ({
                         Quantity: {quantity}
                     </div>
                     <div className=" border border-gray-500 px-2 py-0.5 rounded text-sm ">
-                        Date: {date}
+                        Date: <DateChips date={date}/>
                     </div>
                     <div className=" border border-gray-500 px-2 py-0.5 rounded text-sm ">
                         Price: {price}

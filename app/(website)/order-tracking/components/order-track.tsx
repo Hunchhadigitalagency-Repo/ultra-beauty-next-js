@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import OrderStatus from './order-status';
+// import OrderStatus from './order-status';    
 import StatusHeader from './status-header';
 import OrderProduct from './order-product';
 import DeliveryTimeline from './delivery-timeline';
@@ -16,20 +16,24 @@ const OrderTrack: React.FunctionComponent = () => {
 
     if (!ordersStatus) return null;
 
-    const { status, logs } = generateOrderStatus(ordersStatus)
+    const { logs } = generateOrderStatus(ordersStatus)
 
     function stripHtmlTags(html: string): string {
         if (!html) return "";
         return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     }
+
+    console.log('thisis the daatu', logs[logs.length - 1]?.title);
+
+
     return (
         <React.Fragment>
-            <OrderStatus
+            {/* <OrderStatus
                 status={status as any}
-            />
-            <StatusHeader />
+            /> */}
+            <StatusHeader status={logs[logs.length - 1]?.title} is_track={true} />
             <div className="flex flex-col space-y-8 lg:flex-row-reverse justify-between items-start">
-                <DeliveryTimeline statuses={logs} />
+                <DeliveryTimeline statuses={logs as any} />
                 {
                     orders && orders?.order_details?.map((item) => (
                         <React.Fragment key={item.id}>
