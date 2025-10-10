@@ -335,7 +335,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
                 <Button
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
-                  className="bg-black hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                  className=" text-white font-semibold px-8 py-3 rounded-lg transition-colors"
                 >
                   Save
                 </Button>

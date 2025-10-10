@@ -239,7 +239,7 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
         <Button
           type="submit"
           form="setting-attribute-form"
-          className="text-white bg-orange-400 rounded-sm"
+          className="text-white rounded-sm"
         >
           Save
         </Button>

@@ -1,4 +1,6 @@
+import InventoryFilter from "@/app/dashboard/inventory/components/inventory-filter";
 import OrderFilterForm from "@/app/dashboard/orders/components/order-filter-form";
+import SaleFilter from "@/app/dashboard/sales/components/sale-filter";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -18,6 +20,12 @@ const FilterSheet = ({ type }: IFilterSheetProps) => {
   const renderContent = () => {
     if (type === ETypes.ORDERS) {
       return <OrderFilterForm />;
+    }
+    if (type === ETypes.SALES) {
+      return <SaleFilter />;
+    }
+    if (type === ETypes.INVENTORY) {
+      return <InventoryFilter />;
     }
   };
 
