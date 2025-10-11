@@ -102,7 +102,7 @@ const SingleProductCard = ({
                 {/* Select Product Button (opens dialog) */}
                 <Button
                     onClick={() => setIsOpen(true)}
-                    className="w-full bg-pink-200 mt-2 border-pink-500 rounded-sm h-12 text-black hover:bg-pink-400"
+                    className="w-full bg-red-100 mt-2 border-pink-500 rounded-sm h-12 text-black hover:bg-red-400"
                 >
                     Select Product
                 </Button>

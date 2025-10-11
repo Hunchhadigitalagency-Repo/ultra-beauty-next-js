@@ -110,75 +110,84 @@ const Payment: React.FunctionComponent = () => {
   }
 
   return (
-    <section className="flex flex-col h-auto gap-5 padding lg:gap-10">
+  <section className="flex flex-col h-auto gap-6 lg:gap-10 padding lg:p-8">
+      {/* Section Header */}
       <SectionHeader
         title="Payment"
         description="Payment for your products"
       />
 
-      <div className="grid grid-cols-1  lg:grid-cols-[0.7fr_0.3fr] gap-10 ">
-
-        <div className="flex flex-col order-1 gap-3 md:gap-5 lg:order-none ">
+      <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_0.3fr] gap-8">
+        {/* Left Column */}
+        <div className="flex flex-col gap-5">
+          
+          {/* Payment Methods */}
           <div className="bg-secondary rounded-sm">
             <p className="px-5 py-3 text-sm font-medium md:text-base">
               Select payment Methods
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 sm:gap-5 lg:gap-3 md:gap-4 ">
-            {
-              PAYMENT_GATEWAYS.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActivePaymentMethod(item.value)}
-                  className={`
-                     w-full aspect-square cursor-pointer flex flex-col gap-2 md:gap-4 
-                    justify-center items-center border-[1px] rounded-sm 
-                    ${activePaymentMethod === item.value
-                      ? "border-primary"
-                      : "border-[#7C7C7C]"
-                    }
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-3 sm:gap-5 md:gap-4 lg:gap-3">
+            {PAYMENT_GATEWAYS.map((item, index) => (
+              <button
+                key={index}
+                onClick={() => setActivePaymentMethod(item.value)}
+                className={`
+                  w-full aspect-square flex flex-col gap-2 md:gap-4 justify-center items-center
+                  border-[1px] rounded-sm cursor-pointer
+                  ${activePaymentMethod === item.value ? "border-primary" : "border-[#7C7C7C]"}
                 `}
-                >
-                  <div className="relative w-20 h-20">
-                    <Image
-                      src={item.image}
-                      fill
-                      alt={item.name}
-                      className="object-cover h-0"
-                    />
-                  </div>
-                  <p
-                    className={`
-                  text-center text-xs sm:text-sm md:text-base font-medium lg:px-4
-                  ${activePaymentMethod === item.value && "text-primary"}
-                  `}
-                  >
-                    {item.name}
-                  </p>
-                </button>
-              ))
-            }
+              >
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={item.image}
+                    fill
+                    alt={item.name}
+                    className="object-cover"
+                  />
+                </div>
+                <p className={`
+                  text-center text-xs sm:text-sm md:text-base font-medium
+                  ${activePaymentMethod === item.value ? "text-primary" : "text-foreground"}
+                  lg:px-4
+                `}>
+                  {item.name}
+                </p>
+              </button>
+            ))}
           </div>
-          <div className='flex gap-4 '><input type="checkbox" className='w-5 h-5' /> <span> <p>Save information for future purchases</p></span></div>
-          <div className="border-[1px] border-[#7C7C7C] bg-[#FAFAFA] p-3 md:p-7 rounded-sm flex flex-col gap-2 md:gap-4 order-3 lg:order-none ">
-            <h2 className='text-base font-medium text-primary md:text-xl'>Confirm Order</h2>
-            <ol className="pl-3 text-sm font-medium list-decimal sm:text-base">
+
+          {/* Save Info Checkbox */}
+          <div className="flex items-center gap-3">
+            <input type="checkbox" className="w-5 h-5" />
+            <p className="text-sm md:text-base">Save information for future purchases</p>
+          </div>
+
+          {/* Confirm Order Box */}
+          <div className="border border-[#7C7C7C] bg-[#FAFAFA] rounded-sm p-4 md:p-7 flex flex-col gap-3 md:gap-4">
+            <h2 className="text-base md:text-xl font-medium text-primary">
+              Confirm Order
+            </h2>
+            <ol className="pl-4 list-decimal text-sm sm:text-base font-medium space-y-1">
               <li>Your order will be created once you click <b>Confirm Order</b>.</li>
               <li>Please ensure your chosen wallet has enough balance before proceeding.</li>
               <li>If you select Esewa/Khalti and don’t complete payment, your order will show as <b>Pending Payment</b> in your profile.</li>
             </ol>
 
             <Button
-              variant={'default'}
-              size={'default'}
+              variant="default"
+              size="default"
               onClick={handleConfirmOrder}
               disabled={activePaymentMethod === null}
-              className='py-4 text-sm font-medium text-center text-white rounded-full cursor-pointer bg-primary md:text-base lg:text-lg md:py-3'>
+              className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
+            >
               Confirm Order
             </Button>
           </div>
         </div>
+
+        {/* Right Column: Order Summary */}
         <div>
           <OrderSummary
             shippingDetails={shippingDetails}

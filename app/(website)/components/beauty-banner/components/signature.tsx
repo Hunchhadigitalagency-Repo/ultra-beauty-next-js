@@ -66,7 +66,7 @@ const SignatureSection: React.FunctionComponent = () => {
       </ul>
 
       <Link href="/shop">
-        <button className="cursor-pointer bg-primary text-white py-2 rounded-full text-sm md:text-base font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
+        <button className="cursor-pointer bg-primary text-white py-2 rounded-full text-sm  font-medium hover:bg-pink-700 transition md:px-20 px-[20%] mt-6">
           SHOP NOW →
         </button>
       </Link>

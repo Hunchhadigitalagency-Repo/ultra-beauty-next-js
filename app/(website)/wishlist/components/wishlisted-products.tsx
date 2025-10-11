@@ -143,85 +143,83 @@ const WishlistedProducts = () => {
       </div>
 
       {/* Flash Sale Products */}
-      <div className="w-full p-2 font-medium md:p-4 lg:p-4">
-        <h1 className="text-2xl uppercase">
-          on sale
-        </h1>
+     {/* Flash Sale Products */}
+<div className="w-full p-2 md:p-4 lg:p-6">
+  <h1 className="text-2xl font-bold uppercase mb-6">On Sale</h1>
 
-        {
-          isLoading ? (
-            <div className='flex items-center justify-center w-full h-60'>
-              <p className='font-semibold text-base text-gray-400'>
-                Loading...
-              </p>
-            </div>
-          ) : error ? (
-            <div className='flex flex-col items-center justify-center w-full h-60'>
-              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-              <p className='text-sm font-extralight text-gray-400'>
-                Oops! Something went wrong...
-              </p>
-            </div>
-          ) : flashSaleProducts?.length === 0 ? (
-            <div className='flex flex-col items-center justify-center w-full h-60'>
-              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-              <p className='text-sm font-extralight text-gray-400 capitalize'>
-                Oops! no sales products right now...
-              </p>
-            </div>
-          ) : (
-            flashSaleProducts?.map((product, index) => (
-              <div key={index} className="flex flex-col gap-2 mt-8 shadow">
-                <div className="relative w-full aspect-square ">
-                  <Image src={product.images[0].file}
-                    alt="image"
-                    layout="fill"
-                    className="object-cover"
-                  />
-                  {
-                    product.is_flash_sale && (
-                      <div className="absolute px-2 py-1 text-xs text-white rounded-full right-4 bottom-2 md:right-8 md:bottom-4 lg:bottom-1 lg:right-1 xl:bottom-2 xl:right-2 bg-primary">
-                        <button className="px-1">
-                          Flash Sale
-                        </button>
-                      </div>
-                    )
-                  }
-                  <div className="absolute w-8 h-8 top-4 right-3 bg-[#EEEEEE] rounded-full text-black flex justify-center items-center md:w-10 md:h-10 md:top-8 md:right-8 lg:top-3 lg:right-1 lg:w-6 lg:h-6 xl:top-3 xl:right-3 xl:w-7 xl:h-7" onClick={() => handleWishListClick(product.slug_name, wishlistUpdates[product.slug_name])}>
-                    <Heart
-                      fill={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "transparent"}
-                      stroke={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "black"}
-                      className="w-7 h-7 md:w-8 md:h-8 lg:w-5 lg:h-5" />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 px-4 py-2">
-                  <h1 className="text-sm line-clamp-1 md:text-base xl:text-lg">
-                    {product.name}
-                  </h1>
-                  <div className="flex justify-between">
-                    <p className="text-sm font-semibold md:text-base xl:text-md">
-                      Nrs. {product.price}
-                    </p>
-                    {
-                      product.flash_sale_discount && (
-                        <p className="text-sm text-green-400 lg:text-md md:text-sm">
-                          {product.flash_sale_discount.split(".")[0]}% OFF
-                        </p>
-                      )
-                    }
-                  </div>
-                </div>
-                <button className="flex items-center justify-center gap-2 py-2 text-sm text-white bg-primary">
-                  <Link href={`/shop/${product.slug_name}`}>
-                    View Product
-                  </Link>
-                </button>
+  {isLoading ? (
+    <div className="flex items-center justify-center w-full h-60">
+      <p className="font-semibold text-gray-400 text-base">Loading...</p>
+    </div>
+  ) : error ? (
+    <div className="flex flex-col items-center justify-center w-full h-60">
+      <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+      <p className="text-sm font-light text-gray-400">Oops! Something went wrong...</p>
+    </div>
+  ) : flashSaleProducts?.length === 0 ? (
+    <div className="flex flex-col items-center justify-center w-full h-60">
+      <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+      <p className="text-sm font-light text-gray-400 capitalize">
+        Oops! No sale products right now...
+      </p>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 gap-6">
+      {flashSaleProducts?.map((product, index) => (
+        <div key={index} className="flex flex-col overflow-hidden rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
+          {/* Product Image */}
+          <div className="relative w-full aspect-square">
+            <Image
+              src={product.images[0].file}
+              alt={product.name}
+              layout="fill"
+              className="object-cover"
+            />
+
+            {/* Flash Sale Badge */}
+            {product.is_flash_sale && (
+              <div className="absolute px-3 py-1 text-xs text-white rounded-full right-3 bottom-3 bg-primary font-semibold">
+                Flash Sale
               </div>
-            )
-            )
-          )
-        }
-      </div>
+            )}
+
+            {/* Wishlist Button */}
+            <div
+              className="absolute top-3 right-3 bg-gray-100 rounded-full p-2 flex items-center justify-center cursor-pointer hover:bg-gray-200 transition"
+              onClick={() => handleWishListClick(product.slug_name, wishlistUpdates[product.slug_name])}
+            >
+              <Heart
+                fill={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "transparent"}
+                stroke={wishlistUpdates[product.slug_name] ?? product.my_wishlist ? "red" : "black"}
+                className="w-5 h-5"
+              />
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div className="flex flex-col gap-2 p-4">
+            <h1 className="text-sm font-medium line-clamp-1 md:text-base">{product.name}</h1>
+            <div className="flex justify-between items-center">
+              <p className="text-sm font-semibold md:text-base">Nrs. {product.price}</p>
+              {product.flash_sale_discount && (
+                <p className="text-sm font-semibold text-green-500 md:text-base">
+                  {product.flash_sale_discount.split(".")[0]}% OFF
+                </p>
+              )}
+            </div>
+            <Link
+              href={`/shop/${product.slug_name}`}
+              className="mt-2 inline-block w-full text-center py-2 text-sm text-white bg-primary rounded-md hover:bg-primary/90 transition"
+            >
+              View Product
+            </Link>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
     </section>
   );
 };

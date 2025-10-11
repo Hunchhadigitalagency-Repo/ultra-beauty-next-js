@@ -52,7 +52,7 @@ export default function ProductDescription({
       <div
         ref={contentRef}
         className={`rendered-content prose prose-sm sm:prose-base max-w-none text-gray-700 leading-relaxed transition-all duration-300 
-       font-poppins text-base ${expandedText ? "" : "line-clamp-5"}
+       font-poppins text-sm ${expandedText ? "" : "line-clamp-5"}
           `}
         dangerouslySetInnerHTML={{ __html: detail_description }}
       />

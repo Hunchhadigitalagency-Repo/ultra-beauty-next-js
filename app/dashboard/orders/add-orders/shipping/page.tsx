@@ -62,6 +62,7 @@ const CheckoutDetails = () => {
         ? (voucher?.coupon?.discount_percentage / 100) * subtotal
         : 0;
     const total =  subtotal + taxAmount - discount;
+console.log(selectedItems, totalItems, subtotal, taxAmount, discount, total);
 
     return (
         <section className="space-y-4">
@@ -86,13 +87,13 @@ const CheckoutDetails = () => {
                         onVoucherCodeChange={setVoucherCode}
                         onApplyVoucher={handleApplyVoucher}
                         isCheckout={true}
-                        // products={productItems.map((item) => ({
-                        //     id: item.id,
-                        //     name: item.name,
-                        //     quantity: item.quantity,
-                        //     price: item.currentPrice,
-                        //     total: item.currentPrice * item.quantity,
-                        // }))}
+                        products={productItems.map((item: any) => ({
+                            id: item.id,
+                            name: item.name,
+                            quantity: item.quantity,
+                            price: item.currentPrice,
+                            total: item.currentPrice * item.quantity,
+                        }))}
                     />
                 </div>
             </div>

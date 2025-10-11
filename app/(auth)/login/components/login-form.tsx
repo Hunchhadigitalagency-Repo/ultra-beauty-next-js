@@ -216,20 +216,19 @@ export default function UserLoginForm() {
               </FormItem>
             )}
           />
-          <div className="flex flex-col sm:flex-row justify-between gap-2 items-center">
-            <div className="flex items-center gap-2 text-accent-foreground ">
-              <input type="checkbox" />
-              <span>Remember Me?</span>
-            </div>
-            <div>
-              <Link href={"/forgot"} className=" text-sm text-primary">
-                Forgot Password?
-              </Link>
-            </div>
+          <div className="flex flex-col sm:flex-row justify-between gap-2 items-center text-sm text-muted-foreground">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" className="accent-primary w-4 h-4" />
+              <span>Remember me</span>
+            </label>
+            <Link href={"/forgot"} className="text-primary hover:underline">
+              Forgot password?
+            </Link>
           </div>
+
           <Button
             disabled={loading}
-            className="ml-auto w-full rounded-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer p-5"
+            className="w-full mt-2 rounded-full bg-primary text-white hover:bg-primary/90 cursor-pointer py-3"
             type="submit"
           >
             {loading ? <ButtonLoader /> : "Login"}
@@ -237,24 +236,27 @@ export default function UserLoginForm() {
         </form>
       </Form>
       <div>
-        <div className="flex items-center gap-4 mb-4">
-          <hr className="flex-grow border-t border-accent-foreground" />
-          <span className="text-accent-foreground text-sm">Or</span>
-          <hr className="flex-grow border-t border-accent-foreground" />
+        <div className="flex items-center gap-3 my-4">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="text-gray-500 text-xs">OR</span>
+          <hr className="flex-grow border-t border-gray-300" />
         </div>
         <div
-          className="flex border border-gray-300 rounded-full items-center justify-center gap-4 font-medium py-1 cursor-pointer"
+          className="flex items-center justify-center gap-3 border border-gray-300 rounded-full py-2 cursor-pointer hover:bg-gray-50 transition font-normal text-sm text-muted-foreground"
           onClick={() => handleGoogleLogin()}
         >
-          <FcGoogle className="w-8 h-8" />
-          Continue With Google
+          <FcGoogle className="w-5 h-5" />
+          <span>Continue with Google</span>
         </div>
-        <div className="flex gap-2 text-accent-foreground text-sm my-4">
-          Don&apos;t Have an Account?
-          <Link href={"/register"} className="text-primary">
+
+        {/* --- Register Link --- */}
+        <div className="flex justify-center gap-1 text-sm text-muted-foreground mt-3">
+          <span>Don’t have an account?</span>
+          <Link href={"/register"} className="text-primary hover:underline">
             Register
           </Link>
         </div>
+
       </div>
     </>
   );

@@ -24,7 +24,7 @@ const HelpSection: React.FunctionComponent = () => {
               className="bg-transparent border border-white rounded-sm text-white  !placeholder-white  focus-visible:border-white"
               placeholder="Search for the topic or question........."
             />
-            <button className="bg-white font-bold  text-primary px-4 py-1.5 rounded-sm hover:bg-primary/90 transition-colors cursor-pointer">
+            <button className="bg-white text-primary px-4 py-1.5 rounded-sm hover:bg-gray-300 duration-300 transition-colors cursor-pointer">
               <p className="text-base">Submit</p>
             </button>
           </div>

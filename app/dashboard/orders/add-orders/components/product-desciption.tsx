@@ -172,7 +172,7 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
         };
 
         dispatch(addProductItem(cartItem));
-
+        toast.message("Product added")
         onClose?.();
     };
 

@@ -48,6 +48,9 @@ const MyProfile: React.FunctionComponent = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  console.log('img source', imgSource);
+  
+
   return (
     <section className="flex flex-col gap-8 bg-white">
       {/* Modals */}
@@ -74,7 +77,7 @@ const MyProfile: React.FunctionComponent = () => {
             <p className="text-sm font-medium md:text-base">Personal Information</p>
             <button
               onClick={() => setShowProfileModal(true)}
-              className="text-sm cursor-pointer text-primary md:text-base"
+              className="text-sm cursor-pointer text-primary font-semibold "
             >
               Change
             </button>
@@ -95,7 +98,7 @@ const MyProfile: React.FunctionComponent = () => {
                   {
                     imgSource && (
                       <Image
-                        src={typeof imgSource === "string" ? imgSource : fallbackImage}
+                        src={typeof imgSource === "string" && imgSource || fallbackImage }
                         alt="Profile"
                         fill
                         className="object-cover rounded-full"
@@ -140,16 +143,16 @@ const MyProfile: React.FunctionComponent = () => {
                 default address
               </span>
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-8">
               <button
                 onClick={() => setShowShippingDetailsModal(true)}
-                className="text-sm cursor-pointer text-primary md:text-base"
+                className="text-sm cursor-pointer text-blue-400 font-semibold "
               >
                 View
               </button>
               <button
                 onClick={() => setShowShippingModal(true)}
-                className="text-sm cursor-pointer text-primary md:text-base"
+                className="text-sm cursor-pointer text-primary font-semibold"
               >
                 Change
               </button>

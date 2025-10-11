@@ -25,7 +25,7 @@ const OrderHeader: React.FunctionComponent<OrderHeaderDetails> = ({ orderItems }
             case 'cancelled':
                 return 'bg-red'
             default:
-                return 'bg-yellow'
+                return 'bg-gray-500'
         }
     }
 

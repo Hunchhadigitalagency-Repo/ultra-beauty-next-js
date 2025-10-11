@@ -61,7 +61,7 @@ const ProductCard = ({
       <div className="flex flex-col flex-grow">
         <h3
           onClick={() => router.push(`/shop/${slug}`)}
-          className="text-xs cursor-pointer md:text-lg line-clamp-1 font-poppins text-[#7A7A7A]"
+          className="!text-[12px] cursor-pointer md:text-lg line-clamp-1 font-poppins text-[#7A7A7A]"
         >
           {brand}
         </h3>
@@ -108,7 +108,7 @@ const ProductCard = ({
           disabled={quantity === null}
           className={`flex flex-row rounded-sms items-center justify-center 
           w-full gap-2 py-2 text-xs sm:text-sm  font-medium text-foreground
-          ${quantity === null ? "bg-[#FAFAFA] text-[#7A7A7A]" : "bg-secondary"}
+          ${quantity === null ? "bg-[#FAFAFA] text-[#7A7A7A]" : "bg-secondary hover:bg-pink-300 duration-300"}
           `}>
           <Eye className="w-4 h-4" />
           View Product

@@ -53,7 +53,7 @@ const TalkInPerson: React.FunctionComponent = () => {
             <div className="px-5">
                 <div className="flex items-center justify-between border-t-[1px] border-[#AAAAAA] pt-5 gap-4">
                     <p>
-                        &quot;Want to talk in person? We&apos;d love to meet you! Visit our office, schedule a face-to-face meeting, or drop by during our working hours — our team is always happy to connect and discuss how Sajilo360 can help your business&quot;
+                        &quot;Want to talk in person? We&apos;d love to meet you! Visit our office, schedule a face-to-face meeting, or drop by during our working hours — our team is always happy to connect and discuss how Ultra Beauty and Brands can help your business&quot;
                     </p>
                 </div>
             </div>

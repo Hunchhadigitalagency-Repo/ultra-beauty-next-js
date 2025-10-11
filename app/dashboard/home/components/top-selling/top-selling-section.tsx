@@ -29,7 +29,7 @@ const TopSellingSection = () => {
         />
       }
     >
-      <div className="h-[400px] overflow-y-auto">
+      <div className="h-auto max-h-[400px] overflow-y-auto">
         <CustomTable<TopSelling>
           cols={TopSellingConstants()}
           data={topSelling}

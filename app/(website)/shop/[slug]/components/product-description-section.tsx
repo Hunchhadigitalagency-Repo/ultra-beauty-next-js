@@ -153,7 +153,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         <div>
           {
             product.is_best_seller == false && (
-              <Button className="mt-4 text-white rounded-sm bg-primary">
+              <Button className="mt-3 text-white rounded-sm bg-primary">
                 Best Seller
               </Button>
             )
@@ -254,7 +254,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         </div>
 
       </div>
-      {/* ADD To Bag button */}
+
       <Button
         onClick={handleSubmit}
         className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-6 rounded-sm bg-primary"
