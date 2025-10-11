@@ -1109,7 +1109,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
                       />
                     </div>
-                    {Error && <span className="text-red">{Error}</span>}
+                    {Error && <span className="text-red text-[15px]">{Error}</span>}
                   </section>
                 ))}
             </CardContent>

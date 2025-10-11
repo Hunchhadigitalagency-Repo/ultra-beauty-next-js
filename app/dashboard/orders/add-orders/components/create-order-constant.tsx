@@ -44,7 +44,7 @@ export const CartConstants = (dispatch: AppDispatch): Col<any>[] => {
                             </div>
                         ))
                         :
-                        <div className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center">
+                        <div className="text-[14xpx] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center">
                             No variants
                         </div>
 

@@ -15,10 +15,10 @@ export const BannerConstant = (dispatch: AppDispatch): Col<IDashboardBanner>[] =
       ),
     },
 
-    {
-      title: "TITLE",
-      render: (data: IDashboardBanner) => <span>{data.title}</span>,
-    },
+    // {
+    //   title: "TITLE",
+    //   render: (data: IDashboardBanner) => <span>{data.title}</span>,
+    // },
     {
       title: "PAGE",
       render: (data: IDashboardBanner) => {

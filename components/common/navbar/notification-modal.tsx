@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { AlertCircle, Bell, X, Dot } from "lucide-react";
 import SectionHeader from "../header/section-header";
@@ -28,12 +28,28 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   error = null,
   onClose,
 }) => {
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
   const getNotificationImage = (imagePath: string | null) => {
     return imagePath || australis;
   };
 
   return (
     <div
+          ref={modalRef}
+
       className="absolute w-[350px] md:w-[420px] lg:w-[450px] space-y-4 p-5 z-50 top-full right-4 sm:right-12 lg:right-16 
                  bg-white shadow-xl rounded-lg border border-gray-100 overflow-hidden"
     >
@@ -41,8 +57,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       <div className="flex justify-between items-center border-b pb-3 border-gray-200">
         <SectionHeader
           title="Notifications"
-          titleClassName="text-xl text-gray-800 font-semibold font-poppins"
+          titleClassName="!text-[25px] text-gray-800 "
         />
+
         <button
           onClick={onClose}
           aria-label="Close"
@@ -83,11 +100,10 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
               key={notification.id}
               href={notification.link}
               onClick={onClose}
-              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
-                notification.is_active
-                  ? "bg-white hover:bg-gray-50"
-                  : "bg-indigo-50/50 hover:bg-indigo-100"
-              }`}
+              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${notification.is_active
+                ? "bg-white hover:bg-gray-50"
+                : "bg-indigo-50/50 hover:bg-indigo-100"
+                }`}
             >
               <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
                 <Image
@@ -101,9 +117,8 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
               <div className="flex-grow min-w-0">
                 <h4
-                  className={`text-sm font-semibold text-gray-800 ${
-                    !notification.is_active && "text-indigo-700"
-                  }`}
+                  className={`text-sm font-semibold text-gray-800 ${!notification.is_active && "text-indigo-700"
+                    }`}
                 >
                   {notification.title}
                 </h4>

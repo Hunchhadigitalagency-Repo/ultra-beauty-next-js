@@ -41,7 +41,7 @@ export default function Newsletter() {
     <div className=" w-full flex flex-col  ">
       <div className="text-start sm:text-left space-y-1 bg-inherit">
         <h2 className="text-[18px] sm:text-2xl font-playfair font-semibold text-white">
-          Subscribe to Get Offers and News
+          Subscribe to Get <span className="italic">Offers </span>  and  <span className="italic">News </span>
         </h2>
       </div>
 

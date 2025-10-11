@@ -19,7 +19,7 @@ const QuantityRow = ({ onDecrease, onIncrease, className, value, loading }: Quan
         disabled={loading}
         variant="ghost"
         size="icon"
-        className="w-4 h-4 bg-transparent rounded-full md:h-8 md:w-8 "
+        className="w-4 h-4 bg-gray-300 rounded-full md:h-8 md:w-8 "
         onClick={onDecrease}
       >
         <Minus className="w-4 h-4" />
@@ -29,7 +29,7 @@ const QuantityRow = ({ onDecrease, onIncrease, className, value, loading }: Quan
         disabled={loading}
         variant="ghost"
         size="icon"
-        className="w-4 h-4 bg-transparent rounded-full md:h-8 md:w-8"
+        className="w-4 h-4 bg-gray-300 rounded-full md:h-8 md:w-8"
         onClick={onIncrease}
       >
         <Plus className="w-4 h-4" />

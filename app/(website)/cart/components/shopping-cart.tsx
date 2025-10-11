@@ -9,8 +9,9 @@ import useFetchData from "@/hooks/use-fetch";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import SectionHeader from "@/components/common/header/section-header";
 import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
-import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem } from "@/redux/features/cart-slice";
+import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem, toggleCartItem } from "@/redux/features/cart-slice";
 import { AlertCircle } from "lucide-react";
+import { calculateDiscountedPrice } from "@/lib/cart-utils";
 
 
 export default function ShoppingCart() {
@@ -31,7 +32,28 @@ export default function ShoppingCart() {
     tax_applied: item.product.tax_applied,
   })) ?? [];
 
+useEffect(() => {
+  if (!CartItems || CartItems.length === 0) return;
+
+  CartItems.forEach((item) => {
+    const discountedPrice = Number(
+      calculateDiscountedPrice(item.product.price, item.product.discount_percentage)
+    );
+
+    dispatch(toggleCartItem({
+      id: item.id,
+      quantity: item.quantity,
+      price: (item.quantity * discountedPrice).toFixed(2),
+      discount_percentage: item.product.discount_percentage,
+      tax_applied: item.product.tax_applied,
+    }));
+  });
+  // Only run when CartItems first loads
+}, [CartItems, dispatch]);
+
+
   useEffect(() => {
+
     dispatch(clearVoucherData())
   }, [voucherData, dispatch]);
 

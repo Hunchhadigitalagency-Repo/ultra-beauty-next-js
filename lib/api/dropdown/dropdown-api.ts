@@ -34,7 +34,7 @@ export const getTaxesDropdown = async (page: number, search?: string) => {
 
 export const getProductsDropdown = async (page: number, search?: string) => {
   const response = await api.get(
-    `/products/dropdown/?page=${page}&page_size=10&search_product=${search || ""}`
+    `/products/dropdown/?page=${page}&page_size=10&search=${search || ""}`
 );
   return response.data;
 };

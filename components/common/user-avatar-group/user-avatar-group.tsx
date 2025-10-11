@@ -7,7 +7,10 @@ import { Input } from "@/components/ui/input";
 interface User {
   id: number;
   name: string;
-  avatar: string;
+  email: string;
+  profile: {
+    profile_picture: string;
+  }
 }
 
 interface Props {
@@ -19,17 +22,29 @@ const mockUserList: User[] = [
   {
     id: 1,
     name: "Ram Bahadur Khadka",
-    avatar: "https://randomuser.me/api/portraits/men/75.jpg",
+    email: "A@email.com",
+    profile:{
+
+    profile_picture:  "https://randomuser.me/api/portraits/men/75.jpg",
+    }
   },
   {
     id: 2,
     name: "Ram Bahadur Khadka",
-    avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+    email: "A@email.com",
+    profile:{
+
+    profile_picture:  "https://randomuser.me/api/portraits/women/65.jpg",
+    }
   },
   {
     id: 3,
     name: "Ram Bahadur Khadka",
-    avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+    email: "A@email.com",
+    profile:{
+
+    profile_picture:  "https://randomuser.me/api/portraits/men/45.jpg",
+    }
   },
 ];
 
@@ -52,13 +67,14 @@ const UserAvatarGroup: React.FC<Props> = ({ users, onChange }) => {
     onChange(selectedUsers);
     setOpen(false);
   };
+  console.log('sdsds', users);
 
   return (
     <div className="relative flex items-center space-x-[-10px]">
       {users.map((user) => (
         <Image
           key={user.id}
-          src={user.avatar}
+          src={user?.profile?.profile_picture}
           alt={user.name}
           width={32}
           height={32}
@@ -91,7 +107,7 @@ const UserAvatarGroup: React.FC<Props> = ({ users, onChange }) => {
                   onChange={() => toggleUser(user.id)}
                 />
                 <Image
-                  src={user.avatar}
+                  src={user.profile.profile_picture}
                   alt={user.name}
                   width={24}
                   height={24}

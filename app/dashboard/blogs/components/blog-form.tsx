@@ -21,7 +21,7 @@ import { createBlog, updateBlog } from "@/lib/api/cms/blogs-api";
 import {
   getBlogCategories,
   getProductsDropdown,
-  getUsersDropdown,
+  // getUsersDropdown,
 } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
 import { toggleRefetchTableData } from "@/redux/features/table-slice";
@@ -199,6 +199,26 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                     <FormItem>
                       <FormLabel>AUTHOR</FormLabel>
                       <FormControl>
+                        <Input placeholder="Enter Author Name..." {...field} />
+                        {/* <PaginatedSelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          placeholder="Select Author"
+                          fetchData={getUsersDropdown}
+                          className="w-full"
+                        /> */}
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="author"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>AUTHOR</FormLabel>
+                      <FormControl>
                         <PaginatedSelect
                           value={field.value}
                           onValueChange={field.onChange}
@@ -210,7 +230,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
                 <FormField
                   control={form.control}
