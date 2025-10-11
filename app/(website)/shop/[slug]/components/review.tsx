@@ -77,9 +77,9 @@ export const dummyReviews = [
 //   });
 
 const EmptyState = () => (
-  <div className="mt-10 bg-white rounded-2xl shadow-sm p-8 text-center">
-    <Star className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-    <h2 className="text-2xl font-semibold mb-2 text-gray-900">No reviews yet</h2>
+  <div className=" bg-white rounded-2xl shadow-sm p-8 text-center">
+    <Star className="w-10 h-10 mx-auto text-gray-300 mb-4" />
+    <h2 className="text-xl font-semibold mb-2 text-gray-900">No reviews yet</h2>
     <p className="text-gray-500">Be the first to review this product</p>
   </div>
 );

@@ -102,7 +102,12 @@ const CustomTable = <T,>({
                 <th
                   key={idx}
                   className={`px-4 py-3 font-medium text-[13px]  uppercase text-left whitespace-nowrap ${firstHeaderWidth && idx === 0 ? firstHeaderWidth : ""
-                    } ${idx === cols.length - 1 && "text-right"} `}
+                    } ${idx === cols.length - 1 &&
+                      typeof col.title === "string" &&
+                      col.title?.toLowerCase().includes("action")
+                      ? "text-right"
+                      : ""
+                    }`}
                 >
                   <div className="">{col.title}</div>
                 </th>

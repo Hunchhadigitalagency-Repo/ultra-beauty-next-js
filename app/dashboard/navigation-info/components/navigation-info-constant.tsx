@@ -15,12 +15,12 @@ export const NavigationInfoConstants = (
       render: (data: INavigationInfo) => <span>{data.title}</span>,
     },
 
-    {
-      title: "DISCOUNT",
-      render: (data: INavigationInfo) => (
-        <span>{data.discount_percentage}</span>
-      ),
-    },
+    // {
+    //   title: "DISCOUNT",
+    //   render: (data: INavigationInfo) => (
+    //     <span>{data.discount_percentage}</span>
+    //   ),
+    // },
     {
       title: "STATUS",
       render: (data: INavigationInfo) => (

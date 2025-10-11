@@ -45,7 +45,7 @@ const BlogCard: React.FunctionComponent<IBlog> = ({
         )}
       </div>
 
-      <h3 className="text-xl font-semibold line-clamp-2 font-playfair text-foreground">
+      <h3 className="text-[20px] font-semibold line-clamp-2 font-playfair text-foreground">
         {title}
       </h3>
 

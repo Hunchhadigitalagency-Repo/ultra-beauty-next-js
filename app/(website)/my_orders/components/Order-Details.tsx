@@ -57,10 +57,7 @@ const OrderProductDetails: React.FunctionComponent<OrderProductProps> = ({ order
                                 <div className="border-[1px] border-gray-500 px-1 lg:min-w-30 py-1  md:font-semibold font-poppins text-xs md:text-sm">
                                     Date:  <DateChips date={item.product.created_at}/>
                                 </div>
-                                <div
-                                    className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30  md:font-semibold font-poppins text-xs md:text-sm">
-                                    Quantity: {item.product.quantity}
-                                </div>
+                             
                                 <div className="border-[1px] border-gray-500 px-1 py-1 lg:min-w-30 md:font-semibold font-poppins text-xs md:text-sm">
                                     Nrs {item.product.price}
                                 </div>

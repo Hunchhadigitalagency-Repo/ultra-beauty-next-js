@@ -46,6 +46,7 @@ const Blogs: React.FunctionComponent = () => {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {data && data.results.length > 0 ? (
             data.results.map((blog, index) => {
+              if(index >2) return;
               return <BlogCard key={index} slug={blog.slug} sub_title={blog.sub_title} title={blog.title} author={blog.author.username} cover_image={blog.cover_image} created_at={blog.created_at} />;
             })
           ) : (

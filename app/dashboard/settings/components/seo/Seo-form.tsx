@@ -30,15 +30,15 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
     resolver: zodResolver(seoSchema),
     defaultValues: initialData
       ? {
-          metaKeyword: initialData?.meta_keyword || [],
-          metaTitle: initialData.meta_title,
-          metaDescription: initialData.meta_description,
-        }
+        metaKeyword: initialData?.meta_keyword || [],
+        metaTitle: initialData.meta_title,
+        metaDescription: initialData.meta_description,
+      }
       : {
-          metaKeyword: [],
-          metaTitle: "",
-          metaDescription: "",
-        },
+        metaKeyword: [],
+        metaTitle: "",
+        metaDescription: "",
+      },
   });
 
   const onSubmit = async (data: SeoValues) => {
@@ -136,6 +136,9 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
                     <FormLabel className="text-muted-foreground">
                       META KEYWORDS
                     </FormLabel>
+                    <p className="text-xs text-gray-500">
+                      NOTE: Use comma ( , ) to add new tags
+                    </p>
                     <FormControl>
                       <TagInput
                         value={field.value}

@@ -201,7 +201,7 @@ const AdminForm = ({ initialData }: AdminFromProps) => {
                           EMAIL
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="basera@gmail.com" {...field} />
+                          <Input placeholder="ultrabeautybrands@gmail.com" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

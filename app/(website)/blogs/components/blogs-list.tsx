@@ -38,7 +38,7 @@ const BlogsList = () => {
   } = useInfiniteFetch<IBlog>(searchUrl, "9", undefined, undefined, isLoggedIn); // Fetch 9 at a time
 
   return (
-    <section className="space-y-4 padding">
+    <section className="space-y-4 px-4 md:px-30 ">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader title="Blogs" description="Watch inside story" />
         <div className="flex gap-4">

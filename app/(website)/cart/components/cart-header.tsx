@@ -33,7 +33,7 @@ export default function CartHeader({ cartItemIds, onItemRemove, cartItemsData, o
       <div className="flex items-center gap-2">
         <Checkbox className="w-6 h-6 bg-white border-custom-black"
           checked={allSelected}
-          onClick={handleToggleAll}
+          onClick={() => handleToggleAll}
         />
         <span className="text-sm font-medium">Select All
           ({cartItemsData.length})

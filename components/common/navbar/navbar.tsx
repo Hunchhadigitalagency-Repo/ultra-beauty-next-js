@@ -409,7 +409,7 @@ export default function Navbar() {
                     className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
                     onClick={() => setIsDropdownVisible(false)}
                   >
-                    <span className="font-medium font-sans">All Products</span>
+                    <span className="font-medium font-poppins ">All Products</span>
                   </Link>
 
                   <div className="space-y-1">
@@ -425,7 +425,7 @@ export default function Navbar() {
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="font-medium font-sans">{category.name}</span>
+                          <span className="font-medium font-poppins ">{category.name}</span>
                         </div>
                         {category.subcategories.length > 0 && (
                           <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -451,7 +451,7 @@ export default function Navbar() {
                           onClick={() => handleCategoryCardClick(hoveredCategory.id, parseInt(subcategory.id))}
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-medium font-sans group-hover:text-primary">{subcategory.name}</span>
+                            <span className=" group-hover:text-primary">{subcategory.name}</span>
                           </div>
                         </span>
                       ))}
