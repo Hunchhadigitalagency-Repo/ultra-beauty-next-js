@@ -54,7 +54,7 @@ export default function OrderSummary({
   products = [],
 }: OrderSummaryProps) {
   const router = useRouter();
-console.log('this is the shipping fees', discount);
+// .
 
   return (
     <div className="bg-[#EFEFEF] rounded-lg p-4 space-y-4">
@@ -167,7 +167,7 @@ console.log('this is the shipping fees', discount);
             className="text-sm rounded-none h-10 bg-white"
           />
           <Button
-            className="bg-green-600 hover:bg-green-700 rounded-none h-10"
+            className="bg-pink-600 hover:bg-pink-700 rounded-none h-10"
             onClick={onApplyVoucher}
           >
             Apply

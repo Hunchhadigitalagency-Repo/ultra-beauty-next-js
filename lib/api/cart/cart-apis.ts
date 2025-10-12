@@ -54,6 +54,7 @@ export const getCartItemsByIds = async (cart_ids: number[]) => {
 }
 
 export const applyVoucher = async (code: string) => {
+    
     const response = await api.post("/coupons/validate/", { code });
     return response;
 };

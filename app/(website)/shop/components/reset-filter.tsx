@@ -1,23 +1,32 @@
 import React from 'react';
 import { RefreshCcw } from 'lucide-react';
 import { useAppDispatch } from '@/redux/hooks';
-import { resetFilters } from '@/redux/features/category-slice'
+import { resetFilters } from '@/redux/features/category-slice';
 
-const ResetFilter: React.FunctionComponent = () => {
+const ResetFilter: React.FC = () => {
+  const dispatch = useAppDispatch();
 
-    const dispatch = useAppDispatch();
+  const handleResetFilter = () => {
+    dispatch(resetFilters());
+  };
 
-    const handleResetFilter = () => {
-        dispatch(resetFilters())
-    }
-    return (
-        <div className="flex items-center justify-between mb-4">
-            <h1 className="font-semibold font-poppins text-lg sm:text-xl">
-                Filters
-            </h1>
-            <RefreshCcw onClick={handleResetFilter} className="w-5 h-5 cursor-pointer" />
-        </div>
-    )
-}
+  return (
+    <div className="flex items-center justify-between mb-6">
+      {/* Title */}
+      <h1 className="font-poppins font-semibold text-xl sm:text-2xl text-gray-800">
+        Filters
+      </h1>
 
-export default ResetFilter
+      {/* Reset Button */}
+      <button
+        onClick={handleResetFilter}
+        className="flex items-center justify-center w-9 h-9 rounded-full bg-white transition-all duration-200 shadow-sm hover:shadow-md group"
+        aria-label="Reset Filters"
+      >
+        <RefreshCcw className="w-5 h-5 text-gray-700 group-hover:rotate-180 transition-transform duration-300" />
+      </button>
+    </div>
+  );
+};
+
+export default ResetFilter;

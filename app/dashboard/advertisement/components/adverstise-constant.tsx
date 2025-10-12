@@ -23,13 +23,15 @@ export const AdvertiseBannerConstant = (dispatch: AppDispatch): Col<IAdvertiseme
             />
           </div>
         </div>
-
       ),
     },
     {
       title: "BANNER POSITION",
       render: (data: IAdvertisementBanner) => (
-        <span className="text-xs text-foreground">{data.position}</span>
+        <span className="text-xs text-foreground">{
+          data.position.toLowerCase() === "mesh" ? "Mesh Banner"
+            : data.position.toLowerCase() === "single" ? "Single Banner"
+              : data.position}</span>
       ),
     },
     {

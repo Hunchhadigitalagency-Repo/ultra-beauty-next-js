@@ -16,8 +16,12 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-
+        setCartItems: (state, action) => {
+            state.cartItem = action.payload
+        },
         toggleCartItem: (state, action: PayloadAction<CartItem>) => {
+            console.log('toggling cart items');
+
             const existingIndex = state.cartItem.findIndex(item => item.id === action.payload.id);
             if (existingIndex >= 0) {
                 state.cartItem.splice(existingIndex, 1);
@@ -113,6 +117,7 @@ const cartSlice = createSlice({
 });
 
 export const {
+    setCartItems,
     toggleCartItem,
     toggleAllCartItems,
     deleteCartItem,

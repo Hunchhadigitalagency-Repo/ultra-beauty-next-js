@@ -81,7 +81,7 @@ const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderI
                                             {PolicyData.title}
                                         </h1>
                                     </AccordionTrigger>
-                                    <AccordionContent className=" mt-1 border w-full bg-[#FAFAFA] text-primary text-xs md:text-sm font-poppins leading-relaxed pt-2 px-5 pb-4">
+                                    <AccordionContent className=" mt-1 border w-full bg-[#FAFAFA] text-black text-xs md:text-sm font-poppins leading-relaxed pt-2 px-5 pb-4">
                                         <p>{PolicyData.desc}</p>
                                         <ol className='list-decimal list-inside'>
                                             {
@@ -156,7 +156,7 @@ const CancelOrderForm: React.FunctionComponent<CancelOrderFormProps> = ({ orderI
 
                         {/* Cancel order button */}
                         <div className='flex items-center justify-end w-full'>
-                            <Button type='submit' disabled={!reasonValue || !consent} className='px-5 py-1 mt-5 md:px-10 md:py-2.5 lg:px-14 lg:py-3 rounded-full bg-primary text-white '>Cancel Order</Button>
+                            <Button type='submit' disabled={!reasonValue || !consent} className='px-5 py-1 mt-5 mb-10 md:px-10 md:py-2.5 lg:px-14 lg:py-3 rounded-full bg-primary text-white '>Cancel Order</Button>
                         </div>
                     </div>
                 </form>

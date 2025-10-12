@@ -236,7 +236,7 @@ export function PaginatedSelect({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "mr-2 h-4 w-4 bg-pink-500",
                         selectedItem?.id === item.id ? "opacity-100" : "opacity-0"
                       )}
                     />

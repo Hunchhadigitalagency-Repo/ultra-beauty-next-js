@@ -343,9 +343,9 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
           <div className="flex justify-end pt-4 p-4">
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-md"
+              className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-2 rounded-md"
             >
-              Continue and Pay
+              Continue and Pay 
             </Button>
           </div>
         </form>

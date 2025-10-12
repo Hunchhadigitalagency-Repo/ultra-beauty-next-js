@@ -26,7 +26,7 @@ const useFetchData = <T>(url: string, token?: boolean,
     try {
       setLoading(true);
       setError(null);
-      const response = await API.get(url);
+      const response = await API.get(url, config || '');
       if (response.status === 200) {
         setData(response.data);
       }

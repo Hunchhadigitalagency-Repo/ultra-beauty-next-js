@@ -128,7 +128,7 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
                   <FormItem>
                     <FormLabel>LINK</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Enter the link" {...field} />
+                      <Input placeholder="Enter the link" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
