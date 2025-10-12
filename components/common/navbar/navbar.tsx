@@ -107,6 +107,7 @@ export default function Navbar() {
       hasFetched.current.cart = true;
     }
   }, [wishListData, cartData, dispatch]);
+
   useEffect(() => {
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();
@@ -213,7 +214,6 @@ export default function Navbar() {
   }, [searchOpen]);
 
   const pathname = usePathname();
-  console.log('this is the logo', icon);
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 ">
@@ -413,7 +413,7 @@ export default function Navbar() {
                   </Link>
 
                   <div className="space-y-1">
-                    {dropdownCategoryData?.map((category, ) => (
+                    {dropdownCategoryData?.map((category,) => (
                       <div
                         key={category.id}
                         id={`category-${category.id}`}

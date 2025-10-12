@@ -49,22 +49,22 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
     resolver: zodResolver(bannerSchema),
     defaultValues: initialData
       ? {
-          banner_type: initialData?.banner_type,
-          image: initialData?.image || "",
-          category: initialData?.category || "",
-          page: initialData?.page ?? undefined,
-          product: initialData.product?.id.toString() || undefined,
-          is_active: initialData?.is_active ?? false,
-        }
+        banner_type: initialData?.banner_type,
+        image: initialData?.image || "",
+        category: initialData?.category || "",
+        page: initialData?.page ?? undefined,
+        product: initialData.product?.id.toString() || undefined,
+        is_active: initialData?.is_active ?? false,
+      }
       : {
-          banner_type: "general",
-          image: "",
-          page: undefined,
-          category: "",
-          product: undefined,
-          subcategories: undefined,
-          is_active: false,
-        },
+        banner_type: "general",
+        image: "",
+        page: undefined,
+        category: "",
+        product: undefined,
+        subcategories: undefined,
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: BannerFormValues) => {
@@ -77,13 +77,13 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
         formData.append("image", data.image);
       }
 
-      if (data.product) formData.append("product", data.product?.toString());
+      if (data.product) formData.append("products", data.product?.toString());
+      if (data.category) {
+        const categoryArray = [data.category];
+        formData.append("categories", String(categoryArray));
+      }
       if (data.banner_type === "page") {
         if (data.page) formData.append("page", data.page);
-        if (data.category) {
-          const categoryArray = [data.category];
-          formData.append("categories", String(categoryArray));
-        }
       }
 
       if (initialData) {
@@ -183,25 +183,64 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="product"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Select Product</FormLabel>
-                        <FormControl>
-                          <PaginatedSelect
-                            value={field.value as any}
-                            onValueChange={field.onChange}
-                            placeholder="Select Product"
-                            fetchData={getProductsDropdown}
-                            className="w-full"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+                  {/* Category & Product Conditional Fields */}
+                  {!category && (
+                    <FormField
+                      control={form.control}
+                      name="product"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Product</FormLabel>
+                          <FormControl>
+                            <PaginatedSelect
+                              value={field.value?.toString()}
+                              onValueChange={field.onChange}
+                              placeholder="Select Product"
+                              fetchData={getProductsDropdown}
+                              className="w-full"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  {!product && (
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category</FormLabel>
+                          <FormControl>
+                            <PaginatedSelect
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              placeholder="Select Category"
+                              fetchData={getCategoriesDropdown}
+                              className="w-full"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  {(product || category) && (
+                    <Button
+                      type="button"
+                      onClick={handleUndoSelection}
+                      variant="outline"
+                      className="flex items-center gap-2 border border-primary text-primary hover:bg-primary/10 h-10"
+                    >
+                      <Undo size={18} />
+                      Undo
+                    </Button>
+                  )}
+                  </div>
                 </>
               )}
 

@@ -1,6 +1,6 @@
 "use client";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import CartHeader from "./cart-header";
 import { CartResponse, } from "@/types/cart";
 import OrderSummary from "./order-summary";
@@ -9,9 +9,8 @@ import useFetchData from "@/hooks/use-fetch";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import SectionHeader from "@/components/common/header/section-header";
 import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
-import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem, toggleCartItem } from "@/redux/features/cart-slice";
+import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem, setCartItems, } from "@/redux/features/cart-slice";
 import { AlertCircle } from "lucide-react";
-import { calculateDiscountedPrice } from "@/lib/cart-utils";
 
 
 export default function ShoppingCart() {
@@ -23,34 +22,24 @@ export default function ShoppingCart() {
   const { cartItem, voucherData } = useAppSelector(state => state.cart);
   const totalQuantity = cartItem.length;
 
-
-  const cartItemsData = CartItems?.map(item => ({
-    id: item.id,
-    price: item.product.price,
-    quantity: item.quantity,
-    discount_percentage: item.product.discount_percentage,
-    tax_applied: item.product.tax_applied,
-  })) ?? [];
-
-useEffect(() => {
-  if (!CartItems || CartItems.length === 0) return;
-
-  CartItems.forEach((item) => {
-    const discountedPrice = Number(
-      calculateDiscountedPrice(item.product.price, item.product.discount_percentage)
-    );
-
-    dispatch(toggleCartItem({
+  const cartItemsData = useMemo(() => {
+    if (!CartItems) return [];
+    return CartItems.map(item => ({
       id: item.id,
+      price: item.product.price,
       quantity: item.quantity,
-      price: (item.quantity * discountedPrice).toFixed(2),
       discount_percentage: item.product.discount_percentage,
       tax_applied: item.product.tax_applied,
     }));
-  });
-  // Only run when CartItems first loads
-}, [CartItems, dispatch]);
+  }, [CartItems]);
 
+
+
+  useEffect(() => {
+    if (!cartItemsData || cartItemsData.length === 0) return;
+    dispatch(setCartItems(cartItemsData))
+
+  }, [cartItemsData, dispatch]);
 
   useEffect(() => {
 

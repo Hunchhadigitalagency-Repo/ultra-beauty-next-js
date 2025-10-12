@@ -28,7 +28,6 @@ export default function OrderSummary({
   const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
   const { firstName, lastName, address, phoneNumber, alternativePhoneNumber, city } = shippingDetails || {};
 
-  // Subtotal and Tax Calculation
   const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price)), 0);
   const taxPercentage = cartItem.reduce((sum, item) => sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0), 0);
   const taxAmount = cartItem.reduce((sum, item) => {
@@ -37,9 +36,10 @@ export default function OrderSummary({
     return sum + tax;
   }, 0);
 
-  // Voucher Discount and Total Calculation
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const Total = subTotal + Number(shippingFee) + taxAmount - voucherDiscount;
+const safeShippingFee = parseFloat(shippingFee || '0') || 0;
+
+  const Total = subTotal + safeShippingFee - voucherDiscount;
 
 
   return (
