@@ -8,13 +8,14 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import { teamMembers } from "@/app/(website)/about/components/our-team";
+import useFetchData from "@/hooks/use-fetch";
+import { ITeam } from "@/types/cms";
 
 const TeamCarousel = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-
+  const { data: teamMembers } = useFetchData<ITeam[]>('/cms/our-team/dropdown/')
   useEffect(() => {
     if (!api) {
       return;
@@ -53,7 +54,7 @@ const TeamCarousel = () => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <CarouselContent className="">
-          {teamMembers.map((member) => (
+          {teamMembers?.map((member) => (
             <CarouselItem
               key={member.id}
               className=" basis-full md:basis-1/2"
@@ -67,14 +68,13 @@ const TeamCarousel = () => {
       {/* Page indicator */}
       {/* Slide Indicators - positioned inside the image */}
       <div className="flex items-center justify-center gap-4">
-        {teamMembers.map((_, slideIndex) => (
+        {teamMembers && teamMembers?.map((_, slideIndex) => (
           <button
             key={slideIndex}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              slideIndex === current
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${slideIndex === current
                 ? "bg-orange-500 scale-110"
                 : "bg-[#BBBDBC] hover:bg-[#BBBDBC]/70"
-            }`}
+              }`}
             onClick={() => api?.scrollTo(slideIndex)}
             aria-label={`Go to slide ${slideIndex + 1}`}
           />

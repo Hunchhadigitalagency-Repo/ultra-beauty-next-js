@@ -18,7 +18,8 @@ import { toggleCategory } from "@/redux/features/category-slice";
 
 export interface HeroSectionResponse {
   id: number
-  categories: Category[]
+  categories?: Category[]
+  product?: { id: number, slug_name: string, name: string }
   image: string
   banner_type: string
   title: string
@@ -59,9 +60,17 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [api, isHovered]);
 
-  const handleBannerClick = (id: number) => {
-    dispatch(toggleCategory({ id: id, checked: true }))
-    router.push('/shop')
+  const handleBannerClick = (slide: HeroSectionResponse) => {
+    console.log(slide, "cate gory clicked");
+    if (slide.categories) {
+      dispatch(toggleCategory({ id: slide.categories?.[0].id, checked: true }))
+      router.push('/shop')
+      return;
+    }
+    if (slide.product) {
+      router.push(`/shop/${slide.product?.slug_name}`)
+      return;
+    }
   }
 
   return (
@@ -98,7 +107,7 @@ export default function HeroSection() {
             <CarouselContent className="w-full md:h-[500px] lg:h-[calc(100vh-130px)]">
               {data?.map((slide, index) => (
                 <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
-                  <div className="relative  h-36 sm:h-96 lg:h-[80%]  overflow-hidden rounded-md cursor-pointer" onClick={() => slide.categories.length > 0 && handleBannerClick(slide.categories?.[0].id)}>
+                  <div className="relative  h-36 sm:h-96 lg:h-[80%]  overflow-hidden rounded-md cursor-pointer" onClick={() => handleBannerClick(slide)}>
                     <div className="absolute inset-0 ">
                       <Image
                         src={slide.image || "/placeholder.svg"}

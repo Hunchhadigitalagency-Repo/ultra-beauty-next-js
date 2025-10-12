@@ -194,6 +194,7 @@ export const sidebarData = {
           title: SidebarItems.REPORTS,
           url: "#",
           icon: Files,
+          update: 'Available in Version 2.0'
         },
       ],
     },

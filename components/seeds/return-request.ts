@@ -2,7 +2,7 @@ import useFetchData from "@/hooks/use-fetch";
 import { CancelRequest, ActionStatus } from "@/types/cancel";
 
 export function useReturnRequests() {
-  const { data, loading: isLoading, error } = useFetchData<any>("/return-items/");
+  const { data, loading: isLoading, error } = useFetchData<any>("/return-items/", true);
 
   const returnRequest: CancelRequest[] =
     data?.map((item: CancelRequest, i: number) => {

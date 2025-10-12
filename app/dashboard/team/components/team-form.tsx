@@ -75,10 +75,7 @@ const TeamForm = ({ initialData }: TeamFormProps) => {
 
       if (data.photo instanceof File) {
         formData.append("photo", data.photo)
-      } else if (typeof data.photo === "string") {
-        formData.append("photo", data.photo)
       }
-
       if (initialData) {
         const response = await updateTeam(initialData.id, formData)
         if (response.status === 200) {

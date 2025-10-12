@@ -177,7 +177,7 @@ export default function ContactForm() {
                 <FormControl>
                   <Textarea
                     placeholder="Enter The Message"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 h-20"
+                    className="border-gray-300 bg-white  focus:border-blue-500 focus:ring-blue-500 h-20"
                     {...field}
                   />
                 </FormControl>

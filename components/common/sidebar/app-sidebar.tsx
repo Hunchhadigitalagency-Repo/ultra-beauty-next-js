@@ -59,7 +59,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                               <item.icon className="size-4" />
                             </div>
                           )}
-                          <span>{item.title}</span>
+                          {item.title.toLowerCase() === 'reports' ?
+                            <div className="flex justify-between items-center w-full">
+                              <span>{item.title}</span>
+                              <span className="text-[10px] text-gray-400">{item.update}</span>
+                            </div>
+                            :
+                            <span>{item.title}</span>
+                          }
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

@@ -3,7 +3,7 @@ import { CancelRequest, ActionStatus } from "@/types/cancel";
 
 
 export function useCancelRequests() {
-  const { data, loading: isLoading, error } = useFetchData<any>("/cancel/order");
+  const { data, loading: isLoading, error } = useFetchData<any>("/cancel/order", true);
 
   const cancelRequests: CancelRequest[] = data?.map((item: any, i: number) => {
     const firstProduct = item.order.order_details[0]?.product;
@@ -29,6 +29,7 @@ export function useCancelRequests() {
       description: item.additional_info || "",
     };
   }) || [];
+console.log('this is cencel reruqet', cancelRequests);
 
   return { cancelRequests, isLoading, error };
 }

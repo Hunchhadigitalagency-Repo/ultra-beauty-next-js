@@ -232,17 +232,17 @@ const Footer: React.FC = () => {
             <h3 className="text-lg  text-gray-400">CONTACT US</h3>
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                {/* <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" /> */}
+                <Mail className="flex-shrink-0 w-4 h-4 text-pink-600" />
                 <span className="text-sm text-white">            ultrabeautybrands@gmail.com
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                {/* <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" /> */}
+                <MapPin className="flex-shrink-0 w-4 h-4 text-pink-600" />
                 <span className="text-sm text-white uppercase">One Stop Mall Ground Floor, Jhapa District, Nepal
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                {/* <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" /> */}
+                <Phone className="flex-shrink-0 w-4 h-4 text-pink-600" />
                 <span className="text-sm text-white">+977 9826940855
                 </span>
               </div>

@@ -232,11 +232,11 @@ export function PaginatedMultiSelect({
                   {selectedItems.slice(0, 3).map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center space-x-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-md text-xs"
+                      className="flex items-center space-x-1 bg-pink-100 text-pink-800 px-2 py-1 rounded-md text-xs"
                     >
                       <Avatar className="w-4 h-4">
                         <AvatarImage src={item.image || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-orange-200 text-orange-800 text-[10px]">
+                        <AvatarFallback className="bg-pink-200 text-pink-800 text-[10px]">
                           {item.name?.charAt(0)?.toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
@@ -269,7 +269,7 @@ export function PaginatedMultiSelect({
                   <PopoverTrigger asChild>
                     <Button
                       size="sm"
-                      className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 h-8"
+                      className="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 h-8"
                     >
                       <Filter className="w-3 h-3 mr-1" />
                       {selectedFilterLabel}
@@ -299,7 +299,7 @@ export function PaginatedMultiSelect({
                 placeholder={placeholder}
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -318,7 +318,7 @@ export function PaginatedMultiSelect({
                       }
                     }}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 text-orange-500 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 accent-orange-500"
+                    className="w-4 h-4 text-pink-400 bg-white border-gray-300 rounded focus:ring-pink-400 focus:ring-2 accent-pink-400"
                   />
                 </div>
                 <span className="text-sm font-medium text-gray-900">
@@ -344,7 +344,7 @@ export function PaginatedMultiSelect({
                       type="checkbox"
                       checked={selectedValues.includes(item.id.toString())}
                       onChange={() => handleItemSelect(item.id.toString())}
-                      className="w-4 h-4 text-orange-500 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 accent-orange-500"
+                      className="w-4 h-4 text-pink-500 bg-white border-gray-300 rounded focus:ring-pink-500 focus:ring-2 accent-pink-500"
                     />
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={item.image || "/placeholder.svg"} />
