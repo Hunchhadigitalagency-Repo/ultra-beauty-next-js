@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
-import Esewa from '@/assets/esewa.png';
+// import Esewa from '@/assets/esewa.png';
 import React, { useState } from 'react';
 // import Khalti from '@/assets/khalti.png';
 import { useRouter } from 'next/navigation';
@@ -18,7 +18,7 @@ import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/re
 
 const PAYMENT_GATEWAYS = [
   { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
-  { name: 'Esewa', image: Esewa, value: 'esewa' },
+  // { name: 'Esewa', image: Esewa, value: 'esewa' },
   // { name: 'Khalti', image: Khalti, value: 'khalti' },
 ];
 
