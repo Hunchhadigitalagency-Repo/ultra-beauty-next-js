@@ -13,8 +13,7 @@ import useFetchData from "@/hooks/use-fetch";
 const SingleOrderPage = () => {
   const params = useParams();
 
-  console.log(params.slug);
-  const { data: order, loading: loading } = useFetchData<IOrders>(
+  const { data: order, loading: loading, refetch } = useFetchData<IOrders>(
     `/order/${params.slug}/`, true
   );
 
@@ -32,7 +31,7 @@ const SingleOrderPage = () => {
 
   return (
     <main className="space-y-4">
-      <SingleOrderTable orderData={order} loading={loading} />
+      <SingleOrderTable orderData={order} loading={loading} refetch={refetch} />
       <div className="grid xl:grid-cols-5 gap-4">
         <section className=" col-span-3 space-y-4">
           <aside className="grid grid-cols-1 md:grid-cols-2 gap-4">
