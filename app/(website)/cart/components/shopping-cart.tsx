@@ -91,11 +91,12 @@ export default function ShoppingCart() {
           </p>
         </div>
       ) : CartItems?.length === 0 ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-gray'>
-            No Cart Items found !
-          </p>
-        </div>
+       <div className='flex flex-col items-center justify-center w-full h-60'>
+                   <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                   <p className='font-extralight text-sm text-gray-400 capitalize'>
+                     Oops! no Products in cart right now...
+                   </p>
+                 </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
           {/* Cart Items */}
