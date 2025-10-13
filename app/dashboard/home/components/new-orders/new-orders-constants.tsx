@@ -30,7 +30,7 @@ export const NewOrdersConstants = (): Col<INewOrder>[] => {
             }}
             className="w-[100px] rounded-sm py-1 px-2 text-center"
           >
-            <p className="text-white">{data.status.name}</p>
+            <p className="">{data.status.name}</p>
           </button>
         </div>
       ),

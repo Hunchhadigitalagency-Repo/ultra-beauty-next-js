@@ -15,13 +15,13 @@ import OrderStatusDropdown from "../../../components/order-status-dropdown";
 const SingleOrderTable = ({
   orderData,
   loading,
+  refetch
 }: {
   orderData: IOrders;
   loading: boolean;
+  refetch: () => void;
 }) => {
   const router = useRouter();
-
-  console.log(orderData);
 
   const handleCreateInvoice = async () => {
     try {
@@ -51,6 +51,7 @@ const SingleOrderTable = ({
             <OrderStatusDropdown
               orderId={orderData.id}
               currentStatus={orderData.order_status}
+              refetch={refetch}
             />
 
             <Button

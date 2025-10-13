@@ -257,7 +257,7 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
                         onSelectionChange={field.onChange}
                         title="Select Products"
                         fetchData={getProductsDropdown}
-                        className="w-full "
+                        className="w-full !max-h-[300px]"
                       />
                     </FormControl>
                     <FormMessage />
