@@ -13,6 +13,9 @@ export const getHeaderTitle = (pathname: string) => {
   if (pathname.startsWith("/dashboard/inventory/edit/")) {
     return "Edit Inventory";
   }
+  if (pathname.startsWith("/dashboard/orders/single/")) {
+    return "Single Orders";
+  }
   switch (pathname) {
     case "/dashboard/home":
       return "Dashboard";
@@ -24,6 +27,12 @@ export const getHeaderTitle = (pathname: string) => {
       return "Edit Product";
     case "/dashboard/orders":
       return "Orders";
+    case "/dashboard/orders/add-orders":
+      return "Add Orders";
+    case "/dashboard/orders/add-orders/shipping":
+      return "Shipping";
+    case "/dashboard/orders/add-orders/payment":
+      return "Payment";
     case "/dashboard/sales":
       return "Sales";
     case "/dashboard/invoices":
@@ -42,32 +51,110 @@ export const getHeaderTitle = (pathname: string) => {
     //   return "Edit Inventory";
     case "/dashboard/flash-sales":
       return "Flash Sales";
+    case "/dashboard/flash-sales/add-flash-sales":
+      return "Add Flash Sales";
+    case "/dashboard/flash-sales/edit-flash-sales":
+      return "Edit Flash Sales";
     case "/dashboard/cupons":
       return "Coupons";
+    case "/dashboard/cupons/add-coupon":
+      return "Add Coupons";
+    case "/dashboard/cupons/edit-coupon":
+      return "Edit Coupons";
     case "/dashboard/settings":
       return "Settings";
     case "/dashboard/blogs":
       return "Blogs";
+    case "/dashboard/blogs/add-blogs":
+      return "Add Blogs";
+    case "/dashboard/blogs/edit-blogs":
+      return "Edit Blogs";
     case "/dashboard/partner-company":
       return "Partner Company";
+    case "/dashboard/partner-company/add-partner-company":
+      return "Add Partner Company";
+    case "/dashboard/partner-company/edit-partner-company":
+      return "Edit Partner Company";
     case "/dashboard/faqs":
       return "FAQ's";
+    case "/dashboard/faqs/add-faqs":
+      return "Add FAQ";
+    case "/dashboard/faqs/edit-faqs":
+      return "Edit FAQ";
     case "/dashboard/newsletters":
       return "Newsletter";
+    case "/dashboard/newsletters/add-newsletters":
+      return "Add Newsletter";
+    case "/dashboard/newsletters/edit-newsletters":
+      return "Edit Newsletter";
     case "/dashboard/sms":
       return "SMS";
+    case "/dashboard/sms/add-sms":
+      return "Add SMS";
+    case "/dashboard/sms/edit-sms":
+      return "Edit SMS";
     case "/dashboard/banners":
       return "Banners";
+    case "/dashboard/banners/add-banner":
+      return "Add Banners";
+    case "/dashboard/banners/edit-banner":
+      return "Edit Banners";
+    case "/dashboard/advertisement":
+      return "Advertisement Banners";
+    case "/dashboard/advertisement/add-banner":
+      return "Add Advertisement Banners";
+    case "/dashboard/advertisement/edit-banner":
+      return "Edit Advertisement Banners";
     case "/dashboard/navigation-info":
       return "Navigation Info";
+    case "/dashboard/navigation-info/add-navigation":
+      return "Add Navigation Info";
+    case "/dashboard/navigation-info/edit-navigation":
+      return "Edit Navigation Info";
+
+    // Notification
     case "/dashboard/notification":
       return "Notification";
+    case "/dashboard/notification/add-notification":
+      return "Add Notification";
+    case "/dashboard/notification/edit-notification":
+      return "Edit Notification";
+
+    // User Management
     case "/dashboard/user-management":
       return "User Management";
+    case "/dashboard/user-management/add-user-management":
+      return "Add User";
+    case "/dashboard/user-management/edit-user-management":
+      return "Edit User";
+
+    // Testimonials
     case "/dashboard/testimonials":
       return "Testimonials";
+    case "/dashboard/testimonials/add-testimonials":
+      return "Add Testimonials";
+    case "/dashboard/testimonials/edit-testimonials":
+      return "Edit Testimonials";
+
+    // Expert Recommendation
     case "/dashboard/expert-recommendation":
       return "Expert Recommendation";
+    case "/dashboard/expert-recommendation/add-expert-recommendation":
+      return "Add Expert Recommendation";
+    case "/dashboard/expert-recommendation/edit-expert-recommendation":
+      return "Edit Expert Recommendation";
+    case "/dashboard/team":
+      return "Team";
+    case "/dashboard/team/add-team":
+      return "Add Team";
+    case "/dashboard/team/edit-team":
+      return "Edit Team";
+    case "/dashboard/career":
+      return "Career";
+    case "/dashboard/career/add-career":
+      return "Add Career";
+    case "/dashboard/career/edit-career":
+      return "Edit Career";
     case "/dashboard/cancel-request":
       return "Cancelled Orders";
     case "/dashboard/return-request":

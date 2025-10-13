@@ -22,11 +22,13 @@ type Status = {
 type OrderStatusDropdownProps = {
   currentStatus: Status;
   orderId: number;
+  refetch?: () => void;
 };
 
 const OrderStatusDropdown: React.FC<OrderStatusDropdownProps> = ({
   currentStatus,
   orderId,
+  refetch
 }) => {
   const { orderStatusDropdown } = useAppSelector((state) => state.dropdown);
   const [selectedStatus, setSelectedStatus] = useState<Status>(currentStatus);
@@ -59,6 +61,7 @@ const OrderStatusDropdown: React.FC<OrderStatusDropdownProps> = ({
       toast.error("Failed to update order status");
     } finally {
       setLoading(false);
+      refetch?.()
     }
   };
 

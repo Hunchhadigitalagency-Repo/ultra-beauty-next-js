@@ -39,11 +39,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.items.map((item) => {
-                  const isActive = pathname === item.url;
+                  console.log(pathname, item.url);
+
+                  const isActive = () => {
+                    if (pathname === '/dashboard/newsletters-clients') {
+                      return item.url === '/dashboard/newsletters-clients';
+                    }
+
+                    if (pathname.startsWith('/dashboard/newsletters')) {
+                      return pathname.includes(item.url);
+                    }
+
+                    return pathname === item.url || pathname.startsWith(`${item.url}/`);
+                  };
 
                   return (
                     <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild isActive={isActive}>
+                      <SidebarMenuButton asChild isActive={isActive()}>
                         <Link
                           href={item.url}
                           prefetch={false}
@@ -51,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         >
                           {item.icon && (
                             <div
-                              className={`p-1  ${isActive
+                              className={`p-1  ${isActive()
                                 ? "text-white bg-primary flex items-center justify-center"
                                 : ""
                                 } `}
