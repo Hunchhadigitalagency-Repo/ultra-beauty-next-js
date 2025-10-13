@@ -54,16 +54,16 @@ const Footer: React.FC = () => {
       <div className="flex flex-col pt-10 pb-10 sm:pb-8 md:pb-0">
         {/* News Letter */}
         <div className='flex flex-col justify-between gap-4 mb-14 bg-inherit lg:gap-0 lg:flex-row lg:justify-between'>
-         <div>
-  <h1 className="text-4xl font-semibold md:text-3xl lg:text-5xl leading-snug">
-    <span className="block">
-      Where Elegance Meets
-    </span>
-    <span className="block relative mt-2">
-      Everyday Beauty
-<span className="inline-block h-4 ml-8 w-4 bg-pink-600"></span>    </span>
-  </h1>
-</div>
+          <div>
+            <h1 className="text-4xl font-semibold md:text-3xl lg:text-5xl leading-snug">
+              <span className="block">
+                Where Elegance Meets
+              </span>
+              <span className="block relative mt-2">
+                Everyday Beauty
+                <span className="inline-block h-6 ml-8 w-6 bg-pink-600"></span>    </span>
+            </h1>
+          </div>
 
           <div className='h-full w-full lg:w-[50%]'>
             <Newsletter />
@@ -276,12 +276,14 @@ const Footer: React.FC = () => {
             </p>
             <p className="text-[12px] mt-1">
               DESIGNED AND DEVELOPED BY
-              <Link
+              <a
                 href="https://hunchhadigital.com/"
                 className="hover:underline ml-1"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 HUNCHHA DIGITAL
-              </Link>
+              </a>
             </p>
           </div>
         </div>
