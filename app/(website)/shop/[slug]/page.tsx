@@ -41,19 +41,19 @@ const SingleProductPage: React.FunctionComponent = () => {
             <TabsTrigger
               key={"Description"}
               value="Description"
-              className="font-playfair text-xl bg- font-semibold border-b-[2px]  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
+              className="font-playfair text-xl bg- font-semibold border-b-[2px] pb-4   data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
             >
               Description
             </TabsTrigger>
             <TabsTrigger
               value="Specification"
-              className="font-playfair text-xl font-semibold bg- border-b-[2px]  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
+              className="font-playfair text-xl font-semibold bg- border-b-[2px] pb-4  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
             >
               Ingredients
             </TabsTrigger>
             <TabsTrigger
               value="Reviews"
-              className="font-playfair text-xl font-semibold bg- border-b-[2px]  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
+              className="font-playfair text-xl font-semibold bg- border-b-[2px] pb-4  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
             >
               Reviews
             </TabsTrigger>

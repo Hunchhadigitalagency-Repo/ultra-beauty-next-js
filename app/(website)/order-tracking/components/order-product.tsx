@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import RatingStars from '@/components/common/product/rating-stars';
-import SectionHeader from '@/components/common/header/section-header';
+// import SectionHeader from '@/components/common/header/section-header';
 import DateChips from '@/components/common/chips/date-chips';
 
 interface OrderProductProps {
@@ -53,17 +53,19 @@ const OrderProduct: React.FunctionComponent<OrderProductProps> = ({
                         Quantity: {quantity}
                     </div>
                     <div className=" border border-gray-500 px-2 py-0.5 rounded text-sm ">
-                        Date: <DateChips date={date}/>
+                        Date: <DateChips date={date} />
                     </div>
                     <div className=" border border-gray-500 px-2 py-0.5 rounded text-sm ">
                         Price: {price}
                     </div>
                 </div>
-                <SectionHeader
-                    title={title}
-                    description={description}
-                    titleClassName='text-xl xl:text-2xl'
-                />
+                <div >
+                    <h3 className="mb-1 text-base font-semibold text-gray-900 font-playfair lg:text-2xl">
+                        {title}
+                    </h3>
+                    <p dangerouslySetInnerHTML={{ __html: description }} className="text-sm leading-snug text-gray-600 line-clamp-2">
+                    </p>
+                </div>
                 <div className="flex justify-between items-center mt-2">
                     <div className="flex items-center gap-2">
                         <RatingStars rating={rating} />

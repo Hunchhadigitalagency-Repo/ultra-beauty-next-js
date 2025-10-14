@@ -19,7 +19,7 @@ import { toggleCategory } from "@/redux/features/category-slice";
 export interface HeroSectionResponse {
   id: number
   categories?: Category[]
-  product?: { id: number, slug_name: string, name: string }
+  products?: { id: number, slug_name: string, name: string }[]
   image: string
   banner_type: string
   title: string
@@ -60,18 +60,20 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [api, isHovered]);
 
-  const handleBannerClick = (slide: HeroSectionResponse) => {
-    console.log(slide, "cate gory clicked");
-    if (slide.categories) {
-      dispatch(toggleCategory({ id: slide.categories?.[0].id, checked: true }))
-      router.push('/shop')
-      return;
-    }
-    if (slide.product) {
-      router.push(`/shop/${slide.product?.slug_name}`)
-      return;
-    }
+const handleBannerClick = (slide: HeroSectionResponse) => {
+  console.log(slide, "category clicked");
+
+  if (slide.categories && slide.categories?.length > 0) {
+    dispatch(toggleCategory({ id: slide.categories?.[0].id, checked: true }))
+    router.push('/shop')
+    return;
   }
+
+  if (slide.products && slide.products?.length > 0) {
+    router.push(`/shop/${slide.products?.[0]?.slug_name}`)
+    return;
+  }
+}
 
   return (
     <section className="relative h-60 md:h-[500px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">

@@ -77,7 +77,7 @@ const WishlistCard = ({
           <Link href={`shop/${slug}`} className="w-full h-full">
             <div className="flex flex-col w-full gap-2">
 
-              <h3 className="text-base font-normal line-clamp-1 md:text-2xl text-foreground">
+              <h3 className="text-base font-playfair line-clamp-1 md:text-2xl text-foreground">
                 {name}
               </h3>
               {/* Dom Purify */}
