@@ -43,7 +43,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
 
   return (
 
-    <section className="space-y-4 padding">
+    <section className="space-y-4 padding ">
       <div className="flex items-center justify-between gap-4">
         <SectionHeader
           className="max-w-[60%] sm:max-w-full"
@@ -78,7 +78,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
           <Carousel
             className="w-full"
           >
-            <CarouselContent className="-ml-3 gap-2">
+            <CarouselContent className="ml-4 gap-2">
               {products?.map((product) => {
                 return (
                   <CarouselItem
@@ -103,8 +103,8 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
             </CarouselContent>
 
             {/* Navigation Arrows */}
-            <CarouselPrevious className="absolute left-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
-            <CarouselNext className="absolute right-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
+            <CarouselPrevious className="absolute z-50 left-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
+            <CarouselNext className="absolute z-50 right-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
           </Carousel>)}
       </div>
     </section>

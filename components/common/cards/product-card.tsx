@@ -98,11 +98,11 @@ const ProductCard = ({
               cursor-pointer`}
             aria-label="Toggle Wishlist"
           >
-            <Heart
-              fill={isWishlisted ? "red" : "transparent"}
-              stroke={isWishlisted ? "red" : "black"}
-              className="w-4 h-4 md:w-6 md:h-6"
-            />
+          <Heart
+  fill={isWishlisted ? "red" : "transparent"}
+  stroke={isWishlisted ? "red" : "currentColor"}
+  className="w-4 h-4 md:w-6 md:h-6 text-gray-500" 
+/>
           </button>
         </div>
 

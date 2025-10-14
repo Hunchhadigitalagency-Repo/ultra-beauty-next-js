@@ -52,9 +52,8 @@ const AllProducts = () => {
     queryParams.set("max_price", priceRange[1].toString());
   }
 
-  const path = `public-products/${
-    queryParams.toString() ? `?${queryParams.toString()}` : ""
-  }`;
+  const path = `public-products/${queryParams.toString() ? `?${queryParams.toString()}` : ""
+    }`;
 
   const handleSearchValue = (value: string) => {
     setSearchValue(value);
@@ -87,31 +86,41 @@ const AllProducts = () => {
 
   return (
     <section className="relative flex flex-col gap-8 padding">
-      {/* Header and Search */}
-      <div className="flex flex-row items-center justify-between gap-4">
-        <SectionHeader title={`All Products (${count})`} description="" />
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
 
-        <div className="hidden lg:flex lg:gap-5">
-          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
-          <ProductSort onChange={setSortingValue} selectedValue={sortingValue} />
-        </div>
-
+        {/* Mobile Menu */}
         <Menu
           onClick={toggleFilter}
           className="w-5 h-5 text-foreground lg:hidden cursor-pointer"
         />
       </div>
 
+      {/* Sticky Search + Sort - Desktop */}
+      <div className="hidden lg:flex justify-between bg-white items-center sticky top-20 p-2 z-20  pb-4 -mt-2">
+        <SectionHeader title={`All Products (${count})`} description="" />
+        <div className="flex gap-4 items-start justify-end">
+          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
+          <ProductSort onChange={setSortingValue} selectedValue={sortingValue} />
+        </div>
+      </div>
+
+      {/* Mobile Search + Sort */}
+      <div className="lg:hidden flex flex-col gap-4">
+        <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
+        <ProductSort onChange={setSortingValue} selectedValue={sortingValue} />
+      </div>
+
       {/* Main Layout */}
       <div className="flex flex-col lg:flex-row lg:gap-10">
         {/* Sticky Filter */}
         <div className="lg:w-1/4 xl:w-1/5">
-          <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
+          <div className="lg:sticky lg:top-35 lg:h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
             <FilterSection showFilter={showFilter} onClose={toggleFilter} />
           </div>
         </div>
 
-        {/* Products Section */}
+        {/* Products */}
         <div className="flex-1">
           <InfiniteScroll
             dataLength={products.length}
@@ -127,7 +136,7 @@ const AllProducts = () => {
             }
             endMessage={
               <p className="mt-4 text-sm text-center text-muted-foreground">
-                You’ve reached the end!
+                You&lsquo;ve reached the end!
               </p>
             }
           >

@@ -12,6 +12,9 @@ import {
   CarouselApi
 } from "@/components/ui/carousel";
 import { AlertCircle } from "lucide-react";
+import { useAppDispatch } from "@/redux/hooks";
+import { useRouter } from "next/navigation";
+import { toggleBrands } from "@/redux/features/category-slice";
 
 export interface Link {
   next: string;
@@ -48,7 +51,8 @@ const BrandsSection: React.FunctionComponent = () => {
   const [, setCurrent] = useState(0);
   const [, setCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-
+  const dispatch = useAppDispatch()
+  const router = useRouter()
   useEffect(() => {
     if (!api) return;
 
@@ -69,6 +73,11 @@ const BrandsSection: React.FunctionComponent = () => {
 
     return () => clearInterval(interval);
   }, [api, isHovered]);
+
+  const handleBrandCardClick = (brandId: number) => {
+    dispatch(toggleBrands({ id: brandId, checked: true }));
+    router.push(`/shop`);
+  };
 
   return (
     <section className="space-y-4 padding">
@@ -110,10 +119,22 @@ const BrandsSection: React.FunctionComponent = () => {
               {brandDetails?.map((brand, index) => (
                 <CarouselItem
                   key={index}
-                  className={`${noOfBrands && noOfBrands <= 6 ? `basis-1/2 sm:basis-[25%] md:basis-[33%] lg:basis-1/${noOfBrands}` : 'basis-1/2 sm:basis-[25%] md:basis-[33%] xl:basis-[25%]'}`}
+                  className={`
+    border border-gray-200 rounded-lg 
+    transition-all duration-300 ease-in-out
+    cursor-pointer 
+    hover:shadow-xl hover:border-primary
+    p-4
+    flex justify-center items-center
+    ${noOfBrands && noOfBrands <= 6
+                      ? `basis-1/2 sm:basis-1/4 md:basis-1/3 lg:basis-1/${noOfBrands}`
+                      : 'basis-1/2 sm:basis-1/4 md:basis-1/3 xl:basis-1/4'}
+  `}
+                  onClick={() => handleBrandCardClick(brand.id)}
                 >
                   <BrandsCard image={brand.brand_image} />
                 </CarouselItem>
+
               ))}
             </CarouselContent>
           </Carousel>)}
