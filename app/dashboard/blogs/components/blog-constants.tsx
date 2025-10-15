@@ -31,7 +31,7 @@ export const BlogConstants = (dispatch: AppDispatch,): Col<IBlog>[] => {
 
     {
       title: "AUTHOR",
-      render: (data: IBlog) => <span>{data.author?.username || "-"}</span>,
+      render: (data: IBlog) => <span>{data.author || "-"}</span>,
     },
     {
       title: "CATEGORY",

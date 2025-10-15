@@ -75,7 +75,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
         form.reset({
           title: dataToUse.title || "",
           sub_title: dataToUse.sub_title || "",
-          author: dataToUse.author?.id?.toString() || "",
+          author: dataToUse.author || "",
           category: dataToUse.category?.id?.toString() || "",
           tags: dataToUse.tags || "",
           cover_image: dataToUse.cover_image || "",
