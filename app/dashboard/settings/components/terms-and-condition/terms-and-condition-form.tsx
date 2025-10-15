@@ -58,10 +58,10 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
 
       const response = await createTermsAndCondition(formData);
       if (response.status === 201) {
-        toast.success("Terms and Condition updated successfully");
         dispatch(toggleRefetchTableData());
         dispatch(setActiveSetting(ESettings.TERMS_AND_CONDITION));
       }
+      toast.success("Terms and Condition updated successfully");
     } catch (error) {
       handleError(error, toast);
     }

@@ -12,14 +12,15 @@ import {
   CalendarDays,
   UserCircle2Icon
 } from "lucide-react";
-
+  
 
 const SingleBlogSection = () => {
-
   const id = useParams().id;
-  const path = id ? `cms/blogs/${id}` : "";
+  const path = id ? `cms/blogs-dropdown/${id}` : "";
 
-  const { data: blog, loading, error } = useFetchData<IBlog>(path, true);
+  const { data: blog, loading, error } = useFetchData<IBlog>(path, true, {
+    // config: { headers: { Authorization: `Bearer ${accessToken}` } },
+  });
 
   if (loading) {
     return (
@@ -45,10 +46,35 @@ const SingleBlogSection = () => {
     );
   }
 
-  const cleanHtml = DOMPurify.sanitize(blog.description || "", {
+  let cleanHtml = DOMPurify.sanitize(blog.description || "", {
     USE_PROFILES: { html: true },
   });
 
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(cleanHtml, "text/html");
+
+  const h1Elements = Array.from(doc.querySelectorAll("h1"));
+
+  h1Elements.forEach((el, index) => {
+    el.id = `heading-${index + 1}`;
+  });
+
+  cleanHtml = doc.body.innerHTML;
+
+  const toc = h1Elements.map(el => ({
+    id: el.id,
+    text: el.textContent?.trim() || "",
+  }));
+
+  const scrollToHeading = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -86;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
   return (
     <section className="w-full  space-y-8 padding">
       <SectionHeader
@@ -83,15 +109,13 @@ const SingleBlogSection = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4 md:flex-col">
-        {/* Title */}
         <h2 className="max-w-4xl text-xl font-semibold md:text-3xl text-custom-black">
           {blog.title}
         </h2>
-        {/* Date & Author */}
         <div className="flex flex-wrap gap-6 text-sm font-medium text-accent-foreground ">
           <div className="flex items-center gap-2">
             <UserCircle2Icon className="w-5 h-5" />
-            <span>{blog.author?.username || "Unknown Author"}</span>
+            <span>{blog.author || "Unknown Author"}</span>
           </div>
           {blog.category?.name && (
             <div className="flex items-center gap-2">
@@ -108,12 +132,32 @@ const SingleBlogSection = () => {
           </div>
         </div>
       </div>
-      {/* Description */}
-      <div>
+      <div className="flex flex-col md:flex-row md:gap-8 relative">
         <article
-          className='prose text-base text-[#333333] font-poppins max-w-none prose-indigo'
+          className="rich-text prose max-w-none prose-indigo text-gray-800 flex-1 overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: cleanHtml }}
         />
+
+        {toc.length > 0 && (
+          <div className="hidden md:block md:w-[300px] lg:w-[350px] xl:w-[400px] h-auto max-h-[400px] overflow-y-auto sticky top-22 self-start p-4 border rounded-md bg-gray-50 shadow-sm font-poppins">
+            <h3 className="font-semibold text-lg mb-3 border-b pb-2 text-gray-900">
+              Table of Contents
+            </h3>
+            <ul className="space-y-2">
+              {toc.map(item => (
+                <li key={item.id}>
+                  <button
+                    className="text-gray-900 hover:text-gray-700 transition-colors duration-200 text-left w-full focus:outline-none cursor-pointer line-clamp-1"
+                    onClick={() => scrollToHeading(item.id)}
+                  >
+                    {item.text}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
       </div>
 
     </section>

@@ -48,7 +48,7 @@ export interface IBlog {
   slug: string
   description: string
   tags: string
-  author: Author
+  author: string
   category: Category
   cover_image: string
   recommended_products: RecommendedProduct[]
