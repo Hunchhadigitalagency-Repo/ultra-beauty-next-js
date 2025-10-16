@@ -4,19 +4,17 @@ import PageHeader from "@/components/common/header/page-header";
 import CustomTable from "@/components/common/table/custom-table";
 import React, { useState } from "react";
 import { CancelRequestConstant } from "./components/cancel-request-constant";
-import { ICancelProducts } from "@/types/cancel";
 import CancelRequestDetail from "./components/cancel-request-details";
 import { useInfiniteFetch } from "@/hooks/use-infinite-fetch";
-import { useAppSelector } from "@/redux/hooks";
 import { ETypes } from "@/types/table";
 import InfiniteScroll from "react-infinite-scroll-component";
 import InfiniteScrollLoader from "@/components/common/loader/infinite-scroll-loader";
+import { CancelRequest } from "@/types/cancel";
 
 const CancelRequestPage = () => {
   const [selectedRequest, setSelectedRequest] =
-    useState<ICancelProducts | null>(null);
+    useState<CancelRequest | null>(null);
 
-  const { searchQuery } = useAppSelector((state) => state.filter);
 
   // const { cancelRequests, isLoading, error } = useCancelRequests(); // using the hook
 
@@ -25,11 +23,11 @@ const CancelRequestPage = () => {
     loading: isLoading,
     fetchNext,
     hasMore,
-  } = useInfiniteFetch<ICancelProducts>(
+  } = useInfiniteFetch<CancelRequest>(
     "/cancel/order",
-    "search",
-    searchQuery,
-    ETypes.CANCEL_REQUEST
+    "",
+    '',
+    ETypes.CANCEL_REQUEST,
   );
 
   console.log(cancelRequests);
