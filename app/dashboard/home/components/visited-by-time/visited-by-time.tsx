@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DataCard from "@/components/common/cards/data-card";
 import api from "@/services/api-instance";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface VisitData {
   [day: string]: {
@@ -72,20 +73,30 @@ export default function VisitedByTime() {
               </div>
 
               {/* Heatmap cells - matching header grid */}
-              <div className="flex-1 grid grid-cols-7 gap-1">
-                {days.map((day) => {
-                  const visits = data[day]?.[timeSlot] || 0;
-                  const colorClass = getColorIntensity(visits, maxVisits);
+              <TooltipProvider>
+                <div className="flex-1 grid grid-cols-7 gap-1">
+                  {days.map((day) => {
+                    const visits = data[day]?.[timeSlot] || 0;
+                    const colorClass = getColorIntensity(visits, maxVisits);
 
-                  return (
-                    <div
-                      key={`${day}-${timeSlot}`}
-                      className={`h-8 w-3/4 rounded-sm ${colorClass} hover:opacity-80 transition-opacity cursor-pointer`}
-                      title={`${day} ${timeSlot}: ${visits} visits`}
-                    ></div>
-                  );
-                })}
-              </div>
+                    return (
+                      <Tooltip key={`${day}-${timeSlot}`}>
+                        <TooltipTrigger asChild className="">
+                          <div
+                            className={`h-8 w-3/4 rounded-sm ${colorClass} hover:opacity-80 transition-opacity cursor-pointer`}
+                            title={`${day} ${timeSlot}: ${visits} visits`}
+                          ></div>
+                        </TooltipTrigger>
+                        <TooltipContent className="flex flex-col bg-white text-gray-400">
+                          <p><span className="font-medium">Time Slot:</span> {timeSlot}</p>
+                          <p><span className="font-medium">Visitors:</span> {visits}</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                    );
+                  })}
+                </div>
+              </TooltipProvider>
             </div>
           ))}
           <div className="flex bg-white sticky top-0 z-10">

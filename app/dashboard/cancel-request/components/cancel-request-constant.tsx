@@ -1,40 +1,43 @@
 import React from "react";
 import { Col } from "@/types/table";
 import Image from "next/image";
-import { ICancelProducts } from "@/types/cancel";
+import { CancelRequest } from "@/types/cancel";
 
-export const CancelRequestConstant = (): Col<ICancelProducts>[] => {
+export const CancelRequestConstant = (): Col<CancelRequest>[] => {
   return [
     {
       title: "PRODUCT",
-      render: (data: ICancelProducts) => (
+      render: (data: CancelRequest) =>{ 
+        console.log(data);
+        
+        return(
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
             <Image
-              src={data?.product?.images[0]}
-              alt={data?.product?.name}
+              src={data?.order.order_details?.[0].product.images?.[0]}
+              alt={data?.order.order_details?.[0].product?.name}
               width={40}
               height={40}
               className="rounded-md object-cover w-full h-full"
             />
           </div>
-          <span className="text-xs text-foreground">{data?.product?.name}</span>
+          <span className="text-xs text-foreground">{data?.order.order_details?.[0].product?.name}</span>
         </div>
-      ),
+      )},
     },
 
     {
       title: "QUANTITY",
-      render: (data: ICancelProducts) => (
+      render: (data: CancelRequest) => (
         <span className="text-xs flex justify-center md:justify-start">
-          {data.quantity}
+          {data?.order.order_details?.[0].quantity}
         </span>
       ),
     },
 
     // {
     //   title: "VARIETY",
-    //   render: (data: ICancelProducts) => (
+    //   render: (data: CancelRequest) => (
     //     <div className="flex gap-2 mt-1 flex-col">
     //       {data?.product_variants?.length > 0 ? (
     //         data?.product_variants?.map((att: any, index: number) => (
@@ -56,7 +59,7 @@ export const CancelRequestConstant = (): Col<ICancelProducts>[] => {
 
     // {
     //   title: "USER",
-    //   render: (data: ICancelProducts) => (
+    //   render: (data: CancelRequest) => (
     //     <div className="flex gap-2">
     //       <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
     //         <Image
