@@ -19,7 +19,7 @@ export const ReturnRequestConstant = (): Col<IReturnProducts>[] => {
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
               <Image
-                src={product?.images?.[0] || "/placeholder.png"}
+                src={  data?.order_detail_info?.product_variant?.item_image|| product?.images?.[0] || "/placeholder.png"}
                 alt={product?.name}
                 width={40}
                 height={40}
