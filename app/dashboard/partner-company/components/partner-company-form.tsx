@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import useFetchData from "@/hooks/use-fetch";
 
@@ -33,7 +34,7 @@ import {
 import { IPartnerCompany } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -46,6 +47,7 @@ const PartnerCompanyForm = ({ initialData }: PartnerCompanyFormProps) => {
   const router = useRouter();
 
   const title = initialData ? "Edit Partner Company" : "Add Partner Company";
+  const [loading, setLoading] = useState(false);
 
   const isEditMode = Boolean(initialData);
   const partnerCompanyUrl = isEditMode ? `/cms/partner-companies/${initialData?.id}` : "";
@@ -81,6 +83,7 @@ const PartnerCompanyForm = ({ initialData }: PartnerCompanyFormProps) => {
   }, [initialData, isEditMode, partnerCompney, form])
 
   const onSubmit = async (data: PartnerCompanyFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -107,6 +110,8 @@ const PartnerCompanyForm = ({ initialData }: PartnerCompanyFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -207,8 +212,9 @@ const PartnerCompanyForm = ({ initialData }: PartnerCompanyFormProps) => {
           type="submit"
           form="partner-company-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> :"Save" }
         </Button>
       </div>
     </>

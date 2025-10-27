@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { createCoupons, updateCoupons } from "@/lib/api/coupons/coupons-api";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
@@ -81,8 +82,8 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
   //   };
   // });
 
-  console.log(initialData);
 
+  const [loading, setLoading] = useState(false);
   const form = useForm<any>({
     resolver: zodResolver(couponSchema),
     defaultValues: initialData
@@ -131,6 +132,7 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
   };
 
   const onSubmit = async (data: CouponFormValue) => {
+    setLoading(true)
     try {
       const formData = new FormData();
 
@@ -225,6 +227,8 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -672,8 +676,8 @@ const CouponForm = ({ initialData }: CouponFormProps) => {
           form="expert-recommendation-form"
           className="text-white rounded-sm"
         >
-          Save
-        </Button>
+        {loading ? <Spinner /> : "Save"
+        }        </Button>
       </div>
     </>
   );

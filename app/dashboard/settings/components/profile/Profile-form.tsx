@@ -23,6 +23,8 @@ import { setActiveSetting } from "@/redux/features/setting-slice";
 import { ESettings } from "@/types/table";
 import { useAppDispatch } from "@/redux/hooks";
 import { updateCompanyProifle } from "@/lib/api/settings/profile-api";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ProfileFromProps {
   initialData: ICompanyProfile | null;
@@ -30,6 +32,7 @@ interface ProfileFromProps {
 
 const Profile = ({ initialData }: ProfileFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<CompanyProfileValues>({
     resolver: zodResolver(companyProfileSchema),
@@ -42,6 +45,7 @@ const Profile = ({ initialData }: ProfileFromProps) => {
   });
 
   const onSubmit = async (data: CompanyProfileValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("company_name", data.companyName);
@@ -61,6 +65,8 @@ const Profile = ({ initialData }: ProfileFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -165,8 +171,9 @@ const Profile = ({ initialData }: ProfileFromProps) => {
           type="submit"
           form="setting-profile-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

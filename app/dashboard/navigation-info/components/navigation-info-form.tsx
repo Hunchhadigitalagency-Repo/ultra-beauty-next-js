@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import useFetchData from "@/hooks/use-fetch";
 import {
@@ -29,7 +30,7 @@ import {
 import { INavigationInfo } from "@/types/navigation-info";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -42,6 +43,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
 
   const router = useRouter();
   const isEditMode = Boolean(initialData);
+  const [loading, setLoading] = useState(false);
 
   const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
   const { data: navigationInfo, } = useFetchData<INavigationInfo>(blogUrl);
@@ -102,6 +104,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
   }, [isEditMode, navigationInfo, initialData, form]);
 
   const onSubmit = async (data: NavigationInfoFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("title", data.title);
@@ -135,6 +138,8 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
   return (
@@ -290,8 +295,9 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
           type="submit"
           form="setting-brand-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

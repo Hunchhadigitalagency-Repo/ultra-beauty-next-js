@@ -37,6 +37,8 @@ import {
   bannerSchema,
 } from "@/schemas/cms/banner-schema";
 import { Undo } from "lucide-react";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface BannerFromProps {
   initialData: IDashboardBanner | null;
@@ -44,7 +46,7 @@ interface BannerFromProps {
 
 const BannerForm = ({ initialData }: BannerFromProps) => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const form = useForm<BannerFormValues>({
     resolver: zodResolver(bannerSchema),
     defaultValues: initialData
@@ -68,6 +70,7 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
   });
 
   const onSubmit = async (data: BannerFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("banner_type", data.banner_type);
@@ -101,6 +104,8 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -399,7 +404,7 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
           form="setting-brand-form"
           className="text-white rounded-sm"
         >
-          Save Changes
+          {loading ? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

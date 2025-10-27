@@ -20,7 +20,7 @@ import { toggleRefetchTableData } from "@/redux/features/table-slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { IFlashSales } from "@/types/flash-sales";
@@ -34,6 +34,7 @@ import {
 } from "@/lib/api/sales/flash-sales-api";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
 import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface FlashSalesFormProps {
   initialData: IFlashSales | null;
@@ -47,7 +48,7 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
   const title = initialData ? "Edit Flash Sales" : "Add Flash Sales";
   const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
   const { data: navigationInfo, } = useFetchData<IFlashSales>(blogUrl);
-
+  const [loading, setLoading] = useState(false);
   const emptyDefaults = {
     name: "",
     discount_percentage: "",
@@ -104,7 +105,7 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
 
   const onSubmit = async (data: FlashSalesFormValues) => {
     // console.log('ti\hisiis', data);
-
+setLoading(true)
     try {
       const formData = new FormData();
       formData.append("sales", data.name);
@@ -133,6 +134,8 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -298,8 +301,9 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
           type="submit"
           form="blogs-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>
