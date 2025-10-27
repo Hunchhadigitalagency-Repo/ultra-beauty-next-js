@@ -16,8 +16,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useFetchData from "@/hooks/use-fetch"
+import { Spinner } from "@/components/ui/spinner"
 
 interface TestimonialFormProps {
   initialData: IDashboardITestimonial | null
@@ -27,6 +28,7 @@ const TestimonialForm = ({ initialData }: TestimonialFormProps) => {
   const router = useRouter()
   const title = initialData ? "Edit Testimonial" : "Add Testimonial"
   const isEditMode = Boolean(initialData)
+  const [loading, setLoading] = useState(false);
 
   const testiUrl = isEditMode ? `/cms/testimonials/${initialData?.slug}` : ""
   const { data: navigationInfo } = useFetchData<IDashboardITestimonial>(testiUrl)
@@ -80,6 +82,7 @@ const TestimonialForm = ({ initialData }: TestimonialFormProps) => {
   }, [isEditMode, navigationInfo, initialData, form])
 
   const onSubmit = async (data: TestimonialFormValues) => {
+    setLoading(true);
     try {
       const formData = new FormData()
       formData.append("name", data.name)
@@ -113,6 +116,8 @@ const TestimonialForm = ({ initialData }: TestimonialFormProps) => {
       }
     } catch (error) {
       handleError(error, toast)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -293,7 +298,7 @@ const TestimonialForm = ({ initialData }: TestimonialFormProps) => {
 
       <div className="flex justify-end pt-4">
         <Button type="submit" form="testimonial-form" className="text-white rounded-sm">
-          Save
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

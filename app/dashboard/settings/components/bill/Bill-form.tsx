@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { updateBill } from "@/lib/api/settings/bill-api";
 import { handleError } from "@/lib/error-handler";
 import { setActiveSetting } from "@/redux/features/setting-slice";
@@ -21,6 +22,7 @@ import { billSchema, BillValues } from "@/schemas/settings/bill-schema";
 import { IBill } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -30,6 +32,8 @@ interface BillFromProps {
 
 const BillForm = ({ initialData }: BillFromProps) => {
   const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState(false);
+  
   const form = useForm<BillValues>({
     resolver: zodResolver(billSchema),
     defaultValues: initialData
@@ -54,6 +58,7 @@ const BillForm = ({ initialData }: BillFromProps) => {
   });
 
   const onSubmit = async (data: BillValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("bill_name", data.billName);
@@ -73,6 +78,8 @@ const BillForm = ({ initialData }: BillFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -219,8 +226,9 @@ const BillForm = ({ initialData }: BillFromProps) => {
           type="submit"
           form="setting-bill-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Update
+          {loading? <Spinner /> : "Update" }
         </Button>
       </div>
     </>

@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createNotification,
@@ -27,7 +28,7 @@ import {
 import { INotification } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -40,6 +41,7 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
   const router = useRouter();
 
   const title = initialData ? "Edit Notification" : "Add Notification";
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<NotificationFormValues>({
     resolver: zodResolver(notificationSchema),
@@ -53,6 +55,7 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
   });
 
   const onSubmit = async (data: NotificationFormValues) => {
+    setLoading(true)
     try {
       if (initialData) {
         const response = await updateNotification(initialData.id, data);
@@ -71,6 +74,8 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -144,8 +149,9 @@ const NotificationForm = ({ initialData }: NotificationFormProps) => {
           type="submit"
           form="notifications-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

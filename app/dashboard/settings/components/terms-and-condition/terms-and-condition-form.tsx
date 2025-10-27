@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { createTermsAndCondition } from "@/lib/api/settings/terms-and-condition";
 import { handleError } from "@/lib/error-handler";
 import { setActiveSetting } from "@/redux/features/setting-slice";
@@ -24,6 +25,7 @@ import {
 import { ITermsAndCondition } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -33,6 +35,7 @@ interface HelpAndSupportFormProps {
 
 const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<TermsAndConditionValues>({
     resolver: zodResolver(termsAndConditionSchema),
@@ -50,6 +53,7 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
   });
 
   const onSubmit = async (data: TermsAndConditionValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("topic", data.topic);
@@ -64,6 +68,8 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
       toast.success("Terms and Condition updated successfully");
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -138,7 +144,7 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
           form="setting-social-form"
           className="text-white rounded-sm"
         >
-          Save
+         {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

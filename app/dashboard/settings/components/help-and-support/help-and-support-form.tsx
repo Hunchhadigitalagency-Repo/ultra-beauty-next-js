@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createHelpSupport,
@@ -29,6 +30,7 @@ import {
 import { IHelpAndSupport } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -38,6 +40,8 @@ interface HelpAndSupportFormProps {
 
 const HelpAndSupportForm = ({ initialData }: HelpAndSupportFormProps) => {
   const dispatch = useAppDispatch();
+
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<HelpAndSupportValues>({
     resolver: zodResolver(helpAndSupportSchema),
@@ -59,6 +63,7 @@ const HelpAndSupportForm = ({ initialData }: HelpAndSupportFormProps) => {
   });
 
   const onSubmit = async (data: HelpAndSupportValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("description", data.description);
@@ -87,6 +92,8 @@ const HelpAndSupportForm = ({ initialData }: HelpAndSupportFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -218,8 +225,9 @@ const HelpAndSupportForm = ({ initialData }: HelpAndSupportFormProps) => {
           type="submit"
           form="setting-social-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+         {loading ? <Spinner />  : "Save" }
         </Button>
       </div>
     </>

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import useFetchData from "@/hooks/use-fetch-data";
 import { createCareer, updateCareer } from "@/lib/api/cms/career-api";
@@ -31,7 +32,7 @@ import { ICareer } from "@/types/cms";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -43,7 +44,7 @@ const CareerForm = ({ initialData }: CareerFormProps) => {
   const title = initialData ? "Edit Career" : "Add Career";
   const router = useRouter();
   const dispatch = useAppDispatch();
-
+  const [loading, setLoading] = useState(false);
   const isEditMode = Boolean(initialData);
 
   const careerUrl = isEditMode ? `/cms/career/${initialData?.slug}` : "";
@@ -114,6 +115,7 @@ const CareerForm = ({ initialData }: CareerFormProps) => {
   }, [isEditMode, navigationInfo, initialData, form]);
 
   const onSubmit = async (data: CareerFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("job_title", data.title);
@@ -144,6 +146,8 @@ const CareerForm = ({ initialData }: CareerFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -365,9 +369,10 @@ const CareerForm = ({ initialData }: CareerFormProps) => {
         <Button
           type="submit"
           form="newsletter-form"
+          disabled={loading}
           className="text-white rounded-sm"
         >
-          Save
+         {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

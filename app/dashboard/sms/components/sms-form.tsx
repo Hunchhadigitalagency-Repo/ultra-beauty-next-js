@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import useFetchData from "@/hooks/use-fetch";
 
@@ -28,7 +29,7 @@ import { ISms } from "@/types/cms";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -39,6 +40,7 @@ interface SmsFormProps {
 const SmsForm = ({ initialData }: SmsFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit SMS" : "Add SMS";
   const isEditMode = Boolean(initialData);
@@ -75,6 +77,7 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
   }, [isEditMode, sms, initialData, form]);
 
   const onSubmit = async (data: SmsFormValues) => {
+    setLoading(true);
     try {
       if (initialData) {
         const response = await updateSms(initialData.id, data);
@@ -93,6 +96,8 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -218,7 +223,7 @@ const SmsForm = ({ initialData }: SmsFormProps) => {
           form="newsletter-form"
           className="text-white rounded-sm"
         >
-          Save
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

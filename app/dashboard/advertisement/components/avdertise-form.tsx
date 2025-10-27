@@ -19,6 +19,8 @@ import { IAdvertisementBanner } from "@/types/cms"
 import { addAdvertiseBanner, updateAdvertiseBanner } from "@/lib/api/cms/advertise-banner-apis"
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select"
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api"
+import { useState } from "react"
+import { Spinner } from "@/components/ui/spinner"
 
 interface AdvertiseFormProps {
     initialData?: IAdvertisementBanner | null
@@ -26,6 +28,7 @@ interface AdvertiseFormProps {
 
 const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
     const router = useRouter()
+      const [loading, setLoading] = useState(false);
     const position = initialData?.position?.toLowerCase() === "single banner"
         ? "single"
         : "mesh"
@@ -47,7 +50,7 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
     })
 
     const onSubmit = async (values: AdvertiseBannerFormValues) => {
-
+setLoading(true)
         try {
             const formData = new FormData()
             formData.append("position", values.position)
@@ -71,6 +74,8 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
             router.push("/dashboard/advertisement")
         } catch (error: any) {
             toast.error(`Failed: ${error.message || "Unable to save banner"}`)
+        } finally{
+            setLoading(false)
         }
     }
 
@@ -194,8 +199,9 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                     type="submit"
                     form="advertise-banner-form"
                     className="text-white rounded-sm"
+                    disabled={loading}
                 >
-                    Save Changes
+                    {loading ? <Spinner /> :  "Save Changes" }
                 </Button>
             </div>
         </>

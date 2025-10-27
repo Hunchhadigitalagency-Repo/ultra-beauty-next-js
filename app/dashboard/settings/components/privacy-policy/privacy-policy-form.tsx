@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { createPrivacyPolicy } from "@/lib/api/settings/privacy-policy-api";
 import { formatDateForInput } from "@/lib/date-time-utils";
 import { handleError } from "@/lib/error-handler";
@@ -22,6 +23,7 @@ import {
 import { IPrivacyPolicy } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -30,6 +32,8 @@ interface HelpAndSupportFormProps {
 }
 
 const PrivacyPolicyForm = ({ initialData }: HelpAndSupportFormProps) => {
+    const [loading, setLoading] = useState(false);
+  
   const form = useForm<PrivacyPolicyValues>({
     resolver: zodResolver(privacyPolicySchema),
     defaultValues: initialData
@@ -50,6 +54,7 @@ const PrivacyPolicyForm = ({ initialData }: HelpAndSupportFormProps) => {
   });
 
   const onSubmit = async (data: PrivacyPolicyValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("topic", data.topic);
@@ -63,6 +68,8 @@ const PrivacyPolicyForm = ({ initialData }: HelpAndSupportFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -152,8 +159,9 @@ const PrivacyPolicyForm = ({ initialData }: HelpAndSupportFormProps) => {
           type="submit"
           form="setting-social-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

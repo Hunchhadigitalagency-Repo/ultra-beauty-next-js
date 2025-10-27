@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import useFetchData from "@/hooks/use-fetch";
 
@@ -34,7 +35,7 @@ import { INewsletters } from "@/types/cms";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -45,6 +46,7 @@ interface NewsletterFormProps {
 const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit Newsletter" : "Add Newsletter";
   const isEditMode = Boolean(initialData);
@@ -82,6 +84,7 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
   }, [isEditMode, newsLetter, initialData, form]);
 
   const onSubmit = async (data: NewsletterFormValues) => {
+    setLoading(true)
     try {
       if (initialData) {
         const response = await updateNewsletter(initialData.id, data);
@@ -100,6 +103,8 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -247,9 +252,10 @@ const NewsletterForm = ({ initialData }: NewsletterFormProps) => {
         <Button
           type="submit"
           form="newsletter-form"
+          disabled={loading}
           className="text-white rounded-sm"
         >
-          Save
+          {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

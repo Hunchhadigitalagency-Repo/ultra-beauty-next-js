@@ -15,8 +15,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { createTeam, updateTeam } from "@/lib/api/cms/team-api"
+import { Spinner } from "@/components/ui/spinner"
 
 interface TeamFormProps {
   initialData?: ITeam | null
@@ -26,6 +27,7 @@ const TeamForm = ({ initialData }: TeamFormProps) => {
   const router = useRouter()
   const title = initialData ? "Edit Team" : "Add Team"
   const isEditMode = Boolean(initialData)
+  const [loading, setLoading] = useState(false);
 
   const emptyDefaults: TeamFormValues = {
     name: "",
@@ -62,6 +64,7 @@ const TeamForm = ({ initialData }: TeamFormProps) => {
   }, [isEditMode, initialData, form])
 
   const onSubmit = async (data: TeamFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData()
       formData.append("name", data.name)
@@ -91,6 +94,8 @@ const TeamForm = ({ initialData }: TeamFormProps) => {
       }
     } catch (error) {
       handleError(error, toast)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -255,8 +260,8 @@ const TeamForm = ({ initialData }: TeamFormProps) => {
       </Card>
 
       <div className="flex justify-end pt-4">
-        <Button type="submit" form="team-form" className="text-white rounded-sm">
-          Save
+        <Button type="submit" form="team-form" className="text-white rounded-sm" disabled={loading}>
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>
