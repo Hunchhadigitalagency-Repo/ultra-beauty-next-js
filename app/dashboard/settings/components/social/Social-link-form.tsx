@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createSocialLink,
@@ -25,6 +26,7 @@ import { socialSchema, SocialValues } from "@/schemas/settings/social-schema";
 import { ISocial } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -34,6 +36,7 @@ interface SocialFromProps {
 
 const SocialForm = ({ initialData }: SocialFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<SocialValues>({
     resolver: zodResolver(socialSchema),
@@ -53,6 +56,7 @@ const SocialForm = ({ initialData }: SocialFromProps) => {
   });
 
   const onSubmit = async (data: SocialValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("url", data.socialUrl);
@@ -80,6 +84,8 @@ const SocialForm = ({ initialData }: SocialFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -192,8 +198,9 @@ const SocialForm = ({ initialData }: SocialFromProps) => {
           type="submit"
           form="setting-social-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save"}
         </Button>
       </div>
     </>

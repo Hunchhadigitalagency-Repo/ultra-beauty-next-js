@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { createBrand, updateBrand } from "@/lib/api/settings/brand-api";
 import { handleError } from "@/lib/error-handler";
@@ -24,6 +25,7 @@ import { brandSchema, BrandValues } from "@/schemas/settings/brand-schema";
 import { IBrand } from "@/types/Settings";
 import { ESettings, ETypes } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -33,6 +35,7 @@ interface BrandFromProps {
 
 const BrandForm = ({ initialData }: BrandFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<BrandValues>({
     resolver: zodResolver(brandSchema),
@@ -52,6 +55,7 @@ const BrandForm = ({ initialData }: BrandFromProps) => {
   });
 
   const onSubmit = async (data: BrandValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("brand_name", data.brandName);
@@ -79,6 +83,8 @@ const BrandForm = ({ initialData }: BrandFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -200,8 +206,9 @@ const BrandForm = ({ initialData }: BrandFromProps) => {
           type="submit"
           form="setting-brand-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading ? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

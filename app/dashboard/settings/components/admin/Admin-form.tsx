@@ -30,6 +30,7 @@ import { setActiveSetting } from "@/redux/features/setting-slice";
 import { ESettings } from "@/types/table";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface AdminFromProps {
   initialData: IAdmin | null;
@@ -37,6 +38,7 @@ interface AdminFromProps {
 
 const AdminForm = ({ initialData }: AdminFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -65,6 +67,7 @@ const AdminForm = ({ initialData }: AdminFromProps) => {
   });
 
   const onSubmit = async (data: AdminProfileValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("first_name", data.adminFirstName);
@@ -97,6 +100,8 @@ const AdminForm = ({ initialData }: AdminFromProps) => {
     } catch (error: any) {
       setPasswordErr(error.response.data.password[0])
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -334,8 +339,9 @@ const AdminForm = ({ initialData }: AdminFromProps) => {
           type="submit"
           form="setting-admin-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

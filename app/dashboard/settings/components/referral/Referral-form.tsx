@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createReferral,
@@ -26,6 +27,7 @@ import {
 import { IReferral } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -35,23 +37,25 @@ interface ReferralFromProps {
 
 const ReferralForm = ({ initialData }: ReferralFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<ReferralValues>({
     resolver: zodResolver(referralSchema),
     defaultValues: initialData
       ? {
-          name: initialData.name,
-          point_amount: initialData.point_amount,
-          is_active: initialData.is_active ?? false,
-        }
+        name: initialData.name,
+        point_amount: initialData.point_amount,
+        is_active: initialData.is_active ?? false,
+      }
       : {
-          name: "",
-          point_amount: 0,
-          is_active: false,
-        },
+        name: "",
+        point_amount: 0,
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: ReferralValues) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -75,6 +79,8 @@ const ReferralForm = ({ initialData }: ReferralFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -167,8 +173,9 @@ const ReferralForm = ({ initialData }: ReferralFromProps) => {
           type="submit"
           form="setting-referral-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save"}
         </Button>
       </div>
     </>

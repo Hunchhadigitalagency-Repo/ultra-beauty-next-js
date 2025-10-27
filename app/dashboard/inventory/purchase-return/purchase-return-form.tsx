@@ -26,6 +26,7 @@ import SingleFileUploader from "@/components/common/ImageUploader/file-uploader"
 import { useRouter } from "next/navigation";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ProductOption {
   id: number;
@@ -233,6 +234,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       quantity: 0,
     });
   };
+  const [loading, setLoading] = useState(false);
 
   const removeProduct = (index: number) => {
     if (fields.length > 1) {
@@ -242,7 +244,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
 
   const onSubmit = async (data: PurchaseReturnFormValues) => {
     const formData = new FormData();
-
+    setLoading(true)
     data.products.forEach((prod, index) => {
       formData.append(`product[${index}]`, prod.product.toString());
       formData.append(`quantity[${index}]`, prod.quantity?.toString() || '');
@@ -264,6 +266,8 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
     } catch (error: any) {
       toast.error(`Error updating inventory: ${error.message}`);
       console.error(error);
+    } finally {
+      setLoading(false)
     }
 
   };
@@ -335,9 +339,10 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
                 <Button
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
+                  disabled={loading}
                   className=" text-white font-semibold px-8 py-3 rounded-lg transition-colors"
                 >
-                  Save
+                  {loading ? <Spinner /> : "Save"}
                 </Button>
               </div>
 

@@ -29,12 +29,13 @@ import { useAppDispatch } from "@/redux/hooks";
 import { BlogFormValues, blogSchema } from "@/schemas/cms/blogs-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { IBlog } from "@/types/cms";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
 import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface BlogFormProps {
   initialData: IBlog | null;
@@ -48,6 +49,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
   const title = isEditMode ? "Edit Blog" : "Add Blog";
   const blogUrl = isEditMode ? `/cms/blogs/${initialData?.slug}` : "";
   const { data: blogData, loading: isLoading } = useFetchData<IBlog>(blogUrl);
+  const [loading, setLoading] = useState(false);
 
   const emptyDefaults = {
     title: "",
@@ -89,6 +91,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
   }, [isEditMode, blogData, initialData, form]);
 
   const onSubmit = async (data: BlogFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("title", data.title);
@@ -131,6 +134,8 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -401,8 +406,9 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
           type="submit"
           form="blogs-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading ? <Spinner /> : "Save " }
         </Button>
       </div>
     </>

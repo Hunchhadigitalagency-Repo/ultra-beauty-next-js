@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createPreferences,
@@ -28,6 +29,7 @@ import {
 import { IPreference } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -48,6 +50,8 @@ const colorKeys = [
 
 const PreferenceForm = ({ initialData }: PreferenceFormProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<PreferenceValues>({
     resolver: zodResolver(preferenceSchema),
     defaultValues: initialData
@@ -79,7 +83,7 @@ const PreferenceForm = ({ initialData }: PreferenceFormProps) => {
   });
 
   const onSubmit = async (data: PreferenceValues) => {
-
+    setLoading(true)
     try {
       let transformedColors;
 
@@ -116,6 +120,8 @@ const PreferenceForm = ({ initialData }: PreferenceFormProps) => {
     } catch (error) {
       console.error(error);
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -220,8 +226,9 @@ const PreferenceForm = ({ initialData }: PreferenceFormProps) => {
           type="submit"
           form="setting-preference-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading ? <Spinner /> : "Save"}
         </Button>
       </div>
     </>

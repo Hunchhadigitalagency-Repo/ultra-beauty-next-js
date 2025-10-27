@@ -44,6 +44,7 @@ import { Search, MapPin, Loader2 } from "lucide-react";
 
 import L from "leaflet";
 import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -91,6 +92,7 @@ const InventoryForm = ({ initialData }: InventoryFromProps) => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [showResults, setShowResults] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   // Address search states
   const [addressQuery, setAddressQuery] = useState<string>("");
@@ -256,7 +258,7 @@ const InventoryForm = ({ initialData }: InventoryFromProps) => {
   }
 
   const onSubmit = async (data: InventoryLocationValues): Promise<void> => {
-
+setLoading(true)
     const submissionData = {
       inventory_name: data.inventory_name,
       inventory_address: data.inventory_address,
@@ -288,6 +290,8 @@ const InventoryForm = ({ initialData }: InventoryFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -527,8 +531,9 @@ const InventoryForm = ({ initialData }: InventoryFromProps) => {
           type="submit"
           form="setting-inventory-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading ? <Spinner /> : "Save Changes"}
         </Button>
       </div>
     </>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeaderBackCard from "@/components/common/cards/header-back-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,12 +43,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Spinner } from "@/components/ui/spinner";
 
 interface RolesFormProps {
   initialData: IRolesPermissions | null;
 }
 
 const RolesForm = ({ initialData }: RolesFormProps) => {
+  const [loading, setLoading] = useState(false);
 
 
   const dispatch = useAppDispatch();
@@ -92,7 +94,7 @@ const RolesForm = ({ initialData }: RolesFormProps) => {
   }, [initialData, form]);
 
   const onSubmit = async (data: RolesValues) => {
-    console.log('this is the data', data)
+setLoading(true)
     try {
       if (initialData) {
         const response = await updateRolesandPermissions(initialData.id, data);
@@ -111,6 +113,8 @@ const RolesForm = ({ initialData }: RolesFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -253,8 +257,9 @@ const RolesForm = ({ initialData }: RolesFormProps) => {
           type="submit"
           form="setting-role-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+         {loading? <Spinner /> : "Save Changes"}
         </Button>
       </div>
     </>

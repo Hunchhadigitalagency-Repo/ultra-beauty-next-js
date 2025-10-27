@@ -31,12 +31,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface FaqFormProps {
   initialData: IFaq | null;
@@ -45,7 +46,7 @@ interface FaqFormProps {
 const FaqForm = ({ initialData }: FaqFormProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const title = initialData ? "Edit FAQ's" : "Add FAQ's";
   const isEditMode = Boolean(initialData);
   const faqUrl = isEditMode ? `/cms/faqs/${initialData?.slug}` : "";
@@ -81,6 +82,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
     }
   }, [initialData, isEditMode, faqs, form])
   const onSubmit = async (data: FaqFormValues) => {
+    setLoading(true)
     const payload = {
       ...data,
       product: data.product?.map((item) => item.id.toString()) || [],
@@ -104,6 +106,8 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -243,8 +247,9 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
           type="submit"
           form="partner-company-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>
