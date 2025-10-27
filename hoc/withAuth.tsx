@@ -14,8 +14,7 @@ export default function withAuth<P extends object>(
 ) {
   return function AuthenticatedComponent(props: P) {
     const router = useRouter();
-    const { loading, isAuthenticated } = useCheckToken();
-    const { userType } = useAppSelector((state) => state.authentication);
+    const { userType, isAuth: isAuthenticated, isLoading: loading } = useAppSelector((state) => state.authentication);
 
     const [canRender, setCanRender] = useState(false);
 
