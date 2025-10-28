@@ -24,7 +24,6 @@ const FeaturedSection = () => {
 
   const { data: featuredProducts, loading, error } = useFetchData<FeaturedProductResponse[]>(`featuredproduct/`);
 
-  console.log(featuredProducts, "featuredProducts")
   const router = useRouter();
 
   const handleFeaturedProductClick = (featuredProductSlug: string) => {
