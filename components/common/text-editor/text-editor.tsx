@@ -247,6 +247,7 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
             width: 100% !important;
             max-width: 100% !important;
             overflow-x: hidden !important;
+            background-color: white;
           }
           
           .note-editing-area {
@@ -365,7 +366,7 @@ const RichTextEditor = forwardRef<HTMLDivElement, RichTextEditorProps>(
 
         <textarea
           ref={textareaRef}
-          className={`w-full ${heightClass}`}
+          className={`w-full ${heightClass} !bg-white`}
           defaultValue={value}
         />
         
