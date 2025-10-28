@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import type { ComponentType } from "react";
-import useCheckToken from "@/hooks/use-check-token";
+// import useCheckToken from "@/hooks/use-check-token";
 import { useAppSelector } from "@/redux/hooks";
 import LoadingSpinner from "@/components/common/loader/loading-spinner";
 import { EUserTypes } from "@/types";
@@ -14,8 +14,7 @@ export default function withAuth<P extends object>(
 ) {
   return function AuthenticatedComponent(props: P) {
     const router = useRouter();
-    const { loading, isAuthenticated } = useCheckToken();
-    const { userType } = useAppSelector((state) => state.authentication);
+    const { userType, isAuth: isAuthenticated, isLoading: loading } = useAppSelector((state) => state.authentication);
 
     const [canRender, setCanRender] = useState(false);
 

@@ -39,6 +39,7 @@ export const authentication = createSlice({
   reducers: {
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
+      state.isAuth = true;
     },
     setRefreshToken: (state, action) => {
       state.refreshToken = action.payload;
