@@ -2,6 +2,7 @@
 import { setAccessToken } from "@/redux/features/authentication-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import apiBase from "@/services/api-base-instance";
+import { setAuthToken } from "@/services/api-instance";
 import { useState, useCallback, useEffect } from "react";
 
 const useCheckToken = () => {
@@ -14,6 +15,7 @@ const useCheckToken = () => {
 
   const checkToken = useCallback(async () => {
     try {
+      setAuthToken(accessToken);
       const response = await apiBase.post("/token/verify/", {
         token: accessToken,
       });
@@ -28,6 +30,7 @@ const useCheckToken = () => {
           });
           if (refreshResponse.status === 200) {
             dispatch(setAccessToken(refreshResponse.data.access));
+            setAuthToken(refreshResponse.data.access);
             setIsAuthenticated(true);
           } else {
             setIsAuthenticated(false);
