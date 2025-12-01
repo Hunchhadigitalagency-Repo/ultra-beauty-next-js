@@ -25,13 +25,12 @@ const PAYMENT_GATEWAYS = [
 
 const Payment: React.FunctionComponent = () => {
 
-  const shippingFee = 150
 
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null);
-  const { cartItem, shippingDetails, voucherData } = useAppSelector(state => state.cart);
+  const { cartItem, shippingDetails, voucherData, shippingFee } = useAppSelector(state => state.cart);
   const carts_id = cartItem.map(item => item.id);
 
   const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price)), 0);
@@ -42,7 +41,7 @@ const Payment: React.FunctionComponent = () => {
   }, 0);
 
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const Total = subTotal + shippingFee + taxAmount - voucherDiscount;
+  const Total = subTotal + (parseFloat(shippingFee) || 0) + taxAmount - voucherDiscount;
 
   const handleConfirmOrder = async () => {
     const res = await addOrders({
@@ -191,7 +190,7 @@ const Payment: React.FunctionComponent = () => {
         <div>
           <OrderSummary
             shippingDetails={shippingDetails}
-            shippingFee={shippingFee}
+            shippingFee={shippingFee as any}
             totalItems={cartItem.length}
             applyVoucher={false}
             isCheckout
