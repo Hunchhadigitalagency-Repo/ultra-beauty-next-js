@@ -3,8 +3,11 @@ import { useEffect } from "react";
 
 export default function TestPayment() {
     const BUNDLE_URL = process.env.NEXT_PUBLIC_BUNDLE_URL;
-if(!BUNDLE_URL) return ;
     useEffect(() => {
+        if (!BUNDLE_URL) {
+            console.log('no build url found')
+            return;
+        }
         const script = document.createElement('script');
         script.src = BUNDLE_URL;
         script.async = true;
