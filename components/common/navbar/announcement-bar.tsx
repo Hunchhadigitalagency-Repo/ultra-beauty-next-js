@@ -48,7 +48,6 @@ export default function AnnouncementBar() {
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { data } = useFetchData<INavigationInfo[]>('/cms/navigation-infos-dropdown/')
-  console.log('this is that data', data);
 
   const router = useRouter()
 

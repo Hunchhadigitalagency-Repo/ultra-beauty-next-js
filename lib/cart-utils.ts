@@ -1,7 +1,6 @@
 import { CartItems } from "@/types/cart"
 
 export const formatPrice = (price: number): string => {
-  console.log('---------',price);
   
   return `Nrs. ${price.toLocaleString()}`
 }
