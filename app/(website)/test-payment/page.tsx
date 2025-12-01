@@ -1,17 +1,23 @@
-import Head from "next/head";
+"use client"
+import { useEffect } from "react";
 
 export default function TestPayment() {
-  return (
-    <>
-      <Head>
-        <title>Ultra Beauty Payment Page</title>
-        <script
-          defer
-          src="https://minio.finpos.global/getpay-cdn/webcheckout/v5/bundle.js"
-        ></script>
-      </Head>
+    const BUNDLE_URL = process.env.NEXT_PUBLIC_BUNDLE_URL;
+if(!BUNDLE_URL) return ;
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = BUNDLE_URL;
+        script.async = true;
+        script.onload = () => console.log('GetPay script loaded successfully');
+        document.body.appendChild(script);
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
-      <div id="checkout"></div>
-    </>
-  );
+    return (
+        <>
+            <div id="checkout"></div>
+        </>
+    );
 }
