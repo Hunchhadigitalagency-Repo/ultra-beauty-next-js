@@ -22,6 +22,7 @@ const PAYMENT_GATEWAYS = [
   { name: 'Get Pay (Card)', image: GetPay, value: 'getpay' },
 ];
 
+const imageUrl = "https://ultrabeauty.blr1.digitaloceanspaces.com/media/company_favicons/pink_icon.png"
 
 const Payment: React.FunctionComponent = () => {
 
@@ -45,7 +46,6 @@ const Payment: React.FunctionComponent = () => {
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
   const Total = subTotal + (parseFloat(shippingFee) || 0) + taxAmount - voucherDiscount;
 
-  console.log(cartItem);
   const BUNDLE_URL = process.env.NEXT_PUBLIC_BUNDLE_URL;
 
 
@@ -92,14 +92,14 @@ const Payment: React.FunctionComponent = () => {
       toast.error("Payment system is not ready yet.");
       return;
     }
-    if(!shippingDetails || !orderId || !cartItem){
+    if (!shippingDetails || !orderId || !cartItem) {
       toast.error("Missing required details.");
       return;
     }
 
     const options: any = {
       userInfo: {
-        name: shippingDetails?.firstName +  shippingDetails?.lastName,
+        name: shippingDetails?.firstName + shippingDetails?.lastName,
         email: shippingDetails.email,
         state: shippingDetails.province,
         country: "Nepal",
@@ -113,7 +113,7 @@ const Payment: React.FunctionComponent = () => {
       websiteDomain: process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
       price: Total,
       businessName: process.env.NEXT_PUBLIC_BUSINESS_NAME,
-      imageUrl: process.env.NEXT_PUBLIC_LOGO_URL,
+      imageUrl: imageUrl,
       currency: "NPR",
 
       prefill: {
@@ -124,7 +124,7 @@ const Payment: React.FunctionComponent = () => {
         address: true,
         country: true
       },
-      
+
       disableFields: {
         address: true,
         zipcode: true,
@@ -147,7 +147,6 @@ const Payment: React.FunctionComponent = () => {
       },
       onError: (error: any) => {
         toast.error(error?.error);
-        console.log("Error details:", error);
       },
     };
 
@@ -161,7 +160,7 @@ const Payment: React.FunctionComponent = () => {
       const script = document.createElement('script');
       script.src = BUNDLE_URL || '';
       script.async = true;
-      script.onload = () => console.log('GetPay script loaded successfully');
+      script.onload = () => {};
       document.body.appendChild(script);
       return () => {
         document.body.removeChild(script);

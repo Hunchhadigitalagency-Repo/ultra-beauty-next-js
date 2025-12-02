@@ -99,7 +99,6 @@ const TestCheckoout = () => {
             },
             onError: (error: any) => {
                 toast.error(error?.error);
-                console.log("Error details:", error);
             },
         };
 

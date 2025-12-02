@@ -27,19 +27,15 @@ const Success: React.FunctionComponent = () => {
 
             try {
                 const decoded = JSON.parse(atob(encodedData));
-                console.log(decoded);
                 const { id, oprSecret } = decoded;
                 const oprKey = process.env.NEXT_PUBLIC_OPR_KEY || "";
 
                 const clientHash = await generateClientHash(oprKey, id);
-                console.log(id, "\n", oprSecret, "\n", clientHash);
 
                 if (clientHash !== oprSecret) {
                     console.error("⚠️ Payment hash mismatch — possible tampering!");
                     return;
                 }
-
-                console.log("✔️ Payment verified successfully!");
 
                 const response = await updateOrder(
                     orderId,
