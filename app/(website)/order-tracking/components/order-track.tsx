@@ -23,7 +23,6 @@ const OrderTrack: React.FunctionComponent = () => {
         return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     }
 
-    console.log('thisis the daatu', logs[logs.length - 1]?.title);
 
 
     return (

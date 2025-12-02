@@ -95,8 +95,7 @@ export default function MyTestimonials() {
 
             <Form {...form}>
                 {/* Name */}
-                <form onSubmit={form.handleSubmit(onSubmit, err => console.log('err', err)
-                )} className="space-y-5">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                     <FormField
                         control={form.control}
                         name="name"

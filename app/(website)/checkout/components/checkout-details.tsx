@@ -12,6 +12,8 @@ import OrderSummary from "../../cart/components/order-summary";
 import { applyVoucher, getCartItemsByIds } from "@/lib/api/cart/cart-apis";
 import { setVoucherData } from "@/redux/features/cart-slice";
 import { ShippingFormValues } from "@/schemas/checkout/checkout-schema";
+import { handleError } from "@/lib/error-handler";
+import { toast } from "sonner";
 
 
 const CheckoutDetails: React.FunctionComponent = () => {
@@ -32,7 +34,7 @@ const CheckoutDetails: React.FunctionComponent = () => {
         const response = await getCartItemsByIds(cartIds);
         setCartData(response.data);
       } catch (error) {
-        console.log("Error", error);
+        handleError(error, toast)
       }
     };
     fetchCartData();

@@ -16,7 +16,6 @@ const VarietyTabContent: React.FC<VarietyTabContentProps> = ({ categoryId }) => 
     `/products/?category=${categoryId}`,
     3
   );
-  console.log("this is the product", products)
   if (loading) {
     return (
       <div className="flex flex-nowrap overflow-x-auto gap-6 scrollbar-hide">
