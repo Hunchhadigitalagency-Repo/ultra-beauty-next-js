@@ -51,6 +51,8 @@ export interface LocationCardProps {
 
 export interface CartItem {
   id: number,
+  image: string,
+  name: string,
   quantity: number,
   price: string,
   discount_percentage?: string,
