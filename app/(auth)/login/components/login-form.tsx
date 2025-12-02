@@ -64,13 +64,9 @@ export default function UserLoginForm() {
           res.data?.user?.profile?.user_type === EUserTypes.ADMIN ||
           res.data?.user?.profile?.user_type === EUserTypes.SUPER_ADMIN
         ) {
-          console.log(
-            "I am a admin or superadmin: ",
-            res.data?.user?.profile?.user_type
-          );
+   
           router.push("/dashboard/home");
         } else {
-          console.log("I am a user: ", res.data?.user?.profile?.user_type);
           dispatch(setIsLoggedIn(true));
           router.push("/");
         }

@@ -61,7 +61,6 @@ export default function HeroSection() {
   }, [api, isHovered]);
 
 const handleBannerClick = (slide: HeroSectionResponse) => {
-  console.log(slide, "category clicked");
 
   if (slide.categories && slide.categories?.length > 0) {
     dispatch(toggleCategory({ id: slide.categories?.[0].id, checked: true }))

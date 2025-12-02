@@ -52,7 +52,6 @@ export default function UserRegisterForm() {
       setLoading(true);
 
       const res = await register(data);
-      console.log(res);
       if (res.status === 201) {
         dispatch(setProfileDetails(res.data?.user));
         toast.success("Registration Successful", {

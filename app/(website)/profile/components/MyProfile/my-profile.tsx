@@ -48,7 +48,6 @@ const MyProfile: React.FunctionComponent = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  console.log('img source', imgSource);
   
 
   return (

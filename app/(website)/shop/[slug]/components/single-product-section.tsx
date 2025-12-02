@@ -48,7 +48,6 @@ const SingleProductSection: React.FunctionComponent = () => {
     );
   };
   const allImage = allImages(images, variants)
-  console.log(allImage);
   
   const getActiveVariantId = (id: number) => {
     const image = variants.find(item => item.id === id)?.item_image;

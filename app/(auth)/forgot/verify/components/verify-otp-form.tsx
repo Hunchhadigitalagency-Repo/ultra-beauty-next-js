@@ -38,7 +38,6 @@ export default function VerifyOtpForm() {
   });
 
   const onSubmit = async (data: VerifyOtpFormValue) => {
-    console.log(data);
     try {
       setLoading(true);
       const res = await verifyOtpApi(data);
