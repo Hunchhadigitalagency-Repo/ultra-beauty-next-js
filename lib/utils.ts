@@ -255,3 +255,14 @@ export const generateOrderStatus = (orderStatusLogs: IOrderLog[]) => {
 
   return { logs };
 };
+
+export const generateClientHash = async (oprKey: string, id: string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(oprKey + id);
+
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashBin = String.fromCharCode(...hashArray);
+
+    return btoa(hashBin);  // Base64 encode
+};
