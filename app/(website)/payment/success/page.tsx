@@ -21,7 +21,7 @@ const Success: React.FunctionComponent = () => {
         hasOrdered.current = true;
 
         const handleOrder = async () => {
-            const encodedData = searchParams.get("data");
+            const encodedData = searchParams.get("token");
             if (!encodedData || !orderId) return;
 
             try {

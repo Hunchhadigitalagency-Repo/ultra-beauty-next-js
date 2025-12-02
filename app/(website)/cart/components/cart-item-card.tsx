@@ -76,6 +76,8 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
     dispatch(toggleCartItem({
       id: item.id,
       quantity: item.quantity,
+      name: item.product.name,
+      image: item.product.images?.[0].file,
       price: (item.quantity * discountedPrice).toFixed(2),
       discount_percentage: item.product.discount_percentage,
       tax_applied: item.product.tax_applied,

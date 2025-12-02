@@ -33,11 +33,11 @@ const TestCheckoout = () => {
         });
 
         html += `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: #ddd; margin-top: 20px; border-radius: 5px;" class="total">
-        <label>Total:</label>
-        <span>Rs ${totalAmount.toFixed(2)}</span>
-    </div>
-    </div>`;
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: #ddd; margin-top: 20px; border-radius: 5px;" class="total">
+            <label>Total:</label>
+            <span>Rs ${totalAmount.toFixed(2)}</span>
+        </div>
+        </div>`;
 
         return html;
     };

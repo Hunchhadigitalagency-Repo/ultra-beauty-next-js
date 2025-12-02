@@ -30,6 +30,8 @@ export default function ShoppingCart() {
       quantity: item.quantity,
       discount_percentage: item.product.discount_percentage,
       tax_applied: item.product.tax_applied,
+      image: item.product.images?.[0].file,
+      name: item.product.name,
     }));
   }, [CartItems]);
 
