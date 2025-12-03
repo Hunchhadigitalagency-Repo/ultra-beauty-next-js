@@ -151,7 +151,7 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">            ultrabeautybrands@gmail.com
+                  <span className="text-sm text-white white-pre-space">            ultrabeautybrands<br/>@gmail.com
                   </span>
                 </div>
                 <div className="flex items-center gap-4">
@@ -233,7 +233,7 @@ const Footer: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <Mail className="flex-shrink-0 w-4 h-4 text-pink-600" />
-                <span className="text-sm text-white">            ultrabeautybrands@gmail.com
+                <span className="text-sm text-white beark-words">            ultrabeautybrands@gmail.com
                 </span>
               </div>
               <div className="flex items-center space-x-3">
