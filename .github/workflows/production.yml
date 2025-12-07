@@ -8,88 +8,88 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+          cache: "npm"
 
-    - name: Install dependencies (with dev)
-      run: npm ci
+      - name: Install dependencies (with dev)
+        run: npm ci
 
-    - name: Build application
-      env:
-        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
-        NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
-        NEXT_PUBLIC_ESEWA_SECRET_KEY: ${{ secrets.NEXT_PUBLIC_ESEWA_SECRET_KEY }}
-      run: npm run build
+      - name: Build application
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+          NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
+          NEXT_PUBLIC_ESEWA_SECRET_KEY: ${{ secrets.NEXT_PUBLIC_ESEWA_SECRET_KEY }}
+        run: npm run build
 
-    - name: Prune devDependencies
-      run: npm prune --production
+      - name: Prune devDependencies
+        run: npm prune --production
 
-    - name: Create deployment package
-      run: |
-        mkdir deployment-package
+      - name: Create deployment package
+        run: |
+          mkdir deployment-package
 
-        # Copy runtime only
-        cp -r .next deployment-package/
-        cp -r public deployment-package/ || true
-        cp -r assets deployment-package/ || true
+          # Copy runtime only
+          cp -r .next deployment-package/
+          cp -r public deployment-package/ || true
+          cp -r assets deployment-package/ || true
 
-        # Keep node_modules (production-only after prune)
-        cp -r node_modules deployment-package/
+          # Keep node_modules (production-only after prune)
+          cp -r node_modules deployment-package/
 
-        # Copy configs
-        cp package.json deployment-package/
-        cp ecosystem.config.js deployment-package/
-        cp next.config.ts deployment-package/ 
+          # Copy configs
+          cp package.json deployment-package/
+          cp ecosystem.config.js deployment-package/
+          cp next.config.ts deployment-package/ 
 
-        # Create tarball
-        tar -czf deployment.tar.gz -C deployment-package .
+          # Create tarball
+          tar -czf deployment.tar.gz -C deployment-package .
 
-    - name: Upload deployment package
-      uses: appleboy/scp-action@v0.1.3
-      with:
-        host: ${{ secrets.DROPLET_IP }}
-        username: ${{ secrets.DROPLET_USER }}
-        password: ${{ secrets.DROPLET_PASSWORD }}
-        source: "deployment.tar.gz"
-        target: "/tmp/"
+      - name: Upload deployment package
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          source: "deployment.tar.gz"
+          target: "/tmp/"
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.DROPLET_IP }}
-        username: ${{ secrets.DROPLET_USER }}
-        password: ${{ secrets.DROPLET_PASSWORD }}
-        script: |
-          set -e
-          cd /mnt/volumes_001/projects/frontend
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          script: |
+            set -e
+            cd /mnt/volumes_001/projects/frontend
 
-          # Stop PM2 process
-          pm2 stop ultra-beauty-frontend-production 2>/dev/null || true
+            # Stop PM2 process
+            pm2 stop ultra-beauty-frontend-production 2>/dev/null || true
 
-          # Extract new deployment
-          rm -rf .next node_modules public assets || true
-          tar -xzf /tmp/deployment.tar.gz -C .
+            # Extract new deployment
+            rm -rf .next node_modules public assets || true
+            tar -xzf /tmp/deployment.tar.gz -C .
 
-          # Restart PM2
-          if pm2 describe ultra-beauty-frontend-production > /dev/null; then
-            pm2 restart ecosystem.config.js --update-env
-          else
-            pm2 start ecosystem.config.js --name ultra-beauty-frontend-production
-          fi
+            # Restart PM2
+            if pm2 describe ultra-beauty-frontend-production > /dev/null; then
+              pm2 restart ecosystem.config.js --update-env
+            else
+              pm2 start ecosystem.config.js --name ultra-beauty-frontend-production
+            fi
 
-          # Clean up
-          rm -f /tmp/deployment.tar.gz
+            # Clean up
+            rm -f /tmp/deployment.tar.gz
 
-          echo "🚀 Production deployment completed!"
+            echo "🚀 Production deployment completed!"
