@@ -4,8 +4,8 @@ import React from 'react';
 import { CartConstants } from './create-order-constant';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { FcNext } from 'react-icons/fc';
 import { clearProduct } from '@/redux/features/checkout-slice';
+import { HiArrowRight } from 'react-icons/hi2';
 
 interface Props {
     isShipping: boolean;
@@ -35,7 +35,7 @@ const OrderItems = ({ isShipping }: Props) => {
                 {
                     !isShipping &&
                     <Button onClick={() => router.push('/dashboard/orders/add-orders/shipping')} className='px-4 py-2'>
-                        Next <FcNext className='text-white' />
+                        Next <HiArrowRight className='text-white' />
                     </Button>
                 }
             </div>

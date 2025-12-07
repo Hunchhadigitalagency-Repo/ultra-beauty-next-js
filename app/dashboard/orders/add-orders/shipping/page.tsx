@@ -3,7 +3,6 @@
 import React, {  useState } from "react";
 
 import { toast } from "sonner";
-import {    ShippingFormValues } from "@/schemas/checkout/checkout-schema";
 import { getVoucherDetails } from "@/lib/api/order/voucher-apis";
 import { calculateSubtotal, calculateTaxAmount, calculateTotalItems, } from "@/lib/cart-utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -11,6 +10,7 @@ import { setVoucher } from "@/redux/features/checkout-slice";
 import OrderItems from "../components/order-items";
 import OrderSummary from "../components/order-summery-dashboard";
 import ShippingForm from "../components/dashboard-shiping-form";
+import { ShippingFormValuesAdmin } from "@/schemas/checkout/checkout-dashboard";
 
 
 
@@ -19,7 +19,7 @@ const CheckoutDetails = () => {
     const dispatch = useAppDispatch()
 
     const [voucherCode, setVoucherCode] = useState("");
-    const [shippingData, setShippingData] = useState<Partial<ShippingFormValues>>(
+    const [shippingData, setShippingData] = useState<Partial<ShippingFormValuesAdmin>>(
         {}
     );
 
@@ -62,6 +62,7 @@ const CheckoutDetails = () => {
         ? (voucher?.coupon?.discount_percentage / 100) * subtotal
         : 0;
     const total =  subtotal + taxAmount - discount;
+console.log(selectedItems, totalItems, subtotal, taxAmount, discount, total);
 
     return (
         <section className="space-y-4">
@@ -86,13 +87,13 @@ const CheckoutDetails = () => {
                         onVoucherCodeChange={setVoucherCode}
                         onApplyVoucher={handleApplyVoucher}
                         isCheckout={true}
-                        // products={productItems.map((item) => ({
-                        //     id: item.id,
-                        //     name: item.name,
-                        //     quantity: item.quantity,
-                        //     price: item.currentPrice,
-                        //     total: item.currentPrice * item.quantity,
-                        // }))}
+                        products={productItems.map((item: any) => ({
+                            id: item.id,
+                            name: item.name,
+                            quantity: item.quantity,
+                            price: item.currentPrice,
+                            total: item.currentPrice * item.quantity,
+                        }))}
                     />
                 </div>
             </div>

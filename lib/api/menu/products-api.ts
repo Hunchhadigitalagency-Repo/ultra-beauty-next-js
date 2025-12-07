@@ -6,7 +6,7 @@ export const createProduct = async (data: any) => {
 }
 
 export const updateProduct = async (id: number | string, data: any) => {
-    const response = await api.put(`/products/${id}/`, data);
+    const response = await api.patch(`/products/${id}/`, data);
     return response;
 }
 

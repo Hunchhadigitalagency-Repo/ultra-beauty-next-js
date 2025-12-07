@@ -5,9 +5,27 @@ import TableActions from "@/components/common/table/table-actions";
 import { Col, ETypes } from "@/types/table";
 import { IDashboardBanner } from "@/types/banner";
 import { setSelectedData } from "@/redux/features/authentication-slice";
+import Image from "next/image";
 
 export const BannerConstant = (dispatch: AppDispatch): Col<IDashboardBanner>[] => {
   return [
+    {
+      title: "NAME",
+      render: (data: IDashboardBanner) => (
+        <div className="flex items-center gap-3">
+          <div className="w-16 h-16 rounded overflow-hidden bg-gray-100 flex-shrink-0">
+            <Image
+              src={data.image || "/placeholder.svg?height=40&width=40"}
+              alt={data.title}
+              width={40}
+              height={40}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <span className="text-xs text-foreground">{data.banner_type}</span>
+        </div>
+      ),
+    },
     {
       title: "BANNER TYPE",
       render: (data: IDashboardBanner) => (
@@ -15,10 +33,10 @@ export const BannerConstant = (dispatch: AppDispatch): Col<IDashboardBanner>[] =
       ),
     },
 
-    {
-      title: "TITLE",
-      render: (data: IDashboardBanner) => <span>{data.title}</span>,
-    },
+    // {
+    //   title: "TITLE",
+    //   render: (data: IDashboardBanner) => <span>{data.title}</span>,
+    // },
     {
       title: "PAGE",
       render: (data: IDashboardBanner) => {

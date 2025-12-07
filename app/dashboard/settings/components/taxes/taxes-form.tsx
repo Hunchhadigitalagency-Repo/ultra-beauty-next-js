@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { createTax, updateTax } from "@/lib/api/settings/tax-api";
 import { handleError } from "@/lib/error-handler";
@@ -22,6 +23,7 @@ import { taxSchema, TaxValues } from "@/schemas/settings/taxes.schema";
 import { ITaxes } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -31,23 +33,25 @@ interface TaxesFromProps {
 
 const TaxesForm = ({ initialData }: TaxesFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<TaxValues>({
     resolver: zodResolver(taxSchema),
     defaultValues: initialData
       ? {
-          tax_name: initialData.tax_name,
-          tax_percentage: initialData.tax_percentage,
-          is_active: initialData.is_active ?? false,
-        }
+        tax_name: initialData.tax_name,
+        tax_percentage: initialData.tax_percentage,
+        is_active: initialData.is_active ?? false,
+      }
       : {
-          tax_name: "",
-          tax_percentage: "",
-          is_active: false,
-        },
+        tax_name: "",
+        tax_percentage: "",
+        is_active: false,
+      },
   });
 
   const onSubmit = async (data: TaxValues) => {
+    setLoading(true)
     try {
       if (initialData) {
         const response = await updateTax(initialData.id, data);
@@ -66,6 +70,8 @@ const TaxesForm = ({ initialData }: TaxesFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -170,8 +176,9 @@ const TaxesForm = ({ initialData }: TaxesFromProps) => {
           type="submit"
           form="setting-taxes-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading ? <Spinner /> : "Save Changes"}
         </Button>
       </div>
     </>

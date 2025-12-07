@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "ultrabeauty.blr1.digitaloceanspaces.com",
+      },
+      {
+        protocol: "https",
         hostname: "randomuser.me",
       },
       {
@@ -60,6 +64,19 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "developapi.ultrabeautybrands.com",
       },
+      {
+        protocol: "https",
+        hostname: "api.ultrabeautybrands.com",
+      }
+      ,
+      {
+        protocol: "http",
+        hostname: "api.ultrabeautybrands.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ultrabeauty.blr1.digitaloceanspaces.com",
+      }
     ],
   },
 };

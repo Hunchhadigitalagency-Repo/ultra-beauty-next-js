@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { X } from "lucide-react";
@@ -12,8 +12,8 @@ import { calculateDiscountedPrice } from "@/lib/cart-utils";
 import PriceRow from "@/components/common/product/price-row";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import QuantityRow from "@/components/common/product/quantity-row";
-import { clearVoucherData, toggleCartItem, updateCartItemQuantity } from "@/redux/features/cart-slice";
-import Link from "next/link";
+import { clearVoucherData, toggleCartItem, updateCartItemQuantity, updateSelectedCartItem } from "@/redux/features/cart-slice";
+
 
 export default function CartItemCard({ item, onRemove, refetch }: CartItemCardProps) {
 
@@ -36,19 +36,30 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
       }
 
       const newQuantity = type === "increment" ? quantity + 1 : quantity - 1;
+      const discountedPrice = Number(
+        calculateDiscountedPrice(item.product.price, item.product.discount_percentage)
+      );
 
       dispatch(updateCartItemQuantity({
         id: item.id,
-        quantity: newQuantity
+        quantity: newQuantity,
       }));
 
+      if (cartItem.some(ci => ci.id === item.id)) {
+        dispatch(updateSelectedCartItem({
+          id: item.id,
+          quantity: newQuantity,
+          price: (newQuantity * discountedPrice).toFixed(2),
+        }));
+      }
+
       await updateCart(profileDetails.id, item.product.slug_name, newQuantity, item.id);
-      refetch()
+      refetch();
 
     } catch (error) {
       dispatch(updateCartItemQuantity({
         id: item.id,
-        quantity: quantity
+        quantity: quantity,
       }));
       console.error("Failed to update cart quantity:", error);
     } finally {
@@ -56,16 +67,25 @@ export default function CartItemCard({ item, onRemove, refetch }: CartItemCardPr
     }
   };
 
+
   const onCheckboxChange = () => {
+    const discountedPrice = Number(
+      calculateDiscountedPrice(item.product.price, item.product.discount_percentage)
+    );
+
     dispatch(toggleCartItem({
       id: item.id,
       quantity: item.quantity,
-      price: (parseFloat(calculateDiscountedPrice(item.product.price, item.product.discount_percentage))).toString(),
+      name: item.product.name,
+      image: item.product.images?.[0].file,
+      price: (item.quantity * discountedPrice).toFixed(2),
       discount_percentage: item.product.discount_percentage,
-      tax_applied: item.product.tax_applied
+      tax_applied: item.product.tax_applied,
     }));
-    dispatch(clearVoucherData())
-  }
+
+    dispatch(clearVoucherData());
+  };
+
 
   return (
     <div className="relative flex flex-col p-2 bg-white border-b rounded-lg md:p-4">

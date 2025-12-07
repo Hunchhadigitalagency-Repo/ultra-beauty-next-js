@@ -108,15 +108,20 @@ export const sidebarData = {
           url: "/dashboard/contacts",
           icon: Phone,
         },
-        {
-          title: SidebarItems.PARTNER_COMPANY,
-          url: "/dashboard/partner-company",
-          icon: Building2,
-        },
+        // {
+        //   title: SidebarItems.PARTNER_COMPANY,
+        //   url: "/dashboard/partner-company",
+        //   icon: Building2,
+        // },
         {
           title: SidebarItems.FAQS,
           url: "/dashboard/faqs",
           icon: HelpCircle,
+        },
+        {
+          title: SidebarItems.ADVERTISMENT,
+          url: "/dashboard/advertisement",
+          icon: Image,
         },
         {
           title: SidebarItems.NEWSLETTERS,
@@ -128,11 +133,11 @@ export const sidebarData = {
           url: "/dashboard/newsletters-clients",
           icon: Info,
         },
-        {
-          title: SidebarItems.SMS,
-          url: "/dashboard/sms",
-          icon: MessageSquare,
-        },
+        // {
+        //   title: SidebarItems.SMS,
+        //   url: "/dashboard/sms",
+        //   icon: MessageSquare,
+        // },
         {
           title: SidebarItems.BANNERS,
           url: "/dashboard/banners",
@@ -189,6 +194,7 @@ export const sidebarData = {
           title: SidebarItems.REPORTS,
           url: "#",
           icon: Files,
+          update: 'Available in Version 2.0'
         },
       ],
     },

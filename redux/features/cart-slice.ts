@@ -16,8 +16,12 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-
+        setCartItems: (state, action) => {
+            state.cartItem = action.payload
+        },
         toggleCartItem: (state, action: PayloadAction<CartItem>) => {
+            console.log('toggling cart items');
+
             const existingIndex = state.cartItem.findIndex(item => item.id === action.payload.id);
             if (existingIndex >= 0) {
                 state.cartItem.splice(existingIndex, 1);
@@ -48,6 +52,15 @@ const cartSlice = createSlice({
             const item = state.cartItem.find(item => item.id === action.payload.id);
             if (item) {
                 item.quantity = action.payload.quantity;
+            }
+        },
+
+        updateSelectedCartItem: (state, action) => {
+            const { id, quantity, price } = action.payload;
+            const existing = state.cartItem.find(item => item.id === id);
+            if (existing) {
+                existing.quantity = quantity;
+                existing.price = price;
             }
         },
 
@@ -104,6 +117,7 @@ const cartSlice = createSlice({
 });
 
 export const {
+    setCartItems,
     toggleCartItem,
     toggleAllCartItems,
     deleteCartItem,
@@ -120,7 +134,8 @@ export const {
     clearCartCount,
     decreaseCartCountBy,
     setCartCount,
-    setShippingFee
+    setShippingFee,
+    updateSelectedCartItem
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

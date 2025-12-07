@@ -19,6 +19,8 @@ import { IAdvertisementBanner } from "@/types/cms"
 import { addAdvertiseBanner, updateAdvertiseBanner } from "@/lib/api/cms/advertise-banner-apis"
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select"
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api"
+import { useState } from "react"
+import { Spinner } from "@/components/ui/spinner"
 
 interface AdvertiseFormProps {
     initialData?: IAdvertisementBanner | null
@@ -26,7 +28,8 @@ interface AdvertiseFormProps {
 
 const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
     const router = useRouter()
-    const position = initialData?.position.toLowerCase() === "single banner"
+      const [loading, setLoading] = useState(false);
+    const position = initialData?.position?.toLowerCase() === "single banner"
         ? "single"
         : "mesh"
     const form = useForm<AdvertiseBannerFormValues>({
@@ -47,12 +50,11 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
     })
 
     const onSubmit = async (values: AdvertiseBannerFormValues) => {
-        console.log(values);
-
+setLoading(true)
         try {
             const formData = new FormData()
             formData.append("position", values.position)
-            formData.append("product", values.product)
+            formData.append("product_slug", values.product)
             formData.append("is_active", values.is_active ? "true" : "false")
 
             if (values.image instanceof File) {
@@ -64,6 +66,7 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                 await updateAdvertiseBanner(initialData?.id, formData)
                 toast.success("Banner updated successfully")
             } else {
+
                 await addAdvertiseBanner(formData)
                 toast.success("Banner created successfully")
             }
@@ -71,6 +74,8 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
             router.push("/dashboard/advertisement")
         } catch (error: any) {
             toast.error(`Failed: ${error.message || "Unable to save banner"}`)
+        } finally{
+            setLoading(false)
         }
     }
 
@@ -105,8 +110,8 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="single">Single</SelectItem>
-                                                <SelectItem value="mesh">Mesh</SelectItem>
+                                                <SelectItem value="single">Single Banner</SelectItem>
+                                                <SelectItem value="mesh">Mesh Banner</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -118,27 +123,28 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                             <FormField
                                 control={form.control}
                                 name="product"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-muted-foreground">Product Slug</FormLabel>
-                                        <FormControl>
-                                            <div className="">
-                                                <PaginatedSelect
-                                                    value={field.value}
-                                                    onValueChange={(val, slug) => {
-                                                        console.log(val, slug);
-
-                                                        field.onChange(slug)
-                                                    }}
-                                                    placeholder="Select Product"
-                                                    fetchData={getProductsDropdown}
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
+                                render={({ field }) => {
+                                    return (
+                                        <FormItem>
+                                            <FormLabel className="text-muted-foreground">Product Slug</FormLabel>
+                                            <FormControl>
+                                                <div className="">
+                                                    <PaginatedSelect
+                                                        value={field.value?.toString()}
+                                                        onValueChange={(_, slug_name) =>{
+                                                            console.log('this is slug name',slug_name);
+                                                            
+                                                            field.onChange(slug_name)}}
+                                                        placeholder="Select product"
+                                                        fetchData={getProductsDropdown}
+                                                        className="w-full"
+                                                    />
+                                                </div>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )
+                                }}
                             />
 
                             {/* Image Upload */}
@@ -193,8 +199,9 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                     type="submit"
                     form="advertise-banner-form"
                     className="text-white rounded-sm"
+                    disabled={loading}
                 >
-                    Save Changes
+                    {loading ? <Spinner /> :  "Save Changes" }
                 </Button>
             </div>
         </>

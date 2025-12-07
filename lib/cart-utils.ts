@@ -1,14 +1,15 @@
-import { CartItem } from "@/types/cart"
+import { CartItems } from "@/types/cart"
 
 export const formatPrice = (price: number): string => {
+  
   return `Nrs. ${price.toLocaleString()}`
 }
 
-export const calculateSubtotal = (items: CartItem[]): number => {
-  return items.reduce((sum, item) => sum + parseFloat(item.price ?? "0") * item.quantity, 0)
+export const calculateSubtotal = (items: CartItems[]): number => {
+  return items.reduce((sum, item) => sum + parseFloat(item.price || item.currentPrice || "0") * item.quantity, 0)
 }
 
-export const calculateTotalItems = (items: CartItem[]): number => {
+export const calculateTotalItems = (items: CartItems[]): number => {
   return items.reduce((sum, item) => sum + item.quantity, 0)
 }
 

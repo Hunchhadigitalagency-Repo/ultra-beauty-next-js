@@ -50,10 +50,10 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
             />
 
             {/* Search Results */}
-            <div className="w-full bg-white rounded-md">
+            <div className="w-full bg-white rounded-md max-h-[450px] h-fit">
                 {
                     searchTerm.length > 0 && loading &&
-                    <ul className="rounded-md border space-y-2 overflow-y-auto divide-y divide-gray-100 h-[400px] lg:h-[350px] xl:h-[450px] p-2">
+                    <ul className="rounded-md border space-y-2 overflow-y-auto divide-y divide-gray-100 max-h-[450px] h-auto p-2">
                         {Array.from({ length: 6 }).map((_, i) => (
                             <li
                                 key={i}
@@ -71,11 +71,15 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
                     searchTerm.length > 0 && !loading &&
                     (
                         searchTerm.length > 0 && products.length > 0 ? (
-                            <ul className="rounded-md border space-y-2 overflow-y-auto divide-y divide-gray-100 h-[400px] lg:h-[350px] xl:h-[450px]">
+                            <ul className="rounded-md border space-y-2 overflow-y-auto divide-y divide-gray-100  max-h-[450px] h-fit">
                                 {products.map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center justify-between px-2 py-3 border-gray-200 rounded-md cursor-pointer hover:bg-gray-50"
+                                        onClick={() => {
+                                            router.push(`/shop/${item.slug_name}`);
+                                            onClose?.();
+                                        }}
                                     >
                                         <div className="flex items-center gap-1 md:gap-3">
                                             <div className="relative w-12 h-12 md:w-16 md:h-16">

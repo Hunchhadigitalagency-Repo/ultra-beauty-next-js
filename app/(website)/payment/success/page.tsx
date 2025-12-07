@@ -3,16 +3,17 @@ import Link from 'next/link'
 import { FaCheck } from 'react-icons/fa6'
 import { useSearchParams } from 'next/navigation';
 import { updateOrder } from '@/lib/api/order/order-apis';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef,  } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/redux/features/cart-slice';
+import { generateClientHash } from '@/lib/utils';
 
 const Success: React.FunctionComponent = () => {
 
     const dispatch = useAppDispatch();
     const searchParams = useSearchParams();
     const { orderId, cartItem } = useAppSelector(state => state.cart);
-    const [totalAmount, setTotalAmount] = useState<number | null>(null)
+    // const [totalAmount, setTotalAmount] = useState<number | null>(null)
 
     const hasOrdered = useRef(false);
 
@@ -21,30 +22,36 @@ const Success: React.FunctionComponent = () => {
         hasOrdered.current = true;
 
         const handleOrder = async () => {
-            const encodedData = searchParams.get("data");
+            const encodedData = searchParams.get("token");
             if (!encodedData || !orderId) return;
 
             try {
                 const decoded = JSON.parse(atob(encodedData));
+                const { id, oprSecret } = decoded;
+                const oprKey = process.env.NEXT_PUBLIC_OPR_KEY || "";
 
-                if (decoded.status === "COMPLETE") {
-                    setTotalAmount(decoded.total_amount);
+                const clientHash = await generateClientHash(oprKey, id);
 
-                    const response = await updateOrder(
-                        orderId,
-                        decoded.status === "COMPLETE" ? "paid" : "failed",
-                        decoded.total_amount,
-                        decoded.transaction_code,
-                        decoded.transaction_uuid
-                    );
-
-                    if (response.status === 200) {
-                        dispatch(setOrderId(null));
-                        dispatch(decreaseCartCountBy(cartItem.length));
-                        dispatch(clearCart());
-                        dispatch(setShippingFee(''))
-                    }
+                if (clientHash !== oprSecret) {
+                    console.error("⚠️ Payment hash mismatch — possible tampering!");
+                    return;
                 }
+
+                const response = await updateOrder(
+                    orderId,
+                    "paid",
+                    decoded.total_amount || 0,
+                    decoded.transaction_code,
+                    decoded.transaction_uuid
+                );
+
+                if (response.status === 200) {
+                    dispatch(setOrderId(null));
+                    dispatch(decreaseCartCountBy(cartItem.length));
+                    dispatch(clearCart());
+                    dispatch(setShippingFee(''));
+                }
+
             } catch (error) {
                 console.error("Esewa callback error:", error);
             }
@@ -61,9 +68,9 @@ const Success: React.FunctionComponent = () => {
                 <div className='flex items-center justify-center w-20 h-20 mx-auto text-3xl text-white rounded-full bg-green'>
                     <FaCheck />
                 </div>
-                <h2 className='text-base font-semibold md:text-lg text-green'>
+                {/* <h2 className='text-base font-semibold md:text-lg text-green'>
                     {totalAmount && `Payment of Rs.${totalAmount} was successful`}
-                </h2>
+                </h2> */}
                 <h3 className='text-base font-semibold md:text-lg'>
                     Payment Success !
                 </h3>

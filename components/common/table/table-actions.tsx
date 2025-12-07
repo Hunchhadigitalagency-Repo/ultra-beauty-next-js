@@ -105,6 +105,8 @@ const TableActions = <
       router.push("/dashboard/flash-sales/edit-flash-sales");
     } else if (type === ETypes.BANNERS) {
       router.push("/dashboard/banners/edit-banner");
+    } else if (type === ETypes.ADVERTISE_BANNER) {
+      router.push("/dashboard/advertisement/edit-banner");
     } else if (type === ETypes.COUPON) {
       router.push("/dashboard/cupons/edit-coupon");
     } else if (type === ETypes.TESTIMONIAL) {

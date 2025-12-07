@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createBlogCategory,
@@ -40,6 +41,8 @@ interface BlogCategoryFormProps {
 const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
   const dispatch = useAppDispatch();
   const [err, setErr] = useState()
+    const [loading, setLoading] = useState(false);
+  
   const form = useForm<BlogCategoryValues>({
     resolver: zodResolver(blogCategorySchema),
     defaultValues: initialData
@@ -54,6 +57,7 @@ const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
   });
 
   const onSubmit = async (data: BlogCategoryValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("name", data.blogCategory);
@@ -77,6 +81,8 @@ const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
     } catch (error: any) {
       handleError(error, toast);
       setErr(error?.response?.data?.name[0])
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -150,8 +156,9 @@ const BlogCategoryForm = ({ initialData }: BlogCategoryFormProps) => {
           type="submit"
           form="setting-category-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading? <Spinner /> : "Save Changes" }  
         </Button>
       </div>
     </>

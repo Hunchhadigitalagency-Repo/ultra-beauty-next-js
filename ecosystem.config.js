@@ -4,7 +4,7 @@ module.exports = {
             name: 'ultra-beauty-frontend-production',
             script: 'npm',
             args: 'start',
-            cwd: '/var/www/production/production-ultra-beauty-next-js',
+            cwd: '/mnt/volumes_001/projects/frontend',
             instances: 1,
             exec_mode: 'fork',
             env: {

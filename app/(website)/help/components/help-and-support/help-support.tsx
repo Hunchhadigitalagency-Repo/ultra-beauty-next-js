@@ -6,15 +6,24 @@ import { useEffect, useState } from 'react';
 import useFetchData from '@/hooks/use-fetch';
 import { HelpAndSupport } from '@/types/help-and-support';
 import SectionHeader from '@/components/common/header/section-header';
+import { useAppSelector } from '@/redux/hooks';
 
 const HelpSupportSection: React.FunctionComponent = () => {
-
+  const { searchQuery } = useAppSelector(state => state.filter)
   const [isClamped, setIsClamped] = useState(false);
   const { data, error, loading } = useFetchData<HelpAndSupport[]>('help-and-support/');
+  const [help, setHelp] = useState(data);
 
   useEffect(() => {
     setIsClamped(true)
-  }, []);
+    if(data){
+      if(searchQuery){
+        setHelp(data.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase())))
+      }else {
+        setHelp(data)
+      }
+    }
+  }, [data, searchQuery]);
 
   return (
     <section className='space-y-2 padding'>
@@ -35,33 +44,33 @@ const HelpSupportSection: React.FunctionComponent = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 py-6 sm:grid-cols-2 md:grid-cols-3 gap-x-36 gap-y-6">
-          {
-            data?.map((item, index) => (
-              <Link
-                key={index}
-                href={`/help/${item.id}`}
-                className={"border rounded-md p-4 cursor-pointer border-[#E1E1E1] hover:shadow-md transition"}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="bg-[#EEEEEE] relative  w-14 h-14 rounded-lg">
-                    <Image
-                      src={item.icon}
-                      alt="Help Icon"
-                      fill
-                      className='object-fill'
-                    />
-                  </div>
-                  <h2 className="text-lg font-bold font-playfair text-primary">
-                    {item.name}
-                  </h2>
+          {help?.map((item, index) => (
+            <Link
+              key={index}
+              href={`/help/${item.id}`}
+              className="block border border-[#E1E1E1] rounded-lg p-4 cursor-pointer transition-shadow duration-300 hover:shadow-lg hover:border-primary"
+            >
+              <div className="flex items-center gap-4 mb-3">
+                <div className="bg-[#F0F0F0] relative w-16 h-16 rounded-lg flex-shrink-0 overflow-hidden">
+                  <Image
+                    src={item.icon}
+                    alt={item.name}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
-                <p className={`text-sm font-poppins text-gray-600 ${isClamped ? "line-clamp-3" : ""
-                  }`}>{
-                    item.description}
-                </p>
-              </Link>
-            ))
-          }
+                <h2 className="text-lg font-playfair font-bold text-primary line-clamp-2">
+                  {item.name}
+                </h2>
+              </div>
+              <p
+                className={`text-sm font-poppins text-gray-600 ${isClamped ? "line-clamp-3" : ""}`}
+              >
+                {item.description}
+              </p>
+            </Link>
+          ))}
+
         </div>
       )}
     </section>

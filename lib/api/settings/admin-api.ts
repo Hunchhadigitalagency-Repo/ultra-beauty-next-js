@@ -6,7 +6,7 @@ export const createAdmin = async (data: FormData) => {
 };
 
 export const updateAdmin = async (id: number, data: FormData) => {
-  const response = await api.put(`/admin/${id}/`, data);
+  const response = await api.patch(`/admin/${id}/`, data);
   return response;
 };
 

@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import {
   createCategory,
@@ -29,6 +30,7 @@ import {
 import { ICategory } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,6 +41,7 @@ interface CategoryFormProps {
 
 const CategoryForm = ({ initialData }: CategoryFormProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const title = initialData ? "Edit Category" : "Add Category";
 
@@ -60,6 +63,7 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
   });
 
   const onSubmit = async (data: CategoryValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("name", data.categoryName);
@@ -87,6 +91,8 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -150,53 +156,56 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
                   </FormItem>
                 )}
               />
+              <div className="flex gap-5">
 
-              <FormField
-                control={form.control}
-                name="is_featured"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      IS FEATURED
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="activate"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="activate"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="activate"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="activate"
+                        className="text-muted-foreground"
+                      >
+                        ACTIVATE
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="is_featured"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-4 mt-6">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          id="activate"
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="activate"
+                        className="text-muted-foreground"
+                      >
+                        IS FEATURED
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </form>
           </Form>
         </CardContent>
@@ -207,8 +216,9 @@ const CategoryForm = ({ initialData }: CategoryFormProps) => {
           type="submit"
           form="setting-category-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

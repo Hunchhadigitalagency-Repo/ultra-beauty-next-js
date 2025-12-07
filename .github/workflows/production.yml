@@ -73,7 +73,7 @@ jobs:
         password: ${{ secrets.DROPLET_PASSWORD }}
         script: |
           set -e
-          cd /var/www/production/production-ultra-beauty-next-js
+          cd /mnt/volumes_001/projects/frontend
 
           # Stop PM2 process
           pm2 stop ultra-beauty-frontend-production 2>/dev/null || true

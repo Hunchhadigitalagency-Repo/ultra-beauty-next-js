@@ -20,28 +20,32 @@ import { handleError } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { createSeo } from "@/lib/api/settings/seo-api";
 import { ISeo } from "@/types/Settings";
+import { Spinner } from "@/components/ui/spinner";
 
 interface SeoFormProps {
   initialData: ISeo | null;
 }
 
 const SeoForm = ({ initialData }: SeoFormProps) => {
+    const [loading, setLoading] = useState(false);
+  
   const form = useForm<SeoValues>({
     resolver: zodResolver(seoSchema),
     defaultValues: initialData
       ? {
-          metaKeyword: initialData?.meta_keyword || [],
-          metaTitle: initialData.meta_title,
-          metaDescription: initialData.meta_description,
-        }
+        metaKeyword: initialData?.meta_keyword || [],
+        metaTitle: initialData.meta_title,
+        metaDescription: initialData.meta_description,
+      }
       : {
-          metaKeyword: [],
-          metaTitle: "",
-          metaDescription: "",
-        },
+        metaKeyword: [],
+        metaTitle: "",
+        metaDescription: "",
+      },
   });
 
   const onSubmit = async (data: SeoValues) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("meta_keyword", JSON.stringify(data.metaKeyword));
@@ -54,6 +58,8 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -136,6 +142,9 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
                     <FormLabel className="text-muted-foreground">
                       META KEYWORDS
                     </FormLabel>
+                    <p className="text-xs text-gray-500">
+                      NOTE: Use comma ( , ) to add new tags
+                    </p>
                     <FormControl>
                       <TagInput
                         value={field.value}
@@ -262,8 +271,9 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
           type="submit"
           form="setting-seo-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Update
+          {loading ? <Spinner /> : "Update" }
         </Button>
       </div>
     </>

@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
 
 
   const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown/');
-  const { data: categories } = useFetchData<ICategoryDropdown[]>(`dropdown/category/`);
+  const { data: categories } = useFetchData<ICategoryDropdown[]>(`dropdown/category?is_not_empty=True`);
 
   const categoriesData = categories?.slice(0, 5);
 
@@ -53,13 +53,19 @@ const Footer: React.FC = () => {
       {/* Footer Content */}
       <div className="flex flex-col pt-10 pb-10 sm:pb-8 md:pb-0">
         {/* News Letter */}
-        <div className='flex flex-col gap-4 mb-14 bg-inherit lg:gap-0 lg:flex-row lg:justify-between'>
+        <div className='flex flex-col justify-between gap-4 mb-14 bg-inherit lg:gap-0 lg:flex-row lg:justify-between'>
           <div>
-            <h1 className='text-2xl font-semibold md:text-xl lg:text-5xl'>
-              Where Elegance Meets Everyday Beauty
+            <h1 className="text-4xl font-semibold md:text-3xl lg:text-5xl leading-snug">
+              <span className="block">
+                Where Elegance Meets
+              </span>
+              <span className="block relative mt-2">
+                Everyday Beauty
+                <span className="inline-block h-6 ml-8 w-6 bg-pink-600"></span>    </span>
             </h1>
           </div>
-          <div className='h-full w-full lg:w-[70%]'>
+
+          <div className='h-full w-full lg:w-[50%]'>
             <Newsletter />
           </div>
         </div>
@@ -78,7 +84,7 @@ const Footer: React.FC = () => {
                         {/* <span className="flex-shrink-0 w-2 h-2 rounded-full bg-amber-600"></span> */}
                         <a
                           href={link.href}
-                          className="text-sm text-gray-300 transition-colors duration-200 hover:text-amber-400"
+                          className="text-sm text-gray-300 transition-colors duration-200 hover:text-amber-400 uppercase"
                         >
                           {link.name}
                         </a>
@@ -135,28 +141,33 @@ const Footer: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <MapPin className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">Kathmandu, Nepal</span>
+                  <span className="text-sm text-gray-300">One Stop Mall Ground Floor, Jhapa District, Nepal
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">555555555</span>
+                  <span className="text-sm text-gray-300">+977 9826940855
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="flex-shrink-0 w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-gray-300">bsera@links.com</span>
+                  <span className="text-sm text-white white-pre-space">            ultrabeautybrands<br/>@gmail.com
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
-                  {
-                    socialLinks?.map((social, index) => {
-                      return (
-                        <Link href={social.url} key={index}>
-                          <div className='relative w-6 h-6'>
-                            <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
-                          </div>
-                        </Link>
-                      )
-                    })
-                  }
+                  {socialLinks?.map((social, index) => (
+                    <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+                      <div className="relative w-6 h-6">
+                        <Image
+                          src={social.icon}
+                          alt={social.name}
+                          fill
+                          className="object-center rounded-sm transition-transform duration-300 hover:scale-110 hover:border"
+                        />
+                      </div>
+                    </Link>
+                  ))}
+
                 </div>
               </div>
             </div>
@@ -166,11 +177,14 @@ const Footer: React.FC = () => {
         <div className="hidden lg:grid lg:grid-cols-4">
           {/* SHOP Links - Desktop */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray">SHOP</h3>
+            <h3 className="text-lg  text-gray-400">SHOP</h3>
             <ul className="space-y-3">
+              <button className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary uppercase" onClick={() => router.push('/shop')}>
+                All Products
+              </button>
               {
                 categoriesData?.map((category) => (
-                  <button key={category.name} className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary" onClick={() => handleCategoryClick(category.id)}>
+                  <button key={category.name} className="flex items-center space-x-2 text-sm text-gray-300 transition-colors duration-200 hover:text-primary uppercase" onClick={() => handleCategoryClick(category.id)}>
                     {category.name}
                   </button>
                 ))
@@ -179,7 +193,7 @@ const Footer: React.FC = () => {
           </div>
           {/* ABOUT Links - Desktop */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray">ABOUT</h3>
+            <h3 className="text-lg  text-gray-400">ABOUT</h3>
             <ul className="space-y-3">
               {
                 ABOUT_LINKS.map((link) => (
@@ -197,7 +211,7 @@ const Footer: React.FC = () => {
           </div>
           {/* HELP Links - Desktop */}
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray">HELP</h3>
+            <h3 className="text-lg  text-gray-400">HELP</h3>
             <ul className="space-y-3">
               {
                 HELP_LINKS.map((link) => (
@@ -214,50 +228,67 @@ const Footer: React.FC = () => {
             </ul>
           </div>
           {/* Contact Us - Desktop */}
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-gray">Contact Us</h3>
-            <div className="space-y-3">
+          <div className="space-y-4">
+            <h3 className="text-lg  text-gray-400">CONTACT US</h3>
+            <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <Mail className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300 uppercase">Hello@UltraBeauty.com</span>
+                <Mail className="flex-shrink-0 w-4 h-4 text-pink-600" />
+                <span className="text-sm text-white beark-words">            ultrabeautybrands@gmail.com
+                </span>
               </div>
               <div className="flex items-center space-x-3">
-                <MapPin className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300">BIRTAMOD - 4, JHAPA, KOSHI NEPAL</span>
+                <MapPin className="flex-shrink-0 w-4 h-4 text-pink-600" />
+                <span className="text-sm text-white uppercase">One Stop Mall Ground Floor, Jhapa District, Nepal
+                </span>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="flex-shrink-0 w-4 h-4 text-primary" />
-                <span className="text-sm text-gray-300">
-                  +977-9824386694, 25254568
+                <Phone className="flex-shrink-0 w-4 h-4 text-pink-600" />
+                <span className="text-sm text-white">+977 9826940855
                 </span>
               </div>
               <div className="flex items-center gap-4">
-                {
-                  socialLinks?.map((social, index) => {
-                    return (
-                      <Link href={social.url} key={index}>
-                        <div className='relative w-6 h-6'>
-                          <Image className='object-center transition-transform rounded-sm duration-400 hover:border-red-500 hover:border' src={social.icon} alt={social.name} fill />
-                        </div>
-                      </Link>
-                    )
-                  })
-                }
+                {socialLinks?.map((social, index) => (
+                  <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+                    <div className="relative w-6 h-6">
+                      <Image
+                        src={social.icon}
+                        alt={social.name}
+                        fill
+                        className="object-center rounded-sm transition-transform duration-300 hover:scale-120 "
+                      />
+                    </div>
+                  </Link>
+                ))}
+
               </div>
             </div>
           </div>
         </div>
-        {/* Copyright */}
-        <div className="flex-col items-center pt-8 pb-8 space-y-4 border-t-2 border-gray-700 mt-14 display-flex">
-          <p className="text-sm text-white md:text-base">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-t-2 border-gray-700 mt-14 py-8 text-white text-center md:text-left">
+          <p className="text-sm md:text-base md:w-1/2 leading-relaxed">
             EMBRACE THE BEAUTY WITHIN. CAREFULLY CHOSEN PIECES MADE TO ENHANCE YOUR NATURAL GRACE AND DAILY ROUTINE.
           </p>
-          <p className="text-xs text-gray-400">
-            ALL RIGHT RESERVED ULTRA BEAUTY & BRAND
-            DESIGNED AND DEVELOPED BY
-            <Link href="https://hunchhadigital.com/" className='hover:underline'> HUNCHHA DIGITAL</Link>
-          </p>
+
+          <div className="text-sm md:text-base md:w-1/2 leading-relaxed text-center md:text-right">
+            <p>
+              ALL RIGHTS RESERVED
+              <span className="text-pink-400 font-medium"> ULTRA BEAUTY & BRAND</span>
+            </p>
+            <p className="text-[12px] mt-1">
+              DESIGNED AND DEVELOPED BY
+              <a
+                href="https://hunchhadigital.com/"
+                className="hover:underline ml-1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                HUNCHHA DIGITAL
+              </a>
+            </p>
+          </div>
         </div>
+
+
       </div>
     </footer>
   );

@@ -1,10 +1,14 @@
 import { ShippingFormValues } from "@/schemas/checkout/checkout-schema"
 import { Links, Result, Tax, Variant } from "./product"
 
-export interface CartItem {
+export interface CartItems {
   id: number,
   quantity: number,
-  price: string
+  price: string,
+  currentPrice?: string;
+  discount_percentage?: string,
+  tax_applied: null,
+  selected?: any
 }
 
 export interface CartResponse {
@@ -47,6 +51,8 @@ export interface LocationCardProps {
 
 export interface CartItem {
   id: number,
+  image: string,
+  name: string,
   quantity: number,
   price: string,
   discount_percentage?: string,

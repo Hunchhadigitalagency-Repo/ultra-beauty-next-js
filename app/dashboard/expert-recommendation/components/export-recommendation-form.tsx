@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -30,6 +31,7 @@ import {
 import { IExpertRecommendation } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -43,7 +45,7 @@ const ExpertRecommendationForm = ({
   const title = initialData
     ? "Edit Expert Recommendation"
     : "Add Expert Recommendation";
-
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<ExpertRecommendationFormValues>({
     resolver: zodResolver(expertRecommendationSchema),
@@ -69,6 +71,7 @@ const ExpertRecommendationForm = ({
   });
 
   const onSubmit = async (data: ExpertRecommendationFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("name", data.name);
@@ -104,6 +107,8 @@ const ExpertRecommendationForm = ({
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -275,8 +280,9 @@ const ExpertRecommendationForm = ({
           type="submit"
           form="expert-recommendation-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

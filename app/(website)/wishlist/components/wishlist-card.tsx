@@ -74,29 +74,33 @@ const WishlistCard = ({
           </div>
 
           {/* Content */}
-          <div className="flex flex-col w-full gap-2">
-            <h3 className="text-base font-normal line-clamp-1 md:text-2xl text-foreground">
-              {name}
-            </h3>
-            {/* Dom Purify */}
-            <p
-              className="line-clamp-2 max-w-[58vw] text-sm leading-relaxed md:text-base"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  description || "No description provided"
-                ),
-              }}
-            />
-            {/* Price */}
-            <PriceRow
-              previousPrice={previousPrice}
-              discountTag={discountTag}
-              price={price}
-            />
-          </div>
+          <Link href={`shop/${slug}`} className="w-full h-full">
+            <div className="flex flex-col w-full gap-2">
+
+              <h3 className="text-base font-playfair line-clamp-1 md:text-2xl text-foreground">
+                {name}
+              </h3>
+              {/* Dom Purify */}
+              <p
+                className={`!line-clamp-2 max-w-[58vw] text-sm leading-relaxed md:text-base md:block hidden `}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(
+                    description || "No description provided"
+                  ),
+                }}
+              />
+              {/* Price */}
+
+              <PriceRow
+                previousPrice={previousPrice}
+                discountTag={discountTag}
+                price={price}
+              />
         </div>
+          </Link>
       </div>
     </div>
+    </div >
   );
 };
 

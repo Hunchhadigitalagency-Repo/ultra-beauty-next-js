@@ -13,16 +13,21 @@ export const UserManagementConstants = (
       render: (data: IUsers) => (
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-            <Image
-              src={
-                data.profile?.profile_picture ||
-                defauleImage
-              }
-              alt={data.first_name + " " + data.last_name}
-              width={24}
-              height={24}
-              className="object-cover w-full h-full"
-            />
+            {
+              data.profile?.profile_picture ? (
+                <Image
+                  src={
+                    data.profile?.profile_picture ||
+                    defauleImage
+                  }
+                  alt={data.first_name + " " + data.last_name}
+                  width={24}
+                  height={24}
+                  className="object-cover w-full h-full"
+                />
+              )
+              : <span className="flex justify-center">{data.first_name.charAt(0)}</span>
+            }
           </div>
 
           <span className="text-xs text-foreground">

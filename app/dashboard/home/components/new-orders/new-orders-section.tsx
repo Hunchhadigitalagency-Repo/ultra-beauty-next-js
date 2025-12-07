@@ -21,7 +21,7 @@ const NewOrdersSection = () => {
       title="New Orders"
       count={newOrder.length}
     >
-      <div className="h-[400px] overflow-y-auto">
+      <div className="max-h-[400px] h-auto overflow-y-auto">
         <CustomTable<INeworders>
           cols={NewOrdersConstants()}
           data={newOrder as INeworders[]}

@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import useFetchData from "@/hooks/use-fetch-data";
 import { updatedInventory } from "@/lib/api/inventory/inventory-apis";
 import { toast } from "sonner";
 import {
@@ -22,14 +23,13 @@ import {
 } from "@/schemas/inventory/edit-inventory-shcema";
 import SingleFileUploader from "@/components/common/ImageUploader/file-uploader";
 import { useRouter } from "next/navigation";
-import useFetchData from "@/hooks/use-fetch";
 
 interface EditInventoryFormProps {
   slug: string;
 }
 
 const EditInventoryForm: React.FC<EditInventoryFormProps> = ({ slug }) => {
-  const { data: inventoryData, loading: isLoading } = useFetchData<any>(
+  const { data: inventoryData, isLoading } = useFetchData<any>(
     `/inventory-management/${slug}/`,
     false
   );
@@ -93,71 +93,74 @@ const EditInventoryForm: React.FC<EditInventoryFormProps> = ({ slug }) => {
   if (isLoading) return <div className="p-6">Loading...</div>;
 
   return (
-    <div className="p-6 bg-white rounded-xl">
+    <div className="p-6  rounded-xl">
       <Form {...form}>
         <form
           className="flex flex-col gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-gray-700">Product</Label>
-            <div className="p-3 bg-gray-50 rounded-md border">
-              <div className="font-medium">{inventoryData?.product?.name}</div>
+          <div className="flex flex-col bg-white p-6 rounded-xl shadow-sm gap-4">
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-700">Product</Label>
+              <div className="p-3 bg-gray-50 rounded-md border">
+                <div className="font-medium">{inventoryData?.product?.name}</div>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              {inventoryData?.product_variant?.product_variants?.length > 0 && (
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium text-gray-600 block mb-1">
+                    VARIATION
+                  </Label>
+                  <div className="flex flex-col gap-2">
+                    {inventoryData.product_variant.product_variants.map(
+                      (vari: any, index: number) => (
+                        <div
+                          key={index}
+                          className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
+                        >
+                          {vari?.attribute_variant?.name}
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantity</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Enter the Quantity"
+                        value={field.value ?? undefined}
+                        min={1}
+                        onChange={(e) => {
+                          const val = e.target.valueAsNumber;
+                          field.onChange(val > 0 ? val : "");
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
 
-          <div className="flex gap-4">
-            {inventoryData?.product_variant?.product_variants?.length > 0 && (
-              <div className="space-y-2">
-                <Label className="text-xs font-medium text-gray-600 block mb-1">
-                  VARIATION
-                </Label>
-                <div className="flex flex-col gap-2">
-                  {inventoryData.product_variant.product_variants.map(
-                    (vari: any, index: number) => (
-                      <div
-                        key={index}
-                        className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
-                      >
-                        {vari?.attribute_variant?.name}
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            )}
-
-            <FormField
-              control={form.control}
-              name="quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantity</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter the Quantity"
-                      value={field.value ?? undefined}
-                      min={1}
-                      onChange={(e) => {
-                        const val = e.target.valueAsNumber;
-                        field.onChange(val > 0 ? val : "");
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="fixed bottom-6 right-0  w-[480px] z-50">
-            <div className="bg-white p-4 rounded-xl shadow-lg flex items-center gap-4">
-              <div className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+          <div className={`flex md:justify-end items-end  mt-60 `}>
+            <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col md:items-start gap-4">
+              <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
                 ATTACHMENT
               </div>
 
-              <div className="flex-1 relative">
+              <div className="flex relative gap-4">
                 <FormField
                   control={form.control}
                   name="attachment"
@@ -190,16 +193,14 @@ const EditInventoryForm: React.FC<EditInventoryFormProps> = ({ slug }) => {
                     </FormItem>
                   )}
                 />
+                <Button
+                  type="submit"
+                  onClick={form.handleSubmit(onSubmit)}
+                  className="bg-black hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                >
+                  Save
+                </Button>
               </div>
-
-              {/* Save Button */}
-              <Button
-                type="submit"
-                onClick={form.handleSubmit(onSubmit)}
-                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-              >
-                Save
-              </Button>
             </div>
           </div>
         </form>

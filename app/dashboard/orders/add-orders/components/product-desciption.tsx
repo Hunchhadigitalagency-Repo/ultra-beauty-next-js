@@ -19,6 +19,7 @@ import CardChips from "@/components/common/chips/card-chips";
 import { EChips } from "@/types/chip-type";
 // import { CartItem } from "@/types/cart";
 import { addProductItem } from "@/redux/features/checkout-slice";
+import SingleProductAccordion from "@/app/(website)/shop/[slug]/components/single-product-accordion";
 interface Props {
     product: IDashboardProduct,
     onClose?: () => void;
@@ -29,7 +30,6 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
     const [quantity, setQuantity] = useState(1);
     const [errors, setErrors] = useState<ErrorState>({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
-    const [expanded, setExpanded] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<SelectedAttribute[]>([]);
     const dispatch = useAppDispatch()
     // console.log(product);
@@ -173,7 +173,7 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
         };
 
         dispatch(addProductItem(cartItem));
-
+        toast.message("Product added")
         onClose?.();
     };
 
@@ -191,124 +191,142 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
             })
             : { finalPrice: "", previousPrice: "", discountTag: "" };
 
+    console.log(previousPrice, finalDiscountTag);
     return (
-        <div className="flex flex-col md:flex-row gap-8 p-6 md:p-12">
 
-            <div className="w-full md:w-1/2 h-[300px] md:h-[500px] relative rounded-lg overflow-hidden shadow-lg">
-                <Image
-                    src={product?.images[0]?.file || ""}
-                    alt={product?.name || 'Image'}
-                    fill
-                    className="object-cover"
-                />
-                {/* Chips */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                    {product?.is_best_seller && (
-                        <CardChips title="Best Seller" chipType={EChips.IS_BEST_SELLER} />
-                    )}
-                    {product?.is_flash_sale && (
-                        <CardChips title="Flash Sale" chipType={EChips.IS_FLASH_SALE} />
-                    )}
-                    {product?.is_new && <CardChips title="New" chipType={EChips.IS_NEW} />}
-                </div>
-            </div>
+        <div className="flex flex-col   p-6 md:p-12 h-fit max-h-[600px]">
+            <div className="flex flex-col md:flex-row gap-4">
 
-
-            <div className="flex-1 flex flex-col gap-6">
-
-                <div className="flex items-center gap-2">
-                    <RatingStars rating={product?.average_rating || 0} />
-                    <span className="text-sm text-gray-500">{product?.average_rating}/5 Star Rating</span>
-                </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{product?.name}</h1>
-
-
-
-
-                {product?.general_description && (
-                    <div className="text-sm md:text-base text-gray-700 font-poppins leading-relaxed">
-                        <div className={`${expanded ? "" : "line-clamp-3"}`} dangerouslySetInnerHTML={{ __html: product?.general_description }} />
-                        <button
-                            onClick={() => setExpanded(!expanded)}
-                            className="mt-2 text-sm text-blue-600 hover:underline"
-                        >
-                            {expanded ? "Read Less" : "Read More"}
-                        </button>
+                <div className="w-full md:w-1/2 h-[250px] md:h-[350px] relative rounded-lg overflow-hidden shadow-lg">
+                    <Image
+                        src={product?.images[0]?.file || ""}
+                        alt={product?.name || 'Image'}
+                        fill
+                        className="object-cover"
+                    />
+                    {/* Chips */}
+                    <div className="absolute top-4 right-4 flex flex-col gap-2">
+                        {product?.is_best_seller && (
+                            <CardChips title="Best Seller" chipType={EChips.IS_BEST_SELLER} />
+                        )}
+                        {product?.is_flash_sale && (
+                            <CardChips title="Flash Sale" chipType={EChips.IS_FLASH_SALE} />
+                        )}
+                        {product?.is_new && <CardChips title="New" chipType={EChips.IS_NEW} />}
                     </div>
-                )}
+                </div>
 
 
-                {attributeOrder.length > 0 && (
-                    <div className="flex  gap-10">
-                        {attributeOrder.map(attrName => {
-                            const alreadySelected = selectedAttributes.find(a => a.name === attrName);
-                            const options = [
-                                ...new Set(
-                                    product?.variants
-                                        .filter(v =>
-                                            selectedAttributes
-                                                .filter(sel => sel.name !== attrName)
-                                                .every(sel => v.product_variants.some(
-                                                    pv => pv.attribute.name === sel.name && pv.attribute_variant.name === sel.value
+                <div className="flex-1 flex flex-col gap-4 ">
+                    <div className="flex items-center gap-2">
+                        <RatingStars rating={product?.average_rating || 0} />
+                        <span className="text-sm text-gray-500">{product?.average_rating}/5 Star Rating</span>
+                    </div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{product?.name}</h1>
+                    <SingleProductAccordion
+                        title="Details"
+                        description={product?.general_description || ''} />
+
+                    <div className="flex gap-2 ">
+                        {
+                            attributeOrder.map((attrName) => {
+                                const alreadySelected = selectedAttributes.find(a => a.name === attrName);
+
+                                const options = [
+                                    ...new Set(
+                                        product?.variants
+                                            .filter(variant =>
+                                                selectedAttributes
+                                                    .filter(sel => sel.name !== attrName)
+                                                    .every(sel =>
+                                                        variant.product_variants.some(
+                                                            pv =>
+                                                                pv.attribute.name === sel.name &&
+                                                                pv.attribute_variant.name === sel.value
+                                                        )
+                                                    )
+                                            )
+                                            .map(v => {
+                                                const pv = v.product_variants.find(p => p.attribute.name === attrName);
+                                                return pv ? pv.attribute_variant.name : null;
+                                            })
+                                            .filter(Boolean)
+                                    ),
+                                ];
+
+                                return (
+                                    <div key={attrName} className="flex items-center gap-5 mb-4">
+                                        <h3 className="text-md font-medium font-poppins lg:text-lg">
+                                            {
+                                                attrName.charAt(0).toUpperCase() + attrName.slice(1)
+                                            }
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {
+                                                options.map(opt => (
+                                                    <button
+                                                        key={opt}
+                                                        className={`px-5 py-1 border rounded-md text-sm  cursor-pointer ${alreadySelected?.value === opt ? "bg-primary text-white" : "bg-white text-black"
+                                                            }`}
+                                                        onClick={() => {
+                                                            if (opt !== null) handleSelect(attrName, opt);
+                                                        }}
+                                                    >
+                                                        {opt}
+                                                    </button>
                                                 ))
-                                        )
-                                        .map(v => v.product_variants.find(p => p.attribute.name === attrName)?.attribute_variant.name)
-                                        .filter(Boolean)
-                                ),
-                            ];
-
-                            return (
-                                <div key={attrName} className="flex flex-col gap-2">
-                                    <h3 className="font-semibold">{attrName}</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {options.map(opt => {
-                                            const isSelected = alreadySelected?.value === opt;
-                                            return attrName.toLowerCase() === "color" ? (
-                                                <button
-                                                    key={opt}
-                                                    onClick={() => handleSelect(attrName, opt || "")}
-                                                    className={`w-10 h-10 rounded-full border-2 cursor-pointer ${isSelected ? "ring-2 ring-blue-500 border-blue-500" : "border-gray-300"}`}
-                                                    style={{ backgroundColor: opt || "" }}
-                                                />
-                                            ) : (
-                                                <button
-                                                    key={opt}
-                                                    onClick={() => handleSelect(attrName, opt || "")}
-                                                    className={`border px-3 py-1 rounded cursor-pointer ${isSelected ? "bg-blue-600 text-white" : "bg-white text-gray-900 border-gray-300"}`}
-                                                >
-                                                    {opt}
-                                                </button>
-                                            );
-                                        })}
+                                            }
+                                        </div>
+                                        {
+                                            errors[attrName] && (
+                                                <p className="mt-1 text-sm text-red-600">
+                                                    {errors[attrName]}
+                                                </p>
+                                            )
+                                        }
                                     </div>
-                                    {errors[attrName] && <p className="text-red-600 text-sm">{errors[attrName]}</p>}
-                                </div>
-                            );
-                        })}
-
+                                );
+                            }
+                            )
+                        }
                         {selectedAttributes.length > 0 && (
                             <Button onClick={() => setSelectedAttributes([])} variant="destructive" className="text-sm h-9 w-max flex items-center gap-2">
                                 Clear  <DeleteIcon />
                             </Button>
                         )}
                     </div>
-                )}
 
-                <div className="flex items-center gap-6 mt-4">
-                    <QuantityRow
-                        value={quantity}
-                        onDecrease={() => setQuantity(prev => Math.max(prev - 1, 1))}
-                        onIncrease={() => setQuantity(prev => prev + 1)}
-                    />
-                    <div className="flex gap-2">
-                        {availableStock > 10 && <span className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm font-medium">Available</span>}
-                        {availableStock > 0 && availableStock <= 10 && <span className="bg-red-100 text-red-800 px-3 py-1 rounded text-sm font-medium">Low Stock</span>}
-                        {availableStock === 0 && <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded text-sm font-medium">Stocking Soon</span>}
+                    <div className="flex">
+                        <div className="flex flex-col items-start justify-between w-full gap-4 pt-2 pl-3 sm:flex-row sm:items-center sm:pl-0 sm:pt-6">
+                            <PriceRow
+                                price={product?.discount_percentage ? discountedPrice || '' : product?.price || ''}
+                                previousPrice={product?.discount_percentage && product?.price}
+                                // discountTag={product?.discount_percentage}
+                                priceClassname="gap-5"
+                                discountClassName="bg-primary text-white"
+                            />
+
+                            <div className="flex flex-row-reverse gap-8 sm:flex-row sm:gap-14 lg:gap-4 xl:gap-8 ">
+                                {quantity !== null && (
+
+                                    <span
+                                        className={`$bg-primary text-white text-sm px-3 py-1 rounded`}
+                                    >
+                                        {quantity > 0 ? "Available" : "Not Available"}    </span>
+                                )}
+                                <QuantityRow
+                                    value={quantity}
+                                    onDecrease={() => setQuantity((prev) => (prev > 1 ? prev - 1 : 1))}
+                                    onIncrease={() => setQuantity((prev) => (prev + 1))}
+                                />
+                            </div>
+
+                        </div>
+
                     </div>
-                </div>
 
 
-                <div className="mt-4">
+                    {/* <div className="mt-4">
                     {discountedPrice ? (
                         <PriceRow
                             previousPrice={previousPrice || ""}
@@ -321,17 +339,18 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
                     ) : (
                         <h2 className="text-2xl font-bold text-green-500">NPR. {product?.price}</h2>
                     )}
+                </div> */}
+
+
                 </div>
-
-
-                <Button
-                    className={`w-full text-black font-medium h-12 rounded-full mt-4 ${availableStock === 0 ? "bg-gray-300 cursor-not-allowed" : "bg-yellow-400 hover:bg-yellow-500"}`}
-                    onClick={handleSubmit}
-                    disabled={availableStock === 0}
-                >
-                    Add to Bag <BaggageClaim className="ml-2" />
-                </Button>
             </div>
+            <Button
+                className={`w-full text-black font-medium h-12 rounded-full mt-4 ${availableStock === 0 ? "bg-gray-300 cursor-not-allowed" : " w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-6 rounded-sm bg-primary"}`}
+                onClick={handleSubmit}
+                disabled={availableStock === 0}
+            >
+                Add to Bag <BaggageClaim className="ml-2" />
+            </Button>
         </div>
 
     );

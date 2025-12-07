@@ -4,44 +4,53 @@ import { Megaphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "./components/confirmation-modal";
-
+import { createEmail } from "@/lib/api/cms/newsletter-api";
 
 export default function Newsletter() {
-
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
-  const [showNewsLetterModal, setShowNewsLetterModal] = useState<boolean>(false);
+  const [showNewsLetterModal, setShowNewsLetterModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const isEmailValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   const isFormValid = isEmailValid && consent;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!consent || !email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) return;
+    if (!isFormValid) return;
+
     try {
       setStatus("loading");
-      setTimeout(() => {
-        setStatus("done");
-        setEmail('');
-        setConsent(false);
-      }, 1000); // simulate delay
-
-    } catch {
-      setStatus("error");
+ await createEmail(email);
+      // Success
+      setModalMessage("Thank you for subscribing! Your email has been successfully added.");
+      setIsError(false);
+      setEmail("");
+      setConsent(false);
+      setShowNewsLetterModal(true);
+    } catch (err: any) {
+      // Error
+      const errorMsg = err?.response?.data?.detail || "Something went wrong. Please try again.";
+      setModalMessage(errorMsg);
+      setIsError(true);
+      setShowNewsLetterModal(true);
+    } finally {
+      setStatus("done");
     }
   };
 
-  const toggleNewLetterModal = () => {
-    setShowNewsLetterModal(!showNewsLetterModal)
-  }
+  const handleCloseModal = () => {
+    setShowNewsLetterModal(false);
+    setStatus("idle");
+  };
 
   return (
-
-    <div className=" w-full flex flex-col  ">
-      <div className="text-start sm:text-left space-y-1 bg-inherit">
+    <div className="w-full flex flex-col">
+      <div className="text-start sm:text-left space-y-1">
         <h2 className="text-[18px] sm:text-2xl font-playfair font-semibold text-white">
-          Subscribe to Get Offers and News
+          Subscribe to Get <span className="italic">Offers </span> and <span className="italic">News </span>
         </h2>
       </div>
 
@@ -58,7 +67,6 @@ export default function Newsletter() {
             style={{ borderRadius: "4px" }}
           />
           <Button
-            onClick={toggleNewLetterModal}
             disabled={!isFormValid || status === "loading"}
             type="submit"
             className="bg-primary text-white h-[35px] md:h-[45px] px-2 py-1 gap-0"
@@ -90,7 +98,8 @@ export default function Newsletter() {
               </>
             ) : (
               <>
-                <span className="text-[12px]">Subscribe</span> <Megaphone className="!w-6 !h-6   ml-1 text-white" />
+                <span className="text-[12px]">Subscribe</span>
+                <Megaphone className="!w-6 !h-6 ml-1 text-white" />
               </>
             )}
           </Button>
@@ -107,16 +116,13 @@ export default function Newsletter() {
         </label>
       </form>
 
-      {status === "error" && (
-        <p className="text-sm font-medium text-red-600">
-          Something went wrong — please try again.
-        </p>
+      {showNewsLetterModal && (
+        <ConfirmationModal
+          onClose={handleCloseModal}
+          isError={isError}
+          message={modalMessage}
+        />
       )}
-      {
-        showNewsLetterModal && status === 'done' && (
-          <ConfirmationModal onClose={toggleNewLetterModal} />
-        )
-      }
     </div>
   );
 }

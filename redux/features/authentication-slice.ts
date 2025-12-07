@@ -6,6 +6,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type HomeState = {
   accessToken: string;
   refreshToken: string;
+  isAuth: boolean;
+  isLoading: boolean;
   selectedData: any;
   email: string;
   profileDetails: IProfileDetails;
@@ -19,6 +21,8 @@ type HomeState = {
 const initialState: HomeState = {
   accessToken: "",
   refreshToken: "",
+  isAuth: false,
+  isLoading: false,
   selectedData: {} as any,
   email: "",
   profileDetails: {} as IProfileDetails,
@@ -35,6 +39,7 @@ export const authentication = createSlice({
   reducers: {
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
+      state.isAuth = true;
     },
     setRefreshToken: (state, action) => {
       state.refreshToken = action.payload;
@@ -63,6 +68,9 @@ export const authentication = createSlice({
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload
+    },
     resetAuthentication: () => {
       return initialState;
     },
@@ -81,5 +89,6 @@ export const {
   resetAuthentication,
   setselectedString,
   setUserPermissions,
+  setIsLoading
 } = authentication.actions;
 export default authentication.reducer;

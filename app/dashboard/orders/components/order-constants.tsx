@@ -63,6 +63,7 @@ export const OrderConstants = (): Col<IOrders>[] => {
 
       render: (data: IOrders) => (
         <div
+        className=""
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -74,5 +75,9 @@ export const OrderConstants = (): Col<IOrders>[] => {
         </div>
       ),
     },
+    {
+      title: '',
+      render: () => (<></>)
+    }
   ];
 };

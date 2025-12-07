@@ -8,6 +8,7 @@ import { SingleProductResponse } from '@/types/product';
 import SingleProductSection from './components/single-product-section';
 import DetailDecription from './components/detail-description-section';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import FAQSection from '@/components/common/faq/faq-section';
 
 const SingleProductPage: React.FunctionComponent = () => {
 
@@ -16,10 +17,17 @@ const SingleProductPage: React.FunctionComponent = () => {
 
   const [activeTab, setActiveTab] = useState<string>("Description");
 
-  const { data } = useFetchData<SingleProductResponse>(
+  const { data, loading, error } = useFetchData<SingleProductResponse>(
     `/public-products/${slug}`, true
   );
+  if (!data || loading || error) return null;
 
+  const {
+    detail_description,
+    tutorial,
+    youtube_link,
+    reviews,
+  } = data;
   return (
     <section>
       <SingleProductSection />
@@ -33,13 +41,19 @@ const SingleProductPage: React.FunctionComponent = () => {
             <TabsTrigger
               key={"Description"}
               value="Description"
-              className="font-playfair text-lg data-[state=active]:bg-transparent border-b-[2px] border-transparent data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:shadow-none hover:text-primary hover:cursor-pointer px-4"
+              className="font-playfair text-xl bg- font-semibold border-b-[2px] pb-4   data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
             >
               Description
             </TabsTrigger>
             <TabsTrigger
+              value="Specification"
+              className="font-playfair text-xl font-semibold bg- border-b-[2px] pb-4  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
+            >
+              Ingredients
+            </TabsTrigger>
+            <TabsTrigger
               value="Reviews"
-              className="font-playfair text-lg data-[state=active]:bg-transparent border-b-[2px] border-transparent data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:shadow-none hover:text-primary hover:cursor-pointer px-4"
+              className="font-playfair text-xl font-semibold bg- border-b-[2px] pb-4  data-[state=active]:border-b-primary data-[state=active]:text-primary rounded-none capitalize data-[state=active]:bg-white hover:text-primary hover:cursor-pointer px-4"
             >
               Reviews
             </TabsTrigger>
@@ -48,14 +62,22 @@ const SingleProductPage: React.FunctionComponent = () => {
 
         <TabsContent
           value="Description"
-          className="py-6"
+          className="py-4 space-y-6  w-full flex flex-col min-h-[200px]"
         >
-          <DetailDecription />
+          <DetailDecription detail_description={detail_description || ''} title="" />
         </TabsContent>
-        <TabsContent value="Reviews" className="py-8">
-          <Review reviews={data?.reviews || []} />
+        <TabsContent value="Specification" className="py-2 min-h-[200px]">
+          <DetailDecription
+            detail_description={tutorial}
+            title=""
+            youtube_link={youtube_link}
+          />
+        </TabsContent>
+        <TabsContent value="Reviews" className="py-4 min-h-[200px]">
+          <Review reviews={reviews} />
         </TabsContent>
       </Tabs>
+      <FAQSection page_query="product" product_slug={slug} />
     </section>
   )
 }

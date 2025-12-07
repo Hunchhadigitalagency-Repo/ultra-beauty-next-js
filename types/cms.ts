@@ -48,6 +48,24 @@ export interface IBlog {
   slug: string
   description: string
   tags: string
+  author: string
+  category: Category
+  cover_image: string
+  recommended_products: RecommendedProduct[]
+  recommended_blogs: RecommendedBlog[]
+  created_at: string
+  updated_at: string
+  is_active: boolean
+  send_as_newsletter: boolean
+}
+
+export interface IBlogWithIsNew {
+  id: number
+  title: string
+  sub_title: string
+  slug: string
+  description: string
+  tags: string
   author: Author
   category: Category
   cover_image: string
@@ -57,6 +75,7 @@ export interface IBlog {
   updated_at: string
   is_active: boolean
   send_as_newsletter: boolean
+  is_new: boolean
 }
 
 export interface BlogsList {
@@ -133,6 +152,16 @@ export interface ITestimonial {
   rating: number;
   created_at: string;
   is_active: boolean;
+}
+
+export interface IApplicant {
+  id: number;
+  full_name: string;
+  phone_no: string;
+  email: string;
+  cv: string;
+  cover_letter: string;
+  shortlisted: string;
 }
 
 export interface IDashboardITestimonial {

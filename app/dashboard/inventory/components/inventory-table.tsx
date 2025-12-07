@@ -18,13 +18,12 @@ interface Props {
 
 const InventoryTable = ({ setDatalength }: Props) => {
   const { searchQuery } = useAppSelector((state) => state.filter);
-  console.log("this is search query", searchQuery);
   
   const { data, loading, fetchNext, hasMore, totalCount } = useInfiniteFetch<Results>(
     "/inventory-management/",
     "search",
     searchQuery,
-    ETypes.INVENTORY
+    ETypes.INVENTORY,
   );
 
   const dispatch = useAppDispatch();

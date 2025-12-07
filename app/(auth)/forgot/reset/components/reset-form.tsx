@@ -41,10 +41,8 @@ export default function ResetPasswordForm() {
     },
   });
 
-  console.log(form.getValues());
 
   const onSubmit = async (data: ResetPasswordFormValue) => {
-    console.log(data);
     try {
       setLoading(true);
       const res = await resetPasswordApi(data);

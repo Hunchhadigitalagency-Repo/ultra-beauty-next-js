@@ -40,7 +40,7 @@ const ContactPage: React.FunctionComponent = () => {
           <section className="grid grid-cols-1 gap-10 lg:grid-cols-2">
 
             {/* Contact Details */}
-            <div className="w-full h-full">
+            <div className="w-full h-fit">
               <ContactSection />
             </div>
 
@@ -61,7 +61,8 @@ const ContactPage: React.FunctionComponent = () => {
         <iframe
           className="w-[95%] lg:w-[90%] xl:w-full h-full rounded-md xl:rounded-none"
           loading="lazy"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3531.5272789675164!2d85.32096141461306!3d27.71724573297982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19071fb7f895%3A0x9511b0190b7c7490!2sKathmandu%2C%20Kathmandu%20District%2C%20Province%20No.%201%2C%20Nepal!5e0!3m2!1sen!2sus!4v1688131500950!5m2!1sen!2sus"
+          src=
+          "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3566.169840575962!2d87.9907602!3d26.643044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39e5bb0b95d73921%3A0x714dd4f503bfbc52!2sUltra%20Beauty%20%26%20Brands!5e0!3m2!1sen!2snp!4v1759907794345!5m2!1sen!2snp"
         ></iframe>
       </div>
     </main>

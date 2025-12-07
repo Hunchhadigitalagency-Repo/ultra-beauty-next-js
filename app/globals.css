@@ -101,7 +101,8 @@
   /* --gray: oklch(95.97% 0.002 17.2); */
   --blue: oklch(0.7047 0.1922 259.28);
   --pink: oklch(0.9422 0.0426 19.31);
-  --gray: oklch(0.5281 0.0001 278.52);
+  --gray: oklch(14.655% 0.03296 21.937);
+  --track: oklch(60.038% 0.24438 300.345);
   /* Ultra Beauty Styles */
   --custom-black: oklch(23.50% 0.000 0);
   --button: oklch(0.7752 0.2038 19.82);

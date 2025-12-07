@@ -36,31 +36,31 @@ export const InventoryTableConstant = (
       ),
     },
 
-    // Product Category
-    {
-      title: "PRODUCT CATEGORY",
-      render: (data: InventoryProducts) => (
-        <span className="capitalize text-gray-700 font-medium">
-          {data?.product?.category?.name || "—"}
-        </span>
-      ),
-    },
+    // // Product Category
+    // {
+    //   title: "PRODUCT CATEGORY",
+    //   render: (data: InventoryProducts) => (
+    //     <span className="capitalize text-gray-700 font-medium">
+    //       {data?.product?.category?.name || "—"}
+    //     </span>
+    //   ),
+    // },
 
-    // SKU ID
-    {
-      title: "SKU ID",
-      render: (data: InventoryProducts) => (
-        <span className="text-xs text-muted-foreground">
-          {data?.product?.sku || "—"}
-        </span>
-      ),
-    },
+    // // SKU ID
+    // {
+    //   title: "SKU ID",
+    //   render: (data: InventoryProducts) => (
+    //     <span className="text-xs text-muted-foreground">
+    //       {data?.product?.sku || "—"}
+    //     </span>
+    //   ),
+    // },
 
     // Quantity with stock highlights
     {
       title: "QUANTITY",
       render: (data: InventoryProducts) => {
-        const qty = data?.quantity ?? 0;
+        const qty = Math.floor(Math.abs(data?.quantity ?? 0));
         return (
           <span
             className={`font-semibold flex justify-center px-2 py-1 rounded-md ${qty === 0
@@ -130,8 +130,8 @@ export const InventoryTableConstant = (
       render: (data: InventoryProducts) => {
 
         const action = data.action.toLowerCase() === "purchase return" ? "purchase-return" : data.action.toLowerCase()
-        console.log('this is the actiopn ' ,action);
-        
+        console.log('this is the actiopn ', action);
+
         return (
           <div
             className="flex gap-2 w-full justify-end"

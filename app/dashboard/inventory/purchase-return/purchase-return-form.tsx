@@ -19,13 +19,14 @@ import {
   purchaseReturnFormSchema,
   type PurchaseReturnFormValues,
 } from "@/schemas/inventory/purchase-return-schema";
+import useFetchData from "@/hooks/use-fetch-data";
 import { purchaseReturn } from "@/lib/api/inventory/inventory-apis";
 import { toast } from "sonner";
 import SingleFileUploader from "@/components/common/ImageUploader/file-uploader";
 import { useRouter } from "next/navigation";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
-import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ProductOption {
   id: number;
@@ -233,6 +234,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       quantity: 0,
     });
   };
+  const [loading, setLoading] = useState(false);
 
   const removeProduct = (index: number) => {
     if (fields.length > 1) {
@@ -242,7 +244,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
 
   const onSubmit = async (data: PurchaseReturnFormValues) => {
     const formData = new FormData();
-
+    setLoading(true)
     data.products.forEach((prod, index) => {
       formData.append(`product[${index}]`, prod.product.toString());
       formData.append(`quantity[${index}]`, prod.quantity?.toString() || '');
@@ -264,6 +266,8 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
     } catch (error: any) {
       toast.error(`Error updating inventory: ${error.message}`);
       console.error(error);
+    } finally {
+      setLoading(false)
     }
 
   };
@@ -272,7 +276,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
     <div className="min-h-screen ">
       <Form {...form}>
         <form
-          className="relative flex flex-col gap-6 p-32"
+          className="relative flex flex-col gap-6 "
           onSubmit={form.handleSubmit(onSubmit)}
         >
           {/* Products Section */}
@@ -296,7 +300,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
             </div>
           </div>
 
-          <div className="fixed bottom-6 right-0 w-full p-2 md:w-1/4 z-50">
+          <div className={`flex justify-end items-end  ${fields.length < 2 && "mt-50"} `}>
             <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col md:items-start gap-4">
               <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
                 ATTACHMENT
@@ -335,9 +339,10 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
                 <Button
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
-                  className="bg-black hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                  disabled={loading}
+                  className=" text-white font-semibold px-8 py-3 rounded-lg transition-colors"
                 >
-                  Save
+                  {loading ? <Spinner /> : "Save"}
                 </Button>
               </div>
 

@@ -86,14 +86,14 @@ const SingleProductCard = ({
 
             {/* Product Info */}
             <div className="px-4 flex flex-col">
-                <p className="text-[15px] font-medium text-gray-500 line-clamp-1">
+                <p className="text-[12px] font-medium text-gray-500 line-clamp-1">
                     {category}
                 </p>
-                <p className="text-[18px] font-medium line-clamp-1">{title}</p>
+                <p className="text-[16px] font-medium line-clamp-1">{title}</p>
                 <div className="flex justify-between mt-2">
-                    <p className="text-[17px] font-medium">Nrs. {finalPrice}</p>
+                    <p className="text-[15px] font-medium">Nrs. {finalPrice}</p>
                     {previousPrice && (
-                        <p className="text-[16px] font-medium line-through text-gray-500">
+                        <p className="text-[14px] font-medium line-through text-gray-500">
                             Nrs. {previousPrice}
                         </p>
                     )}
@@ -102,7 +102,7 @@ const SingleProductCard = ({
                 {/* Select Product Button (opens dialog) */}
                 <Button
                     onClick={() => setIsOpen(true)}
-                    className="w-full bg-pink-200 mt-2 border-pink-500 rounded-sm h-12 text-black hover:bg-pink-400"
+                    className="w-full bg-red-100 mt-2 border-pink-500 rounded-sm h-12 text-black hover:bg-red-400"
                 >
                     Select Product
                 </Button>

@@ -1,6 +1,6 @@
 "use client";
 import { toast } from "sonner";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import CartHeader from "./cart-header";
 import { CartResponse, } from "@/types/cart";
 import OrderSummary from "./order-summary";
@@ -9,7 +9,7 @@ import useFetchData from "@/hooks/use-fetch";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import SectionHeader from "@/components/common/header/section-header";
 import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
-import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem } from "@/redux/features/cart-slice";
+import { clearCartCount, clearVoucherData, decreaseCartCount, deleteAllCartItem, deleteCartItem, setCartItems, } from "@/redux/features/cart-slice";
 import { AlertCircle } from "lucide-react";
 
 
@@ -22,16 +22,29 @@ export default function ShoppingCart() {
   const { cartItem, voucherData } = useAppSelector(state => state.cart);
   const totalQuantity = cartItem.length;
 
+  const cartItemsData = useMemo(() => {
+    if (!CartItems) return [];
+    return CartItems.map(item => ({
+      id: item.id,
+      price: item.product.price,
+      quantity: item.quantity,
+      discount_percentage: item.product.discount_percentage,
+      tax_applied: item.product.tax_applied,
+      image: item.product.images?.[0].file,
+      name: item.product.name,
+    }));
+  }, [CartItems]);
 
-  const cartItemsData = CartItems?.map(item => ({
-    id: item.id,
-    price: item.product.price,
-    quantity: item.quantity,
-    discount_percentage: item.product.discount_percentage,
-    tax_applied: item.product.tax_applied,
-  })) ?? [];
+
 
   useEffect(() => {
+    if (!cartItemsData || cartItemsData.length === 0) return;
+    dispatch(setCartItems(cartItemsData))
+
+  }, [cartItemsData, dispatch]);
+
+  useEffect(() => {
+
     dispatch(clearVoucherData())
   }, [voucherData, dispatch]);
 
@@ -80,11 +93,12 @@ export default function ShoppingCart() {
           </p>
         </div>
       ) : CartItems?.length === 0 ? (
-        <div className='h-60 flex w-full justify-center items-center'>
-          <p className='text-gray'>
-            No Cart Items found !
-          </p>
-        </div>
+       <div className='flex flex-col items-center justify-center w-full h-60'>
+                   <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                   <p className='font-extralight text-sm text-gray-400 capitalize'>
+                     Oops! no Products in cart right now...
+                   </p>
+                 </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
           {/* Cart Items */}

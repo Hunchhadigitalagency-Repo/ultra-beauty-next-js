@@ -12,10 +12,14 @@ import {
 } from "@/components/ui/carousel";
 import useFetchData from "@/hooks/use-fetch";
 import LoadingSpinner from "@/components/common/loader/loading-spinner";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hooks";
+import { toggleCategory } from "@/redux/features/category-slice";
 
 export interface HeroSectionResponse {
   id: number
-  categories: Category[]
+  categories?: Category[]
+  products?: { id: number, slug_name: string, name: string }[]
   image: string
   banner_type: string
   title: string
@@ -29,7 +33,8 @@ export interface Category {
 }
 
 export default function HeroSection() {
-
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const params = window.location;
   const path = params.href.includes('shop') ? '/cms/banner-page/?page=shop' : '/cms/banner-general'
   const { data, error, loading } = useFetchData<HeroSectionResponse[]>(
@@ -54,6 +59,20 @@ export default function HeroSection() {
     }, 10000);
     return () => clearInterval(interval);
   }, [api, isHovered]);
+
+const handleBannerClick = (slide: HeroSectionResponse) => {
+
+  if (slide.categories && slide.categories?.length > 0) {
+    dispatch(toggleCategory({ id: slide.categories?.[0].id, checked: true }))
+    router.push('/shop')
+    return;
+  }
+
+  if (slide.products && slide.products?.length > 0) {
+    router.push(`/shop/${slide.products?.[0]?.slug_name}`)
+    return;
+  }
+}
 
   return (
     <section className="relative h-60 md:h-[500px] px-5 py-10 padding-x bg-[#FAFAFA] sm:h-[500px] lg:h-[calc(100vh-130px)]">
@@ -89,7 +108,7 @@ export default function HeroSection() {
             <CarouselContent className="w-full md:h-[500px] lg:h-[calc(100vh-130px)]">
               {data?.map((slide, index) => (
                 <CarouselItem key={slide.id} className="h-full overflow-hidden rounded-md ">
-                  <div className="relative  h-36 sm:h-96 lg:h-[80%]  overflow-hidden rounded-md">
+                  <div className="relative  h-36 sm:h-96 lg:h-[80%]  overflow-hidden rounded-md cursor-pointer" onClick={() => handleBannerClick(slide)}>
                     <div className="absolute inset-0 ">
                       <Image
                         src={slide.image || "/placeholder.svg"}
@@ -114,8 +133,8 @@ export default function HeroSection() {
                 <button
                   key={i}
                   className={`w-[10px] h-[10px] rounded-full transition-all duration-300 ${i === current
-                    ? "bg-red-500 scale-110 h-[10px] w-[15px]"
-                    : "bg-[#7A7A7A] hover:bg-white/70"
+                    ? "bg-pink-600 scale-110 h-[10px] w-[15px]"
+                    : "bg-[#7A7A7A] hover:bg-pink-300"
                     }`}
                   onClick={() => api?.scrollTo(i)}
                   aria-label={`Go to slide ${i + 1}`}

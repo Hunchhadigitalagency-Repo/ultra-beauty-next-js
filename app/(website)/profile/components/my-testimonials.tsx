@@ -9,13 +9,23 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { StarRating } from "@/components/common/form/star-rating-input";
-import { TestimonialFormValues, testimonialSchema } from "@/schemas/cms/testimonials-schema";
+import { TextTestimonialFormValues, textTestimonialSchema } from "@/schemas/cms/testimonials-schema";
+import { toast } from "sonner";
+import { handleError } from "@/lib/error-handler";
+import { createUserTestimonials, updateUserTestimonials } from "@/lib/api/cms/testimonials-api";
+import useFetchData from "@/hooks/use-fetch";
+import { IDashboardITestimonial } from "@/types/cms";
+import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
 
 
 
 export default function MyTestimonials() {
-    const form = useForm<TestimonialFormValues>({
-        resolver: zodResolver(testimonialSchema),
+
+    const { data, refetch } = useFetchData<IDashboardITestimonial[]>('cms/user-testimonials/', true)
+    const initialData = data?.[0] || null;
+
+    const form = useForm<TextTestimonialFormValues>({
+        resolver: zodResolver(textTestimonialSchema),
         defaultValues: {
             name: "",
             designation: "",
@@ -23,18 +33,65 @@ export default function MyTestimonials() {
             message: "",
             image: undefined,
             rating: 0,
-
+            is_active: true,
+            is_video: false,
         },
     });
 
-    function onSubmit(values: TestimonialFormValues) {
-        console.log("Form Values:", values);
+    React.useEffect(() => {
+        if (initialData) {
+            form.reset({
+                name: initialData.name,
+                designation: initialData.designation,
+                company: initialData.company,
+                message: initialData.message,
+                image: initialData.image,
+                rating: initialData.rating,
+                is_active: true,
+                is_video: false,
+            })
+        }
+    }, [initialData])
+
+    async function onSubmit(data: TextTestimonialFormValues) {
+        try {
+            const formData = new FormData()
+            formData.append("name", data.name)
+            formData.append("designation", data.designation)
+            formData.append("company", data.company)
+            formData.append("is_active", data.is_active.toString())
+            formData.append("is_video", data.is_video.toString())
+
+            formData.append("message", data.message)
+            formData.append("rating", data.rating.toString())
+            if (data.image instanceof File) {
+                formData.append("image", data.image)
+            }
+
+            if (initialData) {
+                const response = await updateUserTestimonials(formData, initialData?.slug)
+                if (response.status === 200) {
+                    toast.success("Testimonial updated successfully")
+                }
+                form.reset()
+                refetch()
+            } else {
+                const response = await createUserTestimonials(formData)
+                if (response.status === 201) {
+                    toast.success("Testimonial created successfully")
+                }
+                form.reset()
+                refetch()
+            }
+        } catch (error) {
+            handleError(error, toast)
+        }
     }
 
 
     return (
         <div className="w-full p-6 bg-white rounded-2xl shadow">
-            <h2 className="text-xl font-semibold mb-4">Add Testimonial</h2>
+            <h2 className="text-xl font-semibold mb-4">{initialData ? "Edit Testimonial" : "Add Testimonial"}</h2>
 
             <Form {...form}>
                 {/* Name */}
@@ -106,10 +163,11 @@ export default function MyTestimonials() {
                             <FormItem>
                                 <FormLabel>Image</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => field.onChange(e.target.files?.[0])}
+                                    <SingleImageUploader
+                                        value={field.value}
+                                        onRemove={() => field.onChange(undefined)}
+                                        onChange={field.onChange}
+                                        size="small"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -136,7 +194,7 @@ export default function MyTestimonials() {
                         )}
                     />
                     <Button type="submit" className="w-20 block ml-auto">
-                        Save
+                        {initialData ? "Update" : "Save"}
                     </Button>
                 </form>
             </Form>

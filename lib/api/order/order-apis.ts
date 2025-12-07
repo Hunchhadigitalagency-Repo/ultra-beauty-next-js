@@ -97,9 +97,10 @@ export const returnOrder = async (
     if (reason) {
         formData.append("reason", reason);
     }
+    
     if (attachment) {
-        attachment.forEach((file) => {
-            formData.append("attachment", file);
+        attachment.forEach((file:any) => {
+            formData.append("attachment", file.file);
         });
     }
     const response = await api.post("return-items/", formData, {

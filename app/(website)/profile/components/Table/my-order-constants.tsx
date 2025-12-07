@@ -53,7 +53,7 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
           }}
           className="w-[100px] rounded-sm py-1 px-2 text-center"
         >
-          <p className="text-white">{order.order_status?.name}</p>
+          <p className="text-white">{order.order_details?.[0].status || order.order_status?.name}</p>
         </button>
       )
     },
@@ -65,10 +65,10 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
       title: "Action",
       render: (order: OrderResponse) => (
         <div className="flex justify-end w-full h-full gap-2">
-          <button className="cursor-pointer text-primary"
+          {/* <button className="cursor-pointer text-primary"
             onClick={() => router.push(`/order-tracking`)}>
             Track
-          </button>
+          </button> */}
           <button
             className="cursor-pointer text-primary"
             onClick={() => router.push(`/my_orders/${order.id}`)}

@@ -31,6 +31,8 @@ import { toggleRefetchTableData } from "@/redux/features/table-slice";
 import { handleError } from "@/lib/error-handler";
 import { ESettings } from "@/types/table";
 import { setActiveSetting } from "@/redux/features/setting-slice";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface AttributeFormProps {
   initialData: IAttribute | null;
@@ -38,6 +40,7 @@ interface AttributeFormProps {
 
 const AttributeForm = ({ initialData }: AttributeFormProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<AttributeValues>({
     resolver: zodResolver(attributeSchema),
@@ -64,6 +67,7 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
   });
 
   const onSubmit = async (data: AttributeValues) => {
+    setLoading(true)
     try {
       if (initialData) {
         const response = await updateAttribute(initialData.id, data);
@@ -82,6 +86,8 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -239,9 +245,9 @@ const AttributeForm = ({ initialData }: AttributeFormProps) => {
         <Button
           type="submit"
           form="setting-attribute-form"
-          className="text-white bg-orange-400 rounded-sm"
+          className="text-white rounded-sm"
         >
-          Save
+          {loading ? <Spinner /> : "Save" }
         </Button>
       </div>
     </>

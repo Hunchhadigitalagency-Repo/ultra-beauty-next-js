@@ -1,25 +1,19 @@
-// import { getOutlineStatusColor } from "@/lib/styles-utils";
+import { getOutlineStatusColor } from "@/lib/styles-utils";
 import React from "react";
 
 interface IStatusCard {
   status: string;
-  primaryColor?: string;
-  textColor?: string;
 }
 
-const OutlineStatusCard: React.FC<IStatusCard> = ({ status, primaryColor, textColor }) => {
-  // const styles = getOutlineStatusColor(status || "");
+const OutlineStatusCard = ({ status }: IStatusCard) => {
+  const styles = getOutlineStatusColor(status || "");
 
   return (
-    <button
-      style={{
-        backgroundColor: primaryColor,
-        color: textColor,
-      }}
-      className="w-[100px] rounded-sm py-1 px-2 text-center"
+    <div
+      className={`w-22 h-7 flex items-center justify-center rounded-full border ${styles} capitalize`}
     >
-      <p className="text-black">{status}</p>
-    </button>
+      {status}
+    </div>
   );
 };
 

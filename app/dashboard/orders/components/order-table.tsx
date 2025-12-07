@@ -60,7 +60,7 @@ const OrderTable = ({ setDatalength }: Props) => {
         style={{ overflow: 'visible' }}
         endMessage={
           !hasMore && data.length > 0 ? (
-            <p className="text-center text-gray-500 py-4">
+            <p className="text-center text-[12px] text-gray-500 py-4">
               No more orders to load
             </p>
           ) : null

@@ -14,8 +14,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import esewa from "@/assets/esewa.png";
-import khalti from "@/assets/khalti.png";
+// import esewa from "@/assets/esewa.png";
+// import khalti from "@/assets/khalti.png";
 import coin from "@/assets/coin-dollar.png";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ import { SingleProductPageProps, ErrorState, SelectedAttribute } from "@/types/p
 import { clearCartItems, clearVoucherData, increaseCartCount } from "@/redux/features/cart-slice";
 
 
-const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product }) => {
+const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps> = ({ product, getVariantId }) => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -46,11 +46,11 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
   const attributeOrder = useMemo(() => {
     return (
-      product.variants[0]?.product_variants.map(
+      product?.variants[0]?.product_variants.map(
         (pv) => pv.attribute.name
       ) || []
     );
-  }, [product.variants]);
+  }, [product?.variants]);
 
 
   const optionStep = getOptions({
@@ -61,6 +61,12 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
   const variantId = optionStep.data?.map(item => item.id).toString();
 
+
+  useEffect(() => {
+    if (variantId) {
+      getVariantId(parseInt(variantId))
+    }
+  }, [variantId])
   const validateSelection = useCallback(() => {
     const newErrors: ErrorState = {};
     attributeOrder.forEach(attrName => {
@@ -89,10 +95,10 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
     validateSelection();
   }, [selectedAttributes, hasSubmitted, validateSelection]);
 
-  const discountedPrice = product.discount_percentage
+  const discountedPrice = product?.discount_percentage
     ? (
-      Number(product.price) -
-      (Number(product.price) * Number(product.discount_percentage)) / 100
+      Number(product?.price) -
+      (Number(product?.price) * Number(product?.discount_percentage)) / 100
     ).toFixed(2)
     : null;
 
@@ -107,13 +113,12 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       return [...prev, { name, value }];
     });
   }
-
   const handleSubmit = () => {
     setHasSubmitted(true);
     validateSelection();
     if (isLoggedIn) {
       if (variantId !== undefined && userId) {
-        addToCart(userId, product.slug_name, quantity, parseFloat(variantId));
+        addToCart(userId, product?.slug_name, quantity, parseFloat(variantId));
         dispatch(clearCartItems());
         dispatch(clearVoucherData());
         dispatch(increaseCartCount())
@@ -133,22 +138,22 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       <div className="flex flex-col gap-1" >
         <div className="flex justify-between w-full">
           <h1 className="mb-2 text-sm font-medium text-[#7A7A7A] font-poppins">
-            {product.brand.name || 'No Brand'}
+            {product?.brand?.name || 'No Brand'}
           </h1>
           <div className="flex items-center gap-5">
-            <RatingStars rating={product.average_rating} />
+            <RatingStars rating={product?.average_rating} />
             <span className="text-sm font-medium text-primary">
-              {product.average_rating}/5 Star Rating
+              {product?.average_rating}/5 Star Rating
             </span>
           </div>
         </div>
         <h1 className="text-3xl font-bold capitalize font-playfair line-clamp-2">
-          {product.name}
+          {product?.name}
         </h1>
         <div>
           {
-            product.is_best_seller == false && (
-              <Button className="mt-4 text-white rounded-sm bg-primary">
+            product?.is_best_seller == false && (
+              <Button className="mt-3 text-white rounded-sm bg-primary">
                 Best Seller
               </Button>
             )
@@ -158,7 +163,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       {/* Details */}
       <SingleProductAccordion
         title="Details"
-        description={product.general_description} />
+        description={product?.general_description} />
 
       {/* Variants */}
       {
@@ -167,7 +172,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
 
           const options = [
             ...new Set(
-              product.variants
+              product?.variants
                 .filter(variant =>
                   selectedAttributes
                     .filter(sel => sel.name !== attrName)
@@ -225,9 +230,9 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
       {/* Product Price */}
       <div className="flex flex-col items-start justify-between w-full gap-4 pt-2 pl-3 sm:flex-row sm:items-center sm:pl-0 sm:pt-6">
         <PriceRow
-          price={discountedPrice ?? ''}
-          previousPrice={product.price}
-          discountTag={product.discount_percentage}
+          price={product?.discount_percentage ? discountedPrice || '' : product?.price}
+          previousPrice={product?.discount_percentage && product?.price}
+          discountTag={product?.discount_percentage}
           priceClassname="gap-5"
           discountClassName="bg-primary text-white"
         />
@@ -249,7 +254,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
         </div>
 
       </div>
-      {/* ADD To Bag button */}
+
       <Button
         onClick={handleSubmit}
         className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-6 rounded-sm bg-primary"
@@ -286,26 +291,26 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               C.O.D
             </span>
           </div>
-          <div className="relative w-8 h-8 sm:w-9 sm:h-9">
+          {/* <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image src={esewa.src} alt="esewa" fill className="rounded-full " />
           </div>
           <div className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Image src={khalti.src} alt="Khalti" fill className="rounded-full " />
-          </div>
+          </div> */}
         </div>
       </div>
       {/*Bundle Product Section */}
       {/* {
-        product.variants?.length >= 1 && (
+        product?.variants?.length >= 1 && (
           <div className="space-y-4">
             <h2 className="text-lg font-bold">Bundle and Save</h2>
             <div className="flex flex-col justify-start gap-8 md:flex-row md:gap-20 md:items-center md:justify-between lg:flex-col lg:gap-8 lg:items-start xl:flex-row xl:gap-20 xl:items-center xl:justify-between">
               <div className="flex items-center gap-3">
                 {
-                  product.variants.slice(0, 2).map((variant, i) => (
+                  product?.variants.slice(0, 2).map((variant, i) => (
                     <React.Fragment key={i}>
                       <Image
-                        src={product.images?.[0]?.file || ""}
+                        src={product?.images?.[0]?.file || ""}
                         alt={`Bundle item ${i}`}
                         width={120}
                         height={120}
@@ -324,7 +329,7 @@ const ProductDescriptionSection: React.FunctionComponent<SingleProductPageProps>
               </div>
               <div className="flex flex-col items-start gap-3">
                 {
-                  product.variants.slice(0, 2).map((variant, i) => (
+                  product?.variants.slice(0, 2).map((variant, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <SquareCheck />
                       <h3 className="text-sm font-medium">

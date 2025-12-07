@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
 import { getCategoriesDropdown } from "@/lib/api/dropdown/dropdown-api";
 import {
@@ -32,6 +33,7 @@ import {
 import { ISubCategory } from "@/types/Settings";
 import { ESettings } from "@/types/table";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -42,6 +44,7 @@ interface SubCategoryFromProps {
 
 const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<SubCategoryValues>({
     resolver: zodResolver(subCategorySchema),
@@ -64,7 +67,7 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
 
   const onSubmit = async (data: SubCategoryValues) => {
     const formData = new FormData;
-
+setLoading(true)
     formData.append("category", data.category)
     formData.append("name", data.name)
     formData.append("is_active", data.is_active.toString())
@@ -88,6 +91,8 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -193,7 +198,7 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="is_used_to_build_system"
                   render={({ field }) => (
@@ -215,7 +220,7 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </form>
           </Form>
@@ -227,8 +232,9 @@ const SubCategoryForm = ({ initialData }: SubCategoryFromProps) => {
           type="submit"
           form="setting-sub-category-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save Changes
+          {loading ? <Spinner /> : "Save Changes" }
         </Button>
       </div>
     </>

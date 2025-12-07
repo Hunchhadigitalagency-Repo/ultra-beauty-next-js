@@ -20,6 +20,7 @@ import { Switch } from "@/components/ui/switch";
 import { purchaseFormSchema } from "@/schemas/inventory/purchase-schema";
 import * as z from "zod";
 
+import useFetchData from "@/hooks/use-fetch-data";
 import SingleImageUploader from "@/components/common/ImageUploader/single-image-uploader";
 import { purchaseAdd } from "@/lib/api/inventory/inventory-apis";
 import { toast } from "sonner";
@@ -29,7 +30,7 @@ import SingleFileUploader from "@/components/common/ImageUploader/file-uploader"
 import { useRouter } from "next/navigation";
 import { PaginatedSelect } from "@/components/common/paginated-select/paginated-select";
 import { getProductsDropdown } from "@/lib/api/dropdown/dropdown-api";
-import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ProductOption {
   id: number;
@@ -534,7 +535,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       attachments: [],
     },
   });
-
+  const [loading, setLoading] = useState(false);
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "products",
@@ -556,14 +557,12 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
   const router = useRouter()
   const onSubmit = async (data: MultiProductFormValues) => {
     // console.log("this is data", data);
-
+setLoading(true)
     const formData = new FormData();
 
     data.products.forEach((prod, index) => {
-      // product id/name
       formData.append(`product[${index}]`, String(prod.product));
 
-      // booleans (must convert to string)
       formData.append(
         `sameAsParentName[${index}]`,
         String(prod.sameAsParentName ?? false)
@@ -581,7 +580,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
         String(prod.attributeImage ?? false)
       );
 
-      // quantity (convert number to string)
       if (prod.quantity !== undefined) {
         formData.append(
           `quantity[${index}]`,
@@ -589,7 +587,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
         );
       }
 
-      // existing_variants
       prod.existing_variants?.forEach((variant, vIndex) => {
         formData.append(
           `existing_variants[${index}][${vIndex}][id]`,
@@ -603,7 +600,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
         }
       });
 
-      // variantItems
       prod.variantItems?.forEach((variant, vIndex) => {
         formData.append(
           `variants[${index}][${vIndex}][item_name]`,
@@ -620,7 +616,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
           String(variant.quantity)
         );
 
-        // image (File or null)
         if (variant.image) {
           formData.append(
             `variants[${index}][${vIndex}][image]`,
@@ -628,7 +623,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
           );
         }
 
-        // variant_classes
         variant.variant_classes.forEach((vc, vcIndex) => {
           formData.append(
             `variants[${index}][${vIndex}][variant_classes][${vcIndex}][attribute]`,
@@ -641,7 +635,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
         });
       });
 
-      // attachments (array of Files)
       formData.append(`attachment[${index}]`, data.attachments[0]);
     });
 
@@ -651,6 +644,8 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       router.push("/dashboard/inventory");
     } catch (error: any) {
       toast.error(`Error submitting form: ${error?.message}`);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -685,7 +680,7 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
             </div>
           </div>
 
-          <div className={`${fields.length > 2 && "fixed"} bottom-6 right-0 w-full p-2 lg:w-1/4 z-50`}>
+          <div className={`flex justify-end items-end  ${fields.length < 2 && "mt-10"} `}>
             <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col lg:items-start gap-4">
               <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
                 ATTACHMENT
@@ -724,9 +719,10 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
                 <Button
                   type="submit"
                   onClick={form.handleSubmit(onSubmit)}
-                  className="bg-black hover:bg-gray-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                  className="text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                  disabled={loading}
                 >
-                  Save
+                  {loading ? <Spinner /> : "Save" }
                 </Button>
               </div>
 

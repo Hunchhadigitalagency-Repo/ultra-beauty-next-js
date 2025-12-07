@@ -28,8 +28,7 @@ export default function OrderSummary({
   const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
   const { firstName, lastName, address, phoneNumber, alternativePhoneNumber, city } = shippingDetails || {};
 
-  // Subtotal and Tax Calculation
-  const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price)), 0);
+  const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price) - parseFloat(item.discount_percentage || '0') / 100 * parseFloat(item.price)), 0);
   const taxPercentage = cartItem.reduce((sum, item) => sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0), 0);
   const taxAmount = cartItem.reduce((sum, item) => {
     const price = parseFloat(item.price);
@@ -37,9 +36,10 @@ export default function OrderSummary({
     return sum + tax;
   }, 0);
 
-  // Voucher Discount and Total Calculation
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const Total = subTotal + Number(shippingFee) + taxAmount - voucherDiscount;
+  const safeShippingFee = parseFloat(shippingFee || '0') || 0;
+
+  const Total = subTotal + safeShippingFee - voucherDiscount;
 
 
   return (
@@ -67,7 +67,9 @@ export default function OrderSummary({
                   {address}
                 </span>
                 <span>
-                  {address}{city}
+                  {address}
+                  <br />
+                  {city}
                 </span>
               </p>
             </div>
@@ -76,9 +78,9 @@ export default function OrderSummary({
       }
 
       <div className="space-y-2">
-        <h3 className="text-base font-medium text-foreground">Order Summary</h3>
+        <h3 className="text-md  font-medium text-foreground">Order Summary</h3>
 
-        <div className="space-y-2 text-base font-medium text-custom-black">
+        <div className="space-y-2 text-sm font-medium text-custom-black">
           <div className="flex justify-between">
             <span>Total Item</span>
             <span className="text-foreground">{totalItems}</span>
@@ -157,14 +159,22 @@ export default function OrderSummary({
       </Button>
 
       {
-        !isCheckout &&
-        <Button
-          disabled={!cartItem.length}
-          className="w-full font-medium text-white bg-primary"
-          onClick={() => router.push("/checkout")}
-        >
-          Proceed to Checkout
-        </Button>
+        !isCheckout && (
+          <Button
+            disabled={cartItem.length === 0 || cartItem.length > 5} // disable if empty or >5
+            className={`w-full font-medium text-white rounded-md py-3 transition 
+        ${cartItem.length === 0 || cartItem.length > 5 ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-primary/90"}`}
+            onClick={() => {
+              if (cartItem.length <= 5) {
+                router.push("/checkout");
+              }
+            }}
+          >
+            {cartItem.length > 5
+              ? "Maximum 5 items allowed"
+              : "Proceed to Checkout"}
+          </Button>
+        )
       }
 
       {

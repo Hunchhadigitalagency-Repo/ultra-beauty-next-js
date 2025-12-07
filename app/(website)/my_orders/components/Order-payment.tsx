@@ -1,90 +1,99 @@
+"use client";
 import { CreateOrderResponse } from '@/types/orders';
 import React from 'react';
 
-
 interface OrderPaymentProps {
-    paymentdetails: CreateOrderResponse | null;
+  paymentdetails: CreateOrderResponse | null;
 }
-const OrderPayment: React.FunctionComponent<OrderPaymentProps> = ({ paymentdetails }) => {
 
-    return (
-        <div className='space-y-8'>
-            <div className='padding w-full md:min-h-96  bg-secondary flex-col grid xl:grid-cols-2 gap-3 pt-7 rounded-md'>
-                <div className='px-4  py-5  w-full h-34 md:h-44 bg-white flex flex-col gap-2 md:gap-3 rounded-md'>
-                    <h1 className='font-poppins font-medium text-sm md:text-xl'>
-                        {paymentdetails?.user.first_name} {paymentdetails?.user.last_name}
-                    </h1>
-                    <div className='flex gap-3 items-center'>
+const OrderPayment: React.FC<OrderPaymentProps> = ({ paymentdetails }) => {
+  return (
+    <div className="space-y-8">
+      <div className="padding w-full md:min-h-96 bg-secondary grid xl:grid-cols-2 gap-4 pt-6 rounded-md">
 
-                        <h1 className='font-poppins font-medium text-xs md:text-base'>
-                            {paymentdetails?.shipping_info.address}
-                        </h1>
-                    </div>
-                    <h1 className='font-poppins font-medium text-sm text-cente md:text-base'>
-                        {paymentdetails?.shipping_info.email}
-                    </h1>
-                    <h1 className='font-poppins font-medium text-sm text-cente md:text-base'>
-                        {paymentdetails?.shipping_info.phone_no}
-                    </h1>
-                </div>
-                <div className="px-7 py-5 w-ful h-auto md:h-auto bg-white rounded-md">
-                    <div className='flex flex-col gap-1 md:gap-3'>
-                        <h1 className="font-poppins font-medium text-primary text-sm md:text-xl">Total Summary</h1>
-                        <div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
-                            <h1>
-                                Total Item
-                            </h1>
-                            <h1>
-                                {paymentdetails?.order_details.length}
-                            </h1>
-                        </div>
+        {/* Shipping Info */}
+        <div className="px-6 py-5 w-full bg-white flex flex-col gap-2 md:gap-3 rounded-md shadow-sm">
+          <h2 className="font-poppins font-semibold text-base md:text-lg text-custom-black">
+            {paymentdetails?.user.first_name} {paymentdetails?.user.last_name}
+          </h2>
 
-                        <div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
-                            <h1 className='font-poppins font-medium'>Sub Total</h1>
-                            <h1>{paymentdetails?.sub_total}</h1>
-                        </div>
-                        {Number(paymentdetails?.discount_amount ?? 0) > 0 && (
-                            <div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
-                                <h1 className='font-poppins font-medium'>Discount Amount</h1>
-                                <h1>{paymentdetails?.discount_amount}</h1>
-                            </div>
-                        )}
+          <p className="text-sm md:text-base text-gray-700">
+            {paymentdetails?.shipping_info.address}
+          </p>
 
-                        {Number(paymentdetails?.tax_amount ?? 0) > 0 && (
-                            <div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
-                                <h1 className='font-poppins font-medium'>Tax Amount</h1>
-                                <h1>{paymentdetails?.tax_amount}</h1>
-                            </div>
-                        )}
-
-                        {Number(paymentdetails?.coupon_discount ?? 0) > 0 && (
-                            <div className="flex justify-between text-sm md:text-xl font-poppins font-medium">
-                                <h1 className="font-poppins font-medium">Coupon Discount</h1>
-                                <h1>{paymentdetails?.coupon_discount}</h1>
-                            </div>
-                        )}
-                        {Number(paymentdetails?.shipping_fee ?? 0) > 0 && (<div className='flex justify-between text-sm md:text-xl font-poppins font-medium'>
-                            <h1 className='font-poppins font-medium'>Shipping fee</h1>
-                            <h1>{paymentdetails?.shipping_fee}</h1>
-                        </div>)}
-
-                    </div>
-                    <div className='pt-5 border-t flex text-sm md:text-xl flex-col gap-2'>
-                        <div className='flex justify-between'>
-                            <h1 className='font-poppins font-medium'>Total</h1>
-                            <h1 className='font-poppins font-semibold text-sm md:text-xl text-primary'>{paymentdetails?.total_amount}</h1>
-                        </div>
-                        <div className='font-poppins text-[#6F6F6F] text-xs md:text-sm flex justify-between'>
-                            <h1>
-                                Paid by {paymentdetails?.payment_method}
-                            </h1>
-                            <h1>All Tax Included</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div className="text-sm md:text-base text-gray-700 flex flex-col gap-1">
+            <span>{paymentdetails?.shipping_info.email}</span>
+            <span>{paymentdetails?.shipping_info.phone_no}</span>
+          </div>
         </div>
-    )
-}
 
-export default OrderPayment
+        {/* Order Summary */}
+        <div className="px-6 py-5 w-full bg-white rounded-md shadow-sm">
+          <h2 className="font-poppins font-semibold text-base md:text-lg text-primary mb-4">
+            Total Summary
+          </h2>
+
+          <div className="space-y-2 md:space-y-3 text-sm md:text-base text-gray-800">
+            <SummaryRow label="Total Items" value={paymentdetails?.order_details.length ?? 0} />
+
+            <SummaryRow label="Sub Total" value={paymentdetails?.sub_total} />
+
+            {Number(paymentdetails?.discount_amount ?? 0) > 0 && (
+              <SummaryRow label="Discount Amount" value={paymentdetails?.discount_amount} highlight />
+            )}
+
+            {Number(paymentdetails?.tax_amount ?? 0) > 0 && (
+              <SummaryRow label="Tax Amount" value={paymentdetails?.tax_amount} />
+            )}
+
+            {Number(paymentdetails?.coupon_discount ?? 0) > 0 && (
+              <SummaryRow label="Coupon Discount" value={paymentdetails?.coupon_discount} />
+            )}
+
+            {Number(paymentdetails?.shipping_fee ?? 0) > 0 && (
+              <SummaryRow label="Shipping Fee" value={paymentdetails?.shipping_fee} />
+            )}
+          </div>
+
+          {/* Total */}
+          <div className="pt-5 mt-4 border-t border-gray-300 flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <h3 className="font-poppins font-medium text-sm md:text-base text-gray-700">
+                Total
+              </h3>
+              <h3 className="font-poppins font-semibold text-lg md:text-xl text-primary">
+                {paymentdetails?.total_amount}
+              </h3>
+            </div>
+            <div className="flex justify-between items-center text-xs md:text-sm text-gray-500 font-poppins">
+              <span>Paid by {paymentdetails?.payment_method}</span>
+              <span>All Tax Included</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SummaryRow = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | undefined;
+  highlight?: boolean;
+}) => (
+  <div className="flex justify-between items-center">
+    <span className="font-poppins font-medium text-gray-700 text-sm md:text-base">
+      {label}
+    </span>
+    <span
+      className={`font-poppins font-medium text-sm md:text-base `}
+    >
+      {value}
+    </span>
+  </div>
+);
+
+export default OrderPayment;

@@ -33,6 +33,8 @@ export default function UserRegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [emailErr, setEmailErr] = useState('')
+
 
   const form = useForm<RegisterFormValue>({
     resolver: zodResolver(registerFormSchema),
@@ -50,7 +52,6 @@ export default function UserRegisterForm() {
       setLoading(true);
 
       const res = await register(data);
-      console.log(res);
       if (res.status === 201) {
         dispatch(setProfileDetails(res.data?.user));
         toast.success("Registration Successful", {
@@ -60,8 +61,9 @@ export default function UserRegisterForm() {
         router.push("/login");
       }
     } catch (error: any) {
+      setEmailErr(error?.response?.data?.email?.[0])
       toast.error("Registration Failed", {
-        description: error?.response?.data?.error || error?.message,
+        description: JSON.stringify(error?.response?.data.email?.[0]) || error?.message,
       });
     } finally {
       setLoading(false);
@@ -113,6 +115,7 @@ export default function UserRegisterForm() {
                   </div>
                 </FormControl>
                 <FormMessage />
+                <span className="text-red">{emailErr}</span>
               </FormItem>
             )}
           />

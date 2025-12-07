@@ -68,6 +68,8 @@ export interface IProduct {
   updated_at: string;
   package: any[] | null;
   my_wishlist: boolean;
+  average_rating: number;
+  sold_unit: number
 }
 export interface CategoryFilter {
   id: number;
@@ -220,13 +222,24 @@ export interface Link {
   previous: string;
 }
 
+export interface MyBrand {
+  id: number
+  brand_name: string
+  brand_image: string
+  description?: string
+  is_featured: boolean
+  is_active: boolean
+  created_at: string
+  updated_at: string
+  is_deleted: boolean
+}
 export interface BrandResponse {
   links: Link;
   count: number;
   page_size: number;
   total_pages: number;
   current_page: number;
-  results: Brand[]
+  results: MyBrand[]
 }
 
 export interface Brand {
@@ -247,6 +260,7 @@ export interface SingleProductResponse extends Result {
 }
 export interface SingleProductPageProps {
   product: SingleProductResponse;
+  getVariantId: (id: number) => void;
 }
 
 export interface SelectedAttribute {
@@ -265,6 +279,7 @@ export interface ProductImagesSectionProps {
   flashEndDate?: string;
   isWishlisted?: boolean;
   is_new?: boolean;
+  active_image?: string; 
   onToggleWishlist: () => void;
 }
 

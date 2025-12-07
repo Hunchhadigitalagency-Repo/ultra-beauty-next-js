@@ -23,7 +23,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { IPaginatedDropdown, IPaginatedDropdownData } from "@/types/dropdown";
 
-
 interface PaginatedSelectProps {
   value?: string;
   onValueChange: (value: string, slug_name?: string) => void;
@@ -53,20 +52,20 @@ export function PaginatedSelect({
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
   const commandListRef = useRef<HTMLDivElement>(null);
 
-  // Load data with pagination and search
   const loadData = useCallback(
     async (page: number, search = "", append = false) => {
       setLoading(true);
       try {
         const response = await fetchData(page, search);
 
-        let resultsToSet = response.results;
+        let resultsToSet = response.results || response;
 
-        // If we have a selected value and it's the first page with no search,
-        // ensure the selected item is included in the results
         if (page === 1 && !search && value && !append) {
           const selectedExists = response.results.some(
-            (item) => item?.id.toString() === value
+            (item) =>
+              item?.id?.toString() === value ||
+
+              item?.slug_name === value
           );
 
           if (!selectedExists && selectedItem) {
@@ -140,16 +139,18 @@ export function PaginatedSelect({
     [hasMore, loading, loadMore]
   );
 
-  // Load initial data when component opens
   useEffect(() => {
-    if (open && !initialLoad) {
-
+    if (!initialLoad && value) {
       setInitialLoad(true);
       loadData(1, "", false);
     }
-  }, [open, initialLoad, loadData]);
 
-  // Reset when component closes
+    if (open && !initialLoad) {
+      setInitialLoad(true);
+      loadData(1, "", false);
+    }
+  }, [open, initialLoad, loadData, value]);
+
   useEffect(() => {
     if (!open) {
       setInitialLoad(false);
@@ -160,10 +161,9 @@ export function PaginatedSelect({
     }
   }, [open]);
 
-  // Find and set selected item when value or data changes
   useEffect(() => {
     if (value) {
-      const item = data.find((item) => item.id.toString() === value);
+      const item = data.find((item) => item.id.toString() === value || item?.slug_name?.toString() === value);
 
       if (item) {
         setSelectedItem(item);
@@ -176,10 +176,9 @@ export function PaginatedSelect({
   const handleSelect = (selectedValue: string) => {
     const numericValue = Number.parseInt(selectedValue);
     const item = data.find((item) => item.id === numericValue);
-
     if (item) {
       setSelectedItem(item);
-      onValueChange(item.id.toString());
+      onValueChange(item.id.toString(), item.slug_name?.toString());
       setOpen(false);
     }
   };
@@ -197,7 +196,7 @@ export function PaginatedSelect({
             className
           )}
         >
-          {selectedItem ? selectedItem.name : placeholder}
+          {selectedItem ? selectedItem.user || selectedItem.name : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -227,28 +226,28 @@ export function PaginatedSelect({
               )}
             </CommandEmpty>
             <CommandGroup>
-              {data?.map((item) => (
-                <CommandItem
-                  key={item.id}
-                  value={item.id.toString()}
-                  onSelect={handleSelect}
-                  className="cursor-pointer"
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      selectedItem?.id === item.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={item.image} />
-                    <AvatarFallback>
-                      {item.name?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="ml-3">{item.name}</span>
-                </CommandItem>
-              ))}
+              {data?.map((item) => {
+                return (
+                  <CommandItem
+                    key={item.id}
+                    value={item.id.toString()}
+                    onSelect={handleSelect}
+                    className="cursor-pointer"
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4 bg-pink-500",
+                        selectedItem?.id === item.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage src={item.image} />
+                      <AvatarFallback>{item.user?.charAt(0) || item?.name?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span className="ml-3">{item.user || item.name}</span>
+                  </CommandItem>
+                )
+              })}
               {loading && data?.length > 0 && (
                 <div className="flex items-center justify-center py-2">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />

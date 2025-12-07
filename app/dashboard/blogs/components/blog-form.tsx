@@ -21,7 +21,7 @@ import { createBlog, updateBlog } from "@/lib/api/cms/blogs-api";
 import {
   getBlogCategories,
   getProductsDropdown,
-  getUsersDropdown,
+  // getUsersDropdown,
 } from "@/lib/api/dropdown/dropdown-api";
 import { handleError } from "@/lib/error-handler";
 import { toggleRefetchTableData } from "@/redux/features/table-slice";
@@ -29,12 +29,13 @@ import { useAppDispatch } from "@/redux/hooks";
 import { BlogFormValues, blogSchema } from "@/schemas/cms/blogs-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { IBlog } from "@/types/cms";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
 import useFetchData from "@/hooks/use-fetch";
+import { Spinner } from "@/components/ui/spinner";
 
 interface BlogFormProps {
   initialData: IBlog | null;
@@ -48,6 +49,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
   const title = isEditMode ? "Edit Blog" : "Add Blog";
   const blogUrl = isEditMode ? `/cms/blogs/${initialData?.slug}` : "";
   const { data: blogData, loading: isLoading } = useFetchData<IBlog>(blogUrl);
+  const [loading, setLoading] = useState(false);
 
   const emptyDefaults = {
     title: "",
@@ -75,7 +77,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
         form.reset({
           title: dataToUse.title || "",
           sub_title: dataToUse.sub_title || "",
-          author: dataToUse.author?.id?.toString() || "",
+          author: dataToUse.author || "",
           category: dataToUse.category?.id?.toString() || "",
           tags: dataToUse.tags || "",
           cover_image: dataToUse.cover_image || "",
@@ -89,6 +91,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
   }, [isEditMode, blogData, initialData, form]);
 
   const onSubmit = async (data: BlogFormValues) => {
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("title", data.title);
@@ -131,6 +134,8 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
       }
     } catch (error) {
       handleError(error, toast);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -199,6 +204,26 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                     <FormItem>
                       <FormLabel>AUTHOR</FormLabel>
                       <FormControl>
+                        <Input placeholder="Enter Author Name..." {...field} />
+                        {/* <PaginatedSelect
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          placeholder="Select Author"
+                          fetchData={getUsersDropdown}
+                          className="w-full"
+                        /> */}
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="author"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>AUTHOR</FormLabel>
+                      <FormControl>
                         <PaginatedSelect
                           value={field.value}
                           onValueChange={field.onChange}
@@ -210,7 +235,7 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
                 <FormField
                   control={form.control}
@@ -285,7 +310,12 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
                     <FormControl>
                       <RichTextEditor
                         value={field.value}
-                        onChange={field.onChange}
+                        onChange={
+                          (value) => {
+                            field.onChange(value);
+                            form.trigger("description");
+                          }
+                        }
                         placeholder="Enter the Description"
                         heightClass="!max-h-[250px] h-[250px]"
                       />
@@ -376,8 +406,9 @@ const BlogForm = ({ initialData }: BlogFormProps) => {
           type="submit"
           form="blogs-form"
           className="text-white rounded-sm"
+          disabled={loading}
         >
-          Save
+          {loading ? <Spinner /> : "Save " }
         </Button>
       </div>
     </>

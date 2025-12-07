@@ -1,16 +1,23 @@
+'use client'
 import React from "react";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaXTwitter,
-} from "react-icons/fa6";
+// import {
+//   FaFacebook,
+//   FaInstagram,
+//   FaLinkedin,
+//   FaXTwitter,
+// } from "react-icons/fa6";
 import ContactItem from "./contact-item";
 import { MailIcon, Navigation, PhoneIcon } from "lucide-react";
 import SectionHeader from "@/components/common/header/section-header";
-import SocialLink from "@/components/common/social-links/social-link-item";
+// import SocialLink from "@/components/common/social-links/social-link-item";
+import { SocialLinkResponse } from "@/types/social-contact";
+import useFetchData from "@/hooks/use-fetch";
+import Link from "next/link";
+import Image from "next/image";
 
 const ContactSection: React.FunctionComponent = () => {
+  const { data: socialLinks } = useFetchData<SocialLinkResponse[]>('social-links/dropdown/');
+
   return (
     <section className="flex flex-col gap-5 md:gap-8 lg:justify-between h-full">
       <SectionHeader
@@ -19,20 +26,20 @@ const ContactSection: React.FunctionComponent = () => {
       />
 
       {/* Contact Details */}
-      <div className="grid grid-cols-1 justify-start items-start gap-8 py-4">
+      <div className="grid grid-cols-1 justify-start items-start gap-10 py-4">
         <ContactItem
           title="Phone Number"
-          details="+977-9800000000"
+          details="+977 9826940855"
           icon={PhoneIcon}
         />
         <ContactItem
           title="Email"
-          details="support@basera.io"
+          details="ultrabeautybrands@gmail.com"
           icon={MailIcon}
         />
         <ContactItem
           title="Our Location"
-          details="Ithari, Sunsari"
+          details="One Stop Mall Ground Floor, Jhapa District, Nepal"
           icon={Navigation}
         />
       </div>
@@ -40,30 +47,18 @@ const ContactSection: React.FunctionComponent = () => {
       {/* Social Icons */}
       <div className="px-5">
         <div className="flex items-center justify-between border-t-[1px] border-[#AAAAAA] pt-5 gap-4">
-          <SocialLink
-            icon={FaFacebook}
-            link="https://facebook.com"
-            iconClassName="size-7 text-[#9F9F9F]"
-            ariaLabel="Facebook"
-          />
-          <SocialLink
-            icon={FaXTwitter}
-            link="https://twitter.com"
-            iconClassName="size-7 text-[#9F9F9F]"
-            ariaLabel="Twitter"
-          />
-          <SocialLink
-            icon={FaLinkedin}
-            link="https://linkedin.com"
-            iconClassName="size-7 text-[#9F9F9F]"
-            ariaLabel="LinkedIn"
-          />
-          <SocialLink
-            icon={FaInstagram}
-            link="https://instagram.com"
-            iconClassName="size-7 text-[#9F9F9F]"
-            ariaLabel="Instagram"
-          />
+          {socialLinks?.map((social, index) => (
+            <Link href={social.url} key={index} target="_blank" rel="noopener noreferrer">
+              <div className="relative w-6 h-6">
+                <Image
+                  src={social.icon}
+                  alt={social.name}
+                  fill
+                  className="object-center rounded-sm transition-transform duration-300 hover:scale-120 "
+                />
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
