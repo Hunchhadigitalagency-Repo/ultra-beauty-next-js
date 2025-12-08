@@ -17,8 +17,7 @@ export const getCompanyProfile = async () => {
       company,
       seo,
     };
-  } catch (error) {
-    console.error("Failed to fetch company profile or SEO:", error);
+  } catch {
     return {
       company: null,
       seo: null,
