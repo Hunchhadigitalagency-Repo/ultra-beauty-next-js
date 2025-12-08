@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies (with dev)
         run: |
           sudo apt-get update && sudo apt-get install -y build-essential python3
-          npm ci
+          npm run build:deps
           npm rebuild lightningcss
 
       - name: Build application
