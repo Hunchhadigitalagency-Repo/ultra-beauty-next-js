@@ -20,7 +20,9 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies (with dev)
-      run: npm ci
+      run: |
+           npm ci
+           npm rebuild lightningcss --build-from-source
 
     - name: Build application
       env:
