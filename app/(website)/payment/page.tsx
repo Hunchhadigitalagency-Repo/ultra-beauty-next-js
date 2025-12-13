@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { toast } from 'sonner';
 // import Esewa from '@/assets/esewa.png';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 // import Khalti from '@/assets/khalti.png';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -15,11 +15,12 @@ import SectionHeader from '@/components/common/header/section-header';
 import OrderSummary from '@/app/(website)/cart/components/order-summary';
 import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/redux/features/cart-slice';
 import { getOrderInformationHtml } from './components/get-order-html';
-
+import { DynamicQr } from './helper/dynamic_qr';
+import QRCode from "react-qr-code";
 
 const PAYMENT_GATEWAYS = [
   { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
-  { name: 'Get Pay (Card)', image: GetPay, value: 'getpay' },
+  { name: 'Get Pay (Card)', image: GetPay, value: 'getpay' }
 ];
 
 const imageUrl = "https://ultrabeauty.blr1.digitaloceanspaces.com/media/company_favicons/pink_icon.png"
@@ -31,6 +32,8 @@ const Payment: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null);
+  const [dynamicQrImg, setDynamicQrImg] = useState<string>("");
+
   const [makePayment, setMakePayment] = useState(false)
 
   const { cartItem, shippingDetails, voucherData, shippingFee, orderId } = useAppSelector(state => state.cart);
@@ -47,6 +50,46 @@ const Payment: React.FunctionComponent = () => {
   const Total = subTotal + (parseFloat(shippingFee) || 0) + taxAmount - voucherDiscount;
 
   const BUNDLE_URL = process.env.NEXT_PUBLIC_BUNDLE_URL;
+
+  const handleDynamicQrSocket = (message: string) => {
+    console.log(message, 'message is the socket')
+    const jsonDecodedValue = JSON.parse(message)
+    const transactionStatus = JSON.parse(jsonDecodedValue['transactionStatus'])
+    const isQrVerified: boolean = transactionStatus['qrVerified'] === true
+    const paymentDone: boolean = transactionStatus['paymentSuccess'] === true
+
+    console.log(`qrVerified: ${isQrVerified}, paymentDone: ${paymentDone}`);
+  }
+
+  const getDynamicQr = useCallback(async () => {
+    try {
+      const QR = new DynamicQr()
+      const response = await QR.generateDynamicQR(
+        {
+          amount: Total,
+          remarks1: "Ultra",
+          remarks2: "Beauty",
+        }
+      );
+      console.log("dynamic qr ", response)
+      setDynamicQrImg(response.qrMessage)
+      if (response.merchantWebSocketUrl) {
+        const socket = new WebSocket(response.merchantWebSocketUrl)
+        socket.onmessage = (event: any) => {
+          handleDynamicQrSocket(event.data)
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+    , [Total])
+
+  useEffect(() => {
+    getDynamicQr()
+  }, [getDynamicQr])
+
 
 
 
@@ -160,7 +203,7 @@ const Payment: React.FunctionComponent = () => {
       const script = document.createElement('script');
       script.src = BUNDLE_URL || '';
       script.async = true;
-      script.onload = () => {};
+      script.onload = () => { };
       document.body.appendChild(script);
       return () => {
         document.body.removeChild(script);
@@ -216,6 +259,33 @@ const Payment: React.FunctionComponent = () => {
                 </p>
               </button>
             ))}
+
+            {/* dynamic qr */}
+
+            <button
+              onClick={() => setActivePaymentMethod("fonepay")}
+              className={`
+                  w-full aspect-square flex flex-col gap-2 md:gap-4 justify-center items-center
+                  border-[1px] rounded-sm cursor-pointer
+                  ${activePaymentMethod === "fonepay" ? "border-primary" : "border-[#7C7C7C]"}
+                `}
+            >
+              <div className="relative w-30 h-30">
+                <QRCode
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  value={dynamicQrImg}
+                  viewBox={`0 0 256 256`}
+                />
+              </div>
+              <p className={`
+                  text-center text-xs sm:text-sm md:text-base font-medium
+                  ${activePaymentMethod === "fonepay" ? "text-primary" : "text-foreground"}
+                  lg:px-4
+                `}>
+                {"Fone Pay"}
+              </p>
+            </button>
+
           </div>
 
           {/* Save Info Checkbox */}
