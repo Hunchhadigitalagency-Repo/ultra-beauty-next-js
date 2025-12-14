@@ -32,6 +32,7 @@ import { deleteFlashSales } from "./api/sales/flash-sales-api";
 import { deleteInventoryData } from "./api/inventory/inventory-apis";
 import { deleteTransaction } from "./api/transactions/transaction-api";
 import { deleteTeam } from "./api/cms/team-api";
+import { deleteAdvertiseBanner } from "./api/cms/advertise-banner-apis";
 
 export const handleDeleteData = async (id: number | string, type: string, action?: string | undefined) => {
   console.log('In here and this are the data', type);
@@ -165,6 +166,10 @@ export const handleDeleteData = async (id: number | string, type: string, action
 
   if (type === ETypes.TEAM) {
     await deleteTeam(Number(id))
+  }
+
+  if (type === ETypes.ADVERTISE_BANNER) {
+    await deleteAdvertiseBanner(Number(id))
   }
 };
 

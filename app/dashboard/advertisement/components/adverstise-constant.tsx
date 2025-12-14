@@ -7,7 +7,9 @@ import { setSelectedData } from "@/redux/features/authentication-slice";
 import { IAdvertisementBanner } from "@/types/cms";
 import Image from "next/image";
 
-export const AdvertiseBannerConstant = (dispatch: AppDispatch): Col<IAdvertisementBanner>[] => {
+export const AdvertiseBannerConstant = (
+  dispatch: AppDispatch
+): Col<IAdvertisementBanner>[] => {
   return [
     {
       title: "NAME",
@@ -28,16 +30,15 @@ export const AdvertiseBannerConstant = (dispatch: AppDispatch): Col<IAdvertiseme
     {
       title: "BANNER POSITION",
       render: (data: IAdvertisementBanner) => (
-        <span className="text-xs text-foreground">{
-          data.position.toLowerCase() === "mesh" ? "Mesh Banner"
-            : data.position.toLowerCase() === "single" ? "Single Banner"
-              : data.position}</span>
+        <span className="text-xs text-foreground">{data.position}</span>
       ),
     },
     {
       title: "PRODUCT",
       render: (data: IAdvertisementBanner) => (
-        <span className="text-xs text-foreground">{data.product?.name || '-'}</span>
+        <span className="text-xs text-foreground">
+          {data.product?.name || "-"}
+        </span>
       ),
     },
     {

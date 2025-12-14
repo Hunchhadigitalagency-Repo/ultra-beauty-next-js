@@ -46,7 +46,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
   const [loading, setLoading] = useState(false);
 
   const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
-  const { data: navigationInfo, } = useFetchData<INavigationInfo>(blogUrl);
+  const { data: navigationInfo } = useFetchData<INavigationInfo>(blogUrl);
 
   const emptyDefaults = {
     title: "",
@@ -56,11 +56,11 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
     // expiry_datetime: "",
     // category: "",
     // sub_category: "",
-  }
+  };
 
   const form = useForm<NavigationInfoFormValues>({
     resolver: zodResolver(navigationInfoFormSchema),
-    defaultValues: emptyDefaults
+    defaultValues: emptyDefaults,
     // ? {
     //   title: initialData.title,
     //   discount_percentage: initialData.discount_percentage?.toString() || "",
@@ -74,7 +74,6 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
     //   sub_category: initialData.subcategories[0],
     //   is_active: initialData.is_active ?? false,
     // }
-
   });
 
   // const { data: categories } = useFetchDropdown<ICategoryDropdown>(
@@ -88,7 +87,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
       if (dataToUse) {
         form.reset({
           title: dataToUse.title,
-          products: dataToUse.products?.id?.toString() || '',
+          products: dataToUse.products?.id?.toString() || "",
           is_active: dataToUse.is_active ?? false,
           // discount_percentage: dataToUse.discount_percentage?.toString() || "",
           // expiry_datetime: dataToUse.expiry_datetime
@@ -104,7 +103,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
   }, [isEditMode, navigationInfo, initialData, form]);
 
   const onSubmit = async (data: NavigationInfoFormValues) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("title", data.title);
@@ -123,7 +122,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
 
       // Correctly handle the products array for FormData
       // data?.products?.forEach((product) => {
-      formData.append("product", data.products);
+      // formData.append("product", data.products);
       // });
 
       // ... rest of your update/create logic
@@ -139,7 +138,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
     } catch (error) {
       handleError(error, toast);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
   return (
@@ -155,7 +154,9 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
           <Form {...form}>
             <form
               id="setting-brand-form"
-              onSubmit={form.handleSubmit(onSubmit, error => console.log("this is the error ", error))}
+              onSubmit={form.handleSubmit(onSubmit, (error) =>
+                console.log("this is the error ", error)
+              )}
               className="space-y-6"
             >
               <FormField
@@ -177,9 +178,8 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                 )}
               />
 
-
               <div className="grid sm:grid-cols-3 gap-2">
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="products"
                   render={({ field }) => (
@@ -188,7 +188,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                       <FormControl>
                         <PaginatedSelect
                           value={field.value}
-                          onValueChange={field.onChange}
+                          onValueChange={(_, slug) => field.onChange(slug)}
                           placeholder="Select Products"
                           fetchData={getProductsDropdown}
                           className="w-full "
@@ -197,7 +197,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 {/* <FormCombobox
                   form={form}
                   name="category"
@@ -297,7 +297,7 @@ const NavigationInfoForm = ({ initialData }: NavigationInfoFromProps) => {
           className="text-white rounded-sm"
           disabled={loading}
         >
-          {loading? <Spinner /> : "Save Changes" }
+          {loading ? <Spinner /> : "Save Changes"}
         </Button>
       </div>
     </>
