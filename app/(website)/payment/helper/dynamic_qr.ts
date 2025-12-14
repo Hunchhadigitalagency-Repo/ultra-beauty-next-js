@@ -25,7 +25,7 @@ export class DynamicQr {
                 remarks2: remarks2,
             };
 
-            const url = "http://localhost:8000/api/v1/generate-dynamic-qr/";
+            const url =  `${process.env.NEXT_PUBLIC_API_URL}generate-dynamic-qr/`;
             const response = await axios.post(url, postData);
             console.log("dynamic_qr_ts", response.data)
             if (response.data?.qrMessage) {

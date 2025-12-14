@@ -1,116 +1,148 @@
-"use client"
-import Image from 'next/image';
-import { toast } from 'sonner';
-// import Esewa from '@/assets/esewa.png';
-import React, { useCallback, useEffect, useState } from 'react';
-// import Khalti from '@/assets/khalti.png';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { addOrders } from '@/lib/api/order/order-apis';
-import CashOnDelivery from '@/assets/cash-on-delivery.png';
-import GetPay from '@/assets/getpay.jpeg'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import SectionHeader from '@/components/common/header/section-header';
+"use client";
+import Image from "next/image";
+import { toast } from "sonner";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { addOrders } from "@/lib/api/order/order-apis";
+import CashOnDelivery from "@/assets/cash-on-delivery.png";
+import GetPay from "@/assets/getpay.jpeg";
+import PhonePay from "@/assets/unnamed.png";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import SectionHeader from "@/components/common/header/section-header";
 
-import OrderSummary from '@/app/(website)/cart/components/order-summary';
-import { clearCart, decreaseCartCountBy, setOrderId, setShippingFee } from '@/redux/features/cart-slice';
-import { getOrderInformationHtml } from './components/get-order-html';
-import { DynamicQr } from './helper/dynamic_qr';
-import QRCode from "react-qr-code";
+import OrderSummary from "@/app/(website)/cart/components/order-summary";
+import {
+  clearCart,
+  decreaseCartCountBy,
+  setOrderId,
+  setShippingFee,
+} from "@/redux/features/cart-slice";
+import { getOrderInformationHtml } from "./components/get-order-html";
+import { DynamicQr } from "./helper/dynamic_qr";
+import QrPaymentModal from "./components/qr-payment-modal";
+import { handleError } from "@/lib/error-handler";
 
 const PAYMENT_GATEWAYS = [
-  { name: 'Cash on Delivery', image: CashOnDelivery, value: 'cod' },
-  { name: 'Get Pay (Card)', image: GetPay, value: 'getpay' }
+  { name: "Cash on Delivery (COD)", image: CashOnDelivery, value: "cod" },
+  { name: "Get Pay (Card)", image: GetPay, value: "getpay" },
+  { name: "Phonepay (QR)", image: PhonePay, value: "qr" },
 ];
 
-const imageUrl = "https://ultrabeauty.blr1.digitaloceanspaces.com/media/company_favicons/pink_icon.png"
+export interface QrPayment {
+  dynamicOrImg: string;
+  loading: boolean;
+  error: string;
+}
+
+const imageUrl =
+  "https://ultrabeauty.blr1.digitaloceanspaces.com/media/company_favicons/pink_icon.png";
 
 const Payment: React.FunctionComponent = () => {
-
-
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(null);
-  const [dynamicQrImg, setDynamicQrImg] = useState<string>("");
+  const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(
+    null
+  );
 
-  const [makePayment, setMakePayment] = useState(false)
+  const [qrPayment, setQrPayment] = useState<QrPayment>({
+    dynamicOrImg: "",
+    loading: false,
+    error: "",
+  });
 
-  const { cartItem, shippingDetails, voucherData, shippingFee, orderId } = useAppSelector(state => state.cart);
-  const carts_id = cartItem.map(item => item.id);
+  const [qrModal, setQrModal] = useState<boolean>(false);
+  const [makePayment, setMakePayment] = useState(false);
 
-  const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price)), 0);
+  const { cartItem, shippingDetails, voucherData, shippingFee, orderId } =
+    useAppSelector((state) => state.cart);
+  const carts_id = cartItem.map((item) => item.id);
+
+  const subTotal = cartItem.reduce(
+    (sum, item) => sum + parseFloat(item.price),
+    0
+  );
   const taxAmount = cartItem.reduce((sum, item) => {
     const price = parseFloat(item.price);
-    const tax = item.tax_applied ? (price * item.tax_applied.tax_percentage) / 100 : 0;
+    const tax = item.tax_applied
+      ? (price * item.tax_applied.tax_percentage) / 100
+      : 0;
     return sum + tax;
   }, 0);
 
-  const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const Total = subTotal + (parseFloat(shippingFee) || 0) + taxAmount - voucherDiscount;
+  const voucherDiscount =
+    (parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100) *
+    subTotal;
+  const Total =
+    subTotal + (parseFloat(shippingFee) || 0) + taxAmount - voucherDiscount;
 
   const BUNDLE_URL = process.env.NEXT_PUBLIC_BUNDLE_URL;
 
   const handleDynamicQrSocket = (message: string) => {
-    console.log(message, 'message is the socket')
-    const jsonDecodedValue = JSON.parse(message)
-    const transactionStatus = JSON.parse(jsonDecodedValue['transactionStatus'])
-    const isQrVerified: boolean = transactionStatus['qrVerified'] === true
-    const paymentDone: boolean = transactionStatus['paymentSuccess'] === true
-
-    console.log(`qrVerified: ${isQrVerified}, paymentDone: ${paymentDone}`);
-  }
-
-  const getDynamicQr = useCallback(async () => {
-    try {
-      const QR = new DynamicQr()
-      const response = await QR.generateDynamicQR(
-        {
-          amount: Total,
-          remarks1: "Ultra",
-          remarks2: "Beauty",
-        }
-      );
-      console.log("dynamic qr ", response)
-      setDynamicQrImg(response.qrMessage)
-      if (response.merchantWebSocketUrl) {
-        const socket = new WebSocket(response.merchantWebSocketUrl)
-        socket.onmessage = (event: any) => {
-          handleDynamicQrSocket(event.data)
-        }
-      }
-
-    } catch (error) {
-      console.log(error)
+    console.log(message, "message is the socket");
+    const jsonDecodedValue = JSON.parse(message);
+    const transactionStatus = JSON.parse(jsonDecodedValue["transactionStatus"]);
+    const isQrVerified: boolean = transactionStatus["qrVerified"] === true;
+    const paymentDone: boolean = transactionStatus["paymentSuccess"] === true;
+    if(paymentDone){
+      router.push('/payment/success?status=1')
     }
+    console.log(`qrVerified: ${isQrVerified}, paymentDone: ${paymentDone}`);
+  };
+
+const getDynamicQr = useCallback(async () => {
+  setQrPayment(prev => ({ ...prev, loading: true, error: '' }));
+
+  try {
+    const QR = new DynamicQr();
+    const response = await QR.generateDynamicQR({
+      amount: Total,
+      remarks1: "Ultra",
+      remarks2: "Beauty",
+    });
+
+    setQrPayment(prev => ({
+      ...prev,
+      dynamicOrImg: response.qrMessage,
+    }));
+
+    if (response.merchantWebSocketUrl) {
+      const socket = new WebSocket(response.merchantWebSocketUrl);
+      socket.onmessage = (event: any) => {
+        handleDynamicQrSocket(event.data);
+      };
+    }
+  } catch (error: any) {
+    setQrPayment(prev => ({
+      ...prev,
+      error: error?.message || "QR generation failed",
+    }));
+    handleError(error, toast);
+  } finally {
+    setQrPayment(prev => ({ ...prev, loading: false }));
   }
-    , [Total])
-
-  useEffect(() => {
-    getDynamicQr()
-  }, [getDynamicQr])
-
-
+}, [Total]);
 
 
   const handleConfirmOrder = async () => {
     const res = await addOrders({
       carts_id: carts_id,
       shipping_info: {
-        first_name: shippingDetails?.firstName || '',
-        last_name: shippingDetails?.lastName || '',
-        email: shippingDetails?.email || '',
-        phone_no: shippingDetails?.phoneNumber || '',
-        alternate_phone_no: shippingDetails?.alternativePhoneNumber || '',
-        address: shippingDetails?.address || '',
-        province: shippingDetails?.province || '',
-        city: shippingDetails?.city || '',
-        landmark: shippingDetails?.landmark || '',
-        building: shippingDetails?.buildingAddress || '',
+        first_name: shippingDetails?.firstName || "",
+        last_name: shippingDetails?.lastName || "",
+        email: shippingDetails?.email || "",
+        phone_no: shippingDetails?.phoneNumber || "",
+        alternate_phone_no: shippingDetails?.alternativePhoneNumber || "",
+        address: shippingDetails?.address || "",
+        province: shippingDetails?.province || "",
+        city: shippingDetails?.city || "",
+        landmark: shippingDetails?.landmark || "",
+        building: shippingDetails?.buildingAddress || "",
       },
-      payment_method: activePaymentMethod || 'cod',
-      coupon: voucherData?.coupon ? voucherData.coupon : null
-    })
+      payment_method: activePaymentMethod || "cod",
+      coupon: voucherData?.coupon ? voucherData.coupon : null,
+    });
     if (res.status !== 201) {
       toast.error("Failed to place order. Please try again.");
       return;
@@ -118,19 +150,23 @@ const Payment: React.FunctionComponent = () => {
       toast.success("Order placed successfully!");
       dispatch(setOrderId(res.data.id));
     }
-    if (activePaymentMethod === 'cod') {
-      router.push('/profile');
+    if (activePaymentMethod === "cod") {
+      router.push("/profile");
       dispatch(decreaseCartCountBy(cartItem.length));
       dispatch(clearCart());
-      dispatch(setShippingFee('ß'))
-    } else if (activePaymentMethod === 'getpay') {
-      setMakePayment(true)
-    } else if (activePaymentMethod === 'khalti') {
-      toast.error("Khalti payment method is not implemented yet.");
+      dispatch(setShippingFee("ß"));
+    } else {
+      setMakePayment(true);
     }
-  }
+  };
 
   const handleMakePayment = () => {
+    if (activePaymentMethod === "qr") {
+      setQrModal(true);
+      getDynamicQr();
+      return;
+    }
+
     if (!window.GetPay) {
       toast.error("Payment system is not ready yet.");
       return;
@@ -165,7 +201,7 @@ const Payment: React.FunctionComponent = () => {
         state: true,
         city: true,
         address: true,
-        country: true
+        country: true,
       },
 
       disableFields: {
@@ -185,25 +221,25 @@ const Payment: React.FunctionComponent = () => {
       onSuccess: () => {
         dispatch(decreaseCartCountBy(cartItem.length));
         dispatch(clearCart());
-        dispatch(setShippingFee('ß'))
-        window.location.href = '/payment/make-payment'
+        dispatch(setShippingFee("ß"));
+        window.location.href = "/payment/make-payment";
       },
       onError: (error: any) => {
         toast.error(error?.error);
       },
     };
 
-    options.baseUrl = process.env.NEXT_PUBLIC_PAYMENT_URL
+    options.baseUrl = process.env.NEXT_PUBLIC_PAYMENT_URL;
     const getPay = new window.GetPay(options);
     getPay.initialize();
-  }
+  };
 
   useEffect(() => {
     if (cartItem?.length > 0) {
-      const script = document.createElement('script');
-      script.src = BUNDLE_URL || '';
+      const script = document.createElement("script");
+      script.src = BUNDLE_URL || "";
       script.async = true;
-      script.onload = () => { };
+      script.onload = () => {};
       document.body.appendChild(script);
       return () => {
         document.body.removeChild(script);
@@ -211,19 +247,14 @@ const Payment: React.FunctionComponent = () => {
     }
   }, []);
 
-
   return (
     <section className="flex flex-col h-auto gap-6 lg:gap-10 padding lg:p-8">
       {/* Section Header */}
-      <SectionHeader
-        title="Payment"
-        description="Payment for your products"
-      />
+      <SectionHeader title="Payment" description="Payment for your products" />
 
       <div className="grid grid-cols-1 lg:grid-cols-[0.7fr_0.3fr] gap-8">
         {/* Left Column */}
         <div className="flex flex-col gap-5">
-
           {/* Payment Methods */}
           <div className="bg-secondary rounded-sm">
             <p className="px-5 py-3 text-sm font-medium md:text-base">
@@ -239,7 +270,11 @@ const Payment: React.FunctionComponent = () => {
                 className={`
                   w-full aspect-square flex flex-col gap-2 md:gap-4 justify-center items-center
                   border-[1px] rounded-sm cursor-pointer
-                  ${activePaymentMethod === item.value ? "border-primary" : "border-[#7C7C7C]"}
+                  ${
+                    activePaymentMethod === item.value
+                      ? "border-primary"
+                      : "border-[#7C7C7C]"
+                  }
                 `}
               >
                 <div className="relative w-20 h-20">
@@ -250,48 +285,30 @@ const Payment: React.FunctionComponent = () => {
                     className="object-cover"
                   />
                 </div>
-                <p className={`
+                <p
+                  className={`
                   text-center text-xs sm:text-sm md:text-base font-medium
-                  ${activePaymentMethod === item.value ? "text-primary" : "text-foreground"}
+                  ${
+                    activePaymentMethod === item.value
+                      ? "text-primary"
+                      : "text-foreground"
+                  }
                   lg:px-4
-                `}>
+                `}
+                >
                   {item.name}
                 </p>
               </button>
             ))}
-
-            {/* dynamic qr */}
-
-            <button
-              onClick={() => setActivePaymentMethod("fonepay")}
-              className={`
-                  w-full aspect-square flex flex-col gap-2 md:gap-4 justify-center items-center
-                  border-[1px] rounded-sm cursor-pointer
-                  ${activePaymentMethod === "fonepay" ? "border-primary" : "border-[#7C7C7C]"}
-                `}
-            >
-              <div className="relative w-30 h-30">
-                <QRCode
-                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  value={dynamicQrImg}
-                  viewBox={`0 0 256 256`}
-                />
-              </div>
-              <p className={`
-                  text-center text-xs sm:text-sm md:text-base font-medium
-                  ${activePaymentMethod === "fonepay" ? "text-primary" : "text-foreground"}
-                  lg:px-4
-                `}>
-                {"Fone Pay"}
-              </p>
-            </button>
 
           </div>
 
           {/* Save Info Checkbox */}
           <div className="flex items-center gap-3">
             <input type="checkbox" className="w-5 h-5" />
-            <p className="text-sm md:text-base">Save information for future purchases</p>
+            <p className="text-sm md:text-base">
+              Save information for future purchases
+            </p>
           </div>
 
           {/* Confirm Order Box */}
@@ -300,34 +317,41 @@ const Payment: React.FunctionComponent = () => {
               Confirm Order
             </h2>
             <ol className="pl-4 list-decimal text-sm sm:text-base font-medium space-y-1">
-              <li>Your order will be created once you click <b>Confirm Order</b>.</li>
-              <li>Please ensure your chosen wallet has enough balance before proceeding.</li>
-              <li>If you select Esewa/Khalti and don’t complete payment, your order will show as <b>Pending Payment</b> in your profile.</li>
+              <li>
+                Your order will be created once you click <b>Confirm Order</b>.
+              </li>
+              <li>
+                Please ensure your chosen wallet has enough balance before
+                proceeding.
+              </li>
+              <li>
+                If you select Esewa/Khalti and don’t complete payment, your
+                order will show as <b>Pending Payment</b> in your profile.
+              </li>
             </ol>
             <div id="checkout" hidden></div>
-            {
-              !makePayment ?
-                <Button
-                  variant="default"
-                  size="default"
-                  onClick={handleConfirmOrder}
-                  disabled={activePaymentMethod === null}
-                  className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
-                >
-                  Confirm Order
-                </Button>
-                :
-                <Button
-                  id="checkout-btn"
-                  variant="default"
-                  size="default"
-                  onClick={handleMakePayment}
-                  disabled={!makePayment}
-                  className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
-                >
-                  Make Payment
-                </Button>
-            }
+            {!makePayment ? (
+              <Button
+                variant="default"
+                size="default"
+                onClick={handleConfirmOrder}
+                disabled={activePaymentMethod === null}
+                className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
+              >
+                Confirm Order
+              </Button>
+            ) : (
+              <Button
+                id="checkout-btn"
+                variant="default"
+                size="default"
+                onClick={handleMakePayment}
+                disabled={!makePayment}
+                className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
+              >
+                Make Payment
+              </Button>
+            )}
           </div>
         </div>
 
@@ -341,9 +365,14 @@ const Payment: React.FunctionComponent = () => {
             isCheckout
           />
         </div>
+        <QrPaymentModal
+          isOpen={qrModal}
+          setIsOpen={setQrModal}
+          qrPayment={qrPayment}
+        />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;
