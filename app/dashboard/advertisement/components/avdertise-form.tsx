@@ -30,8 +30,8 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
     const router = useRouter()
       const [loading, setLoading] = useState(false);
     const position = initialData?.position?.toLowerCase() === "single banner"
-        ? "single"
-        : "mesh"
+        ? "Single Banner"
+        : "Mesh Banner"
     const form = useForm<AdvertiseBannerFormValues>({
         resolver: zodResolver(advertiseBannerSchema),
         defaultValues: initialData
@@ -39,13 +39,13 @@ const AdvertiseForm = ({ initialData }: AdvertiseFormProps) => {
                 position: position || '',
                 product: initialData.product?.slug_name || "",
                 image: initialData.image || "",
-                is_active: initialData.is_active ?? false,
+                is_active:true,
             }
             : {
                 position: "",
                 product: "",
                 image: "",
-                is_active: false,
+                is_active: true,
             },
     })
 
@@ -110,8 +110,8 @@ setLoading(true)
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="single">Single Banner</SelectItem>
-                                                <SelectItem value="mesh">Mesh Banner</SelectItem>
+                                                <SelectItem value="Single Banner">Single Banner</SelectItem>
+                                                <SelectItem value="Mesh Banner">Mesh Banner</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />
@@ -168,26 +168,7 @@ setLoading(true)
                             />
 
                             {/* Active Switch */}
-                            <FormField
-                                control={form.control}
-                                name="is_active"
-                                render={({ field }) => (
-                                    <FormItem className="flex items-center gap-4 mt-6">
-                                        <FormControl>
-                                            <Switch
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                                id="activate"
-                                                className="cursor-pointer"
-                                            />
-                                        </FormControl>
-                                        <FormLabel htmlFor="activate" className="text-muted-foreground">
-                                            Activate
-                                        </FormLabel>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                           
                         </form>
                     </Form>
                 </CardContent>

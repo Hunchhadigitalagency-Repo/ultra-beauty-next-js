@@ -7,7 +7,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { formatPrice } from "@/lib/cart-utils";
 import { Button } from "@/components/ui/button";
 import { OrderSummaryProps } from "@/types/cart";
-import { ArrowRight, Info, MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import GenericModal from "@/components/common/modals/generic-modal";
 import CircularProgressBar from "@/components/common/circular-progress-bar/circular-progress-bar";
 
@@ -30,6 +30,7 @@ export default function OrderSummary({
 
   const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price) - parseFloat(item.discount_percentage || '0') / 100 * parseFloat(item.price)), 0);
   const taxPercentage = cartItem.reduce((sum, item) => sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0), 0);
+  
   const taxAmount = cartItem.reduce((sum, item) => {
     const price = parseFloat(item.price);
     const tax = item.tax_applied ? (price * item.tax_applied.tax_percentage) / 100 : 0;
@@ -39,7 +40,7 @@ export default function OrderSummary({
   const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
   const safeShippingFee = parseFloat(shippingFee || '0') || 0;
 
-  const Total = subTotal + safeShippingFee - voucherDiscount;
+  const Total = subTotal + safeShippingFee - voucherDiscount + (taxAmount || 0);
 
 
   return (
@@ -150,13 +151,7 @@ export default function OrderSummary({
         }
       </div>
 
-      <Button
-        className="flex justify-between w-full font-medium text-white bg-blue"
-        onClick={() => setisRewardsModalOpen(!isRewardsModalOpen)}
-      >
-        Apply For Rewards Points
-        <Info className="w-5 h-5" />
-      </Button>
+      
 
       {
         !isCheckout && (

@@ -60,7 +60,6 @@ export default function AnnouncementBar() {
               <MarqueeContent pauseOnHover={true}>
                 {data && data?.map((info, index) => (
                   <MarqueeItem key={index} className="inline-flex mr-20 cursor-pointer" 
-                      onClick={() => info?.products && router.push(`/shop/${info?.products?.slug_name}`)}
                   >
                     <span className="whitespace-nowrap text-black">{info.title}</span>
                   </MarqueeItem>

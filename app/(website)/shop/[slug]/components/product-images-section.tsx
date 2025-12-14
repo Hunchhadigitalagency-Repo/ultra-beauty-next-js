@@ -70,7 +70,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
               src={selectedImage}
               alt="Main product"
               fill
-              className="object-cover rounded-lg"
+              className="object-fit rounded-lg"
             />
           )
         }
@@ -107,7 +107,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
                 src={img.file}
                 alt={`Product thumbnail ${img.id}`}
                 fill
-                className="object-cover w-full h-full rounded-md"
+                className="object-fit w-full h-full rounded-md"
               />
             </div>
           ))}

@@ -21,7 +21,7 @@ export default function ProductVarietyCard({ product }: ProductVarietyCardProps)
           alt={title}
           width={800}
           height={500}
-          className="w-full h-auto object-contain"
+          className="w-full h-auto object-fit"
         />
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Button className="bg-primary hover:bg-sky-500 text-white font-medium w-48 h-10 rounded-full text-sm flex items-center justify-center gap-2">
