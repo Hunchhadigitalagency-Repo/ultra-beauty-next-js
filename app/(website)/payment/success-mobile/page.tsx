@@ -3,15 +3,9 @@
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 import { useSearchParams } from "next/navigation";
-import { updateOrder } from "@/lib/api/order/order-apis";
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  clearCart,
-  decreaseCartCountBy,
-  setOrderId,
-  setShippingFee,
-} from "@/redux/features/cart-slice";
+
 import { generateClientHash } from "@/lib/utils";
 
 type PaymentStatus = "loading" | "success" | "mismatch" | "error";
@@ -32,28 +26,13 @@ const Success: React.FC = () => {
     const handleOrder = async () => {
       try {
         const encodedData = searchParams.get("token");
-        const qrStatus = searchParams.get("status");
 
         if (!orderId) {
           setPaymentStatus("error");
           return;
         }
 
-        // ---------------- QR PAYMENT ----------------
-        if (qrStatus === "COMPLETE") {
-          const response = await updateOrder(orderId, "paid");
 
-          if (response.status === 200) {
-            dispatch(setOrderId(null));
-            dispatch(decreaseCartCountBy(cartItem.length));
-            dispatch(clearCart());
-            dispatch(setShippingFee(""));
-            setPaymentStatus("success");
-            return;
-          }
-        }
-
-        // ---------------- TOKEN PAYMENT ----------------
         if (!encodedData) {
           setPaymentStatus("error");
           return;
@@ -66,30 +45,10 @@ const Success: React.FC = () => {
         const oprKey = process.env.NEXT_PUBLIC_OPR_KEY || "";
         const clientHash = await generateClientHash(oprKey, id);
 
-        // ❌ HASH MISMATCH
         if (clientHash !== oprSecret) {
           console.error("Payment hash mismatch");
           setPaymentStatus("mismatch");
           return;
-        }
-
-        // ✅ VERIFIED
-        const response = await updateOrder(
-          orderId,
-          "paid",
-          total_amount || 0,
-          transaction_code,
-          transaction_uuid
-        );
-
-        if (response.status === 200) {
-          dispatch(setOrderId(null));
-          dispatch(decreaseCartCountBy(cartItem.length));
-          dispatch(clearCart());
-          dispatch(setShippingFee(""));
-          setPaymentStatus("success");
-        } else {
-          setPaymentStatus("error");
         }
       } catch (err) {
         console.error("Payment confirmation error:", err);
@@ -100,7 +59,6 @@ const Success: React.FC = () => {
     handleOrder();
   }, [searchParams, orderId, cartItem.length, dispatch]);
 
-  // ---------------- UI STATES ----------------
 
   if (paymentStatus === "loading") {
     return (

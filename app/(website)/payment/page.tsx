@@ -22,6 +22,7 @@ import { getOrderInformationHtml } from "./components/get-order-html";
 import { DynamicQr } from "./helper/dynamic_qr";
 import QrPaymentModal from "./components/qr-payment-modal";
 import { handleError } from "@/lib/error-handler";
+import { Spinner } from "@/components/ui/spinner";
 
 const PAYMENT_GATEWAYS = [
   { name: "Cash on Delivery (COD)", image: CashOnDelivery, value: "cod" },
@@ -53,7 +54,7 @@ const Payment: React.FunctionComponent = () => {
   });
 
   const [qrModal, setQrModal] = useState<boolean>(false);
-  const [makePayment, setMakePayment] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const { cartItem, shippingDetails, voucherData, shippingFee, orderId } =
     useAppSelector((state) => state.cart);
@@ -85,47 +86,48 @@ const Payment: React.FunctionComponent = () => {
     const transactionStatus = JSON.parse(jsonDecodedValue["transactionStatus"]);
     const isQrVerified: boolean = transactionStatus["qrVerified"] === true;
     const paymentDone: boolean = transactionStatus["paymentSuccess"] === true;
-    if(paymentDone){
-      router.push('/payment/success?status=1')
+    if (paymentDone) {
+      router.push("/payment/success?status=1");
     }
     console.log(`qrVerified: ${isQrVerified}, paymentDone: ${paymentDone}`);
   };
 
-const getDynamicQr = useCallback(async () => {
-  setQrPayment(prev => ({ ...prev, loading: true, error: '' }));
+  const getDynamicQr = useCallback(async () => {
+    setQrPayment((prev) => ({ ...prev, loading: true, error: "" }));
 
-  try {
-    const QR = new DynamicQr();
-    const response = await QR.generateDynamicQR({
-      amount: Total,
-      remarks1: "Ultra",
-      remarks2: "Beauty",
-    });
+    try {
+      const QR = new DynamicQr();
+      const response = await QR.generateDynamicQR({
+        amount: Total,
+        remarks1: "Ultra",
+        remarks2: "Beauty",
+      });
 
-    setQrPayment(prev => ({
-      ...prev,
-      dynamicOrImg: response.qrMessage,
-    }));
+      setQrPayment((prev) => ({
+        ...prev,
+        dynamicOrImg: response.qrMessage,
+      }));
 
-    if (response.merchantWebSocketUrl) {
-      const socket = new WebSocket(response.merchantWebSocketUrl);
-      socket.onmessage = (event: any) => {
-        handleDynamicQrSocket(event.data);
-      };
+      if (response.merchantWebSocketUrl) {
+        const socket = new WebSocket(response.merchantWebSocketUrl);
+        socket.onmessage = (event: any) => {
+          handleDynamicQrSocket(event.data);
+        };
+      }
+    } catch (error: any) {
+      setQrPayment((prev) => ({
+        ...prev,
+        error: error?.message || "QR generation failed",
+      }));
+      handleError(error, toast);
+    } finally {
+      setQrPayment((prev) => ({ ...prev, loading: false }));
+      setloading(false);
     }
-  } catch (error: any) {
-    setQrPayment(prev => ({
-      ...prev,
-      error: error?.message || "QR generation failed",
-    }));
-    handleError(error, toast);
-  } finally {
-    setQrPayment(prev => ({ ...prev, loading: false }));
-  }
-}, [Total]);
-
+  }, [Total]);
 
   const handleConfirmOrder = async () => {
+    setloading(true);
     const res = await addOrders({
       carts_id: carts_id,
       shipping_info: {
@@ -155,18 +157,17 @@ const getDynamicQr = useCallback(async () => {
       dispatch(decreaseCartCountBy(cartItem.length));
       dispatch(clearCart());
       dispatch(setShippingFee("ß"));
-    } else {
-      setMakePayment(true);
-    }
-  };
-
-  const handleMakePayment = () => {
-    if (activePaymentMethod === "qr") {
+    } else if (activePaymentMethod === "getpay") {
+      handleMakePayment();
+      return;
+    } else if (activePaymentMethod === "qr") {
       setQrModal(true);
       getDynamicQr();
       return;
     }
+  };
 
+  const handleMakePayment = () => {
     if (!window.GetPay) {
       toast.error("Payment system is not ready yet.");
       return;
@@ -222,6 +223,7 @@ const getDynamicQr = useCallback(async () => {
         dispatch(decreaseCartCountBy(cartItem.length));
         dispatch(clearCart());
         dispatch(setShippingFee("ß"));
+        setloading(false);
         window.location.href = "/payment/make-payment";
       },
       onError: (error: any) => {
@@ -300,7 +302,6 @@ const getDynamicQr = useCallback(async () => {
                 </p>
               </button>
             ))}
-
           </div>
 
           {/* Save Info Checkbox */}
@@ -330,28 +331,16 @@ const getDynamicQr = useCallback(async () => {
               </li>
             </ol>
             <div id="checkout" hidden></div>
-            {!makePayment ? (
-              <Button
-                variant="default"
-                size="default"
-                onClick={handleConfirmOrder}
-                disabled={activePaymentMethod === null}
-                className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
-              >
-                Confirm Order
-              </Button>
-            ) : (
-              <Button
-                id="checkout-btn"
-                variant="default"
-                size="default"
-                onClick={handleMakePayment}
-                disabled={!makePayment}
-                className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
-              >
-                Make Payment
-              </Button>
-            )}
+
+            <Button
+              variant="default"
+              size="default"
+              onClick={handleConfirmOrder}
+              disabled={activePaymentMethod === null || loading}
+              className="mt-4 py-4 md:py-3 text-sm md:text-base lg:text-lg font-medium text-white text-center rounded-full bg-primary"
+            >
+              {loading ? <Spinner /> : "Confirm Order"}
+            </Button>
           </div>
         </div>
 

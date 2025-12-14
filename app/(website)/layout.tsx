@@ -7,9 +7,15 @@ import MobileFootbar from "@/components/mobile/MobileFootbar";
 // import MobileFilterMenu from "@/components/mobile/MobileFilterMenu";
 import AnnouncementBar from "@/components/common/navbar/announcement-bar";
 import useTrackVisit from "@/hooks/use-track-visit";
+import { usePathname } from "next/navigation";
 
 const WebsiteLayout = ({ children }: { children: React.ReactNode }) => {
   useTrackVisit();
+  const pathname = usePathname();
+
+  if (pathname.includes("mobile")) {
+    return <div className="">{children}</div>;
+  }
   return (
     <div className="bg-white">
       <AnnouncementBar />
