@@ -30,6 +30,13 @@ const invoiceStatusData = [
   { value: "partialpaid", label: "Partial Paid" },
 ];
 
+const allowedTransitions: Record<string, string[]> = {
+  pending: ["pending", "partialpaid", "paid"],
+  partialpaid: ["partialpaid", "paid"],
+  paid: ["paid"],
+};
+
+
 export default function InvoiceHeader({ invoiceId, status }: InvoiceHeaderProps) {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(status);
@@ -78,16 +85,21 @@ export default function InvoiceHeader({ invoiceId, status }: InvoiceHeaderProps)
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {invoiceStatusData.map((choice) => (
-                <DropdownMenuItem
-                  key={choice.value}
-                  onClick={() => handleStatusChange(choice.value)}
-                  disabled={isPending}
-                  className="capitalize cursor-pointer"
-                >
-                  {choice.label}
-                </DropdownMenuItem>
-              ))}
+              {invoiceStatusData.map((choice) => {
+                const isAllowed = allowedTransitions[currentStatus]?.includes(choice.value);
+
+                return (
+                  <DropdownMenuItem
+                    key={choice.value}
+                    onClick={() => isAllowed && handleStatusChange(choice.value)}
+                    disabled={!isAllowed || isPending}
+                    className="capitalize cursor-pointer"
+                  >
+                    {choice.label}
+                  </DropdownMenuItem>
+                );
+              })}
+
             </DropdownMenuContent>
           </DropdownMenu>
 

@@ -1149,7 +1149,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                                     }),
                                   )
 
-                                  const response = await api.delete(`/delete-product-image/${removed.id}/`)
+                                  const response = await api.delete(`/products/${initialData?.slug_name}/delete-image/${removed.id}/`)
                                   if (response?.status === 200) {
                                     toast.success(`File with id ${removed.id} deleted`)
                                   }

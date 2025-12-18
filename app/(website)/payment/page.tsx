@@ -140,7 +140,6 @@ const Payment: React.FunctionComponent = () => {
         province: shippingDetails?.province || "",
         city: shippingDetails?.city || "",
         landmark: shippingDetails?.landmark || "",
-        building: shippingDetails?.buildingAddress || "",
       },
       payment_method: activePaymentMethod || "cod",
       coupon: voucherData?.coupon ? voucherData.coupon : null,

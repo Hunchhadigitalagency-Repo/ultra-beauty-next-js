@@ -9,30 +9,34 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { toggleRefetchTableData } from "@/redux/features/table-slice";
 import { updateOrderStatus } from "@/lib/api/order/order-apis";
-import { useAppSelector } from "@/redux/hooks";
+import ConfirmModal from "./confirm-modal";
 
 type Status = {
   id: number;
   name: string;
   primary_color: string;
   text_color: string;
+  position: number
 };
 
 type OrderStatusDropdownProps = {
   currentStatus: Status;
   orderId: number;
-  refetch?: () => void;
 };
 
 const OrderStatusDropdown: React.FC<OrderStatusDropdownProps> = ({
   currentStatus,
   orderId,
-  refetch
 }) => {
+
   const { orderStatusDropdown } = useAppSelector((state) => state.dropdown);
   const [selectedStatus, setSelectedStatus] = useState<Status>(currentStatus);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false)
+  const dispatch = useAppDispatch();
 
   let formattedStatus: Status[] = [];
 
@@ -41,18 +45,23 @@ const OrderStatusDropdown: React.FC<OrderStatusDropdownProps> = ({
       (a, b) => a.position - b.position
     );
   }
+  const [pendingStatus, setPendingStatus] = useState<Status | null>(null);
 
-  const handleSelect = async (status: Status) => {
+  const handleSelect = (status: Status) => {
     if (status.id === selectedStatus.id) return;
+    setPendingStatus(status);
+    setOpen(true);
+  };
 
+  const confirmUpdate = async () => {
+    if (!pendingStatus) return;
     setLoading(true);
-
     try {
-      const res = await updateOrderStatus(orderId, status.id);
-
+      const res = await updateOrderStatus(orderId, pendingStatus.id);
       if (res.status === 201 || res.status === 200) {
-        setSelectedStatus(status); // update local display
-        toast.success(`Order status updated to ${status.name}`);
+        setSelectedStatus(pendingStatus);
+        toast.success(`Order status updated to ${pendingStatus.name}`);
+        dispatch(toggleRefetchTableData())
       } else {
         throw new Error("Unexpected response");
       }
@@ -61,12 +70,21 @@ const OrderStatusDropdown: React.FC<OrderStatusDropdownProps> = ({
       toast.error("Failed to update order status");
     } finally {
       setLoading(false);
-      refetch?.()
+      setOpen(false);
+      setPendingStatus(null);
     }
   };
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
+      <ConfirmModal
+        is_reverse={pendingStatus && pendingStatus?.position < currentStatus.position}
+        showConfirmModal={open}
+        is_loading={loading}
+        setShowConfirmModal={setOpen}
+        onConfirm={confirmUpdate}
+      />
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild disabled={loading}>
           <Button

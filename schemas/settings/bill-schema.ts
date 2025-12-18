@@ -9,7 +9,6 @@ export const billSchema = z.object({
     .string()
     .min(1, { message: "Company address is required." }),
   panNumber: z.string().min(1, { message: "PAN number is required." }),
-  taxType: z.string().min(1, { message: "Tax type is required." }),
   companyLogo: z.union([
     z.instanceof(File).refine((file) => file.size <= MAX_FILE_SIZE, {
       message: "File size must be less than 10MB",

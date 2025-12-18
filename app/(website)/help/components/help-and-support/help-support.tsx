@@ -11,7 +11,7 @@ import { useAppSelector } from '@/redux/hooks';
 const HelpSupportSection: React.FunctionComponent = () => {
   const { searchQuery } = useAppSelector(state => state.filter)
   const [isClamped, setIsClamped] = useState(false);
-  const { data, error, loading } = useFetchData<HelpAndSupport[]>('help-and-support/');
+  const { data, error, loading } = useFetchData<HelpAndSupport[]>('/help-and-support-dropdown/');
   const [help, setHelp] = useState(data);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const HelpSupportSection: React.FunctionComponent = () => {
                     src={item.icon}
                     alt={item.name}
                     fill
-                    className="object-contain"
+                    className="object-cover"
                   />
                 </div>
                 <h2 className="text-lg font-playfair font-bold text-primary line-clamp-2">

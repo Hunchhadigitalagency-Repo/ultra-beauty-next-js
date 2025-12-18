@@ -13,7 +13,7 @@ const MyReturns: React.FunctionComponent = () => {
             <CustomTable
                 cols={MyCancellationConstants()}
                 loading={loading}
-                error={error}
+                // error={error}
                 data={data?.results || []}
                 height="h-auto"
             />

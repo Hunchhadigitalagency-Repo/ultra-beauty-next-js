@@ -1,4 +1,3 @@
-import React from "react";
 
 import Image from "next/image";
 import { Col } from "@/types/table";
@@ -55,7 +54,7 @@ export const InvoiceProductConstants = (): Col<IOrderDetail>[] => {
     },
 
     {
-      title: "TOTAL",
+      title: "SUB TOTAL",
 
       render: (data: IOrderDetail) =>
         <div className="flex justify-start w-full">

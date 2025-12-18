@@ -185,7 +185,6 @@ export interface IShippingInfo {
   city: string;
   province: string;
   landmark: string;
-  building: string;
   order_id: number;
 }
 

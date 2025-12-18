@@ -25,10 +25,7 @@ function ShippingCardDetails({
     { label: "Province", value: shippingDetailsData.shipping_info?.province },
     { label: "City", value: shippingDetailsData.shipping_info?.city },
     { label: "Landmark", value: shippingDetailsData.shipping_info?.landmark || ""},
-    {
-      label: "Building/Floor",
-      value: shippingDetailsData.shipping_info?.building || "",
-    },
+
     { label: "Email", value: shippingDetailsData.shipping_info?.email },
     { label: "Location", value: shippingDetailsData.shipping_info?.address },
   ];

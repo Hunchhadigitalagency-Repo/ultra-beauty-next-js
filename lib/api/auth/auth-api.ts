@@ -71,3 +71,8 @@ export const logout = async (accessToken: string, refreshToken: string) => {
     throw error;
   }
 };
+
+export const check_access = async (password: string, ) => {
+  const response = await api.post('/check-password/', { password })
+  return response
+}

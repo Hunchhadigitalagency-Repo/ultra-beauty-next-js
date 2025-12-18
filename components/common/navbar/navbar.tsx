@@ -27,6 +27,7 @@ import { setCartCount } from "@/redux/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setWishlistCount } from "@/redux/features/wishList-slice";
 import {
+  resetFilters,
   toggleBrands,
   toggleCategory,
   toggleSubcategory,
@@ -66,11 +67,12 @@ export default function Navbar() {
   const { isLoggedIn, accessToken } = useAppSelector(
     (state) => state.authentication
   );
-  const [categoryPosition, setCategoryPosition] = useState<number>()
-  const [icon, setIcon] = useState<string>()
+  const [categoryPosition, setCategoryPosition] = useState<number>();
+  const [icon, setIcon] = useState<string>();
 
-  const { data: dropdownCategoryData } =
-    useFetchData<ICategoryDropdown[]>(`dropdown/category?is_not_empty=True`);
+  const { data: dropdownCategoryData } = useFetchData<ICategoryDropdown[]>(
+    `dropdown/category?is_not_empty=True`
+  );
   const { data: brandDropdownData } =
     useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
   const {
@@ -101,17 +103,17 @@ export default function Navbar() {
       dispatch(setWishlistCount(count));
       hasFetched.current.wishlist = true;
     }
-
     if (cartData && !hasFetched.current.cart) {
       dispatch(setCartCount(cartData.results?.length || 0));
       hasFetched.current.cart = true;
     }
   }, [wishListData, cartData, dispatch]);
-
+  
   useEffect(() => {
+    dispatch(resetFilters());
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();
-      setIcon(company.company_logo_url)
+      setIcon(company.company_logo_url);
     };
     fetchNavigationItems();
   }, []);
@@ -232,9 +234,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className=" flex items-center justify-center">
             <div className=" relative w-40 lg:w-52 h-20">
-              {icon &&
-                <Image src={icon ?? Logo} alt="logo" fill />
-              }
+              {icon && <Image src={icon ?? Logo} alt="logo" fill />}
             </div>
           </Link>
           {/* Desktop Navigation */}
@@ -245,41 +245,46 @@ export default function Navbar() {
                   {navItems.map((item, index) => (
                     <li
                       key={index}
-                      className={`transition-all duration-200 hover:text-primary ${item.isDropdown ? "flex items-center h-full" : ""
-                        }`}
+                      className={`transition-all duration-200 hover:text-primary ${
+                        item.isDropdown ? "flex items-center h-full" : ""
+                      }`}
                       ref={item.isDropdown ? shopByCategoryRef : undefined}
                       onMouseEnter={
                         item.isDropdown && item.name === "Shop by Category"
                           ? handleCategoryEnter
                           : item.name === "Brands"
-                            ? handleBrandEnter
-                            : undefined
+                          ? handleBrandEnter
+                          : undefined
                       }
                       onMouseLeave={
                         item.isDropdown && item.name === "Shop by Category"
                           ? handleCategoryLeave
                           : item.name === "Brands"
-                            ? handleBrandLeave
-                            : undefined
+                          ? handleBrandLeave
+                          : undefined
                       }
                     >
                       {item.isDropdown ? (
                         <button
-                          className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${(item.name === "Shop by Category" && isDropdownVisible) ||
+                          className={`flex items-center justify-center gap-1 transition-transform duration-200 cursor-pointer hover:text-primary ${
+                            (item.name === "Shop by Category" &&
+                              isDropdownVisible) ||
                             (item.name === "Brands" && isBrandDropdownVisible)
-                            ? "text-primary"
-                            : ""
-                            }`}
+                              ? "text-primary"
+                              : ""
+                          }`}
                         >
                           <p className="transition-all duration-200 line-clamp-1 text-xs xl:text-sm">
                             {item.name}
                           </p>
                           <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-200 ${(item.name === "Shop by Category" && isDropdownVisible) ||
+                            className={`w-4 h-4 transition-transform duration-200 ${
+                              (item.name === "Shop by Category" &&
+                                isDropdownVisible) ||
                               (item.name === "Brands" && isBrandDropdownVisible)
-                              ? "rotate-180"
-                              : ""
-                              }`}
+                                ? "rotate-180"
+                                : ""
+                            }`}
                           />
                         </button>
                       ) : (
@@ -313,13 +318,15 @@ export default function Navbar() {
             >
               {searchOpen ? (
                 <X
-                  className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"
-                    }`}
+                  className={`size-5 md:size-4 xl:size-5 ${
+                    searchOpen && "text-primary"
+                  }`}
                 />
               ) : (
                 <Search
-                  className={`size-5 md:size-4 xl:size-5 ${searchOpen && "text-primary"
-                    }`}
+                  className={`size-5 md:size-4 xl:size-5 ${
+                    searchOpen && "text-primary"
+                  }`}
                 />
               )}
             </Button>
@@ -330,8 +337,9 @@ export default function Navbar() {
               onClick={() => router.push("/wishlist")}
             >
               <Heart
-                className={`size-5 md:size-4 xl:size-5 ${isActive("/wishlist") && "text-primary"
-                  }`}
+                className={`size-5 md:size-4 xl:size-5 ${
+                  isActive("/wishlist") && "text-primary"
+                }`}
               />
               {isLoggedIn && wishlistCount > 0 && (
                 <Badge
@@ -349,8 +357,9 @@ export default function Navbar() {
               onClick={() => router.push("/cart")}
             >
               <ShoppingCart
-                className={`size-5 md:size-4 xl:size-5 ${isActive("/cart") && "text-primary"
-                  }`}
+                className={`size-5 md:size-4 xl:size-5 ${
+                  isActive("/cart") && "text-primary"
+                }`}
               />
               {isLoggedIn && cartCount > 0 && (
                 <Badge
@@ -369,8 +378,9 @@ export default function Navbar() {
                 onClick={() => router.push("/profile")}
               >
                 <CircleUser
-                  className={` size-5 md:size-4 xl:size-5 ${isActive("/profile") && "text-primary"
-                    }`}
+                  className={` size-5 md:size-4 xl:size-5 ${
+                    isActive("/profile") && "text-primary"
+                  }`}
                 />
               </Button>
             ) : (
@@ -393,8 +403,7 @@ export default function Navbar() {
           </div>
         </div>
         {/* Mega Menu */}
-        {
-          isDropdownVisible &&
+        {isDropdownVisible && (
           <div
             ref={dropdownRef}
             className="absolute left-120 z-50 pt-5 transition-all ease-in-out "
@@ -409,23 +418,36 @@ export default function Navbar() {
                     className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
                     onClick={() => setIsDropdownVisible(false)}
                   >
-                    <span className="font-medium font-poppins ">All Products</span>
+                    <span className="font-medium font-poppins ">
+                      All Products
+                    </span>
                   </Link>
 
                   <div className="space-y-1">
-                    {dropdownCategoryData?.map((category,) => (
+                    {dropdownCategoryData?.map((category) => (
                       <div
                         key={category.id}
                         id={`category-${category.id}`}
-                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${hoveredCategory?.id === category.id ? "bg-secondary text-primary" : "hover:bg-secondary/50"
-                          }`}
+                        className={`flex items-center justify-between px-4 py-3 text-sm transition-all duration-200 rounded-md cursor-pointer group ${
+                          hoveredCategory?.id === category.id
+                            ? "bg-secondary text-primary"
+                            : "hover:bg-secondary/50"
+                        }`}
+                        onClick={() => {
+                          dispatch(
+                            toggleCategory({ id: category.id, checked: true })
+                          );
+                          router.push("/shop");
+                        }}
                         onMouseEnter={(e) => {
                           setHoveredCategory(category);
                           setCategoryPosition(e.currentTarget.offsetTop);
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="font-medium font-poppins ">{category.name}</span>
+                          <span className="font-medium font-poppins ">
+                            {category.name}
+                          </span>
                         </div>
                         {category.subcategories.length > 0 && (
                           <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -442,16 +464,25 @@ export default function Navbar() {
                   style={{ top: `${categoryPosition}px` }}
                 >
                   <div className="p-4">
-                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">{hoveredCategory.name}</h3>
+                    <h3 className="text-sm font-semibold text-muted-foreground mb-3 px-2">
+                      {hoveredCategory.name}
+                    </h3>
                     <div className="space-y-1">
                       {hoveredCategory.subcategories.map((subcategory) => (
                         <span
                           key={subcategory.id}
                           className="block px-3 py-2.5 text-sm rounded-md transition-all duration-200 hover:bg-white group cursor-pointer"
-                          onClick={() => handleCategoryCardClick(hoveredCategory.id, parseInt(subcategory.id))}
+                          onClick={() =>
+                            handleCategoryCardClick(
+                              hoveredCategory.id,
+                              parseInt(subcategory.id)
+                            )
+                          }
                         >
                           <div className="flex items-center justify-between">
-                            <span className=" group-hover:text-primary">{subcategory.name}</span>
+                            <span className=" group-hover:text-primary">
+                              {subcategory.name}
+                            </span>
                           </div>
                         </span>
                       ))}
@@ -461,7 +492,7 @@ export default function Navbar() {
               )}
             </div>
           </div>
-        }
+        )}
         {isBrandDropdownVisible && (
           <div
             ref={dropdownRef}

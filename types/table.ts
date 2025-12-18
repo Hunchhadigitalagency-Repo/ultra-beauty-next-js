@@ -127,3 +127,9 @@ export enum ESettings {
 
 export enum EPages {
 }
+
+export const ESecure: Record<string, boolean> = {
+  [ETypes.USER_MANAGEMENT]: true,
+  [ETypes.INVENTORY]: true,
+  [ETypes.INVOICES]: true,
+};

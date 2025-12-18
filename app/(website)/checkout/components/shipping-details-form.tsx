@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
@@ -16,46 +9,70 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+
 import {
   ShippingFormValues,
   shippingSchema,
 } from "@/schemas/checkout/checkout-schema";
-import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { PROVINCES } from "@/constants/province-city-data";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addShippingDetails, setShippingFee } from "@/redux/features/cart-slice";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  addShippingDetails,
+  setShippingFee,
+} from "@/redux/features/cart-slice";
+
+import useFetchData from "@/hooks/use-fetch-data";
 import { postCity } from "@/lib/api/order/order-apis";
+import { Spinner } from "@/components/ui/spinner";
 
+export interface ShippingData {
+  id: number;
+  first_name: string | null;
+  last_name: string | null;
+  profile_picture: string;
+  phone_no: string | null;
+  phone_number: string;
+  alternate_phone_no: string | null;
+  email: string;
+  address: string | null;
+  city: string | null;
+  province: string | null;
+  landmark: string | null;
+  building: string | null;
+}
 
-
-interface ShippinFormProps {
+interface ShippingFormProps {
   onChange: (value: ShippingFormValues) => void;
 }
 
-
-export default function ShippingForm({ onChange }: ShippinFormProps) {
-
+export default function ShippingForm({ onChange }: ShippingFormProps) {
   const dispatch = useAppDispatch();
-  const { shippingDetails, cartItem } = useAppSelector(state => state.cart);
+  const router = useRouter();
 
-  const [selectedProvince, setSelectedProvince] = useState<string | undefined>(
-    shippingDetails?.province || undefined
-  );
-  const [selectedCity, setSelectedCity] = useState<string | undefined>(
-    shippingDetails?.city || undefined
-  );
+  const { cartItem } = useAppSelector((state) => state.cart);
+  const cartIds = cartItem.map((item) => item.id);
 
+  const { data } = useFetchData<ShippingData[]>("/default-address/");
+  const [loading, setLoading] = useState(false);
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
-    defaultValues: shippingDetails ? shippingDetails : {
+    defaultValues: {
       firstName: "",
       lastName: "",
       phoneNumber: "",
@@ -63,7 +80,6 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
       province: "",
       city: "",
       landmark: "",
-      buildingAddress: "",
       email: "",
       address: "",
       communicateUpdates: false,
@@ -71,21 +87,30 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
     },
   });
 
-
-  const router = useRouter();
+  const selectedProvince = form.watch("province");
   const watchedValues = useWatch({ control: form.control });
+
+  const [selectedCity, setSelectedCity] = useState<string>("");
+
   const cities = selectedProvince
     ? PROVINCES.find((p) => p.province === selectedProvince)?.cities || []
     : [];
 
-  const cartIds = cartItem.map(item => item.id);
-
-
+  /* Sync form changes to parent */
   useEffect(() => {
-    onChange(watchedValues as ShippingFormValues)
-  }, [watchedValues, onChange])
+    onChange(watchedValues as ShippingFormValues);
+  }, [watchedValues, onChange]);
 
-  const handleCityChange = async (value: string, onChange: (val: string) => void) => {
+  /* Reset city when province changes */
+  useEffect(() => {
+    setSelectedCity("");
+    form.setValue("city", "");
+  }, [selectedProvince]);
+
+  const handleCityChange = async (
+    value: string,
+    onChange: (val: string) => void
+  ) => {
     onChange(value);
     setSelectedCity(value);
 
@@ -93,39 +118,59 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
       const response = await postCity(cartIds, value);
       dispatch(setShippingFee(String(response.data.rate)));
     } catch (error) {
-      console.error("Failed to post city:", error);
+      console.error("Failed to update shipping fee", error);
     }
-  }
+  };
 
-  function onSubmit(values: ShippingFormValues) {
+  const handleFillForm = () => {
+    if (!data || data.length === 0) return;
+
+    const d = data[0];
+
+    form.reset({
+      firstName: d.first_name ?? "",
+      lastName: d.last_name ?? "",
+      phoneNumber: d.phone_no ?? "",
+      alternativePhoneNumber: d.alternate_phone_no ?? "",
+      province: d.province ?? "",
+      city: d.city ?? "",
+      landmark: d.landmark ?? "",
+      email: d.email ?? "",
+      address: d.address ?? "",
+      communicateUpdates: false,
+      deliveryLocation: "home",
+    });
+
+    setSelectedCity(d.city ?? "");
+  };
+
+  const onSubmit = (values: ShippingFormValues) => {
+    setLoading(true);
     dispatch(addShippingDetails(values));
-    router.push('/payment')
-  }
+    router.push("/payment");
+  };
 
   return (
     <div className="space-y-6 bg-white">
-      <div className="py-2 px-4 bg-secondary rounded-sm font-medium text-custom-black text-base">
-        <h2 className="">Shipping details</h2>
+      <div className="flex justify-between items-center py-2 px-4 bg-secondary rounded-sm">
+        <h2 className="font-medium text-base">Shipping details</h2>
+        <Button className="bg-primary" onClick={handleFillForm}>
+          Use Default Address
+        </Button>
       </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-6">
-          {/* First Name and Last Name */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
+          {/* Names */}
+          <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    First Name
-                  </FormLabel>
+                  <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter First Name"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
+                    <Input {...field} placeholder="Enter Your First name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,15 +181,9 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Last Name
-                  </FormLabel>
+                  <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter Last Name"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
+                    <Input {...field}  placeholder="Enter Your last name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -152,22 +191,16 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
             />
           </div>
 
-          {/* Phone Number and Alternative Phone Number */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
+          {/* Phones */}
+          <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Phone Number
-                  </FormLabel>
+                  <FormLabel>Phone Number</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter the phone number"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
+                    <Input {...field} placeholder="Enter Your Phone number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -178,15 +211,9 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
               name="alternativePhoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Alternative Phone Number
-                  </FormLabel>
+                  <FormLabel>Alternative Phone</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter the alternative phone number"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
+                    <Input {...field}  placeholder="Enter Your Alternative Phone number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,238 +221,144 @@ export default function ShippingForm({ onChange }: ShippinFormProps) {
             />
           </div>
 
-          {/* Province and City */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
+          {/* Province & City */}
+          <div className="grid md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="province"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Province
-                  </FormLabel>
-                  <Select
-                    value={selectedProvince}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedProvince(value);
-                      setSelectedCity(undefined)
-                    }}
-                  >
+                  <FormLabel>Province</FormLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Your Province" />
+                        <SelectValue placeholder="Select Province" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {PROVINCES.map((province, index) => (
-                        <SelectItem key={index} value={province.province}>
-                          {province.province}
+                      {PROVINCES.map((p) => (
+                        <SelectItem key={p.province} value={p.province}>
+                          {p.province}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    City
-                  </FormLabel>
+                  <FormLabel>City</FormLabel>
                   <Select
                     value={selectedCity}
-                    onValueChange={(value) => handleCityChange(value, field.onChange)}
+                    onValueChange={(val) =>
+                      handleCityChange(val, field.onChange)
+                    }
                     disabled={!selectedProvince}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Your Nearest City" />
+                        <SelectValue placeholder="Select City" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {cities?.map((city, index) => (
-                        <SelectItem key={index} value={city}>
+                      {cities.map((city) => (
+                        <SelectItem key={city} value={city}>
                           {city}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
 
-          {/* Landmark and Building Address */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-16">
-            <FormField
-              control={form.control}
-              name="landmark"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Landmark / Area
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Near City Mall"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="buildingAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    Building / floor / Street / House
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Sunrise Tower, 5th floor"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Email */}
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  Email
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter the email address"
-                    type="email"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Address */}
           <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-700">
-                  Address
-                </FormLabel>
+                <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter the full address"
-                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                    {...field}
-                  />
+                  <Input {...field} placeholder="Enter Your Address"  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Communication Updates Checkbox */}
           <FormField
             control={form.control}
-            name="communicateUpdates"
+            name="landmark"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+              <FormItem>
+                <FormLabel>Landmark</FormLabel>
                 <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="border-gray-300"
-                  />
+                  <Input {...field} placeholder="Enter Your Landmark" />
                 </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="text-sm font-normal text-gray-700">
-                    Communicate me shipping updates and offers.
-                  </FormLabel>
-                </div>
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Delivery Location */}
-          <div className="space-y-3">
-            <Label className="text-sm font-medium text-gray-700">
-              Select the label for effective delivery
-            </Label>
-            <FormField
-              control={form.control}
-              name="deliveryLocation"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-row space-x-6"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="home"
-                          id="home"
-                          className="border-gray-300"
-                        />
-                        <Label
-                          htmlFor="home"
-                          className="text-sm font-normal text-gray-700"
-                        >
-                          Home
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="office"
-                          id="office"
-                          className="border-gray-300"
-                        />
-                        <Label
-                          htmlFor="office"
-                          className="text-sm font-normal text-gray-700"
-                        >
-                          Office
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          {/* Submit Button */}
-          <div className="flex justify-end pt-4">
-            <Button
-              disabled={!form.formState.isValid}
-              type="submit"
-              className="px-8 py-2 text-white rounded-md bg-primary"
-            >
-              Continue and Pay
+          <FormField
+            control={form.control}
+            name="communicateUpdates"
+            render={({ field }) => (
+              <FormItem className="flex gap-3">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Send me shipping updates</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="deliveryLocation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Delivery Location</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    className="flex gap-6"
+                  >
+                    <RadioGroupItem value="home" /> Home
+                    <RadioGroupItem value="office" /> Office
+                  </RadioGroup>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <div className="flex justify-end">
+            <Button type="submit" disabled={!form.formState.isValid || loading}>
+              {loading ? <Spinner /> : "Continue and Pay"}
             </Button>
           </div>
         </form>

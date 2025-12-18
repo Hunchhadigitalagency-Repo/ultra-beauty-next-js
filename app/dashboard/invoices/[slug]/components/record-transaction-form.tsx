@@ -72,7 +72,7 @@ export default function TransactionForm({ initialData, invoice }: TransactionFor
   const title = initialData ? "Edit Transaction" : "Add Transaction";
   const defaultValues = initialData
     ? {
-      invoice: invoice,
+      invoice: selectedData?.invoice_id?.toString() ? selectedData?.invoice_id?.toString() : invoice,
       mode: initialData?.mode,
       amount: initialData?.amount,
       remarks: initialData?.remarks,
@@ -100,7 +100,6 @@ export default function TransactionForm({ initialData, invoice }: TransactionFor
           toast.success("Transaction has been successfully updated!");
         }
       } else {
-        // console.log("transaction detials", data)
         const res = await createTransaction(data);
         if (res.status === 201) {
           document.getElementById("closeDialog")?.click();

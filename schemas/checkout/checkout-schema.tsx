@@ -18,9 +18,7 @@ export const shippingSchema = z.object({
     message: "City is required.",
   }),
   landmark: z.string().optional(),
-  buildingAddress: z.string().min(5, {
-    message: "Building address is required.",
-  }),
+
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),

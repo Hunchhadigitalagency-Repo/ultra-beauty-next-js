@@ -37,7 +37,7 @@ export interface IDashboardBanner {
   product?: IPaginatedDropdownData;
   discount_percentage: number;
   expiry_datetime?: string;
-  products?: string;
+  products?: IPaginatedDropdownData[];
   category?: string;
   sub_category?: string;
   is_active: boolean;
