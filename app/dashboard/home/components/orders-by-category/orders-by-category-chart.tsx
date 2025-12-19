@@ -47,8 +47,7 @@ const SalesByCategoryChart = () => {
   const handleChange = (value: string) => {
     setFilter(value);
   };
-  const centerValue = selectedItem.value.toFixed(1)
-  console.log(centerValue)
+
   return (
     <DataCard
       title="Orders by Category"

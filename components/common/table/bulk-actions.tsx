@@ -13,7 +13,7 @@ import { handleDeleteMultipleData } from "@/lib/delete-data-utils";
 import DeleteModal from "../modals/delete-modal";
 
 interface BulkActionsProps {
-  data: number[];
+  data: number[] | string[];
   type: string;
 }
 

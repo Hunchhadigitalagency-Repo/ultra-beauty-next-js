@@ -85,7 +85,7 @@ const AllProducts = () => {
   };
 
   return (
-    <section className="relative flex flex-col gap-8 padding">
+    <section className="relative flex flex-col gap-8 padding" id="shop">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
 

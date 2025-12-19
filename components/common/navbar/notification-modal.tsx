@@ -105,14 +105,8 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                 : "bg-indigo-50/50 hover:bg-indigo-100"
                 }`}
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
-                <Image
-                  src={getNotificationImage(notification.image)}
-                  alt={notification.title}
-                  width={40}
-                  height={40}
-                  className="object-cover"
-                />
+              <div className="flex-shrink-0 flex justiy-center items-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
+                <Bell />
               </div>
 
               <div className="flex-grow min-w-0">

@@ -97,8 +97,8 @@ const CategorySection: React.FunctionComponent = () => {
             </CarouselContent>
 
             {/* Navigation Arrows */}
-            <CarouselPrevious className="absolute !z-50 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
-            <CarouselNext className="absolute !z-50 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
+            <CarouselPrevious className="absolute z-20 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
+            <CarouselNext className="absolute z-20 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
           </Carousel>
         )}
       </div>
