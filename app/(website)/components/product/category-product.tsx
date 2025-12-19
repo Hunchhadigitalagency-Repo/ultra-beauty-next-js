@@ -98,6 +98,7 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({ featur
                                                             title={categoryWiseProduct.name}
                                                             price={categoryWiseProduct.price}
                                                             rating={categoryWiseProduct.average_rating}
+                                                            discountTag={categoryWiseProduct.discount_percentage}
                                                             slug={categoryWiseProduct.slug_name}
                                                             isWishlisted={isWishlisted[categoryWiseProduct.slug_name] ?? categoryWiseProduct.my_wishlist}
                                                             onToggleWishlist={handleToggleWishlist}

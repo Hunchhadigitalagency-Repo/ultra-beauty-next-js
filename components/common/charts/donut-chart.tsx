@@ -112,7 +112,7 @@ export function DonutChart({
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-28 max-w-full break-words md:w-auto">
-        <div className="text-xl font-bold">{formatNumber(displayValue)}</div>
+        <div className="text-xl font-bold">{formatNumber(Math.round(displayValue))}</div>
         <div className="text-xs text-muted-foreground break-words">
           {displayLabel}
         </div>

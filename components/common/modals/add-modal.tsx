@@ -14,11 +14,20 @@ interface AddModalProps {
   text: string;
   className?: string;
   invoice_id?: number;
+  disabled?: boolean;
 }
 
-const AddModal: React.FC<AddModalProps> = ({ type, text, invoice_id, className }) => {
+const AddModal: React.FC<AddModalProps> = ({
+  type,
+  text,
+  invoice_id,
+  className,
+  disabled = false,
+}) => {
   const formComponentMap: Record<string, React.ReactNode> = {
-    [ETypes.INVOICES]: <TransactionForm initialData={null} invoice={invoice_id?.toString()} />,
+    [ETypes.INVOICES]: (
+      <TransactionForm initialData={null} invoice={invoice_id?.toString()} />
+    ),
   };
 
   return (
@@ -26,6 +35,7 @@ const AddModal: React.FC<AddModalProps> = ({ type, text, invoice_id, className }
       <DialogTrigger asChild>
         <Button
           className={` flex items-center gap-1 hover:bg-yellow-600 border border-transparent hover:border-customBlack hover:text-white px-4 ${className}`}
+        disabled={disabled}
         >
           <span className="text-sm font-light capitalize">{text}</span>
         </Button>

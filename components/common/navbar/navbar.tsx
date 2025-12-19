@@ -108,7 +108,7 @@ export default function Navbar() {
       hasFetched.current.cart = true;
     }
   }, [wishListData, cartData, dispatch]);
-  
+
   useEffect(() => {
     dispatch(resetFilters());
     const fetchNavigationItems = async () => {
@@ -175,17 +175,19 @@ export default function Navbar() {
     subcategoryId: number
   ) => {
     setIsDropdownVisible(false);
+    dispatch(resetFilters());
     dispatch(toggleCategory({ id: categoryId, checked: true }));
     dispatch(toggleSubcategory({ id: subcategoryId, checked: true }));
     setHoveredCategory(null);
-    router.push(`/shop`);
+    router.push(`/shop#shop`);
   };
 
   const handleBrandCardClick = (brandId: number) => {
     setIsBrandDropdownVisible(false);
+    dispatch(resetFilters());
     dispatch(toggleBrands({ id: brandId, checked: true }));
     setHoveredCategory(null);
-    router.push(`/shop`);
+    router.push(`/shop#shop`);
   };
 
   const searchAreaRef = useRef<HTMLDivElement>(null);
@@ -414,7 +416,7 @@ export default function Navbar() {
               <div className="w-[280px] h-fit max-h-[450px] bg-white shadow-xl rounded-lg overflow-y-auto border-r border-border">
                 <div className="p-2">
                   <Link
-                    href="/shop"
+                    href="/shop#shop"
                     className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
                     onClick={() => setIsDropdownVisible(false)}
                   >
@@ -434,10 +436,11 @@ export default function Navbar() {
                             : "hover:bg-secondary/50"
                         }`}
                         onClick={() => {
+                          dispatch(resetFilters());
                           dispatch(
                             toggleCategory({ id: category.id, checked: true })
                           );
-                          router.push("/shop");
+                          router.push("/shop#shop");
                         }}
                         onMouseEnter={(e) => {
                           setHoveredCategory(category);

@@ -150,10 +150,10 @@ const Payment: React.FunctionComponent = () => {
     } else {
       toast.success("Order placed successfully!");
       dispatch(setOrderId(res.data.id));
+      dispatch(decreaseCartCountBy(cartItem.length));
     }
     if (activePaymentMethod === "cod") {
       router.push("/profile");
-      dispatch(decreaseCartCountBy(cartItem.length));
       dispatch(clearCart());
       dispatch(setShippingFee("ß"));
     } else if (activePaymentMethod === "getpay") {

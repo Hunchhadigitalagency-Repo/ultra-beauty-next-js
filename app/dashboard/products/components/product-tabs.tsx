@@ -91,7 +91,7 @@ const ProductTabs = () => {
                 data={data}
                 loading={loading && data.length === 0}
                 enableBulkSelect={true}
-                getItemId={(product) => Number(product?.slug_name) as any}
+                getItemId={(product) => product?.slug_name}
                 onRowClick={handleRowClick}
                 height="h-auto"
                 striped

@@ -40,6 +40,7 @@ import {
 import useFetchData from "@/hooks/use-fetch-data";
 import { postCity } from "@/lib/api/order/order-apis";
 import { Spinner } from "@/components/ui/spinner";
+import api from "@/services/api-instance";
 
 export interface ShippingData {
   id: number;
@@ -144,8 +145,21 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
     setSelectedCity(d.city ?? "");
   };
 
-  const onSubmit = (values: ShippingFormValues) => {
+  const onSubmit = async (values: ShippingFormValues) => {
     setLoading(true);
+    const payload = {
+      first_name: values.firstName,
+      last_name: values.lastName,
+      email: values.email,
+      phone_no: values.phoneNumber,
+      alternate_phone_no: values.alternativePhoneNumber,
+      province: values.province,
+      city: values.city,
+      landmark: values.landmark,
+      address: values.address,
+    };
+
+    await api.post("/default-address/", payload);
     dispatch(addShippingDetails(values));
     router.push("/payment");
   };
@@ -160,7 +174,10 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="px-4 space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit, (err) => console.log(err))}
+          className="px-4 space-y-6"
+        >
           {/* Names */}
           <div className="grid md:grid-cols-2 gap-6">
             <FormField
@@ -183,7 +200,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input {...field}  placeholder="Enter Your last name" />
+                    <Input {...field} placeholder="Enter Your last name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -213,7 +230,10 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                 <FormItem>
                   <FormLabel>Alternative Phone</FormLabel>
                   <FormControl>
-                    <Input {...field}  placeholder="Enter Your Alternative Phone number" />
+                    <Input
+                      {...field}
+                      placeholder="Enter Your Alternative Phone number"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -285,7 +305,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
               <FormItem>
                 <FormLabel>Address</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Enter Your Address"  />
+                  <Input {...field} placeholder="Enter Your Address" />
                 </FormControl>
                 <FormMessage />
               </FormItem>

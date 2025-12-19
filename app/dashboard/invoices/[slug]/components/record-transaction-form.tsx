@@ -50,7 +50,7 @@ const paymentModes = [
   },
 
   {
-    id: "banktransfer",
+    id: "bank_transfer",
     name: "Bank Transfer",
   },
 ];

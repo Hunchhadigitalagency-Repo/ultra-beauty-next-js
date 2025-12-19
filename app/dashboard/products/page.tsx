@@ -19,6 +19,7 @@ import { Permissions } from "@/types/permissions";
 const ProductsPage = () => {
   const selectedIds = useAppSelector((state) => state.table.selectedIds);
   const router = useRouter();
+console.log(selectedIds);
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-full lg:h-[calc(100vh-100px)] lg:overflow-hidden">
@@ -33,7 +34,7 @@ const ProductsPage = () => {
             <MobileProductFilters />
           </div>
           <div className="flex items-center gap-3">
-            {selectedIds.length > 0 && <BulkActions type={ETypes.PRODUCTS} data={[]} />}
+            {selectedIds.length > 0 && <BulkActions type={ETypes.PRODUCTS} data={selectedIds} />}
 
             <Button
               className="text-white flex items-center gap-2"

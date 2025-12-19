@@ -89,6 +89,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
                       <ProductCard
                         imageSrc={product.images?.[0]?.file}
                         alt={product.name}
+                        discountTag={product.discount_percentage}
                         title={product.name}
                         price={product.price}
                         rating={product.average_rating}

@@ -52,7 +52,7 @@ const OrderTable = ({ setDatalength }: Props) => {
   return (
     <div id="orders-table" className="overflow-y-auto h-[calc(100vh-190px)]">
       <InfiniteScroll
-        dataLength={totalCount || 0}
+        dataLength={data.length}
         next={fetchNext}
         hasMore={hasMore}
         loader={<InfiniteScrollLoader />}
