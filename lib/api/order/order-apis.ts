@@ -57,7 +57,7 @@ export const cancelOrder = async (
     reason: string,
     additional_info: string
 ) => {
-    const response = await api.post("/cancel/order/", {
+    const response = await api.post("/cancel-order-items/", {
         order_id,
         reason,
         additional_info,
@@ -71,7 +71,7 @@ export const cancelIndividualOrder = async (
     additional_info: string
 ) => {
     const order_detail_ids = [id];
-    const response = await api.post("/cancel-order-items/", {
+    const response = await api.post("/cancel/order/", {
         order_detail_ids,
         reason,
         additional_info,

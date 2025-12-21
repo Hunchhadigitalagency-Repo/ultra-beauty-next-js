@@ -47,7 +47,7 @@ const BrandsModal = () => {
     return (
         <div className='relative flex flex-col'>
             <SearchBox
-                className='relative py-2 text-sm font-semibold rounded-sm md:text-xl lg:text-base md:mt-5 focus-visible:border-white-500'
+                className='relative py-2 text-sm  rounded-sm md:text-xl lg:text-base md:mt-5 focus-visible:border-white-500'
                 placeholder="Find the brand as your requirement"
                 sendValue={handleSearchValue}
             />

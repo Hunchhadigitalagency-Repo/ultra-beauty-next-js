@@ -40,7 +40,7 @@ export const getProductsDropdown = async (page: number, search?: string) => {
 };
 
 export const getBrandsDropdown = async (page: number, search?: string) => {
-const response = await api.get(`/brand-dropdown/?page=${page}&page_size=10&search_name=${search || ""}`);
+const response = await api.get(`/brand-dropdown/?page=${page}&page_size=10&search=${search || ""}`);
   return response.data;
 }
 

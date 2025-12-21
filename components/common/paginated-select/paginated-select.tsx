@@ -61,16 +61,16 @@ export function PaginatedSelect({
         let resultsToSet = response.results || response;
 
         if (page === 1 && !search && value && !append) {
-          const selectedExists = response.results.some(
+          const selectedExists = (response.results || response)?.some(
             (item) =>
               item?.id?.toString() === value ||
 
               item?.slug_name === value
-          );
+          ) ;
 
           if (!selectedExists && selectedItem) {
             // Add the selected item to the beginning of the results
-            resultsToSet = [selectedItem, ...response.results];
+            resultsToSet = [selectedItem, ...(response.results || response)];
           }
         }
 

@@ -65,7 +65,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
                 </div>
               </div>
               {/* Description Block */}
-              <div className="w-full space-y-1">
+              <div className="w-full ">
                 <MdFormatQuote className="w-6 h-6 text-primary sm:w-10 sm:h-10 md:w-14 md:h-14" />
                 <h3 className="text-lg font-bold sm:text-xl md:text-2xl text-primary">
                   {brand?.brand_name}

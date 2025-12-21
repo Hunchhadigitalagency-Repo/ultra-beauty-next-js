@@ -38,7 +38,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onClose, message,
           </div>
 
           <p
-            className={`text-lg font-medium text-center ${
+            className={`text-md font-medium text-center ${
               isSuccess ? "text-pink-700" : "text-red-700"
             }`}
           >

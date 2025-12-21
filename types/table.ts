@@ -56,13 +56,13 @@ export enum ESettings {
   ADD_CATEGORY = "add-category",
   EDIT_CATEGORY = "edit-category",
 
-  SUB_CATEGORY = "sub-category",
-  ADD_SUB_CATEGORY = "add-sub-category",
-  EDIT_SUB_CATEGORY = "edit-sub-category",
+  SUB_CATEGORY = "sub-cate",
+  ADD_SUB_CATEGORY = "add-sub-cate",
+  EDIT_SUB_CATEGORY = "edit-sub-cate",
 
-  BLOG_CATEGORY = "blog-category",
-  ADD_BLOG_CATEGORY = "add-blog-category",
-  EDIT_BLOG_CATEGORY = "edit-blog-category",
+  BLOG_CATEGORY = "blog-cate",
+  ADD_BLOG_CATEGORY = "add-blog-cate",
+  EDIT_BLOG_CATEGORY = "edit-blog-cate",
 
   BRAND = "brand",
   ADD_BRAND = "add-brand",

@@ -48,7 +48,7 @@ export default function ProductDescription({
   if (!detail_description) return <EmptyState />;
 
   return (
-    <div className="bg-white rounded-2xl px-6 mt-0">
+    <div className="bg-white rounded-2xl px-6 mt-0 mb-10">
       <div
         ref={contentRef}
         className={`rendered-content prose prose-sm sm:prose-base max-w-none text-gray-700 leading-relaxed transition-all duration-300 
@@ -59,7 +59,7 @@ export default function ProductDescription({
       {showButton && (
         <div
           onClick={() => setExpandedText(!expandedText)}
-          className="text-base font-medium cursor-pointer text-primary hover:text-primary hover:underline"
+          className="text-sm font-medium cursor-pointer text-primary hover:text-primary hover:underline"
         >
           {expandedText ? "Show Less" : "Read More"}
         </div>

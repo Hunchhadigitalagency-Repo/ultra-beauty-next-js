@@ -17,7 +17,7 @@ const TrendingSection: React.FunctionComponent = () => {
       isLoading={loading}
       error={error}
       products={MostLovedProducts || []}
-      headerTitle="Loved By EveryOne"
+      headerTitle="Loved By Everyone"
       headerDescription="Find the trending Products"
       headerLink="/shop"
     />

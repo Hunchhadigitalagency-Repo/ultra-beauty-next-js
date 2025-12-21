@@ -30,7 +30,7 @@ const HelpSection: React.FunctionComponent = () => {
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-3xl">
           <SearchBox
             iconClassName="text-white"
-            className="flex-1 bg-transparent border border-white rounded-md text-white placeholder-white focus-visible:border-white px-4 py-2"
+            className="help-placeholder flex-1 bg-transparent border border-white rounded-md text-white placeholder-white focus-visible:border-white px-4 py-2"
             placeholder="Search for the topic or question..."
           />
           <button className="bg-white text-primary px-6 py-2 rounded-md hover:bg-gray-200 transition-colors duration-300 cursor-pointer">
