@@ -117,13 +117,18 @@ const ProductDescriptionSection: React.FunctionComponent<
       return [...prev, { name, value }];
     });
   }
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setHasSubmitted(true);
     validateSelection();
-    if (isLoggedIn) {
-      if (variantId !== undefined && userId) {
-        try {
-          addToCart(userId, product?.slug_name, quantity, parseFloat(variantId));
+    try {
+      if (isLoggedIn) {
+        if (variantId !== undefined && userId) {
+          await addToCart(
+            userId,
+            product?.slug_name,
+            quantity,
+            parseFloat(variantId)
+          );
           dispatch(clearCartItems());
           dispatch(clearVoucherData());
           dispatch(increaseCartCount());
@@ -132,12 +137,12 @@ const ProductDescriptionSection: React.FunctionComponent<
           setErrors({});
           setHasSubmitted(false);
           setQuantity(1);
-        } catch (error) {
-          handleError(error, toast)
         }
+      } else {
+        router.push("/login");
       }
-    } else {
-      router.push("/login");
+    } catch (error) {
+      handleError(error, toast);
     }
   };
   const stockQuantity = useMemo(() => {
@@ -154,7 +159,8 @@ const ProductDescriptionSection: React.FunctionComponent<
     return product.quantity ?? 0;
   }, [product, variantId]);
 
-  const isAvailable = stockQuantity !== null ? stockQuantity >= quantity : !!quantity;
+  const isAvailable =
+    stockQuantity !== null ? stockQuantity >= quantity : !!quantity;
 
   return (
     <div className="flex flex-col justify-start w-full space-y-8 ">

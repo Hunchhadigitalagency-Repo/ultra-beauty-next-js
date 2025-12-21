@@ -34,14 +34,12 @@ const ProductCard = ({
     }
   };
 
-  // Function to open product page in a new tab
   const openProductInNewTab = () => {
     window.open(`/shop/${slug}`, "_blank", "noopener,noreferrer");
   };
 
   return (
     <section className="flex flex-col justify-between w-full overflow-hidden bg-white md:gap-3 lg:gap-4">
-      {/* Image Section */}
       <div
         onClick={openProductInNewTab}
         className="relative w-full h-40 mb-2 overflow-hidden rounded-lg cursor-pointer sm:h-60 md:h-72 lg:h-80 group"
@@ -50,7 +48,7 @@ const ProductCard = ({
           src={imageSrc}
           alt={alt}
           fill
-          className="object-fit object-center transition-transform duration-300 group-hover:scale-105"
+          className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
         />
         {isFlashSale && (
           <div className="absolute top-2 right-2">

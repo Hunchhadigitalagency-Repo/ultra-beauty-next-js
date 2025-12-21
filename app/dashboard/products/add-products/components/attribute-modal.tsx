@@ -111,6 +111,7 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave,  }: Attribu
       event.preventDefault();
       event.stopPropagation();
     }
+console.log("Save has been triggered success fully");
 
     const selectedAttribute = attributes?.find(
       (attr) => attr.id.toString() === data.name
@@ -119,7 +120,7 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave,  }: Attribu
       (variation) => variation.id.toString() === data.value
     );
 
-    if (selectedAttribute && selectedVariation && currentVariantId !== undefined) {
+    if (selectedAttribute && selectedVariation) {
       onSave?.({
         attribute: data.name,
         attribute_variant: data.value,
@@ -152,6 +153,8 @@ const AttributeModal = ({ isOpen, currentVariantId, onClose, onSave,  }: Attribu
       //   ];
       // });
 
+    } else {
+      console.log("missed the required things ")
     }
 
     form.reset();

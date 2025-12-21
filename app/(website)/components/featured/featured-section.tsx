@@ -84,8 +84,8 @@ const FeaturedSection = () => {
                         ))
                       }
                     </CarouselContent>
-                    <CarouselPrevious className='ml-10' />
-                    <CarouselNext className='mr-10' />
+                    <CarouselPrevious className='ml-10 z-20' />
+                    <CarouselNext className='mr-10 z-20' />
                   </Carousel>
                 )
         }

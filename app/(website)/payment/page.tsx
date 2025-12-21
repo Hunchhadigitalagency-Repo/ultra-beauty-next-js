@@ -278,12 +278,12 @@ const Payment: React.FunctionComponent = () => {
                   }
                 `}
               >
-                <div className="relative w-20 h-20">
+                <div className="relative w-45 h-20">
                   <Image
                     src={item.image}
                     fill
                     alt={item.name}
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
                 <p
