@@ -70,7 +70,7 @@ const ProductImagesSection: React.FunctionComponent<ProductImagesSectionProps> =
               src={selectedImage}
               alt="Main product"
               fill
-              className="object-fit rounded-lg"
+              className="object-contain rounded-lg"
             />
           )
         }

@@ -418,7 +418,10 @@ export default function Navbar() {
                   <Link
                     href="/shop#shop"
                     className="flex items-center justify-between px-4 py-3 mb-1 text-sm transition-all duration-200 rounded-md hover:bg-secondary hover:text-primary group"
-                    onClick={() => setIsDropdownVisible(false)}
+                    onClick={() => {
+                      dispatch(resetFilters());
+                      setIsDropdownVisible(false);
+                    }}
                   >
                     <span className="font-medium font-poppins ">
                       All Products
