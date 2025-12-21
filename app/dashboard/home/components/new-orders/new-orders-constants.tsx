@@ -28,7 +28,7 @@ export const NewOrdersConstants = (): Col<INewOrder>[] => {
               backgroundColor: data.status.primary_color,
               color: data.status.text_color,
             }}
-            className="w-[100px] rounded-sm py-1 px-2 text-center"
+            className="w-[150px] rounded-sm py-1 px-2 text-center"
           >
             <p className="">{data.status.name}</p>
           </button>

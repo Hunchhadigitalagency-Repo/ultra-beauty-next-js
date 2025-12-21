@@ -234,3 +234,7 @@ input:-webkit-autofill {
     white-space: nowrap;
     display: inline-block;
 }
+
+.help-placeholder::-webkit-input-placeholder{
+  color: #fffdfd;
+}

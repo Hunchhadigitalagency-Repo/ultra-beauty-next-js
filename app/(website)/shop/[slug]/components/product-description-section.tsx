@@ -32,6 +32,8 @@ import {
   increaseCartCount,
 } from "@/redux/features/cart-slice";
 import { handleError } from "@/lib/error-handler";
+import GetPay from "@/assets/getpay.jpeg";
+import PhonePay from "@/assets/unnamed.png";
 
 const ProductDescriptionSection: React.FunctionComponent<
   SingleProductPageProps
@@ -325,6 +327,16 @@ const ProductDescriptionSection: React.FunctionComponent<
             <span className="text-xs font-bold sm:text-sm font-poppins">
               C.O.D
             </span>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative w-24 h-10">
+              <Image src={GetPay} alt="card" fill className="rounded-sm " />
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative w-10 h-10">
+              <Image src={PhonePay} alt="fonepay" fill className="rounded-sm " />
+            </div>
           </div>
         </div>
       </div>

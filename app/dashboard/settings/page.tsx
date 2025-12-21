@@ -347,7 +347,7 @@ const SettingsPage = () => {
                 }}
                 className={cn(
                   "justify-between text-sm font-medium hover:text-primary cursor-pointer",
-                  normalize(activeSetting) === (setting.data)
+                  normalize(activeSetting).includes(setting.data)
                     ? "text-primary"
                     : "text-muted-foreground"
                 )}

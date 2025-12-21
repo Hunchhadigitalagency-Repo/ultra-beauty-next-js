@@ -424,7 +424,7 @@ export default function Navbar() {
                     }}
                   >
                     <span className="font-medium font-poppins ">
-                      All Products
+                      ALL PRODUCTS
                     </span>
                   </Link>
 

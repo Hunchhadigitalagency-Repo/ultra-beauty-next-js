@@ -22,7 +22,7 @@ const PriceRow = ({
     <div className={`md:items-center gap-3 md:gap-5  ${className}`}>
       <span className={`flex w-full items-center justify-between ${priceClassname}`}>
         {Number(previousPrice) > 0 && (
-          <span className={`text-gray-400 text-[16px] font-semibold line-through`}>
+          <span className={`text-gray-600 text-[16px] font-semibold line-through`}>
             Nrs. {previousPrice}
           </span>
         )}

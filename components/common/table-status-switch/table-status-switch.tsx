@@ -73,6 +73,9 @@ const TableStatusSwitch = ({ type, rowData, onUpdate }: Props) => {
         case ETypes.SOCIAL_LINKS:
           response = await updateSocialLink(rowData.id, formData);
           break;
+        case ETypes.SOCIAL_LINKS:
+          response = await updateBanner(rowData.id, formData);
+          break;
         case ETypes.TAX:
           response = await updateTax(rowData.id, {
             ...rowData,
