@@ -14,7 +14,6 @@ import SectionHeader from "@/components/common/header/section-header";
 import OrderSummary from "@/app/(website)/cart/components/order-summary";
 import {
   clearCart,
-  decreaseCartCountBy,
   setOrderId,
   setShippingFee,
 } from "@/redux/features/cart-slice";
@@ -23,6 +22,7 @@ import { DynamicQr } from "./helper/dynamic_qr";
 import QrPaymentModal from "./components/qr-payment-modal";
 import { handleError } from "@/lib/error-handler";
 import { Spinner } from "@/components/ui/spinner";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
 
 const PAYMENT_GATEWAYS = [
   { name: "Cash on Delivery (COD)", image: CashOnDelivery, value: "cod" },
@@ -56,14 +56,29 @@ const Payment: React.FunctionComponent = () => {
   const [qrModal, setQrModal] = useState<boolean>(false);
   const [loading, setloading] = useState(false);
 
-  const { cartItem, shippingDetails, voucherData, shippingFee, orderId } =
-    useAppSelector((state) => state.cart);
+  const {
+    cartItem,
+    shippingDetails,
+    voucherData,
+    shippingFee,
+    orderId,
+    cartCount,
+  } = useAppSelector((state) => state.cart);
   const carts_id = cartItem.map((item) => item.id);
-
   const subTotal = cartItem.reduce(
-    (sum, item) => sum + parseFloat(item.price),
+    (sum, item) =>
+      sum +
+      (parseFloat(item.price) -
+        (parseFloat(
+          item?.is_flash_sale
+            ? item.flash_sale_discount || "0"
+            : item.discount_percentage || "0"
+        ) /
+          100) *
+          parseFloat(item.price)),
     0
   );
+
   const taxAmount = cartItem.reduce((sum, item) => {
     const price = parseFloat(item.price);
     const tax = item.tax_applied
@@ -144,13 +159,15 @@ const Payment: React.FunctionComponent = () => {
       payment_method: activePaymentMethod || "cod",
       coupon: voucherData?.coupon ? voucherData.coupon : null,
     });
+
     if (res.status !== 201) {
       toast.error("Failed to place order. Please try again.");
       return;
     } else {
       toast.success("Order placed successfully!");
       dispatch(setOrderId(res.data.id));
-      dispatch(decreaseCartCountBy(cartItem.length));
+      updateCartAndWishlistCounts(dispatch);
+      dispatch(clearCart());
     }
     if (activePaymentMethod === "cod") {
       router.push("/profile");
@@ -162,6 +179,7 @@ const Payment: React.FunctionComponent = () => {
     } else if (activePaymentMethod === "qr") {
       setQrModal(true);
       getDynamicQr();
+      dispatch(clearCart());
       return;
     }
   };
@@ -219,7 +237,7 @@ const Payment: React.FunctionComponent = () => {
       orderInformationUI: getOrderInformationHtml(cartItem, Total),
 
       onSuccess: () => {
-        dispatch(decreaseCartCountBy(cartItem.length));
+        updateCartAndWishlistCounts(dispatch);
         dispatch(clearCart());
         dispatch(setShippingFee("ß"));
         setloading(false);
@@ -245,6 +263,10 @@ const Payment: React.FunctionComponent = () => {
       return () => {
         document.body.removeChild(script);
       };
+    } else if (cartCount) {
+      router.push("/profile");
+    } else {
+      router.push("/cart");
     }
   }, []);
 

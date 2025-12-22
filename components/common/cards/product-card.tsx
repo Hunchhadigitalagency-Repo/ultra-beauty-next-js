@@ -18,6 +18,7 @@ const ProductCard = ({
   price,
   rating,
   discountTag,
+  flashSaleDiscount,
   brand,
   onToggleWishlist = () => {},
   isWishlisted,
@@ -80,7 +81,14 @@ const ProductCard = ({
           <PriceRow
             discountTag={discountTag}
             previousPrice={price}
-            price={calculateDiscountedPrice(price, discountTag) || price}
+            price={
+              calculateDiscountedPrice(
+                price,
+                discountTag,
+                flashSaleDiscount,
+                isFlashSale
+              ) || price
+            }
             discountClassName="text-[12px]  md:text-sm"
           />
         ) : (

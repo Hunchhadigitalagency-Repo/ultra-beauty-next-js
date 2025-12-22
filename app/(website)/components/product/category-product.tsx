@@ -55,7 +55,7 @@ const CategoryProduct: React.FunctionComponent<CategoryProductProps> = ({
     loading: isLoading,
     error,
   } = useFetchData<CategoryWiseProduct[]>(
-    `category-wise-products/${featuredCategoryId}/`
+    `category-wise-products/${featuredCategoryId}/`, isLoggedIn
   );
 
   return (

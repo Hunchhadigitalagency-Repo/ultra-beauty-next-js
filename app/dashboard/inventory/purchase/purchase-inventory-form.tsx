@@ -65,30 +65,34 @@ const ProductForm: React.FC<{
   const [selectedProductSlug, setSelectedProductSlug] = useState<string | null>(
     null
   );
-  const [url, setUrl] = useState<string>("");
+  const [hasSetVariants, setHasSetVariants] = useState(false);
 
-  useEffect(() => {
-    if (selectedProductSlug) {
-      console.log("inside here");
-
-      // setSelectedProductSlug("")
-      setUrl(`/products/${selectedProductSlug}/`);
-    } else {
-      setUrl("");
-    }
-  }, [selectedProductSlug]);
+  // Only set URL when slug changes
+  const url = selectedProductSlug ? `/products/${selectedProductSlug}/` : "";
 
   const { data: productData } = useFetchData<any>(url, false);
 
+  // Set existing variants only once when product data loads
   useEffect(() => {
-    if (productData?.variants?.length) {
+    if (productData?.variants?.length && !hasSetVariants) {
       const variantsData = productData.variants.map((v: any) => ({
         id: Number(v.id),
         quantity: "",
       }));
-      form.setValue(`products.${index}.existing_variants`, variantsData);
+      form.setValue(`products.${index}.existing_variants`, variantsData, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+      setHasSetVariants(true);
     }
-  }, [productData, form, index]);
+  }, [productData, form, index, hasSetVariants]);
+
+  // Reset hasSetVariants when product changes
+  useEffect(() => {
+    if (selectedProductSlug) {
+      setHasSetVariants(false);
+    }
+  }, [selectedProductSlug]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -121,7 +125,8 @@ const ProductForm: React.FC<{
     if (variantClasses) {
       form.setValue(
         `products.${index}.variantItems.${variantIndex}.variant_classes`,
-        variantClasses.filter((_, i) => i !== attributeIndex)
+        variantClasses.filter((_, i) => i !== attributeIndex),
+        { shouldValidate: false }
       );
     }
   };
@@ -132,8 +137,6 @@ const ProductForm: React.FC<{
     attribute_name: string;
     variant_name: string;
   }) => {
-    console.log("this is the saed data: ", data);
-
     if (currentVariantIndex !== null) {
       const currentClasses =
         form.getValues(
@@ -141,12 +144,14 @@ const ProductForm: React.FC<{
         ) || [];
       form.setValue(
         `products.${index}.variantItems.${currentVariantIndex}.variant_classes`,
-        [...currentClasses, data]
+        [...currentClasses, data],
+        { shouldValidate: false }
       );
     }
     setIsAttributeModalOpen(false);
     setCurrentVariantIndex(null);
   };
+
   return (
     <Card className="relative">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -181,6 +186,9 @@ const ProductForm: React.FC<{
                         onValueChange={(value, slug_name) => {
                           field.onChange(value);
                           setSelectedProductSlug(slug_name || "");
+                          setShowVariantManagement(false);
+                          // Clear variant items when product changes
+                          form.setValue(`products.${index}.variantItems`, []);
                         }}
                         placeholder="Select Product"
                         fetchData={getProductsDropdown}
@@ -350,7 +358,6 @@ const ProductForm: React.FC<{
                     />
                   </div>
 
-                  {/* Conditional Image Field */}
                   {attributeImage && (
                     <div className="mt-4">
                       <FormField
@@ -558,7 +565,6 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
   };
   const router = useRouter();
   const onSubmit = async (data: MultiProductFormValues) => {
-    // console.log("this is data", data);
     setLoading(true);
     const formData = new FormData();
 

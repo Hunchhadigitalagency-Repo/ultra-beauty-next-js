@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { AlertCircle, Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
@@ -31,9 +31,9 @@ const AllProducts = () => {
     (state) => state.category
   );
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
-if(searchQuery){
+  if (searchQuery) {
     queryParams.set("search", searchQuery);
-}
+  }
   if (selectedCategories.length > 0) {
     queryParams.set("category", selectedCategories.join(","));
   }
@@ -133,9 +133,12 @@ if(searchQuery){
               </div>
             }
             endMessage={
-              <p className="mt-4 text-sm text-center text-muted-foreground">
-                You&lsquo;ve reached the end!
-              </p>
+              <div className="w-full h-full flex flex-col justify-center items-center">
+                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                <p className="text-sm font-extralight text-gray-400 capitalize">
+                  Oops! no more Poducts Found...
+                </p>
+              </div>
             }
           >
             <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
@@ -147,6 +150,7 @@ if(searchQuery){
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
                   brand={product.brand?.name}
+                  flashSaleDiscount={product.flash_sale_discount}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

@@ -26,14 +26,12 @@ import {
   ErrorState,
   SelectedAttribute,
 } from "@/types/product";
-import {
-  clearCartItems,
-  clearVoucherData,
-  increaseCartCount,
-} from "@/redux/features/cart-slice";
+import { clearCartItems, clearVoucherData } from "@/redux/features/cart-slice";
 import { handleError } from "@/lib/error-handler";
 import GetPay from "@/assets/getpay.jpeg";
 import PhonePay from "@/assets/unnamed.png";
+import SocialShare from "./share-link";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
 
 const ProductDescriptionSection: React.FunctionComponent<
   SingleProductPageProps
@@ -101,7 +99,10 @@ const ProductDescriptionSection: React.FunctionComponent<
     validateSelection();
   }, [selectedAttributes, hasSubmitted, validateSelection]);
 
-  const discountedPrice = product?.discount_percentage
+  const discountedPrice = product?.is_flash_sale
+    ? Number(product?.price) -
+      (Number(product?.price) * Number(product?.flash_sale_discount)) / 100
+    : product?.discount_percentage
     ? (
         Number(product?.price) -
         (Number(product?.price) * Number(product?.discount_percentage)) / 100
@@ -133,7 +134,7 @@ const ProductDescriptionSection: React.FunctionComponent<
           );
           dispatch(clearCartItems());
           dispatch(clearVoucherData());
-          dispatch(increaseCartCount());
+          updateCartAndWishlistCounts(dispatch);
           toast.success("Product added to cart successfully!");
           setSelectedAttributes([]);
           setErrors({});
@@ -262,7 +263,11 @@ const ProductDescriptionSection: React.FunctionComponent<
               : product?.price
           }
           previousPrice={product?.discount_percentage && product?.price}
-          discountTag={product?.discount_percentage}
+          discountTag={
+            product.is_flash_sale
+              ? product.flash_sale_discount
+              : product?.discount_percentage
+          }
           priceClassname="gap-5"
           discountClassName="bg-primary text-white"
         />
@@ -301,16 +306,7 @@ const ProductDescriptionSection: React.FunctionComponent<
             SHARE:
           </span>
           <div className="flex gap-8 ">
-            {socialLinks.map(({ icon: Icon, href }, idx) => (
-              <Link
-                key={idx}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon className="w-5 h-5 md:h-6 md:w-6 text-[#5D5D5D] hover:text-primary transition-colors" />
-              </Link>
-            ))}
+            <SocialShare />
           </div>
         </div>
       </div>
@@ -335,7 +331,12 @@ const ProductDescriptionSection: React.FunctionComponent<
           </div>
           <div className="flex flex-col items-center justify-center">
             <div className="relative w-10 h-10">
-              <Image src={PhonePay} alt="fonepay" fill className="rounded-sm " />
+              <Image
+                src={PhonePay}
+                alt="fonepay"
+                fill
+                className="rounded-sm "
+              />
             </div>
           </div>
         </div>

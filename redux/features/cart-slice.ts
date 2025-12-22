@@ -20,8 +20,6 @@ const cartSlice = createSlice({
             state.cartItem = action.payload
         },
         toggleCartItem: (state, action: PayloadAction<CartItem>) => {
-            console.log('toggling cart items');
-
             const existingIndex = state.cartItem.findIndex(item => item.id === action.payload.id);
             if (existingIndex >= 0) {
                 state.cartItem.splice(existingIndex, 1);
@@ -96,19 +94,8 @@ const cartSlice = createSlice({
         setShippingFee: (state, action: PayloadAction<string>) => {
             state.shippingFee = action.payload
         },
-        increaseCartCount: (state) => {
-            state.cartCount = state.cartCount + 1;
-        },
-        decreaseCartCount: (state) => {
-            if (state.cartCount > 0) {
-                state.cartCount -= 1;
-            }
-        },
         setCartCount: (state, action: PayloadAction<number>) => {
             state.cartCount = action.payload
-        },
-        decreaseCartCountBy: (state, action: PayloadAction<number>) => {
-            state.cartCount = state.cartCount - action.payload;
         },
         clearCartCount: (state) => {
             state.cartCount = 0;
@@ -129,10 +116,7 @@ export const {
     clearCartItems,
     clearVoucherData,
     setOrderId,
-    increaseCartCount,
-    decreaseCartCount,
     clearCartCount,
-    decreaseCartCountBy,
     setCartCount,
     setShippingFee,
     updateSelectedCartItem

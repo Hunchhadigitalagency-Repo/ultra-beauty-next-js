@@ -12,22 +12,22 @@ import { deleteAllFromCart, deleteFromCart } from "@/lib/api/cart/cart-apis";
 import {
   clearCartCount,
   clearVoucherData,
-  decreaseCartCount,
   deleteAllCartItem,
   deleteCartItem,
   setCartItems,
 } from "@/redux/features/cart-slice";
 import { AlertCircle } from "lucide-react";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
+import { resetCheckout } from "@/redux/features/checkout-slice";
 
 export default function ShoppingCart() {
-  const shippingFee = 150;
   const dispatch = useAppDispatch();
   const { data, refetch, loading, error } = useFetchData<CartResponse>(
     "carts/",
     true
   );
   const CartItems = data?.results;
-  const { cartItem, voucherData } = useAppSelector((state) => state.cart);
+  const { cartItem, voucherData, shippingFee } = useAppSelector((state) => state.cart);
   const totalQuantity = cartItem.reduce((acc, cart) => acc + cart.quantity, 0);
 
   const cartItemsData = useMemo(() => {
@@ -37,6 +37,8 @@ export default function ShoppingCart() {
       price: item.product.price,
       quantity: item.quantity,
       discount_percentage: item.product.discount_percentage,
+      is_flash_sale: item.product.is_flash_sale,
+      flash_sale_discount: item.product.flash_sale_discount,
       tax_applied: item.product.tax_applied,
       image: item.product.images?.[0].file,
       name: item.product.name,
@@ -44,6 +46,7 @@ export default function ShoppingCart() {
   }, [CartItems]);
 
   useEffect(() => {
+    dispatch(resetCheckout())
     if (!cartItemsData || cartItemsData.length === 0) return;
     dispatch(setCartItems(cartItemsData));
   }, [cartItemsData, dispatch]);
@@ -57,7 +60,7 @@ export default function ShoppingCart() {
       deleteFromCart(id);
       refetch();
       dispatch(deleteCartItem(id));
-      dispatch(decreaseCartCount());
+      updateCartAndWishlistCounts(dispatch);
       toast.success("Item Removed from the Cart");
     } catch (error) {
       toast.error(`Error while removing Item from the cart: ${error}`);
@@ -125,7 +128,7 @@ export default function ShoppingCart() {
             <OrderSummary
               shippingDetails={null}
               totalItems={totalQuantity}
-              shippingFee={shippingFee}
+              shippingFee={Number(shippingFee || "0")}
             />
           </div>
         </div>

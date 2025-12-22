@@ -259,6 +259,15 @@ const ProductDetailSlider: React.FC<ProductDetailSliderProps> = ({
               dangerouslySetInnerHTML={{ __html: data.detail_description }}
             />
           </div>
+          {data.tutorial && (
+            <div className="py-2">
+              <span className="font-medium uppercase">ingredient </span>
+              <div
+                className="text-xs mt-1 prose prose-xs max-w-none"
+                dangerouslySetInnerHTML={{ __html: data.tutorial }}
+              />
+            </div>
+          )}
 
           {/* Timestamps */}
           <div className="py-2 flex justify-between">
