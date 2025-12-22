@@ -1,29 +1,29 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface TableState {
-  selectedIds: number[];
+  selectedIds: string[];
   refetch: boolean;
 }
 
 const initialState: TableState = {
   selectedIds: [],
   refetch: false,
-  
 };
 
 export const table = createSlice({
   name: "table",
   initialState,
   reducers: {
-    selectItems: (state, action: PayloadAction<number[]>) => {
+    selectItems: (state, action: PayloadAction<string[]>) => {
       state.selectedIds = action.payload;
     },
-    addSelectedItem: (state, action: PayloadAction<number>) => {
+    addSelectedItem: (state, action: PayloadAction<string>) => {
       if (!state.selectedIds.includes(action.payload)) {
         state.selectedIds.push(action.payload);
       }
     },
-    removeSelectedItem: (state, action: PayloadAction<number>) => {
+  
+    removeSelectedItem: (state, action: PayloadAction<string>) => {
       state.selectedIds = state.selectedIds.filter(
         (id) => id !== action.payload
       );
@@ -31,7 +31,7 @@ export const table = createSlice({
     clearSelection: (state) => {
       state.selectedIds = [];
     },
-    toggleSelectAll: (state, action: PayloadAction<number[]>) => {
+    toggleSelectAll: (state, action: PayloadAction<string[]>) => {
       const allSelected = action.payload.every((id) =>
         state.selectedIds.includes(id)
       );
@@ -42,10 +42,9 @@ export const table = createSlice({
       }
     },
     toggleRefetchTableData: (state) => {
-    state.refetch = !state.refetch;
+      state.refetch = !state.refetch;
+    },
   },
-  },
-
 });
 
 export const {

@@ -4,6 +4,8 @@ export interface ICompanyProfile {
   company_address: string;
   company_logo_url: string;
   company_favicon_url: string;
+  company_email:string;
+  company_number:string;
 }
 
 export interface IPersonalProfile {

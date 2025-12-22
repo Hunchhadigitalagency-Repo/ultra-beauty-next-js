@@ -23,7 +23,7 @@ export function useInfiniteFetch<T>(
   type?: string,
   isBaseUrl?: boolean
 ): InfiniteFetchResult<T> {
-  const { criteria } = useAppSelector((state) => state.filter);
+  const { criteria, searchQuery } = useAppSelector((state) => state.filter);
   const { refetch } = useAppSelector((state) => state.table);
 
   const buildUrl = useCallback(
@@ -39,6 +39,8 @@ export function useInfiniteFetch<T>(
       if (queryParam && queryValue) {
         u.searchParams.set(queryParam, queryValue);
       }
+
+ 
 
       switch (type) {
         case ETypes.ORDERS:
@@ -105,7 +107,7 @@ export function useInfiniteFetch<T>(
 
       setNextUrl(payload.links?.next ?? null);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
       setData([]);
       setNextUrl(null);
       setCount(0);

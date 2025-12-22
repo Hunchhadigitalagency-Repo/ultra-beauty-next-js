@@ -32,8 +32,8 @@ const ReviewHistoryCard: React.FunctionComponent<ReviewHistoryCardProps> = ({ im
             </div>
             <div>
                 <p className='text-sm md:text-base font-semibold text-[#5D5D5D]'>Review Detail</p>
-                <div className='p-2 border-[1px] bg-white border-[#E2E2E2]'>
-                    <p className='font-medium break-words text-sm md:text-base'>
+                <div className='p-2 bg-white border-[#E2E2E2]'>
+                    <p className='font-medium break-words text-sm md:text-sm'>
                         {review}
                     </p>
                 </div>

@@ -90,7 +90,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
 
     try {
       if (initialData) {
-        const response = await updateFaq(Number(initialData.slug), payload as any);
+        const response = await updateFaq(initialData.slug, payload as any);
         if (response.status === 200) {
           toast("FAQ's updated successfully");
           dispatch(toggleRefetchTableData());

@@ -7,6 +7,7 @@ import PriceRow from "../product/price-row";
 import { Button } from "@/components/ui/button";
 import RatingStars from "../product/rating-stars";
 import { ProductCardProps } from "@/types/product";
+import { calculateDiscountedPrice } from "@/lib/cart-utils";
 
 const ProductCard = ({
   slug,
@@ -17,12 +18,12 @@ const ProductCard = ({
   price,
   rating,
   discountTag,
+  flashSaleDiscount,
   brand,
   onToggleWishlist = () => {},
   isWishlisted,
-  quantity
+  quantity,
 }: ProductCardProps) => {
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleWishlist = () => {
@@ -34,14 +35,12 @@ const ProductCard = ({
     }
   };
 
-  // Function to open product page in a new tab
   const openProductInNewTab = () => {
     window.open(`/shop/${slug}`, "_blank", "noopener,noreferrer");
   };
 
   return (
     <section className="flex flex-col justify-between w-full overflow-hidden bg-white md:gap-3 lg:gap-4">
-      {/* Image Section */}
       <div
         onClick={openProductInNewTab}
         className="relative w-full h-40 mb-2 overflow-hidden rounded-lg cursor-pointer sm:h-60 md:h-72 lg:h-80 group"
@@ -50,7 +49,7 @@ const ProductCard = ({
           src={imageSrc}
           alt={alt}
           fill
-          className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+          className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
         />
         {isFlashSale && (
           <div className="absolute top-2 right-2">
@@ -78,8 +77,23 @@ const ProductCard = ({
       </div>
 
       <div className="flex flex-col gap-2 md:gap-3 lg:gap-2">
-        {/* Price row */}
-        <PriceRow price={price} discountTag={discountTag} />
+        {discountTag && parseInt(discountTag) > 0 ? (
+          <PriceRow
+            discountTag={discountTag}
+            previousPrice={price}
+            price={
+              calculateDiscountedPrice(
+                price,
+                discountTag,
+                flashSaleDiscount,
+                isFlashSale
+              ) || price
+            }
+            discountClassName="text-[12px]  md:text-sm"
+          />
+        ) : (
+          <PriceRow discountTag={discountTag} price={price} />
+        )}
 
         {/* Rating and wishlist */}
         <div className="flex items-center justify-between">
@@ -98,11 +112,11 @@ const ProductCard = ({
               cursor-pointer`}
             aria-label="Toggle Wishlist"
           >
-          <Heart
-  fill={isWishlisted ? "red" : "transparent"}
-  stroke={isWishlisted ? "red" : "currentColor"}
-  className="w-4 h-4 md:w-6 md:h-6 text-gray-500" 
-/>
+            <Heart
+              fill={isWishlisted ? "red" : "transparent"}
+              stroke={isWishlisted ? "red" : "currentColor"}
+              className="w-4 h-4 md:w-6 md:h-6 text-gray-500"
+            />
           </button>
         </div>
 
@@ -112,7 +126,11 @@ const ProductCard = ({
           disabled={quantity === null}
           className={`flex flex-row rounded-sm items-center justify-center 
           w-full gap-2 py-2 text-xs sm:text-sm font-medium text-foreground
-          ${quantity === null ? "bg-[#FAFAFA] text-[#7A7A7A]" : "bg-secondary hover:bg-primary hover:text-white  duration-300"}
+          ${
+            quantity === null
+              ? "bg-[#FAFAFA] text-[#7A7A7A]"
+              : "bg-secondary hover:bg-primary hover:text-white  duration-300"
+          }
           `}
         >
           <Eye className="w-4 h-4" />

@@ -15,21 +15,31 @@ import {
   AuthProfileResponse,
   RecentOrdersResponseWithPagination,
 } from "@/types/profile";
+import { ShippingData } from "@/app/(website)/checkout/components/shipping-details-form";
 
 const MyProfile: React.FunctionComponent = () => {
-
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showShippingModal, setShowShippingModal] = useState(false);
-  const [showShippingDetailsModal, setShowShippingDetailsModal] = useState(false);
+  const [showShippingDetailsModal, setShowShippingDetailsModal] =
+    useState(false);
   const [currentpage, setCurrentPage] = useState(1);
 
-  const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(`auth/profile/`, true);
-
+  const { data, loading, error, refetch } = useFetchData<AuthProfileResponse>(
+    `auth/profile/`,
+    true
+  );
+  const { data: shipping, refetch: refetchShipping } = useFetchData<ShippingData[]>(
+    `/default-address/`,
+    true
+  );
   const {
     data: orderData,
     loading: isLoading,
-    error: isError
-  } = useFetchData<RecentOrdersResponseWithPagination>(`recent-orders/?page=${currentpage}`, true)
+    error: isError,
+  } = useFetchData<RecentOrdersResponseWithPagination>(
+    `recent-orders/?page=${currentpage}`,
+    true
+  );
 
   const filtered_Order_Data = orderData?.results?.filter(
     (order) => order.order_details.length > 0
@@ -45,10 +55,8 @@ const MyProfile: React.FunctionComponent = () => {
 
   const handlePagination = (newPage: number) => {
     setCurrentPage(newPage);
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
-  
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <section className="flex flex-col gap-8 bg-white">
@@ -62,10 +70,19 @@ const MyProfile: React.FunctionComponent = () => {
         />
       )}
       {showShippingDetailsModal && (
-        <ShippingDetailsModal onClose={() => setShowShippingDetailsModal(false)} />
+        <ShippingDetailsModal
+          onClose={() => setShowShippingDetailsModal(false)}
+          shipping={shipping?.[0]}
+        />
       )}
       {showShippingModal && (
-        <ShippingModal onClose={() => setShowShippingModal(false)} />
+        <ShippingModal
+          onClose={() => {
+            refetchShipping();
+            setShowShippingModal(false);
+          }}
+          shipping={shipping?.[0]}
+        />
       )}
 
       {/* Personal Information + Shipping */}
@@ -73,7 +90,9 @@ const MyProfile: React.FunctionComponent = () => {
         {/* Personal Information */}
         <div className="border border-[#E2E2E2] rounded-sm">
           <div className="flex items-center justify-between p-3">
-            <p className="text-sm font-medium md:text-base">Personal Information</p>
+            <p className="text-sm font-medium md:text-base">
+              Personal Information
+            </p>
             <button
               onClick={() => setShowProfileModal(true)}
               className="text-sm cursor-pointer text-primary font-semibold "
@@ -81,56 +100,42 @@ const MyProfile: React.FunctionComponent = () => {
               Change
             </button>
           </div>
-          {
-            loading ? (
-              <ProfileInformationLoader />
-            ) : error ? (
-              <div className='flex flex-col items-center justify-center w-full h-35'>
-                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-                <p className='font-extralight text-sm text-gray-400'>
-                  Oops! Something went wrong...
-                </p>
+          {loading ? (
+            <ProfileInformationLoader />
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center w-full h-35">
+              <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+              <p className="font-extralight text-sm text-gray-400">
+                Oops! Something went wrong...
+              </p>
+            </div>
+          ) : (
+            <div className="border-t p-4 flex gap-4">
+              <div className="relative w-20 h-20">
+                {imgSource && (
+                  <Image
+                    src={
+                      (typeof imgSource === "string" && imgSource) ||
+                      fallbackImage
+                    }
+                    alt="Profile"
+                    fill
+                    className="object-cover rounded-full"
+                  />
+                )}
               </div>
-            ) : (
-              <div className="border-t p-4 flex gap-4">
-                <div className="relative w-20 h-20">
-                  {
-                    imgSource && (
-                      <Image
-                        src={typeof imgSource === "string" && imgSource || fallbackImage }
-                        alt="Profile"
-                        fill
-                        className="object-cover rounded-full"
-                      />
-                    )
-                  }
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  {
-                    data?.first_name && data?.last_name && <p className="text-lg font-semibold text-primary">
-                      {data?.first_name + " " + data?.last_name}
-                    </p>
-                  }
-                  {
-                    data?.email && <p className="text-sm font-medium">{data?.email}</p>
-                  }
-                  {
-                    data?.phone_number && (
-                      <p className="text-sm font-medium">
-                        Phone: {data?.phone_number}
-                      </p>
-                    )
-                  }
-                  {
-                    data?.address && (
-                      <p className="text-sm font-medium text-[#5D5D5D]">
-                        Address: {data?.address}
-                      </p>
-                    )
-                  }
-                </div>
+              <div className="flex flex-col gap-1.5">
+                {data?.first_name && data?.last_name && (
+                  <p className="text-lg font-semibold text-primary">
+                    {data?.first_name + " " + data?.last_name}
+                  </p>
+                )}
+                {data?.email && (
+                  <p className="text-sm font-medium">{data?.email}</p>
+                )}
               </div>
-            )}
+            </div>
+          )}
         </div>
 
         {/* Shipping Details */}
@@ -160,39 +165,32 @@ const MyProfile: React.FunctionComponent = () => {
           {loading ? (
             <ShippingInformationLoader />
           ) : error ? (
-            <div className='flex flex-col items-center justify-center w-full h-35'>
+            <div className="flex flex-col items-center justify-center w-full h-35">
               <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-              <p className='font-extralight text-sm text-gray-400'>
+              <p className="font-extralight text-sm text-gray-400">
                 Oops! Something went wrong...
               </p>
             </div>
           ) : (
             <div className="border-t p-4 flex flex-col gap-1.5">
-              {
-                data?.first_name && data?.last_name && <p className="text-lg font-semibold text-primary">
+              {data?.first_name && data?.last_name && (
+                <p className="text-lg font-semibold text-primary">
                   {data?.first_name + " " + data?.last_name}
                 </p>
-              }
-              {
-                data?.email && <p className="text-sm font-medium">{data?.email}</p>
-              }
-              {
-                data?.phone_number && (
-                  <p className="text-sm font-medium">
-                    Phone: {data?.phone_number}
-                  </p>
-                )
-              }
-              {
-                data?.address && (
-                  <p className="text-sm font-medium">
-                    Address: {data?.address}
-                  </p>
-                )
-              }
+              )}
+              {data?.email && (
+                <p className="text-sm font-medium">{data?.email}</p>
+              )}
+              {data?.phone_number && (
+                <p className="text-sm font-medium">
+                  Phone: {data?.phone_number}
+                </p>
+              )}
+              {shipping?.[0]?.address && (
+                <p className="text-sm font-medium">{shipping?.[0]?.address}</p>
+              )}
             </div>
-          )
-          }
+          )}
         </div>
       </div>
 
@@ -203,7 +201,6 @@ const MyProfile: React.FunctionComponent = () => {
           isLoading={isLoading}
           isError={isError}
           data={filtered_Order_Data}
-
         />
 
         {/* Pagination */}
@@ -217,18 +214,21 @@ const MyProfile: React.FunctionComponent = () => {
               <ChevronLeft />
             </button>
 
-            {Array.from({ length: orderData.total_pages }, (_, i) => i + 1).map((pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => setCurrentPage(pageNum)}
-                className={`px-2 py-1 border rounded ${pageNum === orderData.current_page
-                  ? "bg-primary text-white"
-                  : "hover:bg-gray-100"
+            {Array.from({ length: orderData.total_pages }, (_, i) => i + 1).map(
+              (pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => setCurrentPage(pageNum)}
+                  className={`px-2 py-1 border rounded ${
+                    pageNum === orderData.current_page
+                      ? "bg-primary text-white"
+                      : "hover:bg-gray-100"
                   }`}
-              >
-                {pageNum}
-              </button>
-            ))}
+                >
+                  {pageNum}
+                </button>
+              )
+            )}
 
             <button
               disabled={currentpage === orderData.total_pages}

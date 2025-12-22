@@ -47,7 +47,7 @@ export default function ForgotPasswordForm() {
           description: "proceed further to change password",
         });
         dispatch(setSelectedData({ email: data.email }));
-        setTimeout(() => router.push("/verify"), 5000);
+        setTimeout(() => router.push("/reset-password"), 5000);
       }
     } catch (error: any) {
       setStatus("error");

@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { AlertCircle, Menu } from "lucide-react";
 import FilterSection from "./filter";
 import React, { useState } from "react";
 import ProductSort from "./product-sort";
@@ -22,21 +22,20 @@ const AllProducts = () => {
   const queryParams = new URLSearchParams();
 
   const [showFilter, setShowFilter] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [sortingValue, setSortingValue] = useState("");
-  const [wishlistUpdates, setWishlistUpdates] = useState<Record<string, boolean>>({});
-
+  const [wishlistUpdates, setWishlistUpdates] = useState<
+    Record<string, boolean>
+  >({});
+  const { searchQuery } = useAppSelector((state) => state.filter);
   const { selectedCategories, selectedBrands, priceRange } = useAppSelector(
     (state) => state.category
   );
   const { isLoggedIn } = useAppSelector((state) => state.authentication);
-
+  if (searchQuery) {
+    queryParams.set("search", searchQuery);
+  }
   if (selectedCategories.length > 0) {
     queryParams.set("category", selectedCategories.join(","));
-  }
-
-  if (searchValue) {
-    queryParams.set("search", searchValue);
   }
 
   if (sortingValue) {
@@ -52,12 +51,9 @@ const AllProducts = () => {
     queryParams.set("max_price", priceRange[1].toString());
   }
 
-  const path = `public-products/${queryParams.toString() ? `?${queryParams.toString()}` : ""
-    }`;
-
-  const handleSearchValue = (value: string) => {
-    setSearchValue(value);
-  };
+  const path = `public-products/${
+    queryParams.toString() ? `?${queryParams.toString()}` : ""
+  }`;
 
   const {
     data: products,
@@ -85,10 +81,9 @@ const AllProducts = () => {
   };
 
   return (
-    <section className="relative flex flex-col gap-8 padding">
+    <section className="relative flex flex-col gap-8 padding" id="shop">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
-
         {/* Mobile Menu */}
         <Menu
           onClick={toggleFilter}
@@ -100,14 +95,17 @@ const AllProducts = () => {
       <div className="hidden lg:flex justify-between bg-white items-center sticky top-20 p-2 z-20  pb-4 -mt-2">
         <SectionHeader title={`All Products (${count})`} description="" />
         <div className="flex gap-4 items-start justify-end">
-          <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
-          <ProductSort onChange={setSortingValue} selectedValue={sortingValue} />
+          <SearchBox placeholder="Search Products" />
+          <ProductSort
+            onChange={setSortingValue}
+            selectedValue={sortingValue}
+          />
         </div>
       </div>
 
       {/* Mobile Search + Sort */}
       <div className="lg:hidden flex flex-col gap-4">
-        <SearchBox placeholder="Search Products" sendValue={handleSearchValue} />
+        <SearchBox placeholder="Search Products" />
         <ProductSort onChange={setSortingValue} selectedValue={sortingValue} />
       </div>
 
@@ -135,9 +133,12 @@ const AllProducts = () => {
               </div>
             }
             endMessage={
-              <p className="mt-4 text-sm text-center text-muted-foreground">
-                You&lsquo;ve reached the end!
-              </p>
+              <div className="w-full h-full flex flex-col justify-center items-center">
+                <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+                <p className="text-sm font-extralight text-gray-400 capitalize">
+                  Oops! no more Poducts Found...
+                </p>
+              </div>
             }
           >
             <div className="grid grid-cols-2 gap-3 xl:grid-cols-3">
@@ -149,6 +150,7 @@ const AllProducts = () => {
                   alt={product.name}
                   isFlashSale={product.is_flash_sale}
                   brand={product.brand?.name}
+                  flashSaleDiscount={product.flash_sale_discount}
                   title={product.name}
                   price={product.price}
                   discountTag={product.discount_percentage}

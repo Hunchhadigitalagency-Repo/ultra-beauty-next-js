@@ -24,7 +24,7 @@ const CancelRequestPage = () => {
     fetchNext,
     hasMore,
   } = useInfiniteFetch<CancelRequest>(
-    "/cancel/order",
+    "/cancel-orders-dashboard/",
     "",
     '',
     ETypes.CANCEL_REQUEST,

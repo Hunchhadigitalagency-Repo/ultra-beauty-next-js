@@ -310,7 +310,7 @@ const ProductDescriptionSection: React.FunctionComponent<Partial<Props>> = ({ pr
                                 {quantity !== null && (
 
                                     <span
-                                        className={`$bg-primary text-white text-sm px-3 py-1 rounded`}
+                                        className={`bg-primary items-center flex  text-white text-sm px-3 py-1 rounded`}
                                     >
                                         {quantity > 0 ? "Available" : "Not Available"}    </span>
                                 )}

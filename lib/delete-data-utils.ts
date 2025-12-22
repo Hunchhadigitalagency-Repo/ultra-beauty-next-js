@@ -32,12 +32,16 @@ import { deleteFlashSales } from "./api/sales/flash-sales-api";
 import { deleteInventoryData } from "./api/inventory/inventory-apis";
 import { deleteTransaction } from "./api/transactions/transaction-api";
 import { deleteTeam } from "./api/cms/team-api";
+import { deleteAdvertiseBanner } from "./api/cms/advertise-banner-apis";
 
-export const handleDeleteData = async (id: number | string, type: string, action?: string | undefined) => {
-  console.log('In here and this are the data', type);
+export const handleDeleteData = async (
+  id: number | string,
+  type: string,
+  action?: string | undefined
+) => {
+  console.log("In here and this are the data", type);
   console.log("this is the action", action);
-  
-  
+
   if (type === ETypes.BRAND) {
     await deleteBrand(Number(id));
   }
@@ -60,6 +64,10 @@ export const handleDeleteData = async (id: number | string, type: string, action
 
   if (type === ETypes.TAX) {
     await deleteTax(Number(id));
+  }
+
+  if (type === ETypes.FAQ) {
+    await deleteFaq(id);
   }
 
   if (type === ETypes.ADMIN) {
@@ -155,20 +163,26 @@ export const handleDeleteData = async (id: number | string, type: string, action
   }
 
   if (type === ETypes.INVENTORY) {
-    console.log('Caling the api now');
-    await deleteInventoryData(Number(id), action || '')
+    await deleteInventoryData(Number(id), action || "");
   }
 
   if (type === ETypes.TRANSACTIONS) {
-    await deleteTransaction(Number(id))
+    await deleteTransaction(Number(id));
   }
 
   if (type === ETypes.TEAM) {
-    await deleteTeam(Number(id))
+    await deleteTeam(Number(id));
+  }
+
+  if (type === ETypes.ADVERTISE_BANNER) {
+    await deleteAdvertiseBanner(Number(id));
   }
 };
 
-export const handleDeleteMultipleData = async (ids: string[] | number[], type: string) => {
+export const handleDeleteMultipleData = async (
+  ids: string[] | number[],
+  type: string
+) => {
   if (type === ETypes.PRODUCTS) {
     await deleteMultipleProducts(ids);
   }

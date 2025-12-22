@@ -1,32 +1,47 @@
-'use client';
-import Link from 'next/link';
-import Image from 'next/image';
-import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import useFetchData from '@/hooks/use-fetch';
-import { HelpAndSupport } from '@/types/help-and-support';
-import SectionHeader from '@/components/common/header/section-header';
-import { useAppSelector } from '@/redux/hooks';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import useFetchData from "@/hooks/use-fetch";
+import { HelpAndSupport } from "@/types/help-and-support";
+import SectionHeader from "@/components/common/header/section-header";
+import { useAppSelector } from "@/redux/hooks";
 
 const HelpSupportSection: React.FunctionComponent = () => {
-  const { searchQuery } = useAppSelector(state => state.filter)
+  const { searchQuery } = useAppSelector((state) => state.filter);
   const [isClamped, setIsClamped] = useState(false);
-  const { data, error, loading } = useFetchData<HelpAndSupport[]>('help-and-support/');
+  const { data, error, loading } = useFetchData<HelpAndSupport[]>(
+    "/help-and-support-dropdown/"
+  );
   const [help, setHelp] = useState(data);
 
   useEffect(() => {
-    setIsClamped(true)
-    if(data){
-      if(searchQuery){
-        setHelp(data.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase())))
-      }else {
-        setHelp(data)
+    setIsClamped(true);
+    if (data) {
+      if (searchQuery) {
+        setHelp(
+          data.filter((item) =>
+            item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        );
+      } else {
+        setHelp(data);
       }
     }
   }, [data, searchQuery]);
-
+  if (!(data && data?.length > 0)) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-60">
+        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+        <p className="font-extralight text-sm text-gray-400 capitalize">
+          Oops! no messages  right now...
+        </p>
+      </div>
+    );
+  }
   return (
-    <section className='space-y-2 padding'>
+    <section className="space-y-2 padding">
       <SectionHeader
         title="Help And Support"
         description="Explore the help and support"
@@ -34,13 +49,13 @@ const HelpSupportSection: React.FunctionComponent = () => {
       />
 
       {loading ? (
-        <p>
-          Loading data...
-        </p>
+        <p>Loading data...</p>
       ) : error ? (
-        <div className='flex flex-col items-center justify-center py-10'>
+        <div className="flex flex-col items-center justify-center py-10">
           <AlertCircle className="w-8 h-8 mb-2 text-red-500" />
-          <p className="font-medium text-gray-700">Oops! Something went wrong.</p>
+          <p className="font-medium text-gray-700">
+            Oops! Something went wrong.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 py-6 sm:grid-cols-2 md:grid-cols-3 gap-x-36 gap-y-6">
@@ -56,7 +71,7 @@ const HelpSupportSection: React.FunctionComponent = () => {
                     src={item.icon}
                     alt={item.name}
                     fill
-                    className="object-contain"
+                    className="object-cover"
                   />
                 </div>
                 <h2 className="text-lg font-playfair font-bold text-primary line-clamp-2">
@@ -64,17 +79,18 @@ const HelpSupportSection: React.FunctionComponent = () => {
                 </h2>
               </div>
               <p
-                className={`text-sm font-poppins text-gray-600 ${isClamped ? "line-clamp-3" : ""}`}
+                className={`text-sm font-poppins text-gray-600 ${
+                  isClamped ? "line-clamp-3" : ""
+                }`}
               >
                 {item.description}
               </p>
             </Link>
           ))}
-
         </div>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default HelpSupportSection
+export default HelpSupportSection;

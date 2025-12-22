@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +11,7 @@ import CategoryCard from "./category-card";
 import useFetchData from "@/hooks/use-fetch";
 import LinkText from "@/components/common/header/link-text";
 import SectionHeader from "@/components/common/header/section-header";
-import { toggleCategory } from "@/redux/features/category-slice";
+import { resetFilters, toggleCategory } from "@/redux/features/category-slice";
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
@@ -31,14 +31,16 @@ const CategorySection: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<CategoryResponse[]>(
     `dropdown/category/?is_not_empty=True/`
   );
-
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+  
   const handleCategoryCardClick = (categoryId: number) => {
     dispatch(toggleCategory({ id: categoryId, checked: true }));
     router.push(`/shop`);
   };
+  useEffect(() => {
+  dispatch(resetFilters())
+  }, [])
 
   return (
     <section className="space-y-4 padding">
@@ -95,8 +97,8 @@ const CategorySection: React.FunctionComponent = () => {
             </CarouselContent>
 
             {/* Navigation Arrows */}
-            <CarouselPrevious className="absolute !z-50 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
-            <CarouselNext className="absolute !z-50 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
+            <CarouselPrevious className="absolute z-20 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -left-2 top-1/2 hover:bg-gray-50" />
+            <CarouselNext className="absolute z-20 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex -right-2 top-1/2 hover:bg-gray-50" />
           </Carousel>
         )}
       </div>

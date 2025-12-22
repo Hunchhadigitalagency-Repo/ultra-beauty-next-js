@@ -41,7 +41,6 @@ export default function ResetPasswordForm() {
     },
   });
 
-
   const onSubmit = async (data: ResetPasswordFormValue) => {
     try {
       setLoading(true);
@@ -90,7 +89,7 @@ export default function ResetPasswordForm() {
                       placeholder="Please Enter your new Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-full"
+                      className="rounded-xs"
                     />
                     <Button
                       type="button"
@@ -100,10 +99,10 @@ export default function ResetPasswordForm() {
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {showPassword ? (
-                        <FaEyeSlash className="h-4 w-4 cursor-pointer" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
+                          className="h-4 w-4 cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -131,7 +130,7 @@ export default function ResetPasswordForm() {
                       placeholder="Please confirm your new Password"
                       disabled={loading}
                       {...field}
-                      className="rounded-full"
+                      className="rounded-xs"
                     />
                     <Button
                       type="button"
@@ -141,10 +140,10 @@ export default function ResetPasswordForm() {
                       onClick={() => setShowConfirmPassword((prev) => !prev)}
                     >
                       {showConfirmPassword ? (
-                        <FaEyeSlash className="h-4 w-4 text-[#C0C0C0] cursor-pointer" aria-hidden="true" />
+                        <FaEyeSlash className="h-4 w-4 r" aria-hidden="true" />
                       ) : (
                         <FaEye
-                          className="h-4 w-4 text-[#C0C0C0] cursor-pointer"
+                          className="h-4 w-4 cursor-pointer"
                           aria-hidden="true"
                         />
                       )}
@@ -162,7 +161,7 @@ export default function ResetPasswordForm() {
           />
           <Button
             disabled={loading}
-            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-full p-5"
+            className="ml-auto w-full bg-primary text-white border border-primary hover:bg-white hover:text-primary cursor-pointer rounded-xs p-5"
             type="submit"
           >
             Send

@@ -68,17 +68,22 @@ const TeamCarousel = () => {
       {/* Page indicator */}
       {/* Slide Indicators - positioned inside the image */}
       <div className="flex items-center justify-center gap-4">
-        {teamMembers && teamMembers?.map((_, slideIndex) => (
-          <button
-            key={slideIndex}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${slideIndex === current
-                ? "bg-orange-500 scale-110"
-                : "bg-[#BBBDBC] hover:bg-[#BBBDBC]/70"
-              }`}
-            onClick={() => api?.scrollTo(slideIndex)}
-            aria-label={`Go to slide ${slideIndex + 1}`}
-          />
-        ))}
+       {teamMembers &&
+  teamMembers
+    .slice(0, teamMembers.length - 1)
+    .map((_, slideIndex) => (
+      <button
+        key={slideIndex}
+        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+          slideIndex === current
+            ? "bg-orange-500 scale-110"
+            : "bg-[#BBBDBC] hover:bg-[#BBBDBC]/70"
+        }`}
+        onClick={() => api?.scrollTo(slideIndex)}
+        aria-label={`Go to slide ${slideIndex + 1}`}
+      />
+    ))}
+
       </div>
     </div>
   );

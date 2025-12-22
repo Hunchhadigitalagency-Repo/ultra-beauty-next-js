@@ -21,7 +21,7 @@ const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) 
                     key={idx}
                     className={`grid grid-cols-3 w-3/4 justify-center  items-center relative `}
                 >
-                    <div className="w-[140px] text-sm text-gray-700 flex-shrink-0 sm:mb-0 ">
+                    <div className="w-[140px] text-base text-gray-700 flex-shrink-0 sm:mb-0 ">
                         {status.date}
                     </div>
 
@@ -39,7 +39,7 @@ const DeliveryTimeline: React.FunctionComponent<TimelineProps> = ({ statuses }) 
 
                     <div className="relative">
                         <h3
-                            className={`absoulte text-sm md:text-base font-semibold ${status.isActive ? "text-green-500" : "text-gray-500"
+                            className={`absoulte text-base md:text-base font-semibold ${status.isActive ? "text-green-500" : "text-gray-500"
                                 }`}
                         >
                             {status.title}

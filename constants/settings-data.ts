@@ -1,8 +1,8 @@
 export const settingData = [
   { data: "profile", title: "Profile" },
   { data: "category", title: "Category" },
-  { data: "blog-category", title: "Blog Category" },
-  { data: "sub-category", title: "Sub Category" },
+  { data: "blog-cate", title: "Blog Category" },
+  { data: "sub-cate", title: "Sub Category" },
   { data: "brand", title: "Brand" },
   { data: "attributes-and-variation", title: "Attributes and Variation" },
   // { data: "api-keys", title: "API keys" },

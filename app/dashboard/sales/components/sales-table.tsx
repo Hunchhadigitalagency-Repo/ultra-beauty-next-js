@@ -8,17 +8,27 @@ import { ISales } from "@/types/sales";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
 import { ETypes } from "@/types/table";
+import { useEffect } from "react";
 
-const SalesTable = () => {
+interface Props {
+  setDatalength: (number: number) => void;
+}
+
+const SalesTable = ({ setDatalength }: Props) => {
   const { searchQuery } = useAppSelector((state) => state.filter);
-  const { data, loading, hasMore, fetchNext } = useInfiniteFetch<ISales>(
-    "/sold-products/",
-    "search",
-    searchQuery,
-    ETypes.SALES
-  );
+  const { data, loading, hasMore, fetchNext, totalCount } =
+    useInfiniteFetch<ISales>(
+      "/sold-products/",
+      "search",
+      searchQuery,
+      ETypes.SALES
+    );
   const router = useRouter();
-
+  useEffect(() => {
+    if (totalCount !== undefined) {
+      setDatalength?.(totalCount || 0);
+    }
+  }, [totalCount, setDatalength]);
   return (
     <div id="orders-table" className="overflow-y-auto h-[calc(100vh-190px)]">
       <InfiniteScroll

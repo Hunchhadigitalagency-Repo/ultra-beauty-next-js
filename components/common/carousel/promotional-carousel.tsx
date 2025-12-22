@@ -12,6 +12,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { formatDateTime } from "@/lib/date-time-utils";
+import SectionHeader from "../header/section-header";
 
 interface PromotionalCarouselProps {
   id: number;
@@ -107,7 +108,7 @@ export default function PromotionalCarousel() {
                       className="object-cover"
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="absolute inset-0 bg-black/50" />
                   </div>
 
                   {/* Content overlay */}
@@ -115,7 +116,7 @@ export default function PromotionalCarousel() {
                     {/* Left side - Main title */}
                     <div className="flex-1 max-w-full">
                       <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
-                        {slide.title}
+                        <SectionHeader title={slide.title} titleClassName="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" />
                       </h1>
                     </div>
 

@@ -105,12 +105,12 @@ const ReturnRequestDetails: React.FC<ReturnRequestDetailsProps> = ({
 
           <div className="py-2">
             <span className="font-medium">Description</span>
-            <p className="text-xs mt-1">{product?.general_description || "-"}</p>
+            <p className="text-xs mt-1" dangerouslySetInnerHTML={{__html: product?.general_description || "-"}} />
           </div>
 
           <div className="py-2">
             <span className="font-medium">Detailed Description</span>
-            <p className="text-xs mt-1">{product?.detail_description || "-"}</p>
+            <p className="text-xs mt-1" dangerouslySetInnerHTML={{__html: product?.detail_description || "-"}} />
           </div>
 
           <div className="py-2">

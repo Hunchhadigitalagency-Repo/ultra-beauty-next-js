@@ -123,7 +123,7 @@ const handleBannerClick = (slide: HeroSectionResponse) => {
               ))}
             </CarouselContent>
             {/* Slider arrow section*/}
-            <div className="absolute flex flex-row bottom-2">
+            <div className="absolute flex flex-row bottom-2 z-20">
               <CarouselPrevious className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-4 border-none shadow-none bg-transparent" />
               <CarouselNext className="absolute w-[17px] hidden lg:flex text-[#333333] hover:bg-transparent hover:text-foreground left-16 border-none shadow-none bg-transparent" />
             </div>

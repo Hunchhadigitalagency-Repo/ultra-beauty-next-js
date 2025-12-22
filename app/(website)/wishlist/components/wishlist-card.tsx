@@ -82,7 +82,7 @@ const WishlistCard = ({
               </h3>
               {/* Dom Purify */}
               <p
-                className={`!line-clamp-2 max-w-[58vw] text-sm leading-relaxed md:text-base md:block hidden `}
+                className={`!line-clamp-2 max-w-[58vw] text-xs leading-relaxed md:text-base md:block hidden `}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(
                     description || "No description provided"

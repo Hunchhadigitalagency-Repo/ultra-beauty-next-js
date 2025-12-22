@@ -89,6 +89,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
                       <ProductCard
                         imageSrc={product.images?.[0]?.file}
                         alt={product.name}
+                        discountTag={product.discount_percentage}
                         title={product.name}
                         price={product.price}
                         rating={product.average_rating}
@@ -103,8 +104,8 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
             </CarouselContent>
 
             {/* Navigation Arrows */}
-            <CarouselPrevious className="absolute z-50 left-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
-            <CarouselNext className="absolute z-50 right-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
+            <CarouselPrevious className="absolute z-20 left-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
+            <CarouselNext className="absolute z-20 right-0 hidden text-gray-600 -translate-y-1/2 bg-white border-gray-200 lg:flex top-1/3 hover:bg-gray-50" />
           </Carousel>)}
       </div>
     </section>

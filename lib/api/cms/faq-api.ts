@@ -6,7 +6,7 @@ export const createFaq = async (data: FaqFormValues) => {
   return response;
 };
 
-export const updateFaq = async (id: number, data: Partial<FaqFormValues>) => {
+export const updateFaq = async (id: number | string, data: Partial<FaqFormValues>) => {
   const response = await api.patch(`/cms/faqs/${id}/`, data);
   return response;
 };

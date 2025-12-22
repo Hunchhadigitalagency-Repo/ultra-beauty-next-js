@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { EditIcon, EllipsisVertical, TrashIcon } from "lucide-react";
+import { EditIcon, EllipsisVertical, Send, TrashIcon } from "lucide-react";
 
 import { useAppDispatch } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,9 @@ import { handleDeleteData } from "@/lib/delete-data-utils";
 import DeleteModal from "../modals/delete-modal";
 import { setActiveSetting } from "@/redux/features/setting-slice";
 import EditModal from "../modals/edit-model";
+import api from "@/services/api-instance";
+import { toast } from "sonner";
+import { handleError } from "@/lib/error-handler";
 
 interface TableActionProps<
   T extends { id?: number; slug?: string; slug_name?: string }
@@ -22,7 +25,7 @@ interface TableActionProps<
   data: T;
   type: string;
   name: string;
-  action?: string
+  action?: string;
 }
 
 const TableActions = <
@@ -37,9 +40,9 @@ const TableActions = <
   const dispatch = useAppDispatch();
   const [isEditClick, setIsEditClick] = useState(false);
   const isEdit =
-    type === ETypes.INVOICES
-    || type === ETypes.CANCEL_REQUEST
-    || type === ETypes.RETURN_REQUEST
+    type === ETypes.INVOICES ||
+    type === ETypes.CANCEL_REQUEST ||
+    type === ETypes.RETURN_REQUEST;
   const handleDeleteClick = (value: boolean) => {
     setIsDeleteClick(value);
   };
@@ -47,7 +50,7 @@ const TableActions = <
   const handleEditClick = (value: boolean) => {
     setIsEditClick(value);
   };
-
+  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const handleEdit = () => {
@@ -122,6 +125,28 @@ const TableActions = <
     }
   };
 
+  const handleResend = async () => {
+    try {
+      let response;
+      if (type === ETypes.NEWSLETTERS) {
+        response = await api.post("/cms/resend-newsletters/", {
+          newsletter_id: data.id,
+        });
+      } else if (type === ETypes.SMS) {
+        response = await api.post("/cms/resend-sms/", {
+          sms_id: data.id,
+        });
+      }
+      if (response && (response.status === 201 || response.status === 200)) {
+        toast.success("Message sent again");
+      }
+    } catch (error) {
+      handleError(error, toast);
+    } finally {
+      setOpen(false);
+    }
+  };
+
   // const handleViewClick = (type: string) => {
   //   switch (type) {
   //     case ETypes.PRODUCTS:
@@ -135,7 +160,7 @@ const TableActions = <
 
   return (
     <>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger>
           <EllipsisVertical className="cursor-pointer" />
         </PopoverTrigger>
@@ -149,17 +174,24 @@ const TableActions = <
               <EyeIcon className="size-4" />
               View Details
             </button> */}
-            {
-              !isEdit &&
-              < button
+            {!isEdit && (
+              <button
                 className="w-full flex items-center gap-2 p-2 hover:bg-secondary cursor-pointer text-textColor text-sm font-medium"
                 onClick={handleEdit}
               >
                 <EditIcon className="size-4" />
                 Edit
               </button>
-            }
-
+            )}
+            {type === ETypes.NEWSLETTERS && (
+              <button
+                className="w-full flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer  text-sm font-medium"
+                onClick={handleResend}
+              >
+                <Send className="size-4" />
+                Re-Send
+              </button>
+            )}
             <button
               className="w-full flex items-center text-red-400 gap-2 p-2 hover:bg-secondary cursor-pointer text-textColor text-sm font-medium"
               onClick={() => handleDeleteClick(true)}
@@ -169,7 +201,7 @@ const TableActions = <
             </button>
           </div>
         </PopoverContent>
-      </Popover >
+      </Popover>
 
       {isDeleteClick && (
         <DeleteModal
@@ -181,28 +213,24 @@ const TableActions = <
                 type === ETypes.CAREER
                 ? (data.slug as string)
                 : type === ETypes.INVENTORY
-                  ? (data.id as number)
-                  : type === ETypes.PRODUCTS
-                    ? (data?.slug_name as string)
-                    : type === ETypes.FAQ
-                      ? (data?.slug_name as string)
-                      : (data.id as number),
+                ? (data.id as number)
+                : type === ETypes.PRODUCTS
+                ? (data?.slug_name as string)
+                : type === ETypes.FAQ
+                ? (data?.slug as string)
+                : (data.id as number),
               type,
-              action || "",
+              action || ""
             )
-
           }
           setIsOptionClick={setIsDeleteClick}
           type={type}
         />
-      )
-      }
+      )}
 
-      {
-        isEditClick && (
-          <EditModal type={type} setIsOptionClick={setIsEditClick} />
-        )
-      }
+      {isEditClick && (
+        <EditModal type={type} setIsOptionClick={setIsEditClick} />
+      )}
     </>
   );
 };

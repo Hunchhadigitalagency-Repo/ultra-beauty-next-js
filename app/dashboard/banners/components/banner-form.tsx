@@ -55,7 +55,7 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
         image: initialData?.image || "",
         category: initialData?.category || "",
         page: initialData?.page ?? undefined,
-        product: initialData.product?.id.toString() || undefined,
+        product: initialData?.products?.[0]?.id.toString() || undefined,
         is_active: initialData?.is_active ?? false,
       }
       : {
@@ -319,9 +319,9 @@ const BannerForm = ({ initialData }: BannerFromProps) => {
                               <PaginatedSelect
                                 value={field.value?.toString()}
                                 onValueChange={field.onChange}
-                                placeholder="Select Product"
+                                placeholder={initialData ? initialData.products?.[0].name : "Select a product"}
                                 fetchData={getProductsDropdown}
-                                className="w-full"
+                                className="w-full overflow-hidden"
                               />
                             </FormControl>
                             <FormMessage />

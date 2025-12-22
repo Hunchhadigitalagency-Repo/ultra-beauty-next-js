@@ -74,6 +74,7 @@ const DropDownFilter: React.FunctionComponent = () => {
     const handleSubcategoryChange = (value: number, checked: boolean) => {
         dispatch(toggleSubcategory({ id: value, checked }));
     };
+console.log(priceRange);
 
     return (
         <div>

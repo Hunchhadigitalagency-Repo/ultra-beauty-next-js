@@ -65,30 +65,34 @@ const ProductForm: React.FC<{
   const [selectedProductSlug, setSelectedProductSlug] = useState<string | null>(
     null
   );
-  const [url, setUrl] = useState<string>("");
+  const [hasSetVariants, setHasSetVariants] = useState(false);
 
-  useEffect(() => {
-    if (selectedProductSlug) {
-      console.log('inside here',);
-
-      // setSelectedProductSlug("")
-      setUrl(`/products/${selectedProductSlug}/`);
-    } else {
-      setUrl("");
-    }
-  }, [selectedProductSlug]);
+  // Only set URL when slug changes
+  const url = selectedProductSlug ? `/products/${selectedProductSlug}/` : "";
 
   const { data: productData } = useFetchData<any>(url, false);
 
+  // Set existing variants only once when product data loads
   useEffect(() => {
-    if (productData?.variants?.length) {
+    if (productData?.variants?.length && !hasSetVariants) {
       const variantsData = productData.variants.map((v: any) => ({
         id: Number(v.id),
         quantity: "",
       }));
-      form.setValue(`products.${index}.existing_variants`, variantsData);
+      form.setValue(`products.${index}.existing_variants`, variantsData, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+      setHasSetVariants(true);
     }
-  }, [productData, form, index]);
+  }, [productData, form, index, hasSetVariants]);
+
+  // Reset hasSetVariants when product changes
+  useEffect(() => {
+    if (selectedProductSlug) {
+      setHasSetVariants(false);
+    }
+  }, [selectedProductSlug]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -98,7 +102,7 @@ const ProductForm: React.FC<{
   const sameAsParentName = form.watch(`products.${index}.sameAsParentName`);
   const attributePrice = form.watch(`products.${index}.attributePrice`);
   const attributeImage = form.watch(`products.${index}.attributeImage`);
-  const isVariantAdded = form.watch(`products.${index}.variantItems`)
+  const isVariantAdded = form.watch(`products.${index}.variantItems`);
 
   const addVariant = () => {
     setShowVariantManagement(true);
@@ -121,7 +125,8 @@ const ProductForm: React.FC<{
     if (variantClasses) {
       form.setValue(
         `products.${index}.variantItems.${variantIndex}.variant_classes`,
-        variantClasses.filter((_, i) => i !== attributeIndex)
+        variantClasses.filter((_, i) => i !== attributeIndex),
+        { shouldValidate: false }
       );
     }
   };
@@ -139,12 +144,14 @@ const ProductForm: React.FC<{
         ) || [];
       form.setValue(
         `products.${index}.variantItems.${currentVariantIndex}.variant_classes`,
-        [...currentClasses, data]
+        [...currentClasses, data],
+        { shouldValidate: false }
       );
     }
     setIsAttributeModalOpen(false);
     setCurrentVariantIndex(null);
   };
+
   return (
     <Card className="relative">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -178,9 +185,11 @@ const ProductForm: React.FC<{
                         value={field.value}
                         onValueChange={(value, slug_name) => {
                           field.onChange(value);
-                          setSelectedProductSlug(slug_name || "")
-                        }
-                        }
+                          setSelectedProductSlug(slug_name || "");
+                          setShowVariantManagement(false);
+                          // Clear variant items when product changes
+                          form.setValue(`products.${index}.variantItems`, []);
+                        }}
                         placeholder="Select Product"
                         fetchData={getProductsDropdown}
                         className="w-full"
@@ -349,7 +358,6 @@ const ProductForm: React.FC<{
                     />
                   </div>
 
-                  {/* Conditional Image Field */}
                   {attributeImage && (
                     <div className="mt-4">
                       <FormField
@@ -387,7 +395,6 @@ const ProductForm: React.FC<{
                         if (fields.length === 1) {
                           setShowVariantManagement(false);
                         }
-
                       }}
                     >
                       <X className="h-4 w-4" />
@@ -422,7 +429,9 @@ const ProductForm: React.FC<{
           </div>
         )}
 
-        {productData?.variants?.filter((v: any) => v.product_variants?.length > 0).length > 0 ? (
+        {productData?.variants?.filter(
+          (v: any) => v.product_variants?.length > 0
+        ).length > 0 ? (
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900">
               EXISTING VARIANTS
@@ -436,14 +445,16 @@ const ProductForm: React.FC<{
                       <label className="text-xs font-medium text-gray-600 block mb-1">
                         VARIATION
                       </label>
-                      {variant.product_variants.map((vari: any, variIndex: number) => (
-                        <div
-                          key={variIndex}
-                          className="text-[10px] border h-[20px] mt-1 text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
-                        >
-                          {vari?.attribute_variant?.name}
-                        </div>
-                      ))}
+                      {variant.product_variants.map(
+                        (vari: any, variIndex: number) => (
+                          <div
+                            key={variIndex}
+                            className="text-[10px] border h-[20px] mt-1 text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
+                          >
+                            {vari?.attribute_variant?.name}
+                          </div>
+                        )
+                      )}
                     </div>
                     <FormField
                       control={form.control}
@@ -455,14 +466,14 @@ const ProductForm: React.FC<{
                             <Input
                               type="number"
                               placeholder="Enter quantity"
-                              value={field.value ?? ""} // if null/undefined -> empty
+                              value={field.value ?? ""}
                               onChange={(e) => {
                                 const value = Number(e.target.value);
 
                                 if (!e.target.value || value <= 0) {
-                                  field.onChange(null); // set to null if empty or 0
+                                  field.onChange(null);
                                 } else {
-                                  field.onChange(value); // set positive number
+                                  field.onChange(value);
                                 }
                               }}
                             />
@@ -471,15 +482,13 @@ const ProductForm: React.FC<{
                         </FormItem>
                       )}
                     />
-
                   </div>
                 ))}
             </div>
           </div>
         ) : (
           <>
-            {
-              isVariantAdded?.length === 0 &&
+            {isVariantAdded?.length === 0 && (
               <FormField
                 control={form.control}
                 name={`products.${index}.quantity`}
@@ -497,7 +506,7 @@ const ProductForm: React.FC<{
                   </FormItem>
                 )}
               />
-            }
+            )}
           </>
         )}
         <AttributeModal
@@ -554,10 +563,9 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       attachments: [],
     });
   };
-  const router = useRouter()
+  const router = useRouter();
   const onSubmit = async (data: MultiProductFormValues) => {
-    // console.log("this is data", data);
-setLoading(true)
+    setLoading(true);
     const formData = new FormData();
 
     data.products.forEach((prod, index) => {
@@ -581,10 +589,7 @@ setLoading(true)
       );
 
       if (prod.quantity !== undefined) {
-        formData.append(
-          `quantity[${index}]`,
-          String(prod.quantity)
-        );
+        formData.append(`quantity[${index}]`, String(prod.quantity));
       }
 
       prod.existing_variants?.forEach((variant, vIndex) => {
@@ -645,10 +650,9 @@ setLoading(true)
     } catch (error: any) {
       toast.error(`Error submitting form: ${error?.message}`);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
-
 
   return (
     <div className=" rounded-xl min-h-screen">
@@ -659,7 +663,6 @@ setLoading(true)
             toast.error("Please check the form for errors");
           })}
         >
-
           <div className="flex flex-col gap-1 pb-32">
             <div className="space-y-6 ">
               {fields.map((field, index) => (
@@ -680,7 +683,11 @@ setLoading(true)
             </div>
           </div>
 
-          <div className={`flex justify-end items-end  ${fields.length < 2 && "mt-10"} `}>
+          <div
+            className={`flex justify-end items-end  ${
+              fields.length < 2 && "mt-10"
+            } `}
+          >
             <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col lg:items-start gap-4">
               <div className="md:block text-sm font-medium text-gray-600 uppercase tracking-wide">
                 ATTACHMENT
@@ -722,10 +729,9 @@ setLoading(true)
                   className="text-white font-semibold px-8 py-3 rounded-lg transition-colors"
                   disabled={loading}
                 >
-                  {loading ? <Spinner /> : "Save" }
+                  {loading ? <Spinner /> : "Save"}
                 </Button>
               </div>
-
             </div>
           </div>
         </form>

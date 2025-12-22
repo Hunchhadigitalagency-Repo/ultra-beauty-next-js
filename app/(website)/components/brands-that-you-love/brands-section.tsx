@@ -120,13 +120,13 @@ const BrandsSection: React.FunctionComponent = () => {
                 <CarouselItem
                   key={index}
                   className={`
-    border border-gray-200 rounded-lg 
-    transition-all duration-300 ease-in-out
-    cursor-pointer 
-    hover:shadow-xl hover:border-primary
-    p-4
-    flex justify-center items-center
-    ${noOfBrands && noOfBrands <= 6
+                     rounded-lg 
+                    transition-all duration-300 ease-in-out
+                    cursor-pointer 
+                    hover:border-primary
+                    p-4
+                    flex justify-center items-center
+                  ${noOfBrands && noOfBrands <= 6
                       ? `basis-1/2 sm:basis-1/4 md:basis-1/3 lg:basis-1/${noOfBrands}`
                       : 'basis-1/2 sm:basis-1/4 md:basis-1/3 xl:basis-1/4'}
   `}

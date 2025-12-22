@@ -6,6 +6,7 @@ import { Col, ETypes } from "@/types/table";
 import { IDashboardBanner } from "@/types/banner";
 import { setSelectedData } from "@/redux/features/authentication-slice";
 import Image from "next/image";
+import TableStatusSwitch from "@/components/common/table-status-switch/table-status-switch";
 
 export const BannerConstant = (dispatch: AppDispatch): Col<IDashboardBanner>[] => {
   return [
@@ -33,10 +34,10 @@ export const BannerConstant = (dispatch: AppDispatch): Col<IDashboardBanner>[] =
       ),
     },
 
-    // {
-    //   title: "TITLE",
-    //   render: (data: IDashboardBanner) => <span>{data.title}</span>,
-    // },
+    {
+      title: "STATUS",
+      render: (data: IDashboardBanner) => <TableStatusSwitch type={ETypes.BANNERS} rowData={data}/>,
+    },
     {
       title: "PAGE",
       render: (data: IDashboardBanner) => {

@@ -20,7 +20,9 @@ const SingleProductPage: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<SingleProductResponse>(
     `/public-products/${slug}`, true
   );
-  if (!data || loading || error) return null;
+  if (!data || loading || error) return 
+
+  ;
 
   const {
     detail_description,

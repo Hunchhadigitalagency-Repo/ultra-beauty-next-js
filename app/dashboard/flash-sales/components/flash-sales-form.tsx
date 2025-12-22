@@ -46,8 +46,8 @@ const FlashSalesForm = ({ initialData }: FlashSalesFormProps) => {
 
   const isEditMode = Boolean(initialData)
   const title = initialData ? "Edit Flash Sales" : "Add Flash Sales";
-  const blogUrl = isEditMode ? `/cms/navigation-infos/${initialData?.id}` : "";
-  const { data: navigationInfo, } = useFetchData<IFlashSales>(blogUrl);
+  const flashSaleUrl = isEditMode ? `flashsales/${initialData?.id}` : "";
+  const { data: navigationInfo, } = useFetchData<IFlashSales>(flashSaleUrl);
   const [loading, setLoading] = useState(false);
   const emptyDefaults = {
     name: "",

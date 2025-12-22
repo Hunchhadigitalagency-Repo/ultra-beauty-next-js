@@ -51,7 +51,6 @@ const SingleOrderTable = ({
             <OrderStatusDropdown
               orderId={orderData.id}
               currentStatus={orderData.order_status}
-              refetch={refetch}
             />
 
             <Button

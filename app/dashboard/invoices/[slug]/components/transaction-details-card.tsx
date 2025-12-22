@@ -1,6 +1,6 @@
 import { InvoiceTransaction } from "@/types/invoices";
 import InvoiceDetailItem from "./invoice-detail-item";
-import Link from "next/link";
+// import Link from "next/link";
 
 interface TransactionDetailsCardProps {
   transaction: InvoiceTransaction;
@@ -9,16 +9,20 @@ interface TransactionDetailsCardProps {
 export function TransactionDetailsCard({
   transaction,
 }: TransactionDetailsCardProps) {
+
+  const hasTransactionDetails =
+    transaction.transaction_details &&
+    Object.keys(transaction.transaction_details).length > 0
   return (
     <section className="bg-white rounded-lg px-4 py-2">
       <div className="flex items-center justify-between gap-4 p-4 border-[#E7E6E6]">
         <InvoiceDetailItem title="Transaction id" value={transaction.id} />
-        <Link
+        {/* <Link
           className="text-primary text-sm hover:underline hover:underline-offset-4"
           href={`/dashboard/invoices/${transaction.id}`}
         >
           Go to Detail
-        </Link>
+        </Link> */}
       </div>
 
       <div className="flex items-center justify-between gap-4 p-4 border-t border-b border-[#E7E6E6] flex-wrap">
@@ -38,7 +42,7 @@ export function TransactionDetailsCard({
         />
       </div>
 
-      {transaction.transaction_details && (
+      {hasTransactionDetails && (
         <div className="flex items-center justify-between gap-4 p-4 border-t border-b border-[#E7E6E6] flex-wrap">
           <h3 className="font-semibold text-sm text-foreground mb-2">
             Online Transaction Details

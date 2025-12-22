@@ -28,7 +28,6 @@ const SingleOrderPage = () => {
       </p>
     );
   }
-
   return (
     <main className="space-y-4">
       <SingleOrderTable orderData={order} loading={loading} refetch={refetch} />

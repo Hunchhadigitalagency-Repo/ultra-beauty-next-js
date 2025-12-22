@@ -22,6 +22,7 @@ import Link from "next/link";
 interface InvoiceHeaderProps {
   invoiceId: number;
   status: string;
+  canRecordTrans: boolean;
 }
 
 const invoiceStatusData = [
@@ -30,7 +31,14 @@ const invoiceStatusData = [
   { value: "partialpaid", label: "Partial Paid" },
 ];
 
-export default function InvoiceHeader({ invoiceId, status }: InvoiceHeaderProps) {
+const allowedTransitions: Record<string, string[]> = {
+  pending: ["pending", "partialpaid", "paid"],
+  partialpaid: ["partialpaid", "paid"],
+  paid: ["paid"],
+};
+
+
+export default function InvoiceHeader({ invoiceId, status, canRecordTrans }: InvoiceHeaderProps) {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(status);
   const [isPending, setIsPending] = useState(false);
@@ -78,20 +86,25 @@ export default function InvoiceHeader({ invoiceId, status }: InvoiceHeaderProps)
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {invoiceStatusData.map((choice) => (
-                <DropdownMenuItem
-                  key={choice.value}
-                  onClick={() => handleStatusChange(choice.value)}
-                  disabled={isPending}
-                  className="capitalize cursor-pointer"
-                >
-                  {choice.label}
-                </DropdownMenuItem>
-              ))}
+              {invoiceStatusData.map((choice) => {
+                const isAllowed = allowedTransitions[currentStatus]?.includes(choice.value);
+
+                return (
+                  <DropdownMenuItem
+                    key={choice.value}
+                    onClick={() => isAllowed && handleStatusChange(choice.value)}
+                    disabled={!isAllowed || isPending}
+                    className="capitalize cursor-pointer"
+                  >
+                    {choice.label}
+                  </DropdownMenuItem>
+                );
+              })}
+
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <AddModal type={ETypes.INVOICES} text="Record Transaction" className="bg-[#1477B4]" invoice_id={invoiceId} />
+          <AddModal type={ETypes.INVOICES} text="Record Transaction" className="bg-[#1477B4]" invoice_id={invoiceId} disabled={canRecordTrans}/>
         </div>
       </div>
 

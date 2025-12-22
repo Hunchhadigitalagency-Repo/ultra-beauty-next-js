@@ -36,13 +36,11 @@ const Helper: React.FunctionComponent = () => {
       ) : (
         <div className="gap-2 p-5 border border-gray-300 rounded-md">
           <p className="text-xl font-semibold text-foreground">{data?.name}</p>
-          <ul className="py-5 pl-5 text-sm list-disc font-poppins">
-            <li
+            <p
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(data?.steps || ""),
               }}
             />
-          </ul>
         </div>
       )}
       {/* button */}

@@ -12,10 +12,9 @@ export default function VariantAttributeDisplay({
   attributes,
   onDelete,
 }: VariantAttributeDisplayProps) {
+  console.log("This is te attribute: ", attributes);
   const getAttributeDisplay = (attribute: VariantClass) => {
-    // Check if it's a color attribute (you can customize this logic based on your attribute types)
-
-    // Default display for other attributes (like size, material, etc.)
+    
     return (
       <div className="px-5 py-1 border border-gray-700 rounded-[2px] text-sm bg-gray-50">
         {attribute.variant_name}

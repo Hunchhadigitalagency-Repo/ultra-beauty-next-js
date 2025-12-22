@@ -51,7 +51,7 @@ export const MyOrderConstants = (): Col<OrderResponse>[] => {
             backgroundColor: order.order_status?.primary_color,
             color: order.order_status?.text_color,
           }}
-          className="w-[100px] rounded-sm py-1 px-2 text-center"
+          className="w-[100px] rounded-xs py-1 px-2 text-center"
         >
           <p className="text-white">{order.order_details?.[0].status || order.order_status?.name}</p>
         </button>

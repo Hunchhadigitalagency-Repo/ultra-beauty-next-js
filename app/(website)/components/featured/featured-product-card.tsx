@@ -17,7 +17,7 @@ const FeaturedProductCard: React.FC<FeaturedProductCardProps> = ({ image, title,
           src={image}
           alt="brand logo"
           layout="fill"
-          objectFit="object-cover"
+          className="object-contain"
         />
       </div>
       <div className=" flex flex-col">

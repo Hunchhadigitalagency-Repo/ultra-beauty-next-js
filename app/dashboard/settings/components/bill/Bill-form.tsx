@@ -93,7 +93,8 @@ const BillForm = ({ initialData }: BillFromProps) => {
           <Form {...form}>
             <form
               id="setting-bill-form"
-              onSubmit={form.handleSubmit(onSubmit              )}
+              onSubmit={form.handleSubmit(onSubmit, err => console.log(err)
+                            )}
               className="space-y-6"
             >
               <FormField

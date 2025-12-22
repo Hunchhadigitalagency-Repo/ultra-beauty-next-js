@@ -39,7 +39,6 @@ const InvoiceTable = ({ setDatalength }: Props) => {
     }
   }, [loading, data.length, setDatalength, totalCount]);
 
-  // console.log('this is the data', data);
 
   return (
     <div id={scrollId} className="overflow-y-auto h-[calc(100vh-190px)]">

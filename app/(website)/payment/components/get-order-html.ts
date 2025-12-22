@@ -1,6 +1,9 @@
 import { CartItem } from "@/types/cart";
 
-export const getOrderInformationHtml = (cartItems: CartItem[], totalAmount: any) => {
+export const getOrderInformationHtml = (
+  cartItems: CartItem[],
+  totalAmount: any
+) => {
   let html = `
     <div style="
       font-family: Arial, Helvetica, sans-serif;
@@ -20,8 +23,14 @@ export const getOrderInformationHtml = (cartItems: CartItem[], totalAmount: any)
   `;
 
   cartItems.forEach((cartItem) => {
-    const { name, price, image } = cartItem;
-
+    const {
+      name,
+      price: fprice,
+      image,
+      discount_percentage: fdiscount_percentage,
+    } = cartItem;
+    const price = parseInt(fprice);
+    const discount = parseInt(fdiscount_percentage || "0");
     html += `
       <div style="
         display: flex;
@@ -46,7 +55,7 @@ export const getOrderInformationHtml = (cartItems: CartItem[], totalAmount: any)
         </div>
 
         <div style="font-size: 14px; color: #444; font-weight: 600;">
-          Rs ${price}
+          Rs ${price - ((discount || 0) * price) / 100}
         </div>
       </div>
     `;
