@@ -110,6 +110,7 @@ export interface ProductCardProps {
   imageSrc: string;
   alt: string;
   isFlashSale?: boolean;
+  flashSaleDiscount?: string;
   title: string;
   rating: number;
   price: string;

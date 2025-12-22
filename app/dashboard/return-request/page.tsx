@@ -45,7 +45,7 @@ const CancelRequestPage = () => {
         endMessage={
           !hasMore && returnRequest.length > 0 ? (
             <p className="text-center text-gray-500 py-4">
-              No more Cancelled items to load
+              No more Return Requested items to load
             </p>
           ) : null
         }

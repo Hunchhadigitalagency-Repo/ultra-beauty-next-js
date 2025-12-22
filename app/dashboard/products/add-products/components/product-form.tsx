@@ -588,7 +588,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                   )}
                 />
 
-                <CardTitle className="py-4">Product Specific Info</CardTitle>
+                <CardTitle className="py-4">Product Ingredient  </CardTitle>
                 <FormCombobox
                   form={form}
                   name="category"

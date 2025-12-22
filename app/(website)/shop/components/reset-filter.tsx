@@ -1,13 +1,14 @@
 import React from 'react';
 import { RefreshCcw } from 'lucide-react';
 import { useAppDispatch } from '@/redux/hooks';
-import { resetFilters } from '@/redux/features/category-slice';
+import { resetFilters, setPriceRange } from '@/redux/features/category-slice';
 
 const ResetFilter: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleResetFilter = () => {
     dispatch(resetFilters());
+    dispatch(setPriceRange([10, 10000]))
   };
 
   return (

@@ -8,11 +8,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   clearCart,
-  decreaseCartCountBy,
   setOrderId,
   setShippingFee,
 } from "@/redux/features/cart-slice";
 import { generateClientHash } from "@/lib/utils";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
 
 type PaymentStatus = "loading" | "success" | "mismatch" | "error";
 
@@ -45,7 +45,7 @@ const Success: React.FC = () => {
 
           if (response.status === 200) {
             dispatch(setOrderId(null));
-            dispatch(decreaseCartCountBy(cartItem.length));
+updateCartAndWishlistCounts(dispatch)
             dispatch(clearCart());
             dispatch(setShippingFee(""));
             setPaymentStatus("success");
@@ -84,7 +84,7 @@ const Success: React.FC = () => {
 
         if (response.status === 200) {
           dispatch(setOrderId(null));
-          dispatch(decreaseCartCountBy(cartItem.length));
+updateCartAndWishlistCounts(dispatch)
           dispatch(clearCart());
           dispatch(setShippingFee(""));
           setPaymentStatus("success");

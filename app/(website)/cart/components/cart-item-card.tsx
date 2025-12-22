@@ -32,21 +32,18 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
   const { profileDetails } = useAppSelector((state) => state.authentication);
 
   const quantity = item.quantity;
+console.log(item);
 
-  // 🔹 local interaction state
   const [localQuantity, setLocalQuantity] = useState(quantity);
 
-  // 🔹 debounce the quantity
   const debouncedQuantity = useDebounce(localQuantity, 600);
 
   const Variants = item.product_variant?.product_variants;
 
-  // 🔹 keep local state in sync with redux
   useEffect(() => {
     setLocalQuantity(quantity);
   }, [quantity]);
 
-  // 🔹 debounced server update
   useEffect(() => {
     if (debouncedQuantity === quantity) return;
 
@@ -56,7 +53,6 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
       debouncedQuantity,
       item.id
     ).catch(() => {
-      // rollback if API fails
       dispatch(
         updateCartItemQuantity({
           id: item.id,
@@ -84,7 +80,6 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
       )
     );
 
-    // 🔹 optimistic redux update
     dispatch(
       updateCartItemQuantity({
         id: item.id,
@@ -181,7 +176,7 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
 
           <div className="flex flex-col gap-4 md:flex-row md:justify-between">
             <PriceRow
-              discountTag={item.product.discount_percentage}
+              discountTag={item.product.is_flash_sale ? item.product.flash_sale_discount : item.product.discount_percentage}
               previousPrice={
                 item.product.discount_percentage
                   ? item.product.price
@@ -190,7 +185,9 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
               price={
                 calculateDiscountedPrice(
                   item.product.price,
-                  item.product.discount_percentage
+                  item.product.discount_percentage,
+                  item.product.flash_sale_discount,
+                  item.product.is_flash_sale,
                 ) || item.product.price
               }
             />

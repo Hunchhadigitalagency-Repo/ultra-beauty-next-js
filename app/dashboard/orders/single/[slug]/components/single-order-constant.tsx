@@ -57,7 +57,7 @@ export const SingleOrderConstant = (): Col<IOrderDetail>[] => {
     {
       title: "STATUS",
       render: (data: IOrderDetail) => <div className="flex  w-full">
-        <StatusCard status={data.status} />,
+        <StatusCard status={data.status} />
       </div>
     },
   ];

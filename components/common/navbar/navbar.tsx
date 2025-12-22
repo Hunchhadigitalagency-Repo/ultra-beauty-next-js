@@ -412,8 +412,8 @@ export default function Navbar() {
             onMouseEnter={handleDropdownEnter}
             onMouseLeave={handleDropdownLeave}
           >
-            <div className="flex overflow-hidden bg-none rounded-lg gap-5">
-              <div className="w-[280px] h-fit max-h-[450px] bg-white shadow-xl rounded-lg overflow-y-auto border-r border-border">
+            <div className="flex overflow-hidden bg-none rounded-lg gap-5 border">
+              <div className="w-[280px] h-fit max-h-[450px] bg-white  rounded-lg overflow-y-auto border-r border-border">
                 <div className="p-2">
                   <Link
                     href="/shop#shop"
@@ -466,7 +466,7 @@ export default function Navbar() {
 
               {hoveredCategory && hoveredCategory.subcategories.length > 0 && (
                 <div
-                  className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide bg-white rounded-lg shadow-xl absolute left-[280px] transition-all duration-200"
+                  className="w-[320px] h-fit overflow-y-auto bg-muted/30 scrollbar-hide bg-white rounded-lg border-1 absolute left-[280px] transition-all duration-200"
                   style={{ top: `${categoryPosition}px` }}
                 >
                   <div className="p-4">

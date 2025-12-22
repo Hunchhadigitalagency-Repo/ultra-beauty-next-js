@@ -9,8 +9,7 @@ interface Props {
   qrPayment: QrPayment;
 }
 
-const QrPaymentModal = ({ isOpen, setIsOpen, qrPayment }: Props) => {
-  console.log(qrPayment);
+const QrPaymentModal = ({ isOpen, qrPayment }: Props) => {
   
     return (
     <Dialog open={isOpen} onOpenChange={() =>{}}>

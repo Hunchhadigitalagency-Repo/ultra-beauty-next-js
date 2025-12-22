@@ -33,6 +33,7 @@ jobs:
           NEXT_PUBLIC_SUCCESS_URL: ${{ secrets.NEXT_PUBLIC_SUCCESS_URL }}
           NEXT_PUBLIC_FAIL_URL: ${{ secrets.NEXT_PUBLIC_FAIL_URL }}
           NEXT_PUBLIC_PAYMENT_URL: ${{ secrets.NEXT_PUBLIC_PAYMENT_URL }}
+          NEXT_PUBLIC_WEBSITE_DOMAIN: ${{ secrets.NEXT_PUBLIC_WEBSITE_DOMAIN }}
         run: npm run build
 
       - name: Prune devDependencies

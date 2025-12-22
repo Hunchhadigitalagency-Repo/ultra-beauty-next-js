@@ -32,10 +32,10 @@ const ShippingDetailsModal: React.FunctionComponent<
           ] as (keyof ShippingData)[]
         ).map((key) => (
           <div key={key} className="grid grid-cols-[35%_65%]">
-            <p className="text-sm font-medium lg:text-base">
+            <p className="text-sm font-medium lg:text-sm">
               {SHIPPING_LABELS[key]}
             </p>
-            <p className="text-sm font-medium lg:text-base">
+            <p className="text-sm font-medium lg:text-sm">
               : {shipping[key] ?? "-"}
             </p>
           </div>

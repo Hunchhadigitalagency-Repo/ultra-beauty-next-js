@@ -43,6 +43,8 @@ const categorySlice = createSlice({
             }
         },
         setPriceRange: (state, action: PayloadAction<[number, number]>) => {
+            console.log("updatinf the value", action.payload);
+            
             state.priceRange = action.payload;
         },
         clearSubcategoriesForCategory: (state, action: PayloadAction<number[]>) => {
