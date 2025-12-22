@@ -18,7 +18,7 @@ const SingleBlogSection = () => {
   const id = useParams().id;
   const path = id ? `cms/blogs-dropdown/${id}` : "";
 
-  const { data: blog, loading, error } = useFetchData<IBlog>(path, true, {
+  const { data: blog, loading, error } = useFetchData<IBlog>(path, false, {
     // config: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
 

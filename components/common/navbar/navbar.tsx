@@ -33,6 +33,7 @@ import {
   toggleSubcategory,
 } from "@/redux/features/category-slice";
 import { getCompanyProfile } from "@/lib/company-profile";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -63,7 +64,7 @@ export default function Navbar() {
     useState<ICategoryDropdown | null>(null);
   const isActive = (pathname: string) => path === pathname;
   const { wishlistCount } = useAppSelector((state) => state.navbar);
-  const cartCount = useAppSelector((state) => state.cart.cartCount);
+  const {cartCount, notificationCount} = useAppSelector((state) => state.cart);
   const { isLoggedIn, accessToken } = useAppSelector(
     (state) => state.authentication
   );
@@ -80,7 +81,7 @@ export default function Navbar() {
     loading,
     error,
   } = useFetchData<NotificationResponse[]>(
-    "/cms/notifications/all-notification/"
+    "/cms/notifications-views/", true
   );
 
   const { data: wishListData } = useFetchData<WishListResponse>(
@@ -93,6 +94,7 @@ export default function Navbar() {
   const { data: cartData } = useFetchData<CartResponse>("carts/", false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
+console.log('asdasdasd', notificationCount);
 
   useEffect(() => {
     if (wishListData && !hasFetched.current.wishlist) {
@@ -110,6 +112,7 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   useEffect(() => {
+    updateCartAndWishlistCounts(dispatch)
     dispatch(resetFilters());
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();
@@ -396,7 +399,7 @@ export default function Navbar() {
             >
               <Bell className="size-5 md:size-4 xl:size-5" />
               <div className="bg-primary text-white rounded-full text-[9px] absolute -top-1 -right-1 px-1.5 py-0.5">
-                {notifications?.length || 0}
+                {notificationCount || 0}
               </div>
             </Button>
 

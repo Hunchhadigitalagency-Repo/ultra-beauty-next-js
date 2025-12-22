@@ -115,19 +115,19 @@ const BrandsSection: React.FunctionComponent = () => {
             opts={{ align: "start", loop: true }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
-            <CarouselContent className="mt-1 -ml-4 gap-2">
+            <CarouselContent className="mt-1 -ml-1 gap-2">
               {brandDetails?.map((brand, index) => (
                 <CarouselItem
                   key={index}
                   className={`
                      rounded-lg 
-                    transition-all duration-300 ease-in-out
+                    transition-all duration-300 ease-in-out 
                     cursor-pointer 
                     hover:border-primary
                     p-4
                     flex justify-center items-center
                   ${noOfBrands && noOfBrands <= 6
-                      ? `basis-1/2 sm:basis-1/4 md:basis-1/3 lg:basis-1/${noOfBrands}`
+                      ? `basis-1/2 sm:basis-1/4 md:basis-1/3 lg:basis-1/4`
                       : 'basis-1/2 sm:basis-1/4 md:basis-1/3 xl:basis-1/4'}
   `}
                   onClick={() => handleBrandCardClick(brand.id)}
