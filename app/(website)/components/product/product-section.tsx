@@ -83,7 +83,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
                 return (
                   <CarouselItem
                     key={product.name}
-                    className="basis-1/2 lg:basis-1/4 p-2 px-2 items-center border rounded-sm"
+                    className="basis-1/2 lg:basis-1/4 p-2 px-2 items-center rounded-sm"
                   >
                     <div className="flex w-full h-full">
                       <ProductCard

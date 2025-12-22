@@ -73,6 +73,7 @@ export interface CartSelectionState {
   voucherData: VoucherItem | null;
   orderId: number | null;
   shippingFee: string;
+  notificationCount: number;
 }
 
 // Shipping Details Types
