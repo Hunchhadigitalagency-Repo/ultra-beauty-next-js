@@ -73,7 +73,7 @@ const FeaturedSection = () => {
                         featuredProducts?.map((featuredProduct, index) => (
                           <CarouselItem
                             key={index}
-                            className="basis-[60%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3 ">
+                            className="basis-[60%] sm:basis-1/2 md:basis-1/2 lg:basis-1/4 ">
                             <FeaturedProductCard
                               image={featuredProduct?.images[0]?.file}
                               title={featuredProduct?.brand?.name}

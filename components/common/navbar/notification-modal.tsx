@@ -5,6 +5,9 @@ import Image from "next/image";
 import { AlertCircle, Bell, X, Dot } from "lucide-react";
 import SectionHeader from "../header/section-header";
 import australis from "@/assets/australis.png";
+import api from "@/services/api-instance";
+import { updateCartAndWishlistCounts } from "@/lib/update-count";
+import { useAppDispatch } from "@/redux/hooks";
 
 export interface NotificationResponse {
   id: number;
@@ -28,12 +31,14 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   error = null,
   onClose,
 }) => {
-
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -42,14 +47,23 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  const getNotificationImage = (imagePath: string | null) => {
-    return imagePath || australis;
-  };
-
+  useEffect(() => {
+    if (data) {
+      const id = data.map((not) => not.id);
+      const handleView = async () => {
+        const response = await api.post("/cms/notifications-views/", {
+          notification_id: id,
+        });
+        if (response.status === 201) {
+          updateCartAndWishlistCounts(dispatch);
+        }
+      };
+      handleView();
+    }
+  }, []);
   return (
     <div
-          ref={modalRef}
-
+      ref={modalRef}
       className="absolute w-[350px] md:w-[420px] lg:w-[450px] space-y-4 p-5 z-50 top-full right-4 sm:right-12 lg:right-16 
                  bg-white shadow-xl rounded-lg border border-gray-100 overflow-hidden"
     >
@@ -100,10 +114,11 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
               key={notification.id}
               href={notification.link}
               onClick={onClose}
-              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${notification.is_active
-                ? "bg-white hover:bg-gray-50"
-                : "bg-indigo-50/50 hover:bg-indigo-100"
-                }`}
+              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
+                notification.is_active
+                  ? "bg-white hover:bg-gray-50"
+                  : "bg-indigo-50/50 hover:bg-indigo-100"
+              }`}
             >
               <div className="flex-shrink-0 flex justiy-center items-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
                 <Bell />
@@ -111,8 +126,9 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
               <div className="flex-grow min-w-0">
                 <h4
-                  className={`text-sm font-semibold text-gray-800 ${!notification.is_active && "text-indigo-700"
-                    }`}
+                  className={`text-sm font-semibold text-gray-800 ${
+                    !notification.is_active && "text-indigo-700"
+                  }`}
                 >
                   {notification.title}
                 </h4>

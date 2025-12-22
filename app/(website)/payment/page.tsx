@@ -26,7 +26,7 @@ import { updateCartAndWishlistCounts } from "@/lib/update-count";
 
 const PAYMENT_GATEWAYS = [
   { name: "Cash on Delivery (COD)", image: CashOnDelivery, value: "cod" },
-  { name: "Get Pay (Card)", image: GetPay, value: "getpay" },
+  { name: "Get Pay (Card)", image: GetPay, value: "bank_transfer" },
   { name: "Phonepay (QR)", image: PhonePay, value: "qr" },
 ];
 
@@ -173,7 +173,7 @@ const Payment: React.FunctionComponent = () => {
       router.push("/profile");
       dispatch(clearCart());
       dispatch(setShippingFee("ß"));
-    } else if (activePaymentMethod === "getpay") {
+    } else if (activePaymentMethod === "band_transfer") {
       handleMakePayment();
       return;
     } else if (activePaymentMethod === "qr") {

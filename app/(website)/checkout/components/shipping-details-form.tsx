@@ -41,6 +41,7 @@ import useFetchData from "@/hooks/use-fetch-data";
 import { postCity } from "@/lib/api/order/order-apis";
 import { Spinner } from "@/components/ui/spinner";
 import api from "@/services/api-instance";
+import { toast } from "sonner";
 
 export interface ShippingData {
   id: number;
@@ -71,6 +72,8 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
 
   const { data } = useFetchData<ShippingData[]>("/default-address/");
   const [loading, setLoading] = useState(false);
+  const [fetchingShippingFee, setFetchingShippingFee] = useState(false);
+  
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
     defaultValues: {
@@ -97,16 +100,29 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
     ? PROVINCES.find((p) => p.province === selectedProvince)?.cities || []
     : [];
 
-  /* Sync form changes to parent */
   useEffect(() => {
     onChange(watchedValues as ShippingFormValues);
   }, [watchedValues, onChange]);
 
-  /* Reset city when province changes */
   useEffect(() => {
     setSelectedCity("");
     form.setValue("city", "");
-  }, [selectedProvince]);
+  }, [selectedProvince, form]);
+
+  const fetchShippingFee = async (cityValue: string) => {
+    if (!cityValue || cartIds.length === 0) return;
+    
+    setFetchingShippingFee(true);
+    try {
+      const response = await postCity(cartIds, cityValue);
+      dispatch(setShippingFee(String(response.data.rate)));
+    } catch (error) {
+      console.error("Failed to update shipping fee", error);
+      toast.error("Failed to fetch shipping fee");
+    } finally {
+      setFetchingShippingFee(false);
+    }
+  };
 
   const handleCityChange = async (
     value: string,
@@ -114,17 +130,14 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
   ) => {
     onChange(value);
     setSelectedCity(value);
-
-    try {
-      const response = await postCity(cartIds, value);
-      dispatch(setShippingFee(String(response.data.rate)));
-    } catch (error) {
-      console.error("Failed to update shipping fee", error);
-    }
+    await fetchShippingFee(value);
   };
 
-  const handleFillForm = () => {
-    if (!data || data.length === 0) return;
+  const handleFillForm = async () => {
+    if (!data || data.length === 0) {
+      toast.error("No default address found");
+      return;
+    }
 
     const d = data[0];
 
@@ -142,34 +155,51 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
       deliveryLocation: "home",
     });
 
-    setSelectedCity(d.city ?? "");
+    const cityValue = d.city ?? "";
+    setSelectedCity(cityValue);
+
+    // Fetch shipping fee for the default address city
+    if (cityValue) {
+      await fetchShippingFee(cityValue);
+    }
   };
 
   const onSubmit = async (values: ShippingFormValues) => {
     setLoading(true);
-    const payload = {
-      first_name: values.firstName,
-      last_name: values.lastName,
-      email: values.email,
-      phone_no: values.phoneNumber,
-      alternate_phone_no: values.alternativePhoneNumber,
-      province: values.province,
-      city: values.city,
-      landmark: values.landmark,
-      address: values.address,
-    };
+    try {
+      const payload = {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        email: values.email,
+        phone_no: values.phoneNumber,
+        alternate_phone_no: values.alternativePhoneNumber,
+        province: values.province,
+        city: values.city,
+        landmark: values.landmark,
+        address: values.address,
+      };
 
-    await api.post("/default-address/", payload);
-    dispatch(addShippingDetails(values));
-    router.push("/payment");
+      await api.post("/default-address/", payload);
+      dispatch(addShippingDetails(values));
+      router.push("/payment");
+    } catch (error) {
+      console.error("Failed to submit shipping details", error);
+      toast.error("Failed to save shipping details");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="space-y-6 bg-white">
       <div className="flex justify-between items-center py-2 px-4 bg-secondary rounded-sm">
         <h2 className="font-medium text-base">Shipping details</h2>
-        <Button className="bg-primary" onClick={handleFillForm}>
-          Use Default Address
+        <Button 
+          className="bg-primary" 
+          onClick={handleFillForm}
+          disabled={!data || data.length === 0 || fetchingShippingFee}
+        >
+          {fetchingShippingFee ? <Spinner /> : "Use Default Address"}
         </Button>
       </div>
 
@@ -278,7 +308,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                     onValueChange={(val) =>
                       handleCityChange(val, field.onChange)
                     }
-                    disabled={!selectedProvince}
+                    disabled={!selectedProvince || fetchingShippingFee}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -293,6 +323,11 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  {fetchingShippingFee && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Fetching shipping fee...
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
@@ -368,8 +403,12 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                     value={field.value}
                     className="flex gap-6"
                   >
-                    <RadioGroupItem value="home" /> Home
-                    <RadioGroupItem value="office" /> Office
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="home" /> Home
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="office" /> Office
+                    </div>
                   </RadioGroup>
                 </FormControl>
               </FormItem>
