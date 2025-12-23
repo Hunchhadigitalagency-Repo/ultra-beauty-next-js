@@ -1,4 +1,5 @@
-import { setCartCount, setNotificationCount } from "@/redux/features/cart-slice";
+import { setCartCount,  } from "@/redux/features/cart-slice";
+import { setNotificationCount } from "@/redux/features/wishList-slice";
 import { AppDispatch } from "@/redux/store";
 import api from "@/services/api-instance";
 

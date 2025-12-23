@@ -23,14 +23,9 @@ const OrderTrack: React.FunctionComponent = () => {
         return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     }
 
-
-
     return (
         <React.Fragment>
-            {/* <OrderStatus
-                status={status as any}
-            /> */}
-            <StatusHeader status={logs[logs.length - 1]?.title} is_track={true} />
+            <StatusHeader status={logs[logs.length - 1]?.title} is_track={true} order_id={orderId || ""} />
             <div className="flex flex-col space-y-8 lg:flex-row-reverse justify-between items-start">
                 <DeliveryTimeline statuses={logs as any} />
                 {

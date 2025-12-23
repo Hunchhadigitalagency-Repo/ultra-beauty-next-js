@@ -133,8 +133,8 @@ const handleBannerClick = (slide: HeroSectionResponse) => {
                 <button
                   key={i}
                   className={`w-[10px] h-[10px] rounded-full transition-all duration-300 ${i === current
-                    ? "bg-pink-600 scale-110 h-[10px] w-[15px]"
-                    : "bg-[#7A7A7A] hover:bg-pink-300"
+                    ? "bg-primary scale-110 h-[10px] w-[15px]"
+                    : "bg-[#7A7A7A] hover:bg-primary"
                     }`}
                   onClick={() => api?.scrollTo(i)}
                   aria-label={`Go to slide ${i + 1}`}

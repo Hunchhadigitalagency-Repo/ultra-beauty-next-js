@@ -10,6 +10,7 @@ import ProductDescriptionSection from "./product-description-section";
 import SingleProductInformationLoader from "./single-product-information-loader";
 import { allImages } from "@/lib/utils";
 import { ProductImagesResponse, Result } from "@/types/product";
+import { AlertCircle } from "lucide-react";
 
 interface SingleProductResponse extends Result {
   id: number;
@@ -25,8 +26,8 @@ const SingleProductSection: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<SingleProductResponse>(
     `public-products/${slug}`
   );
+  console.log("from product", error);
 
-  // Wishlist state syncs when data arrives
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
   useEffect(() => {
     if (data) setIsWishlisted(data.my_wishlist);
@@ -34,7 +35,6 @@ const SingleProductSection: React.FunctionComponent = () => {
 
   const [activeImg, setActiveImg] = useState<string>("");
 
-  // Show skeleton loader while loading
   if (loading) {
     return (
       <div className="mt-4 ml-4 sm:mt-6 sm:mx-14">
@@ -43,9 +43,17 @@ const SingleProductSection: React.FunctionComponent = () => {
     );
   }
 
-  // Show error if fetch fails
   if (error) return <div>Error loading product...</div>;
-  if (!data) return null;
+  if (!data)
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-60 mt-10 mb-10">
+        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+        <p className="font-extralight text-sm text-gray-400 capitalize">
+          Oops! no Products You looking for is not availabe for sale right
+          now...
+        </p>
+      </div>
+    );
 
   const {
     images,

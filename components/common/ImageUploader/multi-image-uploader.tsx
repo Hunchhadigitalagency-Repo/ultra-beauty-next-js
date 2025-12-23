@@ -198,7 +198,7 @@ export default function MultiImageUploader({
           const isDoc = ["doc", "docx"].includes(fileExtension || "")
 
           return (
-            <div className="relative border" key={index}>
+            <div className="relative" key={index}>
               {isImage ? (
                 <Image
                   src={isString ? (fileObj as string) : URL.createObjectURL(fileObj as File) || "/placeholder.svg"}
@@ -227,7 +227,7 @@ export default function MultiImageUploader({
               <button
                 type="button"
                 onClick={() => handleDeleteFile(index)}
-                className="absolute p-1 text-white bg-red-500 rounded-full -top-2 -right-2 hover:bg-red-600"
+                className="absolute p-1 text-white bg-red-500 rounded-full left-0 -top-2 hover:bg-red-600"
                 disabled={isDeleting === index}
               >
                 <X className="w-4 h-4" />

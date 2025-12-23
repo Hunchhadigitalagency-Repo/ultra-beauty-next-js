@@ -20,61 +20,86 @@ export default function OrderSummary({
   applyVoucher,
   isCheckout = false,
 }: OrderSummaryProps) {
-
-
   const router = useRouter();
   const progress = [50];
-  const { voucherData, cartItem, shippingFee } = useAppSelector(state => state.cart);
-  const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
-  const { firstName, lastName, address, phoneNumber, alternativePhoneNumber, city } = shippingDetails || {};
-
-  const subTotal = cartItem.reduce((sum, item) => sum + (parseFloat(item.price) - parseFloat(item?.is_flash_sale? item.flash_sale_discount || "0" : item.discount_percentage || '0') / 100 * parseFloat(item.price)), 0);
-  const taxPercentage = cartItem.reduce((sum, item) => sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0), 0);
+  const { voucherData, cartItem, shippingFee } = useAppSelector(
+    (state) => state.cart
+  );
+  console.log('this is he ', shippingFee);
   
+  const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
+  const {
+    firstName,
+    lastName,
+    address,
+    phoneNumber,
+    alternativePhoneNumber,
+    city,
+  } = shippingDetails || {};
+
+  const subTotal = cartItem.reduce(
+    (sum, item) =>
+      sum +
+      item.quantity *
+        (parseFloat(item.price) -
+          (parseFloat(
+            item?.is_flash_sale
+              ? item.flash_sale_discount || "0"
+              : item.discount_percentage || "0"
+          ) /
+            100) *
+            parseFloat(item.price)),
+    0
+  );
+  const taxPercentage = cartItem.reduce(
+    (sum, item) =>
+      sum + (item.tax_applied ? item.tax_applied.tax_percentage : 0),
+    0
+  );
+
   const taxAmount = cartItem.reduce((sum, item) => {
     const price = parseFloat(item.price);
-    const tax = item.tax_applied ? (price * item.tax_applied.tax_percentage) / 100 : 0;
+    const tax = item.tax_applied
+      ? (price * item.tax_applied.tax_percentage) / 100
+      : 0;
     return sum + tax;
   }, 0);
 
-  const voucherDiscount = parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100 * subTotal;
-  const safeShippingFee = parseFloat(shippingFee || '0') || 0;
+  const voucherDiscount =
+    (parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100) *
+    subTotal;
+  const safeShippingFee = parseFloat(shippingFee || "0") || 0;
+console.log(safeShippingFee);
 
   const Total = subTotal + safeShippingFee - voucherDiscount + (taxAmount || 0);
 
-
   return (
     <div className="order-2 p-4 space-y-4 rounded-lg bg-secondary">
-      {
-        isCheckout && (
-          <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
-            <div className="flex items-center w-full gap-2">
-              <div className="flex items-center justify-center p-2 rounded-full bg-primary">
-                <MapPin className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-base font-medium text-foreground">Shipping Details</h3>
+      {isCheckout && (
+        <div className="flex flex-col items-start  gap-2 border-b pb-4 border-[#6F6F6F]">
+          <div className="flex items-center w-full gap-2">
+            <div className="flex items-center justify-center p-2 rounded-full bg-primary">
+              <MapPin className="w-4 h-4 text-white" />
             </div>
-            <div className="flex items-start gap-2">
-
-
-              <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
-                <span>
-                  {firstName} {lastName}
-                </span>
-                <span>
-                  {phoneNumber}{alternativePhoneNumber && ` | ${alternativePhoneNumber}`}
-                </span>
-                <span>
-                  {address}
-                </span>
-                <span>
-                  {city}
-                </span>
-              </p>
-            </div>
+            <h3 className="text-base font-medium text-foreground">
+              Shipping Details
+            </h3>
           </div>
-        )
-      }
+          <div className="flex items-start gap-2">
+            <p className="flex flex-col pl-10 text-sm font-medium text-custom-black">
+              <span>
+                {firstName} {lastName}
+              </span>
+              <span>
+                {phoneNumber}
+                {alternativePhoneNumber && ` | ${alternativePhoneNumber}`}
+              </span>
+              <span>{address}</span>
+              <span>{city}</span>
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-2">
         <h3 className="text-md  font-medium text-foreground">Order Summary</h3>
@@ -88,126 +113,120 @@ export default function OrderSummary({
             <span>Sub Total</span>
             <span className="text-foreground">{formatPrice(subTotal)}</span>
           </div>
-          {
-            taxAmount > 0 && (
-              <div className="flex justify-between">
-                <span>Tax ({`${taxPercentage}%`}) </span>
-                <span className="text-foreground">{formatPrice(taxAmount)}</span>
-              </div>
-            )
-          }
-          {
-            isCheckout && (
-              <div className="flex justify-between">
-                <span>Shipping fee</span>
-                <span className="text-foreground">{formatPrice(Number(shippingFee))}</span>
-              </div>
-            )
-          }
+          {taxAmount > 0 && (
+            <div className="flex justify-between">
+              <span>Tax ({`${taxPercentage}%`}) </span>
+              <span className="text-foreground">{formatPrice(taxAmount)}</span>
+            </div>
+          )}
+          {isCheckout && (
+            <div className="flex justify-between">
+              <span>Shipping fee</span>
+              <span className="text-foreground">
+                {formatPrice(Number(shippingFee))}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Voucher Code */}
-      {
-        voucherDiscount > 0 && (
-          <div className="flex justify-between text-base font-medium text-custom-black">
-            <span>Voucher Discount</span>
-            <span className="text-foreground">{formatPrice(voucherDiscount)}</span>
-          </div>
-        )
-      }
-      {
-        applyVoucher && !voucherData && (
-          <div className="flex">
-            <Input
-              placeholder="Enter Voucher Code"
-              value={voucherCode}
-              onChange={(e) => onVoucherCodeChange?.(e.target.value)}
-              className="h-10 text-sm bg-white rounded-none"
-            />
-            <Button
-              className="h-10 rounded-none bg-primary"
-              onClick={onApplyVoucher}
-            >
-              Apply
-            </Button>
-          </div>
-        )
-      }
+      {voucherDiscount > 0 && (
+        <div className="flex justify-between text-base font-medium text-custom-black">
+          <span>Voucher Discount</span>
+          <span className="text-foreground">
+            {formatPrice(voucherDiscount)}
+          </span>
+        </div>
+      )}
+      {applyVoucher && !voucherData && (
+        <div className="flex">
+          <Input
+            placeholder="Enter Voucher Code"
+            value={voucherCode}
+            onChange={(e) => onVoucherCodeChange?.(e.target.value)}
+            className="h-10 text-sm bg-white rounded-none"
+          />
+          <Button
+            className="h-10 rounded-none bg-primary"
+            onClick={onApplyVoucher}
+          >
+            Apply
+          </Button>
+        </div>
+      )}
 
       <div className="pt-4">
         <div className="flex justify-between font-semibold ">
           <span className="text-base text-custom-black">Total</span>
           <span className="text-lg text-foreground">{formatPrice(Total)}</span>
         </div>
-        {
-          isCheckout && (
-            <p className="mt-1 text-sm text-right text-accent-foreground">
-              All Tax included
-            </p>
-          )
-        }
+        {isCheckout && (
+          <p className="mt-1 text-sm text-right text-accent-foreground">
+            All Tax included
+          </p>
+        )}
       </div>
 
-      
+      {!isCheckout && (
+        <Button
+          disabled={cartItem.length === 0 || cartItem.length > 5} // disable if empty or >5
+          className={`w-full font-medium text-white rounded-md py-3 transition 
+        ${
+          cartItem.length === 0 || cartItem.length > 5
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-primary hover:bg-primary/90"
+        }`}
+          onClick={() => {
+            if (cartItem.length <= 5) {
+              router.push("/checkout");
+            }
+          }}
+        >
+          {cartItem.length > 5
+            ? "Maximum 5 items allowed"
+            : "Proceed to Checkout"}
+        </Button>
+      )}
 
-      {
-        !isCheckout && (
+      {cartItem.length === 0 && (
+        <div className="flex items-center justify-end">
           <Button
-            disabled={cartItem.length === 0 || cartItem.length > 5} // disable if empty or >5
-            className={`w-full font-medium text-white rounded-md py-3 transition 
-        ${cartItem.length === 0 || cartItem.length > 5 ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-primary/90"}`}
-            onClick={() => {
-              if (cartItem.length <= 5) {
-                router.push("/checkout");
-              }
-            }}
+            variant="ghost"
+            className="text-sm hover:text-secondary"
+            onClick={() => router.push("/shop")}
           >
-            {cartItem.length > 5
-              ? "Maximum 5 items allowed"
-              : "Proceed to Checkout"}
+            CONTINUE SHOPPING
+            <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
-        )
-      }
+        </div>
+      )}
 
-      {
-        cartItem.length === 0 && (
-          <div className="flex items-center justify-end">
-            <Button
-              variant="ghost"
-              className="text-sm hover:text-secondary"
-              onClick={() => router.push("/shop")}
-            >
-              CONTINUE SHOPPING
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-        )
-      }
-
-      {
-        isRewardsModalOpen && (
-          <GenericModal title="Total Rewards Points" setIsOptionClick={() => setisRewardsModalOpen(false)}>
-            <div>
-              <div className="flex items-center gap-5 ">
-                <CircularProgressBar
-                  value={progress[0]}
-                  size={120}
-                  strokeWidth={10}
-                  showLabel
-                  labelClassName="text-xl font-bold"
-                  renderLabel={(progress) => `${progress}%`}
-                />
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-xl font-semibold">350 Points</h1>
-                  <p className="text-base font-medium">Points till your next purchases</p>
-                </div>
+      {isRewardsModalOpen && (
+        <GenericModal
+          title="Total Rewards Points"
+          setIsOptionClick={() => setisRewardsModalOpen(false)}
+        >
+          <div>
+            <div className="flex items-center gap-5 ">
+              <CircularProgressBar
+                value={progress[0]}
+                size={120}
+                strokeWidth={10}
+                showLabel
+                labelClassName="text-xl font-bold"
+                renderLabel={(progress) => `${progress}%`}
+              />
+              <div className="flex flex-col gap-2">
+                <h1 className="text-xl font-semibold">350 Points</h1>
+                <p className="text-base font-medium">
+                  Points till your next purchases
+                </p>
               </div>
-
             </div>
-          </GenericModal>
-        )
-      }
+          </div>
+        </GenericModal>
+      )}
     </div>
   );
 }

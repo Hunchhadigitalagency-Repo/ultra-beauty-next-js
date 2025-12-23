@@ -47,15 +47,15 @@ const BrandsDescSection: React.FunctionComponent = () => {
           </p>
         </div>
       ) : (
-        <div className="space-y-10">
+        <div className="space-y-10 grid lg:grid-cols-2">
           {brandDetails?.map((brand, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 sm:grid-cols-[35%_65%] lg:grid-cols-[20%_80%] gap-4 sm:gap-7 items-start rounded-md"
+              className="flex gap-4 sm:gap-7 items-start rounded-md"
             >
               {/* Image Block */}
-              <div className="flex items-center justify-center w-full gap-3 p-2 border border-[#B3B3B3] rounded-md">
-                <div className="relative w-full rounded-none h-28 md:h-32">
+              <div className="flex items-center justify-center max-w-[350px] w-full gap-3 p-2 border border-[#B3B3B3] rounded-md">
+                <div className="relative min-w-[250px] w-full rounded-none h-28 md:h-32">
                   <Image
                     src={brand?.brand_image}
                     alt={`${brand?.brand_name} logo`}
@@ -65,7 +65,7 @@ const BrandsDescSection: React.FunctionComponent = () => {
                 </div>
               </div>
               {/* Description Block */}
-              <div className="w-full ">
+              <div className=" ">
                 <MdFormatQuote className="w-6 h-6 text-primary sm:w-10 sm:h-10 md:w-14 md:h-14" />
                 <h3 className="text-lg font-bold sm:text-xl md:text-2xl text-primary">
                   {brand?.brand_name}

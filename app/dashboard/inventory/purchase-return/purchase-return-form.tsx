@@ -250,8 +250,8 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
       formData.append(`quantity[${index}]`, prod.quantity?.toString() || '');
 
       prod?.existing_variants?.forEach((variant, vIndex) => {
-        formData.append(`existing_variants[${index}][${vIndex}].id`, variant.id.toString());
-        formData.append(`existing_variants[${index}][${vIndex}].quantity`, variant?.quantity?.toString() || '');
+        formData.append(`existing_variants[${index}][${vIndex}][id]`, variant.id.toString());
+        formData.append(`existing_variants[${index}][${vIndex}][quantity]`, variant?.quantity?.toString() || '');
       });
 
       if (data.attachments) {

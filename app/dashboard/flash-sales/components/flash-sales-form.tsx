@@ -235,7 +235,7 @@ setLoading(true)
                       <FormLabel>End DATE</FormLabel>
 
                       <FormControl>
-                        <Input
+                      <Input
                           type="datetime-local"
                           {...field}
                           className={field.value ? "" : "!text-xs"}
@@ -253,7 +253,7 @@ setLoading(true)
                 name="products"
                 render={({ field }) => (
                   <FormItem className="m-0 p-0 col-span-2 sm:col-span-1 pb-4">
-                    <FormLabel>RECOMMENDED PRODUCTS</FormLabel>
+                    <FormLabel>PRODUCTS</FormLabel>
                     <FormControl>
                       <PaginatedProductSelect
                         selectedValues={field.value}

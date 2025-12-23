@@ -23,6 +23,11 @@ import QrPaymentModal from "./components/qr-payment-modal";
 import { handleError } from "@/lib/error-handler";
 import { Spinner } from "@/components/ui/spinner";
 import { updateCartAndWishlistCounts } from "@/lib/update-count";
+import {
+  useBlockBrowserLeave,
+  useConfirmLeavePayment,
+} from "./helper/use-check-reload";
+import { LeavePaymentDialog } from "./components/leave-confirm-modal";
 
 const PAYMENT_GATEWAYS = [
   { name: "Cash on Delivery (COD)", image: CashOnDelivery, value: "cod" },
@@ -42,7 +47,10 @@ const imageUrl =
 const Payment: React.FunctionComponent = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  useBlockBrowserLeave(true);
 
+  const { open, setOpen, requestNavigation, confirmLeave, cancelLeave } =
+    useConfirmLeavePayment({ shouldBlock: true });
   const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(
     null
   );
@@ -370,7 +378,7 @@ const Payment: React.FunctionComponent = () => {
           <OrderSummary
             shippingDetails={shippingDetails}
             shippingFee={shippingFee as any}
-            totalItems={cartItem.length}
+            totalItems={cartItem.reduce((acc, sum) => acc + sum.quantity, 0)}
             applyVoucher={false}
             isCheckout
           />
@@ -379,6 +387,12 @@ const Payment: React.FunctionComponent = () => {
           isOpen={qrModal}
           setIsOpen={setQrModal}
           qrPayment={qrPayment}
+        />
+        <LeavePaymentDialog
+          open={open}
+          onOpenChange={setOpen}
+          onConfirm={confirmLeave}
+          onCancel={cancelLeave}
         />
       </div>
     </section>

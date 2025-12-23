@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 const StatusHeader = ({
     status,
     is_track = false,
+    order_id
 }: {
     status: string;
     is_track?: boolean;
+    order_id: number|string
 }) => {
     return (
         <div className="md:h-12 h-12 px-4 md:px-6 bg-secondary rounded-sm font-medium text-custom-black text-sm flex items-center justify-between">
@@ -14,7 +16,7 @@ const StatusHeader = ({
             <div className="flex flex-wrap gap-2 md:gap-6 text-xs md:text-sm">
                 <h4 className="flex gap-1">
                     Order No:
-                    <span>#78647763728</span>
+                    <span>#{order_id}</span>
                 </h4>
 
                 {/* Status after order number, only if tracking */}

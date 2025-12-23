@@ -7,7 +7,9 @@ import SectionHeader from "../header/section-header";
 import australis from "@/assets/australis.png";
 import api from "@/services/api-instance";
 import { updateCartAndWishlistCounts } from "@/lib/update-count";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import useFetchData from "@/hooks/use-fetch";
+import { useRouter } from "next/navigation";
 
 export interface NotificationResponse {
   id: number;
@@ -16,23 +18,22 @@ export interface NotificationResponse {
   description: string;
   link: string;
   is_active: boolean;
+  is_viewed: boolean;
 }
 
 interface NotificationModalProps {
-  data: NotificationResponse[] | null;
-  loading?: boolean;
-  error?: Error | null;
   onClose: () => void;
 }
 
-const NotificationModal: React.FC<NotificationModalProps> = ({
-  data,
-  loading = false,
-  error = null,
-  onClose,
-}) => {
+const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const { notificationCount } = useAppSelector((state) => state.navbar);
   const dispatch = useAppDispatch();
+  const { data, loading, error } = useFetchData<NotificationResponse[]>(
+    "/cms/notifications-views/",
+    true
+  );
+  const router = useRouter();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -45,22 +46,22 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+  }, [onClose, data]);
 
   useEffect(() => {
-    if (data) {
+    if (data && notificationCount > 0) {
       const id = data.map((not) => not.id);
       const handleView = async () => {
         const response = await api.post("/cms/notifications-views/", {
-          notification_id: id,
+          notification_ids: id,
         });
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200) {
           updateCartAndWishlistCounts(dispatch);
         }
       };
       handleView();
     }
-  }, []);
+  }, [data]);
   return (
     <div
       ref={modalRef}
@@ -110,24 +111,26 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         /* Notifications List */
         <div className="max-h-[400px] overflow-y-auto space-y-1 -mx-5 px-5">
           {data.map((notification) => (
-            <a
+            <button
               key={notification.id}
-              href={notification.link}
-              onClick={onClose}
-              className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
+              onClick={() => {
+                notification.link && router.push(notification.link);
+                onClose;
+              }}
+              className={`flex items-start justify-start gap-3 py-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
                 notification.is_active
                   ? "bg-white hover:bg-gray-50"
                   : "bg-indigo-50/50 hover:bg-indigo-100"
               }`}
             >
-              <div className="flex-shrink-0 flex justiy-center items-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
+              <div className="flex-shrink-0 flex justify-center items-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
                 <Bell />
               </div>
 
-              <div className="flex-grow min-w-0">
+              <div className="fkex min-w-0">
                 <h4
                   className={`text-sm font-semibold text-gray-800 ${
-                    !notification.is_active && "text-indigo-700"
+                    !notification.is_viewed && "text-indigo-700"
                   }`}
                 >
                   {notification.title}
@@ -137,10 +140,10 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
                 </p>
               </div>
 
-              {!notification.is_active && (
+              {!notification.is_viewed && (
                 <Dot className="absolute top-1 right-1 w-6 h-6 text-indigo-500 fill-indigo-500" />
               )}
-            </a>
+            </button>
           ))}
         </div>
       )}

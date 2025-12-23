@@ -7,79 +7,62 @@ export const CancelRequestConstant = (): Col<CancelRequest>[] => {
   return [
     {
       title: "PRODUCT",
-      render: (data: CancelRequest) =>{ 
-        console.log(data);
-        
-        return(
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-            <Image
-              src={data?.order.order_details?.[0].product.images?.[0]}
-              alt={data?.order.order_details?.[0].product?.name}
-              width={40}
-              height={40}
-              className="rounded-md object-cover w-full h-full"
-            />
+      render: (data: CancelRequest) => {
+        const imageSrc = data?.product?.image || "/placeholder.png";
+        const productName = data?.product?.name || "Unnamed product";
+
+        return (
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0 border">
+              <Image
+                src={imageSrc}
+                alt={productName}
+                width={40}
+                height={40}
+                className="object-cover w-full h-full"
+              />
+            </div>
+
+            <span className="text-xs text-foreground truncate max-w-[180px]">
+              {productName}
+            </span>
           </div>
-          <span className="text-xs text-foreground">{data?.order.order_details?.[0].product?.name}</span>
-        </div>
-      )},
+        );
+      },
     },
 
     {
       title: "QUANTITY",
       render: (data: CancelRequest) => (
         <span className="text-xs flex justify-center md:justify-start">
-          {data?.order.order_details?.[0].quantity}
+          {data?.quantity ?? 0}
         </span>
       ),
     },
 
-    // {
-    //   title: "VARIETY",
-    //   render: (data: CancelRequest) => (
-    //     <div className="flex gap-2 mt-1 flex-col">
-    //       {data?.product_variants?.length > 0 ? (
-    //         data?.product_variants?.map((att: any, index: number) => (
-    //           <div
-    //             key={index}
-    //             className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
-    //           >
-    //             {att.attribute_variant?.name}
-    //           </div>
-    //         ))
-    //       ) : (
-    //         <div className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center">
-    //           No variants
-    //         </div>
-    //       )}
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "PRICE",
+      render: (data: CancelRequest) => (
+        <span className="text-xs flex justify-center md:justify-start">
+          {data?.price ?? "0.00"}
+        </span>
+      ),
+    },
 
-    // {
-    //   title: "USER",
-    //   render: (data: CancelRequest) => (
-    //     <div className="flex gap-2">
-    //       <div className="w-10 h-10 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-    //         <Image
-    //           src={data?.}
-    //           alt={data.user.name}
-    //           width={32}
-    //           height={32}
-    //           className="rounded-full object-cover w-full h-full"
-    //         />
-    //       </div>
-    //       <div>
-    //         <div className="text-xs font-medium">
-    //           {data.user.name || "User"}
-    //         </div>
-    //         <div className="text-xs text-muted-foreground">
-    //           {data.user.email}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "STATUS",
+      render: (data: CancelRequest) => (
+        <span
+          className={`text-[11px] px-2 py-1 rounded-full border capitalize
+            ${
+              data?.status === "cancelled"
+                ? "bg-red-50 text-red-700 border-red-200"
+                : "bg-gray-50 text-gray-700 border-gray-200"
+            }`}
+        >
+          {data?.status ?? "unknown"}
+        </span>
+      ),
+    },
   ];
 };

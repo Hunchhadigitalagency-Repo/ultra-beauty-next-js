@@ -7,7 +7,10 @@ import useFetchDropdown from "@/hooks/use-fetch-dropdown";
 import { Button } from "@/components/ui/button";
 import { useForm, FormProvider } from "react-hook-form";
 import { ICategoryDropdown } from "@/types/dropdown";
-import { ComboboxOption, FormCombobox } from "@/components/common/form/form-combobox";
+import {
+  ComboboxOption,
+  FormCombobox,
+} from "@/components/common/form/form-combobox";
 import { SheetClose } from "@/components/ui/sheet";
 
 interface IFormValues {
@@ -27,13 +30,15 @@ const InventoryFilter = () => {
   });
 
   // Fetch categories
-  const { data: categories } = useFetchDropdown<ICategoryDropdown>("/categoriesdropdown/");
+  const { data: categories } = useFetchDropdown<ICategoryDropdown>(
+    "/categoriesdropdown/"
+  );
 
   // Action type options
   const actionTypeOptions: ComboboxOption[] = [
     { value: "purchase", label: "Purchase" },
     { value: "damage", label: "Damage" },
-    { value: "purchase_return", label: "Purchase Return" },
+    { value: "purchase return", label: "Purchase Return" },
   ];
 
   const handleApply = (values: IFormValues) => {
@@ -67,7 +72,10 @@ const InventoryFilter = () => {
           form={form}
           name="category"
           label="Category"
-          placeholder="Select a category"
+          placeholder={
+            categories.find((cat) => cat.id === criteria.categories?.[0])
+              ?.name || "Select a category"
+          }
           searchPlaceholder="Search Category..."
           options={categories?.map((category) => ({
             value: category.id.toString(),
@@ -80,13 +88,19 @@ const InventoryFilter = () => {
           form={form}
           name="action_type"
           label="Action Type"
-          placeholder="Select action type"
+          placeholder={
+            actionTypeOptions.find(
+              (act) => act.value === criteria.action_type
+            )?.label || "Select a Action Type"
+          }
           options={actionTypeOptions}
         />
 
         <div className="flex gap-2">
           <SheetClose asChild>
-            <Button onClick={() => handleApply(form.getValues())}>Apply Filter</Button>
+            <Button onClick={() => handleApply(form.getValues())}>
+              Apply Filter
+            </Button>
           </SheetClose>
           <SheetClose asChild>
             <Button variant="outline" onClick={handleClear}>
