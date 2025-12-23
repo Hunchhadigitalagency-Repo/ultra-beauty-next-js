@@ -121,7 +121,7 @@ const EditInventoryForm: React.FC<EditInventoryFormProps> = ({ slug }) => {
                           key={index}
                           className="text-[10px] border h-[20px] text-black bg-gray-100 rounded-2xl w-[100px] p-1 flex justify-center items-center"
                         >
-                          {vari?.attribute_variant?.name}
+                          {vari?.attribute_variant_name}
                         </div>
                       )
                     )}

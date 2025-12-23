@@ -86,7 +86,6 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
       landmark: "",
       email: "",
       address: "",
-      communicateUpdates: false,
       deliveryLocation: "home",
     },
   });
@@ -151,7 +150,6 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
       landmark: d.landmark ?? "",
       email: d.email ?? "",
       address: d.address ?? "",
-      communicateUpdates: false,
       deliveryLocation: "home",
     });
 
@@ -375,21 +373,6 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="communicateUpdates"
-            render={({ field }) => (
-              <FormItem className="flex gap-3">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormLabel>Send me shipping updates</FormLabel>
-              </FormItem>
-            )}
-          />
 
           <FormField
             control={form.control}

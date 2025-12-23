@@ -9,6 +9,8 @@ import SingleProductSection from './components/single-product-section';
 import DetailDecription from './components/detail-description-section';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FAQSection from '@/components/common/faq/faq-section';
+import SingleProductInformationLoader from './components/single-product-information-loader';
+import { AlertCircle } from 'lucide-react';
 
 const SingleProductPage: React.FunctionComponent = () => {
 
@@ -20,11 +22,26 @@ const SingleProductPage: React.FunctionComponent = () => {
   const { data, loading, error } = useFetchData<SingleProductResponse>(
     `/public-products/${slug}`, true
   );
-  if (!data || loading || error) return 
+  if (loading) {
+    return (
+      <div className="mt-4 ml-4 sm:mt-6 sm:mx-14">
+        <SingleProductInformationLoader />
+      </div>
+    );
+  }
 
-  ;
-
-  const {
+  if (!data)
+    return (
+  <div className="flex flex-col items-center justify-center w-full h-60 mt-10 mb-10">
+        <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
+        <p className="font-extralight text-sm text-gray-400 capitalize">
+          Oops! no Products You looking for is not availabe for sale right
+          now...
+        </p>
+      </div>
+    );
+    if (error) return <div>Error loading product...</div>;
+    const {
     detail_description,
     tutorial,
     youtube_link,
@@ -39,7 +56,7 @@ const SingleProductPage: React.FunctionComponent = () => {
         onValueChange={setActiveTab}
       >
         <div className="flex-1 flex justify-start">
-          <TabsList className="flex items-center gap-6 bg-white">
+          <TabsList className="flex items-center gap-6 bg-white overflow-x-auto">
             <TabsTrigger
               key={"Description"}
               value="Description"

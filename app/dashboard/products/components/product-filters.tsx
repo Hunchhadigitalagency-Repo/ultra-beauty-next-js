@@ -32,8 +32,8 @@ export default function ProductFilters() {
         const data = response.data;
 
         setFilterData({
-          categories: [...data.categories, { id: 0, name: "None" },],
-          subcategories: [...data.subcategories, { id: 0, name: "None" },],
+          categories: [...data.categories],
+          subcategories: [...data.subcategories],
           inventories: [...data.inventories, { id: 0, name: "None" },],
           brands: [...data.brands, { id: 0, name: "None" },],
           price_range: data.price_range,

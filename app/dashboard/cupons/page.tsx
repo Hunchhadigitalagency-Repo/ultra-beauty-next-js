@@ -35,14 +35,13 @@ const CouponsPage = () => {
     }
   };
 
-  const { data, counts, loading, hasMore, fetchNext, } = useInfiniteFetchCoupons(
+  const { data, counts, loading, hasMore, fetchNext } = useInfiniteFetchCoupons(
     getActivePath(activeTab)
   );
 
   const scrollId = "infinite-scroll-container";
 
-  console.log('this is the data', data);
-
+  console.log("this is the data", data);
 
   useEffect(() => {
     if (counts && persistedCounts.total === 0) {
@@ -58,10 +57,12 @@ const CouponsPage = () => {
             value="general"
             count={persistedCounts.general_coupon_count}
             title="General Coupons"
+            underlineClassName="pb-1"
           />
           <ProductTabsTrigger
             value="influencer"
             count={persistedCounts.influencer_coupon_count}
+            underlineClassName="pb-1"
             title="Influencer Coupons"
           />
 

@@ -31,6 +31,8 @@ const useFetchData = <T>(url: string, token?: boolean,
         setData(response.data);
       }
     } catch (err) {
+      console.log('from hook', err);
+      
       setError(err as Error);
     } finally {
       setLoading(false);

@@ -32,7 +32,6 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
   const { profileDetails } = useAppSelector((state) => state.authentication);
 
   const quantity = item.quantity;
-console.log(item);
 
   const [localQuantity, setLocalQuantity] = useState(quantity);
 
@@ -76,7 +75,9 @@ console.log(item);
     const discountedPrice = Number(
       calculateDiscountedPrice(
         item.product.price,
-        item.product.discount_percentage
+        item.product.discount_percentage,
+        item.product.flash_sale_discount,
+        item.is_flash_sale,
       )
     );
 
@@ -92,7 +93,7 @@ console.log(item);
         updateSelectedCartItem({
           id: item.id,
           quantity: newQuantity,
-          price: (newQuantity * discountedPrice).toFixed(2),
+          price: item.product.price,
         })
       );
     }
@@ -102,7 +103,9 @@ console.log(item);
     const discountedPrice = Number(
       calculateDiscountedPrice(
         item.product.price,
-        item.product.discount_percentage
+        item.product.discount_percentage,
+        item.product.flash_sale_discount,
+        item.product.is_flash_sale
       )
     );
 
@@ -111,8 +114,10 @@ console.log(item);
         id: item.id,
         quantity: item.quantity,
         name: item.product.name,
+        is_flash_sale: item.product.is_flash_sale,
+        flash_sale_discount: item.product.flash_sale_discount,
         image: item.product.images?.[0].file,
-        price: (item.quantity * discountedPrice).toFixed(2),
+        price: item.product.price,
         discount_percentage: item.product.discount_percentage,
         tax_applied: item.product.tax_applied,
       })

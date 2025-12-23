@@ -25,7 +25,6 @@ export const shippingSchema = z.object({
   address: z.string().min(10, {
     message: "Full address must be at least 10 characters.",
   }),
-  communicateUpdates: z.boolean(),
   deliveryLocation: z.enum(["home", "office"], {
     required_error: "Please select a delivery location.",
   }),

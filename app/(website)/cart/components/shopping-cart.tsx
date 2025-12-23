@@ -14,6 +14,7 @@ import {
   clearVoucherData,
   deleteAllCartItem,
   deleteCartItem,
+  resetCart,
   setCartItems,
 } from "@/redux/features/cart-slice";
 import { AlertCircle } from "lucide-react";
@@ -46,13 +47,16 @@ export default function ShoppingCart() {
   }, [CartItems]);
 
   useEffect(() => {
-    dispatch(resetCheckout())
     if (!cartItemsData || cartItemsData.length === 0) return;
+    console.log(cartItemsData);
+    
     dispatch(setCartItems(cartItemsData));
   }, [cartItemsData, dispatch]);
-
+  
   useEffect(() => {
+    dispatch(resetCart())
     dispatch(clearVoucherData());
+    dispatch(resetCheckout())
   }, [voucherData, dispatch]);
 
   const handleSingleCartItemRemove = (id: number) => {
