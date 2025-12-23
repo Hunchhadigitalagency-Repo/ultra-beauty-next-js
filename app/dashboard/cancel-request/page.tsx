@@ -30,7 +30,6 @@ const CancelRequestPage = () => {
     ETypes.CANCEL_REQUEST,
   );
 
-  console.log(cancelRequests);
 
   return (
     <>

@@ -10,7 +10,6 @@ const initialState: CartSelectionState = {
     voucherData: null,
     orderId: null,
     shippingFee: '',
-    notificationCount: 0,
 };
 
 const cartSlice = createSlice({
@@ -101,9 +100,8 @@ const cartSlice = createSlice({
         clearCartCount: (state) => {
             state.cartCount = 0;
         },
-        setNotificationCount: (state, action) => {
-            state.notificationCount = action.payload;
-        }
+
+        resetCart: () => initialState
     },
 });
 
@@ -123,7 +121,7 @@ export const {
     clearCartCount,
     setCartCount,
     setShippingFee,
-    setNotificationCount,
+    resetCart,
     updateSelectedCartItem
 } = cartSlice.actions;
 

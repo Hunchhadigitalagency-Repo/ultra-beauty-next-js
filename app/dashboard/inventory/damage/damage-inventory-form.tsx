@@ -252,8 +252,8 @@ const PurchaseInventoryForm: React.FC<PurchaseInventoryFormProps> = ({
 
       // if existing_variants is an array, loop it too
       prod?.existing_variants?.forEach((variant, vIndex) => {
-        formData.append(`existing_variants[${index}][${vIndex}].id`, variant.id.toString());
-        formData.append(`existing_variants[${index}][${vIndex}].quantity`, variant?.quantity?.toString() || '');
+        formData.append(`existing_variants[${index}][${vIndex}][id]`, variant.id.toString());
+        formData.append(`existing_variants[${index}][${vIndex}][quantity]`, variant?.quantity?.toString() || '');
       });
 
       // if attachment is a file

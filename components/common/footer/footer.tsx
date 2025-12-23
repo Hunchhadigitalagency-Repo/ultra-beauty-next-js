@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
   ];
 
   const HELP_LINKS = [
-    { name: "FAQ", href: "/help" },
+    // { name: "FAQ", href: "/help" },
     { name: "HELP AND SUPPORT", href: "/help" },
   ];
 

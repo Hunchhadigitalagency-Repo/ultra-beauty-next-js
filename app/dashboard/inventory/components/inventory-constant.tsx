@@ -88,7 +88,7 @@ export const InventoryTableConstant = (
                   key={index}
                   className="text-[10px] border h-[20px] bg-gray-100 rounded-2xl px-2 flex justify-center items-center"
                 >
-                  {vari?.attribute_variant?.name}
+                  {vari?.attribute_variant_name}
                 </span>
               )
             )}

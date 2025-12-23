@@ -25,12 +25,13 @@ export default function FAQSection({ page_query, product_slug }: FaqProps) {
   if (!data || data.length == 0) return;
 
   return (
-    <section className="px-10 space-y-12">
+    <section className="px-10 md:px-40 space-y-12 pb-10">
       {/* Header */}
       <SectionHeader
         title="What People Normally Ask"
         description="Most of the people have common question that we have answered here"
         className="items-center"
+        descriptionClassName=""
       />
 
       {/* FAQ Accordion */}
@@ -56,7 +57,7 @@ export default function FAQSection({ page_query, product_slug }: FaqProps) {
             <AccordionItem
               key={faq.id}
               value={`${faq.id}`}
-              className="rounded-lg px-6 py-2 bg-white border-none"
+              className="rounded-lg px-6 py-1 bg-white border-none"
             >
               <AccordionTrigger className="text-left cursor-pointer text-foreground hover:text-primary hover:no-underline data-[state=open]:text-primary font-semibold text-sm lg:text-base">
                 <div

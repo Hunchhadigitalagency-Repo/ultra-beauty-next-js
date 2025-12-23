@@ -34,6 +34,7 @@ import {
 } from "@/redux/features/category-slice";
 import { getCompanyProfile } from "@/lib/company-profile";
 import { updateCartAndWishlistCounts } from "@/lib/update-count";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -63,8 +64,11 @@ export default function Navbar() {
   const [hoveredCategory, setHoveredCategory] =
     useState<ICategoryDropdown | null>(null);
   const isActive = (pathname: string) => path === pathname;
-  const { wishlistCount } = useAppSelector((state) => state.navbar);
-  const {cartCount, notificationCount} = useAppSelector((state) => state.cart);
+  const { wishlistCount, notificationCount } = useAppSelector((state) => state.navbar);
+  const { cartCount,  } = useAppSelector(
+    (state) => state.cart
+  );
+
   const { isLoggedIn, accessToken } = useAppSelector(
     (state) => state.authentication
   );
@@ -76,13 +80,7 @@ export default function Navbar() {
   );
   const { data: brandDropdownData } =
     useFetchData<IBrandDropdown[]>(`brand-dropdown/`);
-  const {
-    data: notifications,
-    loading,
-    error,
-  } = useFetchData<NotificationResponse[]>(
-    "/cms/notifications-views/", true
-  );
+
 
   const { data: wishListData } = useFetchData<WishListResponse>(
     "/wishlists/",
@@ -94,8 +92,6 @@ export default function Navbar() {
   const { data: cartData } = useFetchData<CartResponse>("carts/", false, {
     config: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
-console.log('asdasdasd', notificationCount);
-
   useEffect(() => {
     if (wishListData && !hasFetched.current.wishlist) {
       const count = wishListData.results.reduce(
@@ -112,7 +108,7 @@ console.log('asdasdasd', notificationCount);
   }, [wishListData, cartData, dispatch]);
 
   useEffect(() => {
-    updateCartAndWishlistCounts(dispatch)
+    updateCartAndWishlistCounts(dispatch);
     dispatch(resetFilters());
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();
@@ -229,9 +225,6 @@ console.log('asdasdasd', notificationCount);
         {showNotification && (
           <NotificationModal
             onClose={() => setShowNotification(false)}
-            data={notifications}
-            loading={loading}
-            error={error}
           />
         )}
 
@@ -301,14 +294,17 @@ console.log('asdasdasd', notificationCount);
                   ))}
                 </ul>
               )}
-              {/* Search Bar */}
+
               {searchOpen && (
-                <div
-                  ref={searchAreaRef}
-                  className="absolute z-50 w-[90%] transform -translate-x-1/2 left-1/2 top-3 transition-all duration-300"
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: "100%", opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute inset-0 flex items-center px-10"
                 >
-                  <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
-                </div>
+                  <SearchModal onClose={() => setSearchOpen(false)} />
+                </motion.div>
               )}
             </div>
           </nav>
