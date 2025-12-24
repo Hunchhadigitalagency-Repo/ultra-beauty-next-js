@@ -14,9 +14,10 @@ export function TransactionDetailsCard({
     transaction.transaction_details &&
     Object.keys(transaction.transaction_details).length > 0
   return (
-    <section className="bg-white rounded-lg px-4 py-2">
-      <div className="flex items-center justify-between gap-4 p-4 border-[#E7E6E6]">
+    <section className="bg-white rounded-lg ">
+      <div className="flex items-center justify-between gap-4 pb-4 border-[#E7E6E6]">
         <InvoiceDetailItem title="Transaction id" value={transaction.id} />
+     
         {/* <Link
           className="text-primary text-sm hover:underline hover:underline-offset-4"
           href={`/dashboard/invoices/${transaction.id}`}
@@ -25,7 +26,7 @@ export function TransactionDetailsCard({
         </Link> */}
       </div>
 
-      <div className="flex items-center justify-between gap-4 p-4 border-t border-b border-[#E7E6E6] flex-wrap">
+      <div className="flex items-center justify-between gap-4 py-4 border-t border-b border-[#E7E6E6] flex-wrap">
         <InvoiceDetailItem title="Transaction Date" value={new Date(transaction.date).toLocaleDateString("en-US", {
           day: "2-digit",
           month: "short",

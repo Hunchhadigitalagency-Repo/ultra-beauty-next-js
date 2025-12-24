@@ -257,3 +257,17 @@ input:-webkit-autofill {
     background-color: #cbd5e1; /* Slightly darker on hover (slate-300) */
   }
 }
+
+@media print {
+  @page {
+    /* Set margins to zero to reduce space for header/footer */
+    margin: 0;
+  }
+
+  /* Hide elements that might contain the title, URL, etc. */
+  header,
+  footer,
+  .no-print {
+    display: none;
+  }
+}

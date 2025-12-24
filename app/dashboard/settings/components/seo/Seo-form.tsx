@@ -124,9 +124,9 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
   return (
     <>
       <Card className="border-none shadow-none rounded-sm p-0">
-        <CardContent className="pt-4 pb-8">
+        <CardContent className="pt-4 px-4 ">
           <div className="flex w-full justify-between pb-6">
-            <h1 className="font-semibold text-xl">Update SEO</h1>
+            <h1 className="font-semibold text-xl">SEO</h1>
           </div>
           <Form {...form}>
             <form
@@ -187,7 +187,7 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
                     <FormControl>
                       <Textarea
                         placeholder="Please enter the meta description."
-                        className="rounded-xs"
+                        className="rounded-xs !h-[100px]"
                         {...field}
                       />
                     </FormControl>
@@ -195,78 +195,12 @@ const SeoForm = ({ initialData }: SeoFormProps) => {
                   </FormItem>
                 )}
               />
-
-              {/* <div className="flex justify-around">
-                <FormField
-                  control={form.control}
-                  name="primaryColor"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel className="text-muted-foreground">
-                        PRIMARY COLOR
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="color"
-                          {...field}
-                          className="w-12 h-10 p-0 border-none bg-transparent cursor-pointer"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="textColor"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel className="text-muted-foreground">
-                        TEXT COLOR
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="color"
-                          {...field}
-                          className="w-12 h-10 p-0 border-none bg-transparent cursor-pointer"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="activate"
-                render={({ field }) => (
-                  <FormItem className="flex items-center gap-4 mt-6">
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        id="activate"
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor="activate"
-                      className="text-muted-foreground"
-                    >
-                      ACTIVATE
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
             </form>
           </Form>
         </CardContent>
       </Card>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-start px-4 pb-4 -mt-6">
         <Button
           type="submit"
           form="setting-seo-form"

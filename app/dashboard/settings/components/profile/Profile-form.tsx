@@ -33,6 +33,7 @@ interface ProfileFromProps {
 const Profile = ({ initialData }: ProfileFromProps) => {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+console.log(initialData);
 
   const form = useForm<CompanyProfileValues>({
     resolver: zodResolver(companyProfileSchema),
@@ -72,8 +73,8 @@ const Profile = ({ initialData }: ProfileFromProps) => {
 
   return (
     <>
-      <Card className="border-none shadow-none rounded-sm p-0">
-        <CardContent className="pt-4 pb-8">
+      <Card className="border-none shadow-none rounded-sm p">
+        <CardContent className="px-4 ">
           <div className="flex w-full justify-between pb-6">
             <p className="text-lg font-semibold">Company Profile</p>
           </div>
@@ -166,7 +167,7 @@ const Profile = ({ initialData }: ProfileFromProps) => {
         </CardContent>
       </Card>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-start -mt-4 px-4">
         <Button
           type="submit"
           form="setting-profile-form"
