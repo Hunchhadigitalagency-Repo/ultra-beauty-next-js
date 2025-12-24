@@ -76,13 +76,9 @@ const PrivacyPolicyForm = ({ initialData }: HelpAndSupportFormProps) => {
   return (
     <>
       <Card className="border-none shadow-none rounded-sm">
-        <CardContent className=" pt-4  pb-8">
+        <CardContent className="pb-8">
           <div className="flex w-full justify-between pb-6">
-            <HeaderBackCard
-              title={initialData ? "Edit Privacy Policy" : "Add Privacy Policy"}
-              fallBackLink="/dashboard/settings"
-              settingValue={ESettings.HELP_AND_SUPPORT}
-            />
+                 <p className=" text-lg font-semibold">Privacy Policy</p>
           </div>
           <Form {...form}>
             <form

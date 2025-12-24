@@ -58,8 +58,8 @@ export const InvoiceProductConstants = (): Col<IOrderDetail>[] => {
 
       render: (data: IOrderDetail) =>
         <div className="flex justify-start w-full">
-          <span>Nrs. {data.total_price}</span>
-        </div>,
+          <span>{data.total_price}</span>
+        </div>
     },
   ];
 };

@@ -32,7 +32,6 @@ import AdminForm from "./components/admin/Admin-form";
 import TaxesForm from "./components/taxes/taxes-form";
 import BrandForm from "./components/brand/brand-form";
 import OrderTab from "./components/order/order-status";
-import Profile from "./components/profile/Profile-form";
 import CategoryTab from "./components/category/Category";
 import ReferralTab from "./components/referral/Referral";
 import AttributeTab from "./components/attribute/Attribute";
@@ -56,6 +55,7 @@ import SectionManagement from "./components/sectionManagement/section-management
 import HelpAndSupportForm from "./components/help-and-support/help-and-support-form";
 import RolesAndPermission from "./components/rolesAndPermissions/roles-and-permissions";
 import TermsAndConditionForm from "./components/terms-and-condition/terms-and-condition-form";
+import CombinedSeoProfileForm from "./components/profile/combined-profile-seo";
 
 const SettingsPage = () => {
   const [loading, setLoading] = useState(true);
@@ -202,7 +202,7 @@ const SettingsPage = () => {
             <p className="text-lg">Loading Profile...</p>
           </div>
         ) : (
-          <Profile initialData={selectedData} />
+          <CombinedSeoProfileForm  />
         );
       case ESettings.CATEGORY:
         return <CategoryTab />;

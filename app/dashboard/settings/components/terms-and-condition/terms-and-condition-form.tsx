@@ -41,19 +41,19 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
     resolver: zodResolver(termsAndConditionSchema),
     defaultValues: initialData
       ? {
-        topic: initialData.topic,
-        description: initialData.description,
-        activate: initialData.is_active ?? false,
-      }
+          topic: initialData.topic,
+          description: initialData.description,
+          activate: initialData.is_active ?? false,
+        }
       : {
-        topic: "",
-        description: "",
-        activate: false,
-      },
+          topic: "",
+          description: "",
+          activate: false,
+        },
   });
 
   const onSubmit = async (data: TermsAndConditionValues) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("topic", data.topic);
@@ -69,24 +69,16 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
     } catch (error) {
       handleError(error, toast);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <Card className="border-none shadow-none rounded-sm p-0">
-        <CardContent className=" pt-4  pb-8">
+      <Card className="border-none shadow-none rounded-sm ">
+        <CardContent className="pb-8">
           <div className="flex w-full justify-between pb-6">
-            <HeaderBackCard
-              title={
-                initialData
-                  ? "Edit Terms and Condition"
-                  : "Add Terms and Condition"
-              }
-              fallBackLink="/dashboard/settings"
-              settingValue={ESettings.TERMS_AND_CONDITION}
-            />
+            <p className=" text-lg font-semibold">Terms and Condition</p>
           </div>
           <Form {...form}>
             <form
@@ -124,15 +116,13 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
                         value={field.value}
                         onChange={field.onChange}
                         placeholder="Please enter the Description"
-                        heightClass="!h-[250px] !min-h-[250px] !max-h-250px]"
+                        heightClass="!h-[500px] !min-h-[250px] !max-h-250px]"
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-
             </form>
           </Form>
         </CardContent>
@@ -144,7 +134,7 @@ const TermsAndConditionForm = ({ initialData }: HelpAndSupportFormProps) => {
           form="setting-social-form"
           className="text-white rounded-sm"
         >
-         {loading? <Spinner /> : "Save" }
+          {loading ? <Spinner /> : "Save"}
         </Button>
       </div>
     </>
