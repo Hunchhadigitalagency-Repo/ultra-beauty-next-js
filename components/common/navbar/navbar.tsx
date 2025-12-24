@@ -295,17 +295,18 @@ export default function Navbar() {
                 </ul>
               )}
 
-              {searchOpen && (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "100%", opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute inset-0 flex items-center px-10"
-                >
-                  <SearchModal onClose={() => setSearchOpen(false)} />
-                </motion.div>
-              )}
+           {searchOpen && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.2 }}
+    className="absolute left-0 right-0 top-3 z-50 px-10"
+  >
+    <SearchModal onClose={() => setSearchOpen(false)} />
+  </motion.div>
+)}
+
             </div>
           </nav>
           {/* Right side icons */}
@@ -543,8 +544,8 @@ export default function Navbar() {
       </div>
 
       {pathname === "/" && (
-        <div className="bg-white relative h-[8vh] py-2 lg:hidden padding-x">
-          <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 min-w-[250px] sm:min-w-[400px]">
+        <div className="bg-white relative h-[8vh]  lg:hidden ">
+          <div className="absolute z-50 transform -translate-x-1/2 left-1/2 top-2 px-4 w-full">
             <SearchModal onClose={() => setSearchOpen(!searchOpen)} />
           </div>
         </div>

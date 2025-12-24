@@ -41,10 +41,10 @@ const SearchModal: React.FunctionComponent<SearchModalprops> = ({ onClose }) => 
     } = useInfiniteFetch<Result>(path || "", "", searchTerm.toString(), "", isLoggedIn);
 
     return (
-        <div className="flex flex-col items-center w-full gap-2" >
+        <div className="flex flex-col justify-between items-center w-full gap-2" >
             {/* Search Box */}
             <SearchBox
-                searchBoxClassName="lg:w-full"
+                searchBoxClassName="w-full lg:w-full"
                 placeholder="Find the Product of Your Choice"
                 sendValue={handleSearchValue}
             />

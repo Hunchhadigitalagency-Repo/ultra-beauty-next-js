@@ -78,7 +78,7 @@ const ProductSection: React.FunctionComponent<ProductSectionProps> = ({ headerTi
           <Carousel
             className="w-full"
           >
-            <CarouselContent className="ml-4 gap-2">
+            <CarouselContent className="md:ml-4 gap-2">
               {products?.map((product) => {
                 return (
                   <CarouselItem
