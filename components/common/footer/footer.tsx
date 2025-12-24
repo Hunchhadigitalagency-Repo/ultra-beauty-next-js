@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
 
   const ABOUT_LINKS = [
     { name: "WHO WE ARE?", href: "/about" },
-    { name: "CAREER", href: "/career" },
+    // { name: "CAREER", href: "/career" },
     { name: "BLOGS", href: "/blogs" },
     { name: "TERMS & CONDITION", href: "/terms-and-condition" },
     { name: "PRIVACY & POLICY", href: "/privacy-policy" },

@@ -143,11 +143,11 @@ export const sidebarData = {
           url: "/dashboard/banners",
           icon: Image,
         },
-        {
-          title: SidebarItems.NAVIGATION_INFO,
-          url: "/dashboard/navigation-info",
-          icon: Compass,
-        },
+        // {
+        //   title: SidebarItems.NAVIGATION_INFO,
+        //   url: "/dashboard/navigation-info",
+        //   icon: Compass,
+        // },
         {
           title: SidebarItems.NOTIFICATION,
           url: "/dashboard/notification",
@@ -173,11 +173,11 @@ export const sidebarData = {
         //   url: "/dashboard/expert-recommendation",
         //   icon: Star,
         // },
-        {
-          title: SidebarItems.CAREERS,
-          url: "/dashboard/career",
-          icon: Briefcase,
-        },
+        // {
+        //   title: SidebarItems.CAREERS,
+        //   url: "/dashboard/career",
+        //   icon: Briefcase,
+        // },
       ],
     },
 

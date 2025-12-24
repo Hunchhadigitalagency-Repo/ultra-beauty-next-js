@@ -49,13 +49,12 @@ export default function AnnouncementBar() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { data } = useFetchData<INavigationInfo[]>('/cms/navigation-infos-dropdown/')
 
-  const router = useRouter()
 
   return (
     <div className="bg-[#FAFAFA] text-black w-full px-8 padding-x h-12 flex items-center justify-between">
       <div className="flex items-center justify-between flex-1 text-sm">
         <div className="flex items-center justify-center flex-1 text-sm lg:justify-between">
-          <div className="relative max-w-[300px] h-full flex items-center overflow-hidden group">
+          {/* <div className="relative max-w-[300px] h-full flex items-center overflow-hidden group">
             <Marquee>
               <MarqueeContent pauseOnHover={true}>
                 {data && data?.map((info, index) => (
@@ -67,10 +66,10 @@ export default function AnnouncementBar() {
               </MarqueeContent>
             </Marquee>
 
-          </div>
+          </div> */}
         </div>
         {isLoggedIn ? (
-          <div className="items-center hidden space-x-4 lg:flex">
+          <div className="items-end justify-end hidden space-x-4 lg:flex">
             <h6 className="text-sm text-black">
               Hello!
               {" " + profileDetails.first_name + " " + profileDetails.last_name}
