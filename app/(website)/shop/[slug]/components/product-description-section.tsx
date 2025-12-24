@@ -175,7 +175,7 @@ const ProductDescriptionSection: React.FunctionComponent<
           <div className="flex items-center gap-5">
             <RatingStars rating={product?.average_rating} />
             <span className="text-sm font-medium text-primary">
-              {product?.average_rating}/5 Star Rating
+              {product?.average_rating.toFixed(2)}/5 Star Rating
             </span>
           </div>
         </div>

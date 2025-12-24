@@ -108,40 +108,41 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
           </p>
         </div>
       ) : (
-        /* Notifications List */
-        <div className="max-h-[400px] overflow-y-auto space-y-1 -mx-5 px-5">
+        <div className="max-h-[400px] overflow-y-auto space-y-2 -mx-5 px-5">
           {data.map((notification) => (
             <button
               key={notification.id}
               onClick={() => {
                 notification.link && router.push(notification.link);
-                onClose;
+                onClose(); 
               }}
-              className={`flex items-start justify-start gap-3 py-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
-                notification.is_active
+              className={`w-full flex items-start gap-4 py-3 px-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
+                notification.is_viewed
                   ? "bg-white hover:bg-gray-50"
                   : "bg-indigo-50/50 hover:bg-indigo-100"
               }`}
             >
-              <div className="flex-shrink-0 flex justify-center items-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 mt-0.5">
-                <Bell />
+              <div className="flex-shrink-0 flex justify-center items-center w-10 h-10 rounded-full bg-gray-50 border border-gray-200 mt-0.5">
+                <Bell className="w-5 h-5 text-gray-600" />
               </div>
 
-              <div className="fkex min-w-0">
+              <div className="flex-1 min-w-0 text-left">
                 <h4
-                  className={`text-sm font-semibold text-gray-800 ${
-                    !notification.is_viewed && "text-indigo-700"
+                  className={`text-sm font-semibold truncate ${
+                    notification.is_viewed ? "text-gray-800" : "text-indigo-700"
                   }`}
                 >
                   {notification.title}
                 </h4>
-                <p className="text-xs text-gray-600 mt-0.5 break-words">
+                <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-relaxed">
                   {notification.description}
                 </p>
               </div>
 
               {!notification.is_viewed && (
-                <Dot className="absolute top-1 right-1 w-6 h-6 text-indigo-500 fill-indigo-500" />
+                <span className="absolute top-4 right-2">
+                  <Dot className="w-8 h-8 text-indigo-500 fill-indigo-500" />
+                </span>
               )}
             </button>
           ))}
