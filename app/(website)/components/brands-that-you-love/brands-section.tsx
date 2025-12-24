@@ -9,7 +9,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselApi
+  CarouselApi,
 } from "@/components/ui/carousel";
 import { AlertCircle } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
@@ -27,32 +27,33 @@ export interface BrandResponse {
   page_size: number;
   total_pages: number;
   current_page: number;
-  results: Brand[]
+  results: Brand[];
 }
 
 export interface Brand {
-  id: number
-  brand_name: string
-  brand_image: string
-  description?: string
-  is_featured: boolean
-  is_active: boolean
-  created_at: string
-  updated_at: string
-  is_deleted: boolean
+  id: number;
+  brand_name: string;
+  brand_image: string;
+  description?: string;
+  is_featured: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
 }
 const BrandsSection: React.FunctionComponent = () => {
-
-  const { data, loading, error } = useFetchData<BrandResponse>("/public-brands/?is_featured=true");
-  const brandDetails = data?.results
-  const noOfBrands = Number(brandDetails?.length)
+  const { data, loading, error } = useFetchData<BrandResponse>(
+    "/public-brands/?is_featured=true"
+  );
+  const brandDetails = data?.results;
+  const noOfBrands = Number(brandDetails?.length);
 
   const [api, setApi] = useState<CarouselApi>();
   const [, setCurrent] = useState(0);
   const [, setCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   useEffect(() => {
     if (!api) return;
 
@@ -91,53 +92,63 @@ const BrandsSection: React.FunctionComponent = () => {
       {/* Brand Images section */}
       <div className="relative w-full">
         {loading ? (
-          <div className='flex items-center justify-center w-full h-60'>
-            <p className='font-extralight text-sm text-gray-400'>
+          <div className="flex items-center justify-center w-full h-60">
+            <p className="font-extralight text-sm text-gray-400">
               Loading Featured Brands...
             </p>
           </div>
         ) : error ? (
-          <div className='flex flex-col items-center justify-center w-full h-60'>
+          <div className="flex flex-col items-center justify-center w-full h-60">
             <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-            <p className='font-extralight text-sm text-gray-400'>
+            <p className="font-extralight text-sm text-gray-400">
               Oops! Something went wrong...
             </p>
           </div>
         ) : data?.results.length === 0 ? (
-          <div className='flex flex-col items-center justify-center w-full h-60'>
+          <div className="flex flex-col items-center justify-center w-full h-60">
             <AlertCircle className="w-8 h-8 mb-2 text-gray-400" />
-            <p className='font-extralight text-sm text-gray-400 capitalize'>
+            <p className="font-extralight text-sm text-gray-400 capitalize">
               Oops! no featured brands right now...
             </p>
           </div>
         ) : (
-          <Carousel setApi={setApi}
+          <Carousel
+            setApi={setApi}
             opts={{ align: "start", loop: true }}
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}>
-            <CarouselContent className="mt-1 -ml-1 gap-2">
+            onMouseLeave={() => setIsHovered(false)}
+            className="w-full"
+          >
+            <CarouselContent className="mt-1 !ml-0 flex-nowrap gap-2 md:px-2">
               {brandDetails?.map((brand, index) => (
                 <CarouselItem
                   key={index}
                   className={`
-                     rounded-lg 
-                    transition-all duration-300 ease-in-out 
-                    cursor-pointer 
-                    hover:border-primary
-                    p-4
-                    flex justify-center items-center
-                  ${noOfBrands && noOfBrands <= 6
-                      ? `basis-1/2 sm:basis-1/4 md:basis-1/3 lg:basis-1/4`
-                      : 'basis-1/2 sm:basis-1/4 md:basis-1/3 xl:basis-1/4'}
-  `}
+          min-w-0 shrink-0 grow-0
+          rounded-lg
+          transition-all duration-300 ease-in-out
+          cursor-pointer
+          hover:border-primary
+          flex justify-center items-center
+
+          ${
+            noOfBrands && noOfBrands <= 6
+              ? "basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4"
+              : "basis-1/2 sm:basis-1/3 md:basis-1/4 xl:basis-1/4"
+          }
+        `}
                   onClick={() => handleBrandCardClick(brand.id)}
                 >
-                  <BrandsCard image={brand.brand_image} />
+                  <div className="w-full max-w-full flex justify-center items-center">
+                    <div className="w-full max-w-full">
+                      <BrandsCard image={brand.brand_image} />
+                    </div>
+                  </div>
                 </CarouselItem>
-
               ))}
             </CarouselContent>
-          </Carousel>)}
+          </Carousel>
+        )}
       </div>
     </section>
   );

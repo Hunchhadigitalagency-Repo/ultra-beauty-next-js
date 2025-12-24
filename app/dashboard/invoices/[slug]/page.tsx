@@ -45,10 +45,9 @@ const SingleInvoiceDetailsPage = () => {
     (acc, trans) => acc + parseInt(trans.amount || "0"),
     0
   );
-  console.log(data.amount.toString() === paidAmount.toString());
   
   return (
-    <main className="min-h-screen space-y-6 bg-gray-50">
+    <main className="min-h-screen space-y-6 bg-white">
       {/* Heading */}
 
       <section
@@ -68,43 +67,24 @@ const SingleInvoiceDetailsPage = () => {
             </div>
           </>
         )}
-        {companyProfile && (
-          <>
-            <h1 className="text-lg border-b pb-2 mb-2 md:text-xl font-bold text-gray-900 text-center uppercase tracking-wide flex justify-between flex-wrap ">
-              <span>
-                <p>{companyProfile.company_name}</p>
-                <p className="text-sm text-gray-600 font-normal">
-                  {companyProfile.company_address}
-                </p>
-              </span>
-              <span>
-                <p className="text-sm text-gray-600 font-normal lowercase">
-                  {companyProfile.company_email ||
-                    "ultrabeautyandbrands@gmail.com"}
-                </p>
-                <p className="text-sm text-gray-600 font-normal">
-                  {companyProfile.company_number || "+977 9826940855"}
-                </p>
-              </span>
-            </h1>
-          </>
-        )}
+      
+        <InvoiceHeader invoiceId={data.id} status={data.status} canRecordTrans={data.amount.toString() === paidAmount.toString()} />
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 text-center uppercase tracking-wide mb-6 border-b-4 border-primary pb-2">
           Proforma Invoice
         </h1>
 
-        <InvoiceHeader invoiceId={data.id} status={data.status} canRecordTrans={data.amount.toString() === paidAmount.toString()} />
         <InvoiceDetailsSection {...data} billing={billings?.[0]} />
         <InvoiceProductsList data={data?.order?.order_details} />
         <InvoiceSummary {...data} />
       </section>
 
-      <div className="grid grid-cols-1 gap-6 p-4">
+      <div className="grid grid-cols-1 gap-6 p-4 bg-white">
         {data?.transactions.length > 0 && (
           <>
             <h2 className="text-lg font-semibold text-foreground mb-4">
               Transaction Details
             </h2>
+            <hr className="-my-2 py-0" />
             {data?.transactions.length > 0 &&
               data?.transactions?.map((transaction, index) => (
                 <TransactionDetailsCard key={index} transaction={transaction} />

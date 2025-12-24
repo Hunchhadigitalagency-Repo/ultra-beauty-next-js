@@ -23,15 +23,9 @@ import { FaqFormValues, faqSchema } from "@/schemas/cms/faq-schema";
 
 import { IFaq } from "@/types/cms";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+;
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import PaginatedProductSelect from "@/components/common/paginated-select/paginated-product-select";
@@ -56,7 +50,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
   const emptyDefaults = {
     question: "",
     answer: "",
-    page: "",
+    type: "product",
     is_active: false,
   }
   const form = useForm<FaqFormValues>({
@@ -74,7 +68,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
         form.reset({
           question: dataToUse.question,
           answer: dataToUse.answer,
-          type: dataToUse.type,
+          type: "product",
           is_active: dataToUse?.is_active,
           product: dataToUse?.product,
         })
@@ -153,40 +147,7 @@ const FaqForm = ({ initialData }: FaqFormProps) => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => {
-                  console.log('this is tha', field.value);
-
-                  return (
-                    <FormItem>
-                      <FormLabel className="text-muted-foreground">
-                        Faqs Type
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value || ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="cursor-pointer">
-                            <SelectValue placeholder="Select page" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="general">
-                            General
-                          </SelectItem>
-                          <SelectItem value="product">
-                            Product
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
-              />
+           
               {
                 faqs_type?.toLowerCase() === 'product' && (
                   <>

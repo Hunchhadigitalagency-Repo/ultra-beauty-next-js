@@ -1,4 +1,5 @@
 import { Invoice } from "@/types/invoices";
+import { number } from "zod";
 
 export default function InvoiceSummary({ order }: Invoice) {
   return (
@@ -13,7 +14,7 @@ export default function InvoiceSummary({ order }: Invoice) {
           <span className="text-right">Nrs. {order?.discount_amount ?? 0}</span>
         </div>
         {
-          order.coupon_discount &&
+          typeof order.coupon_discount == "number" && order.coupon_discount > 0 &&
         <div className="grid grid-cols-2 gap-y-2 py-2 border-b border-gray-200">
           <span className="font-medium">Coupon Discount</span>
           <span className="text-right">Nrs. {order?.coupon_discount ?? 0}</span>

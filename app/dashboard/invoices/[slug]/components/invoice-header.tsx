@@ -37,8 +37,11 @@ const allowedTransitions: Record<string, string[]> = {
   paid: ["paid"],
 };
 
-
-export default function InvoiceHeader({ invoiceId, status, canRecordTrans }: InvoiceHeaderProps) {
+export default function InvoiceHeader({
+  invoiceId,
+  status,
+  canRecordTrans,
+}: InvoiceHeaderProps) {
   const dispatch = useAppDispatch();
   const [currentStatus, setCurrentStatus] = useState(status);
   const [isPending, setIsPending] = useState(false);
@@ -67,48 +70,6 @@ export default function InvoiceHeader({ invoiceId, status, canRecordTrans }: Inv
 
   return (
     <div className="flex flex-col gap-6 mb-8 relative z-10 no-print">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-5 border-t border-b border-[#E7E6E6]">
-        <p className="text-sm font-medium text-gray-700 mb-2 md:mb-0">
-          Select  your Current Payment status and record it.
-        </p>
-
-        <div className="flex flex-wrap gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="flex justify-start gap-1 w-auto"
-                disabled={isPending}
-              >
-                {displayedStatusLabel}
-                {isPending ? <ButtonLoader className="!w-4 !h-4" /> : ""}
-                <ChevronDown className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {invoiceStatusData.map((choice) => {
-                const isAllowed = allowedTransitions[currentStatus]?.includes(choice.value);
-
-                return (
-                  <DropdownMenuItem
-                    key={choice.value}
-                    onClick={() => isAllowed && handleStatusChange(choice.value)}
-                    disabled={!isAllowed || isPending}
-                    className="capitalize cursor-pointer"
-                  >
-                    {choice.label}
-                  </DropdownMenuItem>
-                );
-              })}
-
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <AddModal type={ETypes.INVOICES} text="Record Transaction" className="bg-[#1477B4]" invoice_id={invoiceId} disabled={canRecordTrans}/>
-        </div>
-      </div>
-
-      {/* --- Row 2: Invoice ID + Print button --- */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div className="flex items-center gap-2 mb-4 md:mb-0">
           <Link
@@ -122,14 +83,60 @@ export default function InvoiceHeader({ invoiceId, status, canRecordTrans }: Inv
             Invoice Id: <span className="font-semibold">{invoiceId}</span>
           </h1>
         </div>
+        <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex justify-start gap-1 w-auto"
+                  disabled={isPending}
+                >
+                  {displayedStatusLabel}
+                  {isPending ? <ButtonLoader className="!w-4 !h-4" /> : ""}
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {invoiceStatusData.map((choice) => {
+                  const isAllowed = allowedTransitions[currentStatus]?.includes(
+                    choice.value
+                  );
 
-        <Button
-          onClick={() => window.print()}
-          className="bg-orange hover:bg-orange-400 text-white"
-        >
-          Print Invoice
-        </Button>
+                  return (
+                    <DropdownMenuItem
+                      key={choice.value}
+                      onClick={() =>
+                        isAllowed && handleStatusChange(choice.value)
+                      }
+                      disabled={!isAllowed || isPending}
+                      className="capitalize cursor-pointer"
+                    >
+                      {choice.label}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <AddModal
+              type={ETypes.INVOICES}
+              text="Record Transaction"
+              className="bg-[#1477B4]"
+              invoice_id={invoiceId}
+              disabled={canRecordTrans}
+            />
+          </div>
+          <Button
+            onClick={() => window.print()}
+            className="bg-orange hover:bg-orange-400 text-white"
+          >
+            Print Invoice
+          </Button>
+        </div>
       </div>
+
+      {/* --- Row 2: Invoice ID + Print button --- */}
     </div>
   );
 }

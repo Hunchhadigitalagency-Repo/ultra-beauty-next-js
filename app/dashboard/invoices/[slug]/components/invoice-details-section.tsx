@@ -5,7 +5,7 @@ import { Invoice } from "@/types/invoices";
 export default function InvoiceDetailsSection({ date, order, billing }: Invoice) {
   return (
     <section>
-      <div className="flex items-center justify-between gap-4 p-2 border-t border-b border-[#E7E6E6] flex-wrap">
+      <div className="flex flex-col items-start justify-start gap-4 p-2 border-t border-b border-[#E7E6E6] flex-wrap">
         <InvoiceDetailItem
           title={billing?.name || ""}
           value=""
