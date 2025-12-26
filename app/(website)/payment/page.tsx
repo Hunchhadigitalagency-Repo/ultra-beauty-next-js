@@ -48,7 +48,7 @@ const Payment: React.FunctionComponent = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   useBlockBrowserLeave(true);
-
+  const { accessToken } = useAppSelector((state) => state.authentication);
   const { open, setOpen, requestNavigation, confirmLeave, cancelLeave } =
     useConfirmLeavePayment({ shouldBlock: true });
   const [activePaymentMethod, setActivePaymentMethod] = useState<string | null>(
@@ -174,7 +174,7 @@ const Payment: React.FunctionComponent = () => {
     } else {
       toast.success("Order placed successfully!");
       dispatch(setOrderId(res.data.id));
-      updateCartAndWishlistCounts(dispatch);
+      updateCartAndWishlistCounts(dispatch, accessToken);
       dispatch(clearCart());
     }
     if (activePaymentMethod === "cod") {
@@ -245,7 +245,7 @@ const Payment: React.FunctionComponent = () => {
       orderInformationUI: getOrderInformationHtml(cartItem, Total),
 
       onSuccess: () => {
-        updateCartAndWishlistCounts(dispatch);
+        updateCartAndWishlistCounts(dispatch, accessToken);
         dispatch(clearCart());
         dispatch(setShippingFee("ß"));
         setloading(false);

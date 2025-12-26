@@ -109,7 +109,9 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   useEffect(() => {
-    updateCartAndWishlistCounts(dispatch);
+    console.log("calling from here");
+    
+    updateCartAndWishlistCounts(dispatch, accessToken);
     dispatch(resetFilters());
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();

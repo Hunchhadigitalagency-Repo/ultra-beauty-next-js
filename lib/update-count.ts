@@ -1,11 +1,14 @@
 import { setCartCount } from "@/redux/features/cart-slice";
 import { setNotificationCount } from "@/redux/features/wishList-slice";
-import { useAppSelector } from "@/redux/hooks";
 import { AppDispatch } from "@/redux/store";
 import apiBase from "@/services/api-base-instance";
 
-export const updateCartAndWishlistCounts = async (dispatch: AppDispatch) => {
-  const { accessToken } = useAppSelector((state) => state.authentication);
+export const updateCartAndWishlistCounts = async (
+  dispatch: AppDispatch,
+  accessToken: string
+) => {
+  console.log("it has been called");
+  if (!accessToken) return;
   try {
     const [notificationRes, cartRes] = await Promise.all([
       apiBase.get("/cms/notifications-views/", {
@@ -19,10 +22,12 @@ export const updateCartAndWishlistCounts = async (dispatch: AppDispatch) => {
         },
       }),
     ]);
+    console.log(notificationRes);
 
     const unreadNotificationCount =
       notificationRes?.data?.filter((not: any) => not.is_viewed === false)
         .length || 0;
+    console.log(unreadNotificationCount);
 
     const cartCount = cartRes?.data?.results?.length || 0;
 

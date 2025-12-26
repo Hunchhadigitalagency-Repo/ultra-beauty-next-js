@@ -25,7 +25,6 @@ export default function OrderSummary({
   const { voucherData, cartItem, shippingFee } = useAppSelector(
     (state) => state.cart
   );
-  console.log('this is he ', shippingFee);
   
   const [isRewardsModalOpen, setisRewardsModalOpen] = useState<boolean>(false);
   const {
@@ -69,7 +68,6 @@ export default function OrderSummary({
     (parseFloat(voucherData?.coupon?.discount_percentage ?? "0") / 100) *
     subTotal;
   const safeShippingFee = parseFloat(shippingFee || "0") || 0;
-console.log(safeShippingFee);
 
   const Total = subTotal + safeShippingFee - voucherDiscount + (taxAmount || 0);
 

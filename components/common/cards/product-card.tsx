@@ -25,7 +25,6 @@ const ProductCard = ({
   quantity,
 }: ProductCardProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  console.log(title, isFlashSale, flashSaleDiscount);
 
   const handleWishlist = () => {
     setIsLoading(true);

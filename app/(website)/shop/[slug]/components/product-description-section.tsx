@@ -46,7 +46,7 @@ const ProductDescriptionSection: React.FunctionComponent<
     SelectedAttribute[]
   >([]);
   const [variantStatus, setVarStatus] = useState(false);
-  const { isLoggedIn, profileDetails } = useAppSelector(
+  const { isLoggedIn, profileDetails, accessToken } = useAppSelector(
     (state) => state.authentication
   );
   const userId = profileDetails.id || null;
@@ -134,7 +134,7 @@ const ProductDescriptionSection: React.FunctionComponent<
           );
           dispatch(clearCartItems());
           dispatch(clearVoucherData());
-          updateCartAndWishlistCounts(dispatch);
+          updateCartAndWishlistCounts(dispatch, accessToken);
           toast.success("Product added to cart successfully!");
           setSelectedAttributes([]);
           setErrors({});
