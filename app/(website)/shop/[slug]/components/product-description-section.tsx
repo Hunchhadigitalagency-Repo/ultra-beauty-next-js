@@ -275,7 +275,7 @@ const ProductDescriptionSection: React.FunctionComponent<
         <div className="flex flex-row-reverse gap-8 sm:flex-row sm:gap-14 lg:gap-4 xl:gap-8 ">
           {stockQuantity !== null && (
             <Button
-              className={`text-xs sm:text-sm w-17 !px-2 sm:text-md xl:text-base w-24 ${
+              className={` ${
                 isAvailable ? "bg-primary" : "bg-gray-800 cursor-not-allowed"
               }`}
               disabled={!isAvailable}

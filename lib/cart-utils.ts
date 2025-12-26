@@ -26,8 +26,11 @@ export const calculateDiscountedPrice = (
   const parsedDiscount = parseFloat(
     isFlash ? flashSaleDiscount ?? "0" : discountPercentage ?? "0"
   );
+  console.log(parsedDiscount);
   
   const total = parsedPrice - (parsedPrice * parsedDiscount) / 100;
+  console.log(total, isFlash, flashSaleDiscount);
+  
   return total.toString();
 };
 
