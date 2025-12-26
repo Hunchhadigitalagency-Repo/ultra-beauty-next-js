@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { useForm, useWatch } from "react-hook-form";
@@ -29,7 +28,6 @@ import {
   ShippingFormValues,
   shippingSchema,
 } from "@/schemas/checkout/checkout-schema";
-import { PROVINCES } from "@/constants/province-city-data";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -42,6 +40,7 @@ import { postCity } from "@/lib/api/order/order-apis";
 import { Spinner } from "@/components/ui/spinner";
 import api from "@/services/api-instance";
 import { toast } from "sonner";
+import { useAddressData } from "@/hooks/use-address";
 
 export interface ShippingData {
   id: number;
@@ -69,11 +68,12 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
 
   const { cartItem } = useAppSelector((state) => state.cart);
   const cartIds = cartItem.map((item) => item.id);
+  const { data: PROVINCE } = useAddressData();
 
   const { data } = useFetchData<ShippingData[]>("/default-address/");
   const [loading, setLoading] = useState(false);
   const [fetchingShippingFee, setFetchingShippingFee] = useState(false);
-  
+
   const form = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
     defaultValues: {
@@ -96,9 +96,19 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
   const [selectedCity, setSelectedCity] = useState<string>("");
 
   const cities = selectedProvince
-    ? PROVINCES.find((p) => p.province === selectedProvince)?.cities || []
+    ? PROVINCE.find((p) => p.province === selectedProvince)?.areas.map(
+        (ar) => ar.name
+      ) || []
     : [];
+  const provinceObj = PROVINCE.find(
+    (p) => p.province?.toLowerCase() === selectedProvince?.toLowerCase()
+  );
 
+  const cityObj = provinceObj?.areas?.find(
+    (a) => a.name?.toLowerCase() === selectedCity?.toLowerCase()
+  );
+
+  const areaCovered = cityObj?.area_covered ?? [];
   useEffect(() => {
     onChange(watchedValues as ShippingFormValues);
   }, [watchedValues, onChange]);
@@ -110,7 +120,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
 
   const fetchShippingFee = async (cityValue: string) => {
     if (!cityValue || cartIds.length === 0) return;
-    
+
     setFetchingShippingFee(true);
     try {
       const response = await postCity(cartIds, cityValue);
@@ -192,8 +202,8 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
     <div className="space-y-6 bg-white">
       <div className="flex justify-between items-center py-2 px-4 bg-secondary rounded-sm">
         <h2 className="font-medium text-base">Shipping details</h2>
-        <Button 
-          className="bg-primary" 
+        <Button
+          className="bg-primary"
           onClick={handleFillForm}
           disabled={!data || data.length === 0 || fetchingShippingFee}
         >
@@ -270,7 +280,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
           </div>
 
           {/* Province & City */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
             <FormField
               control={form.control}
               name="province"
@@ -284,7 +294,7 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {PROVINCES.map((p) => (
+                      {PROVINCE.map((p) => (
                         <SelectItem key={p.province} value={p.province}>
                           {p.province}
                         </SelectItem>
@@ -295,40 +305,64 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <Select
-                    value={selectedCity}
-                    onValueChange={(val) =>
-                      handleCityChange(val, field.onChange)
-                    }
-                    disabled={!selectedProvince || fetchingShippingFee}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {cities.map((city) => (
-                        <SelectItem key={city} value={city}>
-                          {city}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {fetchingShippingFee && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Fetching shipping fee...
+            <div className="flex flex-col gap-2">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <Select
+                      value={selectedCity}
+                      onValueChange={(val) =>
+                        handleCityChange(val, field.onChange)
+                      }
+                      disabled={!selectedProvince || fetchingShippingFee}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select City" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {cities.map((city) => (
+                          <SelectItem key={city} value={city}>
+                            {city}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fetchingShippingFee && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Fetching shipping fee...
+                      </p>
+                    )}
+                  </FormItem>
+                )}
+              />
+              <div className="flex flex-col gap-2 justify-left">
+                {areaCovered.length > 0 && (
+                  <>
+                    <p className="text-xs text-red font-medium">
+                      Delivery is limited to the following areas:
                     </p>
-                  )}
-                </FormItem>
-              )}
-            />
+                    <div className="flex flex-wrap gap-2 justify-left">
+                      {areaCovered?.map((ar) => (
+                        <span
+                          key={ar}
+                          className="
+                    text-xs 
+                    text-gray-500
+                  "
+                        >
+                          {ar},
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
           <FormField
@@ -372,7 +406,6 @@ export default function ShippingForm({ onChange }: ShippingFormProps) {
               </FormItem>
             )}
           />
-
 
           <FormField
             control={form.control}
