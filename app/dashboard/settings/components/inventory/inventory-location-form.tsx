@@ -170,9 +170,7 @@ const InventoryForm = ({ initialData }: InventoryFromProps) => {
 
     // Filter branches based on search query - searches in name, municipality, and district
     const filtered = branch.filter((branchItem: BranchData) =>
-      branchItem.name.toLowerCase().includes(query.toLowerCase()) ||
-      branchItem.municipality.toLowerCase().includes(query.toLowerCase()) ||
-      branchItem.district.toLowerCase().includes(query.toLowerCase())
+      branchItem.name.toLowerCase().includes(query.toLowerCase())
     );
 
     setAddressResults(filtered.slice(0, 10)); // Limit to 10 results for performance
