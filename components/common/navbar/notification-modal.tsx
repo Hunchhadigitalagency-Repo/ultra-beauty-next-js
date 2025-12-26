@@ -28,6 +28,7 @@ interface NotificationModalProps {
 const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const { notificationCount } = useAppSelector((state) => state.navbar);
+  const { accessToken } = useAppSelector((state) => state.authentication);
   const dispatch = useAppDispatch();
   const { data, loading, error } = useFetchData<NotificationResponse[]>(
     "/cms/notifications-views/",
@@ -56,7 +57,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
           notification_ids: id,
         });
         if (response.status === 201 || response.status === 200) {
-          updateCartAndWishlistCounts(dispatch);
+          updateCartAndWishlistCounts(dispatch, accessToken);
         }
       };
       handleView();
@@ -114,7 +115,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ onClose }) => {
               key={notification.id}
               onClick={() => {
                 notification.link && router.push(notification.link);
-                onClose(); 
+                onClose();
               }}
               className={`w-full flex items-start gap-4 py-3 px-3 rounded-lg cursor-pointer transition-colors duration-150 relative ${
                 notification.is_viewed

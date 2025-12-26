@@ -20,7 +20,7 @@ const Success: React.FC = () => {
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const { orderId, cartItem } = useAppSelector((state) => state.cart);
-
+const {accessToken} = useAppSelector(state => state.authentication)
   const hasOrdered = useRef(false);
   const [paymentStatus, setPaymentStatus] =
     useState<PaymentStatus>("loading");
@@ -45,7 +45,7 @@ const Success: React.FC = () => {
 
           if (response.status === 200) {
             dispatch(setOrderId(null));
-updateCartAndWishlistCounts(dispatch)
+updateCartAndWishlistCounts(dispatch, accessToken)
             dispatch(clearCart());
             dispatch(setShippingFee(""));
             setPaymentStatus("success");
@@ -84,7 +84,7 @@ updateCartAndWishlistCounts(dispatch)
 
         if (response.status === 200) {
           dispatch(setOrderId(null));
-updateCartAndWishlistCounts(dispatch)
+updateCartAndWishlistCounts(dispatch, accessToken)
           dispatch(clearCart());
           dispatch(setShippingFee(""));
           setPaymentStatus("success");

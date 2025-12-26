@@ -35,6 +35,7 @@ import {
 import { getCompanyProfile } from "@/lib/company-profile";
 import { updateCartAndWishlistCounts } from "@/lib/update-count";
 import { motion, AnimatePresence } from "framer-motion";
+import { setSearchQuery } from "@/redux/features/filter-slice";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -108,7 +109,9 @@ export default function Navbar() {
   }, [wishListData, cartData, dispatch]);
 
   useEffect(() => {
-    updateCartAndWishlistCounts(dispatch);
+    console.log("calling from here");
+    
+    updateCartAndWishlistCounts(dispatch, accessToken);
     dispatch(resetFilters());
     const fetchNavigationItems = async () => {
       const { company } = await getCompanyProfile();
@@ -199,6 +202,7 @@ export default function Navbar() {
         searchIconRef.current.contains(event.target as Node)
       ) {
         const searchState = !searchOpen;
+        dispatch(setSearchQuery(""))
         setSearchOpen(searchState);
       }
       if (
@@ -314,7 +318,7 @@ export default function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              // onClick={() => setSearchOpen(!searchOpen)}
+              onClick={() => dispatch(setSearchQuery(""))}
               ref={searchIconRef}
               className="hidden lg:block hover:text-primary md:text-sm"
             >

@@ -28,6 +28,7 @@ export const calculateDiscountedPrice = (
   );
   
   const total = parsedPrice - (parsedPrice * parsedDiscount) / 100;
+  
   return total.toString();
 };
 

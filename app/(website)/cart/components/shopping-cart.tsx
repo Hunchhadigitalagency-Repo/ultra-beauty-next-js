@@ -23,12 +23,15 @@ import { resetCheckout } from "@/redux/features/checkout-slice";
 
 export default function ShoppingCart() {
   const dispatch = useAppDispatch();
+  const { accessToken } = useAppSelector((state) => state.authentication);
   const { data, refetch, loading, error } = useFetchData<CartResponse>(
     "carts/",
     true
   );
   const CartItems = data?.results;
-  const { cartItem, voucherData, shippingFee } = useAppSelector((state) => state.cart);
+  const { cartItem, voucherData, shippingFee } = useAppSelector(
+    (state) => state.cart
+  );
   const totalQuantity = cartItem.reduce((acc, cart) => acc + cart.quantity, 0);
 
   const cartItemsData = useMemo(() => {
@@ -37,7 +40,8 @@ export default function ShoppingCart() {
       id: item.id,
       price: item.product.price,
       quantity: item.quantity,
-      available_quant: item.product_variant.item_quantity || item.product.quantity,
+      available_quant:
+        item.product_variant.item_quantity || item.product.quantity,
       discount_percentage: item.product.discount_percentage,
       is_flash_sale: item.product.is_flash_sale,
       flash_sale_discount: item.product.flash_sale_discount,
@@ -49,14 +53,14 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (!cartItemsData || cartItemsData.length === 0) return;
-    
+
     dispatch(setCartItems(cartItemsData));
   }, [cartItemsData, dispatch]);
-  
+
   useEffect(() => {
-    dispatch(resetCart())
+    dispatch(resetCart());
     dispatch(clearVoucherData());
-    dispatch(resetCheckout())
+    dispatch(resetCheckout());
   }, [voucherData, dispatch]);
 
   const handleSingleCartItemRemove = (id: number) => {
@@ -64,7 +68,7 @@ export default function ShoppingCart() {
       deleteFromCart(id);
       refetch();
       dispatch(deleteCartItem(id));
-      updateCartAndWishlistCounts(dispatch);
+      updateCartAndWishlistCounts(dispatch, accessToken);
       toast.success("Item Removed from the Cart");
     } catch (error) {
       toast.error(`Error while removing Item from the cart: ${error}`);

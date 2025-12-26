@@ -77,23 +77,19 @@ const ProductCard = ({
       </div>
 
       <div className="flex flex-col gap-2 md:gap-3 lg:gap-2">
-        {discountTag && parseInt(discountTag) > 0 ? (
-          <PriceRow
-            discountTag={discountTag}
-            previousPrice={price}
-            price={
-              calculateDiscountedPrice(
-                price,
-                discountTag,
-                flashSaleDiscount,
-                isFlashSale
-              ) || price
-            }
-            discountClassName="text-[12px]  md:text-sm"
-          />
-        ) : (
-          <PriceRow discountTag={discountTag} price={price} />
-        )}
+        <PriceRow
+          discountTag={isFlashSale ? flashSaleDiscount : discountTag}
+          previousPrice={price}
+          price={
+            calculateDiscountedPrice(
+              price,
+              discountTag,
+              flashSaleDiscount,
+              isFlashSale
+            ) || price
+          }
+          discountClassName="text-[12px]  md:text-sm"
+        />
 
         {/* Rating and wishlist */}
         <div className="flex items-center justify-between">
