@@ -294,6 +294,7 @@ const ProductDescriptionSection: React.FunctionComponent<
 
       <Button
         onClick={handleSubmit}
+        disabled={!isAvailable}
         className="w-full text-[#FFFFFF] font-bold py-1 md:py-5 xl:py-6 rounded-sm bg-primary"
       >
         ADD TO CART

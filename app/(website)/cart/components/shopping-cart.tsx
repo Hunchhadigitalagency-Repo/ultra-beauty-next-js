@@ -37,6 +37,7 @@ export default function ShoppingCart() {
       id: item.id,
       price: item.product.price,
       quantity: item.quantity,
+      available_quant: item.product_variant.item_quantity || item.product.quantity,
       discount_percentage: item.product.discount_percentage,
       is_flash_sale: item.product.is_flash_sale,
       flash_sale_discount: item.product.flash_sale_discount,
@@ -48,7 +49,6 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     if (!cartItemsData || cartItemsData.length === 0) return;
-    console.log(cartItemsData);
     
     dispatch(setCartItems(cartItemsData));
   }, [cartItemsData, dispatch]);

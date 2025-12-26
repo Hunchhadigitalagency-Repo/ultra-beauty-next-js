@@ -66,7 +66,11 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
       onRemove(item.id);
       return;
     }
+    const availableStock = item.product_variant.item_quantity || item.quantity;
 
+    if (type === "increment" && localQuantity >= availableStock) {
+      return;
+    }
     const newQuantity =
       type === "increment" ? localQuantity + 1 : localQuantity - 1;
 
@@ -77,7 +81,7 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
         item.product.price,
         item.product.discount_percentage,
         item.product.flash_sale_discount,
-        item.is_flash_sale,
+        item.is_flash_sale
       )
     );
 
@@ -181,7 +185,11 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
 
           <div className="flex flex-col gap-4 md:flex-row md:justify-between">
             <PriceRow
-              discountTag={item.product.is_flash_sale ? item.product.flash_sale_discount : item.product.discount_percentage}
+              discountTag={
+                item.product.is_flash_sale
+                  ? item.product.flash_sale_discount
+                  : item.product.discount_percentage
+              }
               previousPrice={
                 item.product.discount_percentage
                   ? item.product.price
@@ -192,7 +200,7 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
                   item.product.price,
                   item.product.discount_percentage,
                   item.product.flash_sale_discount,
-                  item.product.is_flash_sale,
+                  item.product.is_flash_sale
                 ) || item.product.price
               }
             />
