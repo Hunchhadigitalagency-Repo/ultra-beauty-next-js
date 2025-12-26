@@ -123,7 +123,10 @@ export const postCity = async (id: number[], destination: string | undefined) =>
     return response
 }
 
-
+export const getShippingAdminFees = async (product_ids: number[] | null, delivery_location: string) => {
+  const response = await api.post("/get-product-shipping-price/", { product_ids, delivery_location })
+  return response
+}
 
 export const addOrderByAdmin = async (payload : any) => {
   const response = await api.post('/order/create/by-admin/', payload)
