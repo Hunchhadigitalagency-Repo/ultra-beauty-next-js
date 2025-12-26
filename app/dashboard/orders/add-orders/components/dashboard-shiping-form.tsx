@@ -23,10 +23,13 @@ import {
 } from "@/components/ui/form";
 
 import { useRouter } from "next/navigation";
-import { PROVINCES } from "@/constants/province-constants";
 import { useAppDispatch } from "@/redux/hooks";
 import { setShippingInfo } from "@/redux/features/checkout-slice";
-import { ShippingFormValuesAdmin, ShippingSchemaAdmin } from "@/schemas/checkout/checkout-dashboard";
+import {
+  ShippingFormValuesAdmin,
+  ShippingSchemaAdmin,
+} from "@/schemas/checkout/checkout-dashboard";
+import { useAddressData } from "@/hooks/use-address";
 
 type ShippingFormProps = {
   onDataChange: (data: Partial<ShippingFormValuesAdmin>) => void;
@@ -34,9 +37,14 @@ type ShippingFormProps = {
   isWebsite: boolean;
 };
 
-export default function ShippingForm({ onDataChange, getCity, isWebsite }: ShippingFormProps) {
+export default function ShippingForm({
+  onDataChange,
+  getCity,
+  isWebsite,
+}: ShippingFormProps) {
   const [availableCities, setAvailableCities] = useState<string[]>([]);
   const dispatch = useAppDispatch();
+  const { data: PROVINCE } = useAddressData();
 
   const form = useForm<ShippingFormValuesAdmin>({
     resolver: zodResolver(ShippingSchemaAdmin),
@@ -58,6 +66,16 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
   const selectedProvince = form.watch("province");
   const selectCity = form.watch("city");
 
+  const provinceObj = PROVINCE.find(
+    (p) => p.province?.toLowerCase() === selectedProvince?.toLowerCase()
+  );
+
+  const cityObj = provinceObj?.areas?.find(
+    (a) => a.name?.toLowerCase() === selectCity?.toLowerCase()
+  );
+
+  const areaCovered = cityObj?.area_covered ?? [];
+
   useEffect(() => {
     if (selectCity) {
       getCity(selectCity);
@@ -66,8 +84,10 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
 
   useEffect(() => {
     if (selectedProvince) {
-      const provinceData = PROVINCES.find(p => p.province === selectedProvince);
-      setAvailableCities(provinceData?.cities || []);
+      const provinceData = PROVINCE.find(
+        (p) => p.province === selectedProvince
+      );
+      setAvailableCities(provinceData?.areas.map((ar) => ar.name) || []);
       form.setValue("city", "");
     } else {
       setAvailableCities([]);
@@ -189,7 +209,7 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
           </div>
 
           {/* Province and City with Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-16 items-start">
             <FormField
               control={form.control}
               name="province"
@@ -199,12 +219,15 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
                     Province
                   </FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
                       <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                         <SelectValue placeholder="Select a province" />
                       </SelectTrigger>
                       <SelectContent>
-                        {PROVINCES.map((provinceData) => (
+                        {PROVINCE.map((provinceData) => (
                           <SelectItem
                             key={provinceData.province}
                             value={provinceData.province}
@@ -219,35 +242,59 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="city"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-gray-700">
-                    City
-                  </FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value || ""}
-                    >
-                      <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                        <SelectValue placeholder="Select a city" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {availableCities.map((city) => (
-                          <SelectItem key={city} value={city}>
-                            {city}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col gap-3">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">
+                      City
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || ""}
+                      >
+                        <SelectTrigger className="border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                          <SelectValue placeholder="Select a city" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableCities.map((city) => (
+                            <SelectItem key={city} value={city}>
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex flex-col gap-2 justify-left">
+                {areaCovered.length > 0 && (
+                  <>
+                    <p className="text-xs text-red font-medium">
+                      Delivery is limited to the following areas:
+                    </p>
+                    <div className="flex flex-wrap gap-2 justify-left">
+                      {areaCovered?.map((ar) => (
+                        <span
+                          key={ar}
+                          className="
+                    text-xs 
+                    text-gray-500
+                  "
+                        >
+                          {ar},
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Landmark and Building Address */}
@@ -345,7 +392,7 @@ export default function ShippingForm({ onDataChange, getCity, isWebsite }: Shipp
               type="submit"
               className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-2 rounded-md"
             >
-              Continue and Pay 
+              Continue and Pay
             </Button>
           </div>
         </form>
