@@ -69,7 +69,6 @@ export default function CartItemCard({ item, onRemove }: CartItemCardProps) {
     const availableStock = item.product_variant.item_quantity || item.quantity;
 
     if (type === "increment" && localQuantity >= availableStock) {
-      console.log("Cannot exceed available stock");
       return;
     }
     const newQuantity =
